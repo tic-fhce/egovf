@@ -1,0 +1,29 @@
+
+.material-icons{
+    color: green;
+    font-size: 24px;
+    background-color: rgba(187, 55, 55, 0.158);
+    padding: 0.3em;
+    border-radius: 20%;
+    margin: 0.3em;
+}
+
+.material-icons-toast{
+    color: rgb(255, 255, 255);
+    font-size: 24px;
+    padding: 0.3em;
+    border-radius: 20%;
+    margin: 0.3em;
+}
+
+.material-icons-round{
+    color: rgb(255, 255, 255);
+    font-size: 24px;
+    background-color: rgba(2, 177, 69, 0.616);
+    padding: 3.0em;
+    border-radius: 20%;
+    margin: 0.3em;
+}
+.margen{
+    margin-top: 100px;
+}
