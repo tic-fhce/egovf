@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue numero="1" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -10,36 +10,40 @@
             
         </div>
     </div>
+    <ComponenteFooter/>
 </template>
 
 <script>
-import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
+import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteFooter from '@/components/ComponenteFooter.vue';
 export default {
     name:'EscritorioView',
+    components:{
+        ComponenteMenuVue,
+        ComponenteFooter
+    },
     data(){
         return {
             usuario:{
-                cif:'',
+                cif:0,
                 correo:'',
                 celular:'',
-                pass:''
+                pass:'',
+                menu:[]
             }
         }
-    },
-    components:{
-        ComponenteMenuVue
     },
     computed:{
         
     },
     created(){
-        
         this.usuario.cif=this.$cookies.get('cif');
         this.usuario.correo=this.$cookies.get('correo');
         this.usuario.celular=this.$cookies.get('celular');
         this.usuario.pass=this.$cookies.get('pass');
+        this.usuario.menu=this.$cookies.get('menu');        
     },
-    beforeCreate(){
+    beforeCreate(){ //antes de crear e ingresar verificamos la existencia del CIF
         console.log(this.$cookies.get('cif'));
         if(this.$cookies.get('cif')==0){
             this.$router.push('/');

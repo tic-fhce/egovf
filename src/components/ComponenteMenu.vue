@@ -1,5 +1,5 @@
 <template>
-    <nav v-if="numero == 0" class="navbar fixed-top navbar-expand-lg bg-primary">
+    <nav v-if="cif == 0" class="navbar fixed-top navbar-expand-lg bg-primary">
         <div class="container justify-content-evenly">
             <router-link to="/" class="nav-link"><span class="material-icons-round">&#xe88a;</span></router-link>
             <router-link to="/about" class="nav-link"><span class="material-icons-round">&#xe80c;</span></router-link>
@@ -7,40 +7,24 @@
         </div>
     </nav>
 
-    <nav v-if="numero==1" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav v-if="cif>0" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <router-link to="/escritorio" class="navbar-brand">e-FHCE</router-link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <router-link to="/escritorio" class="nav-link active">Inicio</router-link>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" v-for="m in menu" :key="m.id">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Modulos
+                            {{ m.titulo }}
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><router-link to="/listaPersonas" class="dropdown-item">Ciudadanos</router-link></li>
-                            <li><a class="dropdown-item" href="#">TIC</a></li>
-                            <li><a class="dropdown-item" href="#">Postgrado</a></li>
-                            <li><a class="dropdown-item" href="#">Reserva de Ambiente</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Certificados</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Certificados
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">TIC</a></li>
-                            <li><a class="dropdown-item" href="#">Postgrado</a></li>
-                            <li><a class="dropdown-item" href="#">Reserva de Ambiente</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Certificados</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">                            
+                            <li><a v-for="sub in m.subModel" :key="sub.id" class="dropdown-item"><router-link :to="sub.ruta" class="dropdown-item">{{sub.titulo}}</router-link></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -69,9 +53,15 @@
     
 </template>
 <script>
+
 export default {
     name:'ComponenteMenuVue',
-    props:['numero'],
+    props:['cif','menu'],
+    data(){
+        return{
+            
+        }
+    },
     methods:{
         salir(){
             this.$swal.fire({
@@ -90,7 +80,17 @@ export default {
             });
             
         }
-    }
+    },
+    created(){
+        console.log(this.menu);
+    },
+    updated(){
+        if(this.cif>0 )
+        {
+            console.log(this.cif);
+            
+        }
+    },
 }
 </script>
 <style scoped>

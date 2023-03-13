@@ -49,6 +49,16 @@ const routes = [
     path: '/reportePerfil:reporte',
     name: 'reportePerfil',
     component: () => import('../views/ReportePerfilView.vue')
+  },
+  {
+    path: '/reportePerfilUsuario:reporte',
+    name: 'reportePerfilUsuario',
+    component: () => import('../views/ReportePerfilUsuarioView.vue')
+  },
+  {
+    path: '/reporteUsuario',
+    name: 'reporteUsuario',
+    component: () => import('../views/ReporteUsuarioView.vue')
   }
 ]
 

@@ -149,6 +149,14 @@ export default {
             personaService:null,
             what:"https://api.whatsapp.com/send?phone=591",
             getPB:true,
+            usuario:{
+                token:'',
+                cif:'',
+                correo:'',
+                celular:'',
+                pass:'',
+                menu:[]
+            },
             persona:{
                 id:null,
                 _01cif:'',
@@ -171,13 +179,6 @@ export default {
                 _05correo:'',
                 _06celular:'',
                 _07pass:''
-            },
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:''
             }
         }
     },
@@ -202,6 +203,7 @@ export default {
             this.usuario.correo=this.$cookies.get('correo');
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
+            this.usuario.menu=this.$cookies.get('menu');
 
             // Creamos datos de Usuario
             

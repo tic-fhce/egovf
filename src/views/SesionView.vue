@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue numero="0"/>
+    <ComponenteMenuVue cif="0"/>
         
     <div class="container">
         <div class="row">
@@ -162,6 +162,8 @@ export default {
                     this.$cookies.set('correo',response.data.correo);
                     this.$cookies.set('celular',response.data.celular);
                     this.$cookies.set('pass',response.data.pass);
+                    this.$cookies.set('menu',JSON.stringify(response.data.menu));
+                    //console.log(response.data.menu);
                     this.$router.push('/escritorio');
                 }
                 else{

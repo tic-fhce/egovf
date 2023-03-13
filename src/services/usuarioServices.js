@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const usuario_api="";
+const usuario_api="http://192.168.31.45:8080/fhce-egovf/";
 
 export default class UsuarioService{
     getListaUsuario(){

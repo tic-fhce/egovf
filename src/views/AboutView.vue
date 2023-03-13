@@ -1,5 +1,5 @@
 <template>
-  <ComponenteMenuVue numero="0"/>
+  <ComponenteMenuVue cif="0"/>
       <div class="container">
         <div class="row">
             <div class="margen">

@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue numero="1" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
     <div class="container">
         <div class="row margen">
         </div>
@@ -36,7 +36,7 @@
           </div>
         </div>
     </div>
-
+    <ComponenteFooterVue/>
 <!-- Modal  Celular-->
 <div class="modal fade" id="personamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -178,53 +178,62 @@
 </template>
 
 <script>
-import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
+import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import PersonaService from '@/services/personaService';
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
-import $ from 'jquery'
+import $ from 'jquery';
 
 DataTable.use(DataTablesLib);
 
 export default {
     name:'ListaPersonaView',
     components:{
-        ComponenteMenuVue
+        ComponenteMenuVue,
+        ComponenteFooterVue
     },
     data(){
         return {
-            listaCiudadanos:[],
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:''
-            },
-            persona:{
-              _01cif:0,
-              _02ci:'',
-              _03complemento:'',
-              _04nombre:'',
-              _05paterno:'',
-              _06materno:'',
-              _07fecha:'',
-              _08sexo:'',
-              _09cel:'',
-              _10correo:''
-            },
-            errorpersona:{
-              ci:false,
-              complemento:false,
-              nombre:false,
-              paterno:false,
-              materno:false,
-              fecha:false,
-              sexo:false,
-              cel:false,
-              correo:false
-            },
-            registro:[]
+          personaService:null,
+          usuario:{
+            token:'',
+            cif:'',
+            correo:'',
+            celular:'',
+            pass:'',
+            menu:[]
+          },
+          persona:{
+            _01cif:0,
+            _02ci:'',
+            _03complemento:'',
+            _04nombre:'',
+            _05paterno:'',
+            _06materno:'',
+            _07fecha:'',
+            _08sexo:'',
+            _09cel:'',
+            _10correo:''
+          },
+          errorpersona:{
+            ci:false,
+            complemento:false,
+            nombre:false,
+            paterno:false,
+            materno:false,
+            fecha:false,
+            sexo:false,
+            cel:false,
+            correo:false
+          },
+          listaCiudadanos:[],
+          registro:[]
+        }
+    },
+    beforeCreate(){        
+        if(this.$cookies.get('cif')==null){
+            this.$router.push('/');
         }
     },
     created(){
@@ -233,11 +242,6 @@ export default {
     mounted(){
       this.getDatos();
       this.getListaCiudadanos();
-    },
-    beforeCreate(){        
-        if(this.$cookies.get('cif')==null){
-            this.$router.push('/');
-        }
     },
     methods:{
       tabla(){
@@ -252,6 +256,7 @@ export default {
             this.usuario.correo=this.$cookies.get('correo');
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
+            this.usuario.menu=this.$cookies.get('menu');
 
             this.personaService= new PersonaService();
             this.personaService.headersUsuario(this.usuario.token);

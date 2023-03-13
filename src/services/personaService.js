@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const personaUrl="";
+const personaUrl="http://192.168.31.45:8080/fhce-egovf/";
 
 export default class PersonaService{
     headersUsuario(token){

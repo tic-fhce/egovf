@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue numero="1" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -37,7 +37,8 @@ export default {
                 cif:'',
                 correo:'',
                 celular:'',
-                pass:''
+                pass:'',
+                menu:[]
             },
             reporte:{
                 id_horario:'',
@@ -69,6 +70,7 @@ export default {
             this.usuario.correo=this.$cookies.get('correo');
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
+            this.usuario.menu=this.$cookies.get('menu');
         }
       }
     }

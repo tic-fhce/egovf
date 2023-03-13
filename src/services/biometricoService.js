@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const controlUrl="";
+const controlUrl="http://192.168.31.45:8082/fhce-egovf-scc/";
 
 export default class BiometricoService{
     getListarCifCero(){
