@@ -13,21 +13,29 @@
         <!-- Componente de Control de Personal -->
         <br>
         <ComponenteControlPersonalVue :persona="persona" />
+        <!-- Componente de Permisos en el Menu -->
+        <br>
+        <ComponentePernicionVue :persona="persona" />
     </div>
+    <ComponenteFooterVue/>
 </template>
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteControlPersonalVue from '@/components/ComponenteControlPersonal.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
+import ComponentePernicionVue from '@/components/ComponentePernicion.vue';
 import PersonaService from '@/services/personaService';
+import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 
 export default {
     name:'PerfilCiudadanoView',
     components:{
         ComponenteMenuVue,
         ComponenteControlPersonalVue,
-        ComponenteDatosPersonaVue
+        ComponenteDatosPersonaVue,
+        ComponentePernicionVue,
+        ComponenteFooterVue
     },
     data(){
         return {

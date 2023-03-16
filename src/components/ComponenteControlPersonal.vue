@@ -494,7 +494,6 @@ export default {
     },
     mounted(){
         this.getLista();
-        
     },
     updated(){
         if(this.persona._01cif>0 && this.getPB)
@@ -504,13 +503,13 @@ export default {
         }
     },
     methods:{
-        getLista(){
-            this.biometricoService.getListarCifCero().then(response => {
+        async getLista(){
+            await this.biometricoService.getListarCifCero().then(response => {
                 this.listaBiometrico = response.data;
             });
         },
-        getPerfilBiometrico(){
-            this.biometricoService.getPerfil(this.persona._01cif).then(response=>{
+        async getPerfilBiometrico(){
+            await this.biometricoService.getPerfil(this.persona._01cif).then(response=>{
                 this.listaPerfil=response.data;
                 if(this.listaPerfil.length>0){
                     this.id_horario=this.listaPerfil[0]._05horario_id;
