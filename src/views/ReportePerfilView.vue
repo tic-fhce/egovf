@@ -14,11 +14,12 @@
         <br>
         <ComponenteReporteVue :reporte="reporte"/>
     </div>
-
+    <ComponenteFooterVue/>
 </template>
 
 <script>
-import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
+import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteReporteVue from '@/components/ComponenteReporte.vue';
 
@@ -27,7 +28,8 @@ export default {
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonaVue,
-        ComponenteReporteVue
+        ComponenteReporteVue,
+        ComponenteFooterVue
     },
     data(){
         return {
@@ -53,8 +55,6 @@ export default {
     mounted(){
         this.reporte=JSON.parse(this.$route.params.reporte);
         this.cifCiudadano=this.reporte.cif;
-        console.log("este es el cif "+this.reporte.cif);
-        console.log(this.reporte);
         this.getDatos();
     },
     beforeCreate(){        

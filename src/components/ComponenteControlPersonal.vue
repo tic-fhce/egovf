@@ -7,11 +7,14 @@
                         <div class=" col col-md-6 col-sm-6">
                             <h3>Control de Personal Biometrico</h3>
                         </div>
-                        <div class=" col col-md-3 col-sm-3">
+                        <div class=" col col-md-2 col-sm-2">
                             <a href="#" class="form-control btn btn-primary" data-bs-toggle="modal" data-bs-target=#biometricoModal><span class="material-icons">&#xe145;</span>Biometrico</a>
                         </div>
-                        <div class="col col-md-3 col-sm-3">
+                        <div class="col col-md-2 col-sm-2">
                             <a href="#" class="form-control btn btn-warning" data-bs-toggle="modal" data-bs-target=#horarioModal><span class="material-icons">&#xe145;</span>Horario</a>
+                        </div>
+                        <div class="col col-md-2 col-sm-2">
+                            <a href="#" class="form-control btn btn-success" data-bs-toggle="modal" data-bs-target=#obsModal><span class="material-icons">&#xe145;</span>Obs</a>
                         </div>
                     </div>
                 </div>
@@ -25,6 +28,9 @@
                                 <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#horario" type="button" role="tab"  aria-selected="true">Horarios</button>
                             </li>
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#observaciones" type="button" role="tab"  aria-selected="true">Obserbaciones</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#mensual" type="button" role="tab"  aria-selected="false">Reporte Mensual</button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -33,6 +39,7 @@
                         </ul>
 
                         <div class="tab-content" id="myTabContentBiometrico">
+                            <!--Datos del Biometrico-->
                             <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
                                 <br>
                                 <ul v-for="perfil in listaPerfil" :key="perfil.id">
@@ -41,10 +48,14 @@
                                     <li>Nombre : {{perfil._02nombre}}</li>
                                     <li>Estado : {{perfil._04estado}}</li>
                                     <li>Lugar : {{perfil._06lugar}}</li>
+                                    <li v-if="perfil._07id_tipo===1">Tipo : Administrador</li>
+                                    <li v-else>Tipo : Docente/Aux</li>
                                     <hr>
                                 </ul>
                             </div>
+                            <!--Datos del Biometrico-->
 
+                            <!--Horario-->
                             <div class="tab-pane fade" id="horario" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
                                 <table class="table">
@@ -104,6 +115,29 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <!--Horario-->
+
+                            <!--Observaciones del Biometrico-->
+                            <div class="tab-pane fade" id="observaciones" role="tabpanel" aria-labelledby="datos-tab">
+                                <br>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th><th>Uid</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Detalle</th><th>Tipo</th><th>Hora</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="lsobs in listaObs" :key="lsobs.id">
+                                            <td>{{ lsobs.id }}</td><td>{{ lsobs._02uidobs }}</td><td>{{ lsobs._03fechainicio }}</td><td>{{ lsobs._04fechafin }}</td><td>{{ lsobs._09detalle }}</td><td>{{ lsobs._11tipo }}</td><td>{{ lsobs._12hora }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!--Observaciones del Biometrico-->
 
                             <div class="tab-pane fade" id="mensual" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
@@ -254,7 +288,7 @@
     </div>
     <br>
 
-    <!-- Modal  Biometrico-->
+<!-- Modal  Biometrico-->
 <div class="modal fade" id="biometricoModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -270,6 +304,13 @@
                     <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">{{lista._02nombre}} {{lista._06lugar}}</option>
                 </select>
             </div>
+            <label for="datos" class="col-sm-6 col-form-label">Tipo</label>
+            <div class="col-sm-6">
+                <select v-model="id_tipo" class="form-control" @change="datosChange()">
+                    <option value="1">Administrador</option>
+                    <option value="2">Docente/Aux</option>
+                </select>
+            </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -280,7 +321,7 @@
   </div>
 </div>
 
-<!-- Modal  Biometrico-->
+<!-- Modal  Horario-->
 <div class="modal fade" id="horarioModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -358,20 +399,70 @@
 </div>
 
 
-    <!-- Modal  Reporte-->
-<div class="modal fade" id="reporteModal" tabindex="-1" aria-labelledby="reporteModalLabel" aria-hidden="true">
-  <div class="modal-dialog-lg">
+<!-- Modal  Obserbasiones-->
+<div class="modal fade" id="obsModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Reporte de Asistencia</h5>
+        <h5 class="modal-title">Agregar Observaciones de Asistencia</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="obs.uidobs">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="obs.fechainicio">
+            </div>
+        </div>
         
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="obs.fechafin">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" v-model="obs.detalle"></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Tipo</label>
+            <div class="col-sm-8">
+                <select class="form-control" v-model="obs.tipo">
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="comision">Comisión</option>
+                    <option value="permiso">Permiso</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Hora</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="obs.hora">
+            </div>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updateBiometrico()">Agregar Datos </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addObs()">Agregar Observaciones</button>
       </div>
     </div>
   </div>
@@ -392,6 +483,7 @@ export default {
             id_bio:0,
             id_horario:0,
             getPB:true,
+            id_tipo:1,
             reporteMes:{
                 id_horario:'',
                 cif:'',
@@ -421,7 +513,8 @@ export default {
                 _03cif:0,
                 _04estado:0,
                 _05horario:0,
-                _06lugar:''
+                _06lugar:'',
+                _07id_tipo:1
             },
             horario:{
                 _01cif:this.persona._01cif,
@@ -486,7 +579,17 @@ export default {
                 _28det:'14:30',
                 _29dst:'18:30'
             },
-            reporteFinal:[]
+            reporteFinal:[],
+            obs:{
+                cif:null,
+                uidobs:'',
+                fechainicio:'',
+                fechafin:'',
+                detalle:'',
+                tipo:'Seleccionar Tipo',
+                hora:'08:30'
+            },
+            listaObs:[]
         }
     },
     created(){
@@ -513,11 +616,20 @@ export default {
                 this.listaPerfil=response.data;
                 if(this.listaPerfil.length>0){
                     this.id_horario=this.listaPerfil[0]._05horario_id;
-                    console.log("hola horario" +this.id_horario);
                     this.getHorario();
                 }
             });
-            
+        },
+        async getHorario(){
+            await this.biometricoService.getHorario(this.id_horario,this.persona._01cif).then(response=>{
+                this.horarioPerfil=response.data;
+                this.getObs();
+            });
+        },
+        async getObs(){
+            await this.biometricoService.getObs(this.persona._01cif).then(response=>{
+                this.listaObs=response.data;
+            });
         },
         datosChange(){
             this.listaBiometrico.forEach(element => {
@@ -525,6 +637,7 @@ export default {
                 {
                     this.biometrico=element;
                     this.biometrico._03cif=this.persona._01cif;
+                    this.biometrico._07id_tipo=this.id_tipo;
                 }
             });
         },
@@ -538,8 +651,6 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.biometricoService.addHorario(this.horario).then(response=>{
-                        console.log("esta es la respuesta =====================");
-                        console.log(response.status);
                         if(response.status==200){
                             this.$swal.fire('Los Horarios fueron Agregados al Ciudadano Corectamente', '', 'success');
                         }
@@ -553,11 +664,31 @@ export default {
                 }
             });
         },
-        getHorario(){
-            this.biometricoService.getHorario(this.id_horario,this.persona._01cif).then(response=>{
-                this.horarioPerfil=response.data;
+        addObs(){
+            this.obs.cif=this.persona._01cif;
+            this.$swal.fire({
+                title: 'Desea agregar las Observaciones de Asistencia al Ciudadano ?',
+                showDenyButton: true,
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.biometricoService.addObs(this.obs).then(response=>{
+                        console.log(response.status);
+                        if(response.status==200){
+                            this.$swal.fire('Las Observaciones fueron Agregados al Ciudadano Corectamente', '', 'success');
+                        }
+                        else{
+                            this.$swal.fire('Las Observaciones no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
             });
         },
+        
         updateBiometrico(){
             this.$swal.fire({
                 title: 'Desea Agregar el Nuevo Horario al Ciudadano ?'+this.biometrico._02nombre,
@@ -587,6 +718,7 @@ export default {
             this.reporteMes.id_horario=this.id_horario;
             this.reporteMes.listaPerfil=this.listaPerfil;
             this.reporteMes.persona=this.persona;
+            
             this.$router.push({
                 name: "reportePerfil",
                 params:{

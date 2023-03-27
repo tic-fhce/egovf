@@ -40,25 +40,25 @@ const routes = [
     name: 'listaPersonas',
     component: () => import('../views/ListaPersonaView.vue')
   },
-  {
+  {//perfil ciudadano que viene de la lista de ciudadanos
     path: '/perfilCiudadano:cifCiudadano',
     name: 'perfilCiudadano',
     component: () => import('../views/PerfilCiudadanoView.vue')
   },
-  {
+  {//reporte del perfil viene de perfil ciudadano con parametros del reporte
     path: '/reportePerfil:reporte',
     name: 'reportePerfil',
     component: () => import('../views/ReportePerfilView.vue')
   },
   {
-    path: '/reportePerfilUsuario:reporte',
-    name: 'reportePerfilUsuario',
-    component: () => import('../views/ReportePerfilUsuarioView.vue')
-  },
-  {
     path: '/reporteUsuario',
     name: 'reporteUsuario',
     component: () => import('../views/ReporteUsuarioView.vue')
+  },
+  {
+    path: '/reportePerfilUsuario:reporteUsuario',
+    name: 'reportePerfilUsuario',
+    component: () => import('../views/ReportePerfilUsuarioView.vue')
   }
 ]
 

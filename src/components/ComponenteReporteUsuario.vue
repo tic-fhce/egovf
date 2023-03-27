@@ -8,7 +8,7 @@
                         <h2 id="titulo">Reporte de Asistencia</h2>
                 </div>
                     <div class="col col-md-4 col-sm-4">
-                        <h2>{{mes}} de {{reporte.gestion}} </h2>
+                        <h2>{{mes}} de {{reporteUsuario.gestion}} </h2>
                     </div>
                     <div class="col col-md-2 col-sm-2">
                         <button class="form-control btn btn-success" @click="pdf()"><span class="material-icons">&#xe8ad;</span>Imprimir</button>
@@ -19,7 +19,7 @@
             <div class="card-body">
                 <table class="table table-striped table-hover" id="printDatos">
                     <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
-                    <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
+                    <tr v-for="perfil in reporteUsuario.listaPerfil" :key="perfil.id">
                         <td>ID Biometrico : {{perfil.id}}</td>
                         <td>User ID : {{perfil._01user_id}}</td>
                         <td>Nombre : {{perfil._02nombre}}</td>
@@ -86,8 +86,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 export default {
-    name:'ComponenteReporteVue',
-    props:['reporte'],
+    name:'ComponenteReporteUsuarioVue',
+    props:['reporteUsuario'],
     data(){
         return{
             biometricoService:null,
@@ -101,10 +101,10 @@ export default {
         this.biometricoService= new BiometricoService();
     },
     updated(){
-        if(this.reporte.cif>0 && this.getPB)
+        if(this.reporteUsuario.cif>0 && this.getPB)
         {
             this.getMes();
-            if(this.reporte.di>0 && this.reporte.df>0)
+            if(this.reporteUsuario.di>0 && this.reporteUsuario.df>0)
                 this.getReporteMesDia();
             else
                 this.getReporteMes();
@@ -113,7 +113,7 @@ export default {
     },
     methods:{
         getReporteMes(){
-            this.biometricoService.getReporteMes(this.reporte).then((result) => {
+            this.biometricoService.getReporteMes(this.reporteUsuario).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso();
             }).catch((err) => {
@@ -121,7 +121,7 @@ export default {
             });
         },
         getReporteMesDia(){
-            this.biometricoService.getReporteMesDia(this.reporte).then((result) => {
+            this.biometricoService.getReporteMesDia(this.reporteUsuario).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso();
             }).catch((err) => {
@@ -139,18 +139,18 @@ export default {
             console.log("La suma es "+this.sumaRetraso);
         },
         getMes(){
-            if(this.reporte.mes==1){this.mes='Enero';}
-            if(this.reporte.mes==2){this.mes='Febrero';}
-            if(this.reporte.mes==3){this.mes='Marzo';}
-            if(this.reporte.mes==4){this.mes='Abril';}
-            if(this.reporte.mes==5){this.mes='Mayo';}
-            if(this.reporte.mes==6){this.mes='Junio';}
-            if(this.reporte.mes==7){this.mes='Julio';}
-            if(this.reporte.mes==8){this.mes='Agosto';}
-            if(this.reporte.mes==9){this.mes='Septiembre';}
-            if(this.reporte.mes==10){this.mes='Octubre';}
-            if(this.reporte.mes==11){this.mes='Noviembre';}
-            if(this.reporte.mes==12){this.mes='Diciembre';}
+            if(this.reporteUsuario.mes==1){this.mes='Enero';}
+            if(this.reporteUsuario.mes==2){this.mes='Febrero';}
+            if(this.reporteUsuario.mes==3){this.mes='Marzo';}
+            if(this.reporteUsuario.mes==4){this.mes='Abril';}
+            if(this.reporteUsuario.mes==5){this.mes='Mayo';}
+            if(this.reporteUsuario.mes==6){this.mes='Junio';}
+            if(this.reporteUsuario.mes==7){this.mes='Julio';}
+            if(this.reporteUsuario.mes==8){this.mes='Agosto';}
+            if(this.reporteUsuario.mes==9){this.mes='Septiembre';}
+            if(this.reporteUsuario.mes==10){this.mes='Octubre';}
+            if(this.reporteUsuario.mes==11){this.mes='Noviembre';}
+            if(this.reporteUsuario.mes==12){this.mes='Diciembre';}
         },
         pdf(){
             var img = new Image();
@@ -161,13 +161,13 @@ export default {
             doc.text("Universidad Mayor de San Andrés",55,18);
             doc.text("Facultad de Humanidades y Ciencias de la Educación",55,23);
             doc.text("Datos de Personales",20,40);
-            doc.text("CIF : "+this.reporte.persona._01cif,30,45);
-            doc.text("Nombre : "+this.reporte.persona._04nombre,30,50);
-            doc.text("Apellidos : "+this.reporte.persona._05paterno+" "+this.reporte.persona._06materno,30,55);
-            doc.text("Celular: "+this.reporte.persona._09cel,30,60);
-            doc.text("ID app : "+this.reporte.persona.id,120,45);
-            doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,50);
-            doc.text("Correo : "+this.reporte.persona._10correo,120,55);
+            doc.text("CIF : "+this.reporteUsuario.persona._01cif,30,45);
+            doc.text("Nombre : "+this.reporteUsuario.persona._04nombre,30,50);
+            doc.text("Apellidos : "+this.reporteUsuario.persona._05paterno+" "+this.reporteUsuario.persona._06materno,30,55);
+            doc.text("Celular: "+this.reporteUsuario.persona._09cel,30,60);
+            doc.text("ID app : "+this.reporteUsuario.persona.id,120,45);
+            doc.text("C.I. : "+this.reporteUsuario.persona._02ci+" "+this.reporteUsuario.persona._03complemento,120,50);
+            doc.text("Correo : "+this.reporteUsuario.persona._10correo,120,55);
             var finalY=65;
             autoTable(doc, {
                 theme: 'plain',
@@ -187,7 +187,7 @@ export default {
             });
             finalY = doc.lastAutoTable.finalY;
             doc.setFontSize(15);
-            doc.text("Reporte de Asistencia " + this.mes +" "+this.reporte.gestion,20,finalY+10);
+            doc.text("Reporte de Asistencia " + this.mes +" "+this.reporteUsuario.gestion,20,finalY+10);
             autoTable(doc, {
                 startY:finalY+15,
                 margin: {left:20 },
@@ -195,7 +195,7 @@ export default {
                 html:'#printMarcado',
                 showFoot: 'lastPage'
             });
-            doc.save(this.reporte.persona._01cif+'reporte.pdf');
+            doc.save(this.reporteUsuario.persona._01cif+'reporte.pdf');
         }
     }
 }

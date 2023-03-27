@@ -64,6 +64,9 @@
                                     <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#horario" type="button" role="tab"  aria-selected="true">Horarios</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#observaciones" type="button" role="tab"  aria-selected="true">Obserbaciones</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#mensual" type="button" role="tab"  aria-selected="false">Reporte Mensual</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -147,6 +150,28 @@
                                     </table>
                                 </div>
                                 <!--Tab para el detalle del Horaraio-->
+
+                                <!--Tab para las Observaciones del Biometrico-->
+                                <div class="tab-pane fade" id="observaciones" role="tabpanel" aria-labelledby="datos-tab">
+                                    <br>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th><th>Uid</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Detalle</th><th>Tipo</th><th>Hora</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="lsobs in listaObs" :key="lsobs.id">
+                                                <td>{{ lsobs.id }}</td><td>{{ lsobs._02uidobs }}</td><td>{{ lsobs._03fechainicio }}</td><td>{{ lsobs._04fechafin }}</td><td>{{ lsobs._09detalle }}</td><td>{{ lsobs._11tipo }}</td><td>{{ lsobs._12hora }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!--Tab para las Observaciones del Biometrico-->
 
                                 <!--Tab para el reporte de MES-->
                                 <div class="tab-pane fade" id="mensual" role="tabpanel" aria-labelledby="mensula-tab">
@@ -392,7 +417,8 @@ export default {
                     _09cel:'',
                     _10correo:''
                 },
-            }
+            },
+            listaObs:[]
         }
     },
     beforeCreate(){        
@@ -421,7 +447,7 @@ export default {
                 
                 this.usuarioService.headersUsuario(this.usuario.token);
                 this.usuarioService.getPerfil(this.usuario.cif).then(response => {
-                this.persona = response.data;
+                    this.persona = response.data;
                 });
             }
         },
@@ -437,6 +463,12 @@ export default {
         getHorario(){
             this.biometricoService.getHorario(this.id_horario,this.usuario.cif).then(response=>{
                 this.horarioPerfil=response.data;
+                this.getObs();
+            });
+        },
+        async getObs(){
+            await this.biometricoService.getObs(this.usuario.cif).then(response=>{
+                this.listaObs=response.data;
             });
         },
         getReporteMes(){
@@ -444,10 +476,11 @@ export default {
             this.reporteMes.id_horario=this.id_horario;
             this.reporteMes.listaPerfil=this.listaPerfil;
             this.reporteMes.persona=this.persona;
+
             this.$router.push({
                 name: "reportePerfilUsuario",
                 params:{
-                    reporte:JSON.stringify(this.reporteMes)
+                    reporteUsuario:JSON.stringify(this.reporteMes)
                 }
             });            
         }

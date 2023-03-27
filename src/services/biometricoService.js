@@ -7,8 +7,6 @@ export default class BiometricoService{
         return axios.get(controlUrl+"biometrico/listarCifCero");
     }
     updateBiometrico(biometrico){
-        console.log('datos del biometrico');
-        console.log(biometrico);
         return axios.put(controlUrl+"biometrico/agregarBiometrico",biometrico);
     }
     getPerfil(cif){
@@ -18,8 +16,27 @@ export default class BiometricoService{
             }});
     }
     addHorario(horario){
-        console.log(horario);
         return axios.post(controlUrl+"horario/addHorario",horario);
+    }
+    addObs(obs){
+        const obsaux={
+            _01cif:obs.cif,
+            _02uidobs:obs.uidobs,
+            _03fechainicio:obs.fechainicio,
+            _04fechafin:obs.fechafin,
+            _05gestion:obs.fechainicio.substring(0, 4),
+            _06mes:obs.fechainicio.substring(5,7),
+            _07di:obs.fechainicio.substring(8,10),
+            _08df:obs.fechafin.substring(8,10),
+            _09detalle:obs.detalle,
+            _10imagen:'Ninguna',
+            _11tipo:obs.tipo,
+            _12hora:obs.hora,
+            _13h:obs.hora.substring(0,2),
+            _14m:obs.hora.substring(3,5)
+
+        };
+        return axios.post(controlUrl+"obs/agregarObs",obsaux);
     }
     getHorario(id_horario,cif){
         return axios.get(controlUrl+"horario/getHorario",{
@@ -29,8 +46,17 @@ export default class BiometricoService{
             }
         });
     }
+    getObs(cif){
+        const fecha = new Date();
+        const gestion = fecha.getFullYear();
+        return axios.get(controlUrl+"obs/getObsPerfil",{
+            params:{
+                cif:cif,
+                gestion:gestion
+            }
+        });
+    }
     getReporteMes(reporte){
-        console.log(reporte);
         return axios.get(controlUrl+"marcado/reporteMes",{
             params:{
                 id_horario:reporte.id_horario,
@@ -41,7 +67,6 @@ export default class BiometricoService{
         });
     }
     getReporteMesDia(reporte){
-        console.log(reporte);
         return axios.get(controlUrl+"marcado/reporteMesDia",{
             params:{
                 id_horario:reporte.id_horario,

@@ -27,7 +27,6 @@ export default class UsuarioService{
         });
     }
     updatePersona(persona){
-        console.log(persona);
         return axios.put(usuario_api+"updatePersona",persona);
     }
     updateUsuario(usuario){

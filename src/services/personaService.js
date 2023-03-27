@@ -24,7 +24,6 @@ export default class PersonaService{
             _09cel:persona._09cel,
             _10correo:persona._10correo
         }
-        console.log(aux);
         return axios.post(personaUrl+"registrar",aux);
     }
     getPersona(cif){

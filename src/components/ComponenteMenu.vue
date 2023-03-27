@@ -82,13 +82,12 @@ export default {
         }
     },
     created(){
-        console.log(this.menu);
+        console.log("Menu en createt menu"+this.menu);
     },
     updated(){
         if(this.cif>0 )
         {
-            console.log(this.cif);
-            
+            console.log("cif en Update Menu"+this.cif);
         }
     },
 }
