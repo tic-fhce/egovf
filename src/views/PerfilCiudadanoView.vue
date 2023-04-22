@@ -25,8 +25,9 @@ import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteControlPersonalVue from '@/components/ComponenteControlPersonal.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponentePernicionVue from '@/components/ComponentePernicion.vue';
-import PersonaService from '@/services/personaService';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
+
+import PersonaService from '@/services/personaService';
 
 export default {
     name:'PerfilCiudadanoView',
@@ -64,19 +65,18 @@ export default {
             }
         }
     },
+    beforeCreate(){        
+        if(this.$cookies.get('cif')==null){
+            this.$router.push('/');
+        }
+    },
     created(){
         this.personaService = new PersonaService();
     },
     mounted(){
         this.cifCiudadano = this.$route.params.cifCiudadano;
-        console.log(this.cifCiudadano);
         this.getDatos();
         this.getDatosPersona();
-    },
-    beforeCreate(){        
-        if(this.$cookies.get('cif')==null){
-            this.$router.push('/');
-        }
     },
     methods:{
         getDatos(){

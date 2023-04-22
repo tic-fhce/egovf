@@ -288,195 +288,15 @@
     </div>
     <br>
 
-<!-- Modal  Biometrico-->
-<div class="modal fade" id="biometricoModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Agregar Biometrico</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Datos del Biometrico</label>
-            <div class="col-sm-6">
-                <select v-model="id_bio" class="form-control" @change="datosChange()">
-                    <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">{{lista._02nombre}} {{lista._06lugar}}</option>
-                </select>
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Tipo</label>
-            <div class="col-sm-6">
-                <select v-model="id_tipo" class="form-control" @change="datosChange()">
-                    <option value="1">Administrador</option>
-                    <option value="2">Docente/Aux</option>
-                </select>
-            </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updateBiometrico()">Agregar Datos </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal  Horario-->
-<div class="modal fade" id="horarioModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Agregar Nuevo Horario</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3 row">
-            <br>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Horario</th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miercoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
-                        <th>Sabado</th>
-                        <th>Domingo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Ingreso Mañana</th>
-                        <td><input type="text" v-model="horario._02lem" size="5"></td>
-                        <td><input type="text" v-model="horario._06mem" size="5"></td>
-                        <td><input type="text" v-model="horario._10miem" size="5"></td>
-                        <td><input type="text" v-model="horario._14jem" size="5"></td>
-                        <td><input type="text" v-model="horario._18vem" size="5"></td>
-                        <td><input type="text" v-model="horario._22sem" size="5"></td>
-                        <td><input type="text" v-model="horario._26dem" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Salida Mañana</th>
-                        <td><input type="text" v-model="horario._03lsm" size="5"></td>
-                        <td><input type="text" v-model="horario._07msm" size="5"></td>
-                        <td><input type="text" v-model="horario._11mism" size="5"></td>
-                        <td><input type="text" v-model="horario._15jsm" size="5"></td>
-                        <td><input type="text" v-model="horario._19vsm" size="5"></td>
-                        <td><input type="text" v-model="horario._23ssm" size="5"></td>
-                        <td><input type="text" v-model="horario._27dsm" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Ingreso Tarde</th>
-                        <td><input type="text" v-model="horario._04let" size="5"></td>
-                        <td><input type="text" v-model="horario._08met" size="5"></td>
-                        <td><input type="text" v-model="horario._12miet" size="5"></td>
-                        <td><input type="text" v-model="horario._16jet" size="5"></td>
-                        <td><input type="text" v-model="horario._20vet" size="5"></td>
-                        <td><input type="text" v-model="horario._24set" size="5"></td>
-                        <td><input type="text" v-model="horario._28det" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Salida Tarde</th>
-                        <td><input type="text" v-model="horario._05lst" size="5"></td>
-                        <td><input type="text" v-model="horario._09mst" size="5"></td>
-                        <td><input type="text" v-model="horario._13mist" size="5"></td>
-                        <td><input type="text" v-model="horario._17jst" size="5"></td>
-                        <td><input type="text" v-model="horario._21vst" size="5"></td>
-                        <td><input type="text" v-model="horario._25sst" size="5"></td>
-                        <td><input type="text" v-model="horario._29dst" size="5"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addHorario()">Agregar Datos </button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
-<!-- Modal  Obserbasiones-->
-<div class="modal fade" id="obsModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Agregar Observaciones de Asistencia</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="obs.uidobs">
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-            <div class="col-sm-8">
-                <input type="date" class="form-control" v-model="obs.fechainicio">
-            </div>
-        </div>
-        
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-            <div class="col-sm-8">
-                <input type="date" class="form-control" v-model="obs.fechafin">
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-            <div class="col-sm-8">
-                <textarea class="form-control" v-model="obs.detalle"></textarea>
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Tipo</label>
-            <div class="col-sm-8">
-                <select class="form-control" v-model="obs.tipo">
-                    <option value="Entrada M.">Entrada Mañana</option>
-                    <option value="Salida M.">Salida Mañana</option>
-                    <option value="Entrada T.">Entrada Tarde</option>
-                    <option value="Salida T.">Salida Tarde</option>
-                    <option value="continuo">Continuo</option>
-                    <option value="comision">Comisión</option>
-                    <option value="permiso">Permiso</option>
-                    <option value="asueto">Asueto</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="obs.hora">
-            </div>
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addObs()">Agregar Observaciones</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </template>
 <script>
 import BiometricoService from '@/services/biometricoService';
 
 export default {
-    name:'ComponenteControlPersonalVue',
+    name:'ComponenteControlPersonalUsuarioVue',
     props:['persona'],
     data(){
         return{
@@ -519,37 +339,6 @@ export default {
                 _06lugar:'',
                 _07id_tipo:1
             },
-            horario:{
-                _01cif:this.persona._01cif,
-                _02lem:'08:30',
-                _03lsm:'12:30',
-                _04let:'14:30',
-                _05lst:'18:30',
-                _06mem:'08:30',
-                _07msm:'12:30',
-                _08met:'14:30',
-                _09mst:'18:30',
-                _10miem:'08:30',
-                _11mism:'12:30',
-                _12miet:'14:30',
-                _13mist:'18:30',
-                _14jem:'08:30',
-                _15jsm:'12:30',
-                _16jet:'14:30',
-                _17jst:'18:30',
-                _18vem:'08:30',
-                _19vsm:'12:30',
-                _20vet:'14:30',
-                _21vst:'18:30',
-                _22sem:'08:30',
-                _23ssm:'12:30',
-                _24set:'14:30',
-                _25sst:'18:30',
-                _26dem:'08:30',
-                _27dsm:'12:30',
-                _28det:'14:30',
-                _29dst:'18:30'
-            },
             horarioPerfil:{
                 id:0,
                 _01cif:this.persona._01cif,
@@ -583,15 +372,6 @@ export default {
                 _29dst:'18:30'
             },
             reporteFinal:[],
-            obs:{
-                cif:null,
-                uidobs:'',
-                fechainicio:'',
-                fechafin:'',
-                detalle:'',
-                tipo:'Seleccionar Tipo',
-                hora:'08:30'
-            },
             listaObs:[]
         }
     },
@@ -632,88 +412,6 @@ export default {
         async getObs(){
             await this.biometricoService.getObs(this.persona._01cif).then(response=>{
                 this.listaObs=response.data;
-            });
-        },
-        datosChange(){
-            this.listaBiometrico.forEach(element => {
-                if (element.id== this.id_bio)
-                {
-                    this.biometrico=element;
-                    this.biometrico._03cif=this.persona._01cif;
-                    this.biometrico._07id_tipo=this.id_tipo;
-                }
-            });
-            console.log(this.biometrico);
-        },
-        addHorario(){
-            this.horario._01cif=this.persona._01cif;
-            this.$swal.fire({
-                title: 'Desea Agregar los datos del Biometrico al Ciudadano ?',
-                showDenyButton: true,
-                confirmButtonText: 'Aceptar',
-                denyButtonText: 'Cancelar',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    this.biometricoService.addHorario(this.horario).then(response=>{
-                        if(response.status==200){
-                            this.$swal.fire('Los Horarios fueron Agregados al Ciudadano Corectamente', '', 'success');
-                        }
-                        else{
-                            this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                        }
-                    });
-                    
-                } else if (result.isDenied) {
-                    this.$swal.fire('Datos Cancelados', '', 'info');
-                }
-            });
-        },
-        addObs(){
-            this.obs.cif=this.persona._01cif;
-            this.$swal.fire({
-                title: 'Desea agregar las Observaciones de Asistencia al Ciudadano ?',
-                showDenyButton: true,
-                confirmButtonText: 'Aceptar',
-                denyButtonText: 'Cancelar',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    this.biometricoService.addObs(this.obs).then(response=>{
-                        console.log(response.status);
-                        if(response.status==200){
-                            this.$swal.fire('Las Observaciones fueron Agregados al Ciudadano Corectamente', '', 'success');
-                        }
-                        else{
-                            this.$swal.fire('Las Observaciones no fueron Guardados Error'+ response.status, '', 'error');
-                        }
-                    });
-                    
-                } else if (result.isDenied) {
-                    this.$swal.fire('Datos Cancelados', '', 'info');
-                }
-            });
-        },
-        
-        async updateBiometrico(){
-            await this.$swal.fire({
-                title: 'Desea Agregar el Biometrico  al Ciudadano ? '+this.biometrico._02nombre,
-                showDenyButton: true,
-                confirmButtonText: 'Aceptar',
-                denyButtonText: 'Cancelar',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    this.biometricoService.updateBiometrico(this.biometrico).then(response=>{
-                        if(response.status==200){
-                            this.$swal.fire('Datos del Biometrico Agregados al Ciudadano Corectamente', '', 'success');
-                            location.reload();
-                        }
-                        else{
-                            this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                        }
-                    });
-                    
-                } else if (result.isDenied) {
-                    this.$swal.fire('Datos Cancelados', '', 'info');
-                }
             });
         },
         getReporteMes(){

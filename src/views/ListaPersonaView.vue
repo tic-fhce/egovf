@@ -7,8 +7,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6"></div>
-        <div class="col-md-6 align-self-end text-end">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target=#personamodal>Agregar Ciudadano</button>
+        <div class="col-md-3 align-self-end text-end">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
+        </div>
+        <div class="col-md-3 align-self-end text-end">
+          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs Ciudadano</button>
         </div>
       </div>
       <hr>
@@ -151,25 +154,81 @@
   </div>
 </div>
 
-<!-- Modal Matricula-->
-<div class="modal fade" id="matriculamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- Modal  Obserbasiones-->
+<div class="modal fade" id="obsModalAll" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Actualizar Matricula Universitaria</h5>
+        <h5 class="modal-title">Agregar Observaciones de Asistencia a los Ciudadanos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
         <div class="mb-3 row">
-            <label for="celular" class="col-sm-6 col-form-label">Matricula</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" >
+            <label for="datos" class="col-sm-4 col-form-label">Obs - Para</label>
+            <div class="col-sm-8">
+              <select class="form-control" v-model="obsall.cif">
+                <option value="1">Administrativo</option>
+                <option value="2">Docente / Aux</option>
+              </select>
             </div>
         </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="obsall.uidobs">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="obsall.fechainicio">
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="obsall.fechafin">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" v-model="obsall.detalle"></textarea>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Tipo</label>
+            <div class="col-sm-8">
+                <select class="form-control" v-model="obsall.tipo">
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="comision">Comisión</option>
+                    <option value="permiso">Permiso</option>
+                    <option value="asueto">Asueto</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Hora</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="obsall.hora">
+            </div>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  >Guardar Cambios</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="addObsAll()">Agregar Observaciones</button>
       </div>
     </div>
   </div>
@@ -181,6 +240,7 @@
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import PersonaService from '@/services/personaService';
+import BiometricoService from '@/services/biometricoService';
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
 import $ from 'jquery';
@@ -196,6 +256,7 @@ export default {
     data(){
         return {
           personaService:null,
+          biometricoService:null,
           usuario:{
             token:'',
             cif:'',
@@ -228,7 +289,16 @@ export default {
             correo:false
           },
           listaCiudadanos:[],
-          registro:[]
+          registro:[],
+          obsall:{
+            cif:null,
+            uidobs:'',
+            fechainicio:'',
+            fechafin:'',
+            detalle:'',
+            tipo:'Seleccionar Tipo',
+            hora:'08:30'
+          }
         }
     },
     beforeCreate(){        
@@ -237,7 +307,7 @@ export default {
         }
     },
     created(){
-        
+      this.biometricoService= new BiometricoService();
     },
     mounted(){
       this.getDatos();
@@ -365,6 +435,29 @@ export default {
         this.errorpersona.sexo=false,
         this.errorpersona.cel=false,
         this.errorpersona.correo=false
+      },
+      async addObsAll(){
+        await this.$swal.fire({
+                title: 'Desea agregar las Observaciones de Asistencia a los Ciudadanos ?',
+                showDenyButton: true,
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.biometricoService.addObsAll(this.obsall).then(response=>{
+                        console.log(response.status);
+                        if(response.status==200){
+                            this.$swal.fire('Las Observaciones fueron Agregados a los Ciudadanos Corectamente', '', 'success');
+                        }
+                        else{
+                            this.$swal.fire('Las Observaciones no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
       }
     }
 }
@@ -376,5 +469,12 @@ export default {
 }
 .color{
   background-color: brown;
+}
+.material-icons{
+    
+    color: white;
+    font-size: 1em;
+    border-top: 0ch;
+    border-bottom: 0ch;
 }
 </style>

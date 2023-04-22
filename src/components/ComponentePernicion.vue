@@ -49,9 +49,15 @@
       </div>
       <div class="modal-body">
         <div class="mb-3 row">
+            <label for="datos" class="col-sm-6 col-form-label">Confirmar CIF</label>
+            <div class="col-sm-6">
+                <input type="text"  class="form-control" v-model="pernicion.cif">
+            </div>
+        </div>
+        <div class="mb-3 row">
             <label for="datos" class="col-sm-6 col-form-label">Perbicions del Menu</label>
             <div class="col-sm-6">
-                <select v-model="pernicion" class="form-control" >
+                <select v-model="pernicion.id_menu" class="form-control" >
                     <option v-for="lm in listamenu" :key="lm.id" :value="lm.id">{{ lm._03nivel }} {{ lm._01titulo }}</option>
                 </select>
             </div>
@@ -59,7 +65,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" >Agregar Permiso </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="addPernicion()">Agregar Permiso </button>
       </div>
     </div>
   </div>
@@ -68,24 +74,29 @@
 </template>
 
 <script>
-import PernicionService from '@/services/pernicionService';
-    export default {
+    import PernicionService from '@/services/pernicionService';
+    export default{
         name:'ComponentePernicionVue',
         props:['persona'],
         data(){
             return{
-                pernicionService:null,
+                prenicionService:null,
                 getPB:true,
                 pernicionsmenu:[],
                 listamenu:[],
-                pernicion:0,
                 usuario:{
                     token:'',
                     cif:'',
                     correo:'',
                     celular:'',
                     pass:'',
-                    menu:[]
+                    menun:[]
+                },
+                pernicion:{
+                    cif:0,
+                    id_menu:0,
+                    fecha:'',
+                    estado:1
                 }
             }
         },
@@ -100,7 +111,7 @@ import PernicionService from '@/services/pernicionService';
             }
         },
         methods:{
-            async  getDatosMenu(){
+            async getDatosMenu(){
                 this.usuario.token=this.$cookies.get('token');
                 this.usuario.cif=this.$cookies.get('cif');
                 this.usuario.correo=this.$cookies.get('correo');
@@ -121,6 +132,29 @@ import PernicionService from '@/services/pernicionService';
                     this.pernicionsmenu=response.data;
                 });
                 
+            },
+            async addPernicion(){
+                await this.$swal.fire({
+                    title : 'Desea Agregar el Pernicion al Ciudadano ? ',
+                    showDenyButton: true,
+                    confirmButtonText: 'Aceptar',
+                    denyButtonText: 'Cancelar',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.pernicionService.addPernicion(this.pernicion).then(response=>{
+                            if(response.status==200){
+                                this.$swal.fire('Permisos Agregados al Ciudadano Corectamente', '', 'success');
+                                location.reload();
+                            }
+                            else{
+                                this.$swal.fire('Los Permisos no fueron Guardados Error'+ response.status, '', 'error');
+                            }
+                        });
+                        
+                    } else if (result.isDenied) {
+                        this.$swal.fire('Permisos Cancelados', '', 'info');
+                    }
+                });
             }
         }
     }

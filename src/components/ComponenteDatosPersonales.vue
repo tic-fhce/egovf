@@ -141,7 +141,7 @@ import UsuarioService from '@/services/usuarioServices';
 import PersonaService from '@/services/personaService';
 
 export default {
-    name:'ComponenteDatosPersonaVue',
+    name:'ComponenteDatosPersonalesVue',
     props:['cifCiudadano'],
     data(){
         return{

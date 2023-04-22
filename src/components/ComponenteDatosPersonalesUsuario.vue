@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-    <div class="card col-sm-6">
+    <div class="card col-sm-12 col-md-12">
         <div class="row">
             <div class="card-header">
                 <h3>Datos Personales</h3>
@@ -11,24 +11,27 @@
             <div class="col-sm-8">
                 <div class="card-body">
                     <div class="row">
-                        <h4 class="card-title">CIF : {{persona._01cif}}</h4>
-                        <label for="nombre" class="col-md-6">Nombre : </label>
-                        <label for="nombre" class="col-md-6">{{persona._04nombre}}</label>
+                        <div class="col col-sm-6 col-md-6">
+                            <h4 class="card-title">CIF : {{persona._01cif}}</h4>
+                            <label for="nombre" class="col-md-6">Nombre : </label>
+                            <label for="nombre" class="col-md-6">{{persona._04nombre}}</label>
 
-                        <label for="apellido" class="col-md-6">Apellidos : </label>
-                        <label for="nombre" class="col-md-6">{{persona._05paterno}} {{persona._06materno}}</label>
-                    </div>
-                    <hr>
-                    <ul>
-                        <li>ID app : {{persona.id}}</li>
-                        <li>CIF : {{persona._01cif}}</li>
-                        <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
-                        <li>Correo : {{persona._10correo}}</li>
-                        <li>Celular : <a href="" target="_blank">{{persona._09cel}}</a></li>
-                        <li>Fecha N : {{persona._07fecha}}</li>
-                        <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
-                        <li v-if="persona._08sexo == 2">Sexo : Masculino</li>
-                    </ul>
+                            <label for="apellido" class="col-md-6">Apellidos : </label>
+                            <label for="nombre" class="col-md-6">{{persona._05paterno}} {{persona._06materno}}</label>
+                        </div>
+                        <div class="col col-sm-6 col-md-6">
+                            <ul>
+                                <li>ID app : {{persona.id}}</li>
+                                <li>CIF : {{persona._01cif}}</li>
+                                <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
+                                <li>Correo : {{persona._10correo}}</li>
+                                <li>Celular : <a href="" target="_blank">{{persona._09cel}}</a></li>
+                                <li>Fecha N : {{persona._07fecha}}</li>
+                                <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
+                                <li v-if="persona._08sexo == 2">Sexo : Masculino</li>
+                            </ul>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -38,6 +41,7 @@
 </template>
 
 <script>
+import UsuarioService from '@/services/usuarioServices';
 import PersonaService from '@/services/personaService';
 
 export default {
@@ -76,6 +80,7 @@ export default {
         //this.getDatosComponenteDatosPersona();
     },
     created(){
+        this.usuarioService= new UsuarioService();
         this.personaService = new PersonaService();
     },
     updated(){
@@ -94,6 +99,12 @@ export default {
             this.usuario.pass=this.$cookies.get('pass');
             this.usuario.menu=this.$cookies.get('menu');
 
+            // Creamos datos de Usuario
+            
+            this.usuarioService.headersUsuario(this.usuario.token);
+            this.usuarioService.getUsuario(this.cifCiudadano).then((response) =>{
+                this.egovf=response.data;
+            });
             // creamos los datos del Ciudadano
             
             this.personaService.headersUsuario(this.usuario.token);

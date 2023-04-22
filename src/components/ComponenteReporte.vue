@@ -49,7 +49,10 @@
                             <td>
                                 {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
                             </td>
-                            <td>{{ value.obserModel.uidobs }}<br> {{ value.obserModel.tipo }} <br>{{ value.obserModel.hora }}</td>
+                            
+                            <td>
+                                <div class="obserbaciones" v-for="listobs in value.obserModel" :key="listobs.id">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}<br></div>
+                            </td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -212,5 +215,8 @@ export default {
     font-size: 1em;
     border-top: 0ch;
     border-bottom: 0ch;
+}
+.obserbaciones{
+    font-size: 0.9em;
 }
 </style>

@@ -1,12 +1,14 @@
 import axios from "axios";
 
-const controlUrl="http://192.168.31.45:8082/fhce-egovf-scc/";
+const controlUrl="http://200.7.161.114:8080/fhce-egovf-scc/";
+//const controlUrl="http://172.16.114.144:8084/fhce-egovf-scc/";
 
 export default class BiometricoService{
     getListarCifCero(){
         return axios.get(controlUrl+"biometrico/listarCifCero");
     }
     updateBiometrico(biometrico){
+        console.log(biometrico);
         return axios.put(controlUrl+"biometrico/agregarBiometrico",biometrico);
     }
     getPerfil(cif){
@@ -37,6 +39,27 @@ export default class BiometricoService{
 
         };
         return axios.post(controlUrl+"obs/agregarObs",obsaux);
+    }
+    addObsAll(obs){
+        const obsaux={
+            _01cif:obs.cif,
+            _02uidobs:obs.uidobs,
+            _03fechainicio:obs.fechainicio,
+            _04fechafin:obs.fechafin,
+            _05gestion:obs.fechainicio.substring(0, 4),
+            _06mes:obs.fechainicio.substring(5,7),
+            _07di:obs.fechainicio.substring(8,10),
+            _08df:obs.fechafin.substring(8,10),
+            _09detalle:obs.detalle,
+            _10imagen:'Ninguna',
+            _11tipo:obs.tipo,
+            _12hora:obs.hora,
+            _13h:obs.hora.substring(0,2),
+            _14m:obs.hora.substring(3,5)
+
+        };
+        console.log(obsaux);
+        return axios.post(controlUrl+"obs/agregarObsAll",obsaux);
     }
     getHorario(id_horario,cif){
         return axios.get(controlUrl+"horario/getHorario",{
