@@ -39,17 +39,15 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><router-link to="/perfil" class="dropdown-item">Mi Perfil</router-link></li>
-                            <li><a class="dropdown-item" href="#">Modulos Permitidos</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Actualizar Datos</a></li>
-                            <li><hr class="dropdown-divider"></li>
+
                             <li><a class="dropdown-item" href="#" @click="salir()">Salir</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
-        </nav>
+    </nav>
     
 </template>
 <script>
@@ -82,14 +80,14 @@ export default {
         }
     },
     created(){
-        console.log("Menu en createt menu"+this.menu);
+        
     },
     updated(){
         if(this.cif>0 )
         {
             console.log("cif en Update Menu"+this.cif);
         }
-    },
+    }
 }
 </script>
 <style scoped>

@@ -1,17 +1,19 @@
 <template>
 <div class="row">
-    <div class="card col-sm-12 col-md-12">
+    <div class="card col col-sm-12 col-md-12">
         <div class="row">
             <div class="card-header">
                 <h3>Datos Personales</h3>
             </div>
-            <div class="col-sm-4">
-                <img src="../assets/logo.png" class="img-fluid rounded-start" alt="...">
+            <div class="col col-sm-4 col-md-4">
+                <br>
+                <img src="../assets/user.png" class="img-fluid rounded-start" alt="...">
+                <br>
             </div>
-            <div class="col-sm-8">
+            <div class="col col-sm-8 col-md-8">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col col-sm-6 col-md-6">
+                        <div class="col">
                             <h4 class="card-title">CIF : {{persona._01cif}}</h4>
                             <label for="nombre" class="col-md-6">Nombre : </label>
                             <label for="nombre" class="col-md-6">{{persona._04nombre}}</label>
@@ -19,7 +21,7 @@
                             <label for="apellido" class="col-md-6">Apellidos : </label>
                             <label for="nombre" class="col-md-6">{{persona._05paterno}} {{persona._06materno}}</label>
                         </div>
-                        <div class="col col-sm-6 col-md-6">
+                        <div class="col">
                             <ul>
                                 <li>ID app : {{persona.id}}</li>
                                 <li>CIF : {{persona._01cif}}</li>

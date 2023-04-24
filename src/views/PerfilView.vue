@@ -55,9 +55,6 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#actualizar" type="button" role="tab"  aria-selected="false">Actualizar</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
-                            </li>
                         </ul>
                         
                         <div class="tab-content" id="myTabContent">
@@ -80,6 +77,7 @@
                                     <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                                     <li>Correo : {{egovf._05correo}}</li>
                                     <li>Celular : <a href="#" data-bs-toggle="modal" data-bs-target=#celularmodal> {{egovf._06celular}}</a></li>
+                                    <li>Contraseña : <a href="#" data-bs-toggle="modal" data-bs-target=#passmodal> Actualizar Contraseña</a></li>
                                 </ul>
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
@@ -133,6 +131,42 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updateUsuario()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal  Contraseña-->
+<div class="modal fade" id="passmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar Contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 row">
+            <label for="celular" class="col-sm-6 col-form-label">Contraseña Actual</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" v-model="persona._09cel">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="celular" class="col-sm-6 col-form-label">Nueva Contraseña </label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" v-model="persona._09cel">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="celular" class="col-sm-6 col-form-label">Confirmar Nueva Contraseña </label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" v-model="persona._09cel">
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updatePersona()">Guardar Cambios</button>
       </div>
     </div>
   </div>

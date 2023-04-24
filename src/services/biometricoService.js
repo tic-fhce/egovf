@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const controlUrl="http://200.7.161.114:8080/fhce-egovf-scc/";
+//const controlUrl="http://200.7.161.114:8080/fhce-egovf-scc/";
 //const controlUrl="http://172.16.114.144:8084/fhce-egovf-scc/";
+const controlUrl="http://192.168.31.45:8082/fhce-egovf-scc/";
 
 export default class BiometricoService{
     getListarCifCero(){
         return axios.get(controlUrl+"biometrico/listarCifCero");
     }
     updateBiometrico(biometrico){
-        console.log(biometrico);
         return axios.put(controlUrl+"biometrico/agregarBiometrico",biometrico);
     }
     getPerfil(cif){
@@ -58,7 +58,6 @@ export default class BiometricoService{
             _14m:obs.hora.substring(3,5)
 
         };
-        console.log(obsaux);
         return axios.post(controlUrl+"obs/agregarObsAll",obsaux);
     }
     getHorario(id_horario,cif){

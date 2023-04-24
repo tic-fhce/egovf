@@ -17,25 +17,27 @@
       <hr>
         <div class="row">
           <div class="col-ms-12">
-            <table id="personaTabla" class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="persona in listaCiudadanos" :key="persona.id">
-                  <th scope="row">{{persona.id}}</th>
-                  <td>{{persona._01cif}}</td>
-                  <td>{{persona._04nombre}} {{persona._05paterno}} {{persona._06materno}}<br>
-                  {{persona._02ci}} {{persona._03complemento}}
-                  </td>
-                  <td>{{persona._09cel}}</td>
-                  <td>{{persona._10correo}}</td>
-                  <td><button class="btn btn-success" @click="perfil(persona._01cif)">Perfil</button></td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table id="personaTabla" class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="persona in listaCiudadanos" :key="persona.id">
+                    <th scope="row">{{persona.id}}</th>
+                    <td>{{persona._01cif}}</td>
+                    <td>{{persona._04nombre}} {{persona._05paterno}} {{persona._06materno}}<br>
+                    {{persona._02ci}} {{persona._03complemento}}
+                    </td>
+                    <td>{{persona._09cel}}</td>
+                    <td>{{persona._10correo}}</td>
+                    <td><button class="btn btn-success" @click="perfil(persona._01cif)">Perfil</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
     </div>

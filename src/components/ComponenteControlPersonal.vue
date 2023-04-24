@@ -721,13 +721,12 @@ export default {
             this.reporteMes.id_horario=this.id_horario;
             this.reporteMes.listaPerfil=this.listaPerfil;
             this.reporteMes.persona=this.persona;
-            
             this.$router.push({
                 name: "reportePerfil",
                 params:{
                     reporte:JSON.stringify(this.reporteMes)
                 }
-            });            
+            });
         }
     }
 }

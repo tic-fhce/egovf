@@ -17,63 +17,69 @@
                 
             </div>
             <div class="card-body">
-                <table class="table table-striped table-hover" id="printDatos">
-                    <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
-                    <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
-                        <td>ID Biometrico : {{perfil.id}}</td>
-                        <td>User ID : {{perfil._01user_id}}</td>
-                        <td>Nombre : {{perfil._02nombre}}</td>
-                        <td>Lugar : {{perfil._06lugar}}</td>
-                    </tr>
-                </table>
-                <hr>
-                <table class="table table-striped table-hover" id="printMarcado">
-                    <thead>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="printDatos">
+                        <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
+                        <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
+                            <td>ID Biometrico : {{perfil.id}}</td>
+                            <td>User ID : {{perfil._01user_id}}</td>
+                            <td>Nombre : {{perfil._02nombre}}</td>
+                            <td>Lugar : {{perfil._06lugar}}</td>
+                        </tr>
+                    </table>
+                </div>
+                    <hr>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="printMarcado">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Detalle</th><th>Lugar</th><th>Turno</th><th>Hora M.</th><th>Min. R.</th><th>Obs.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="value in listaReporte" :key="value.id">
+                                <td>{{value.id}}</td>
+                                <td>{{value.dia}} {{value.day}} <br>{{value.fecha}}<br></td>
+                                <td>
+                                    {{value.lugar[0]}}<br>{{value.lugar[1]}}<br>{{value.lugar[2]}}<br>{{value.lugar[3]}}
+                                </td>
+                                <td>
+                                    {{value.turno[0]}}<br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
+                                </td>
+                                <td>
+                                    {{value.hora[0]}}<br>{{value.hora[1]}}<br>{{value.hora[2]}}<br>{{value.hora[3]}}
+                                </td>
+                                <td>
+                                    {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
+                                </td>
+                                
+                                <td>
+                                    <div class="obserbaciones" v-for="listobs in value.obserModel" :key="listobs.id">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}<br></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{sumaRetraso}}</h2></th><th>min.</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table id="firma">
                         <tr>
-                            <th>#</th><th>Detalle</th><th>Lugar</th><th>Turno</th><th>Hora M.</th><th>Min. R.</th><th>Obs.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="value in listaReporte" :key="value.id">
-                            <td>{{value.id}}</td>
-                            <td>{{value.dia}} {{value.day}} <br>{{value.fecha}}<br></td>
                             <td>
-                                {{value.lugar[0]}}<br>{{value.lugar[1]}}<br>{{value.lugar[2]}}<br>{{value.lugar[3]}}
+                                <p class="text-center">Lic. Jaime Montecinos Marquez<br>Responsable Unidad TIC</p>
                             </td>
                             <td>
-                                {{value.turno[0]}}<br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
-                            </td>
-                            <td>
-                                {{value.hora[0]}}<br>{{value.hora[1]}}<br>{{value.hora[2]}}<br>{{value.hora[3]}}
-                            </td>
-                            <td>
-                                {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
-                            </td>
-                            
-                            <td>
-                                <div class="obserbaciones" v-for="listobs in value.obserModel" :key="listobs.id">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}<br></div>
+                                <p class="text-center">Vo.Bo<br>Inmediato Superior</p>
                             </td>
                         </tr>
-                    </tbody>
-                    <tfoot>
                         <tr>
-                            <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{sumaRetraso}}</h2></th><th>min.</th>
+                            <td class="text-center"><img src="../assets/logoticjpg.jpg" width="100" height="75"></td><td></td>
                         </tr>
-                    </tfoot>
-                </table>
-                <table id="firma">
-                    <tr>
-                        <td>
-                            <p class="text-center">Lic. Jaime Montecinos Marquez<br>Responsable Unidad TIC</p>
-                        </td>
-                        <td>
-                            <p class="text-center">Vo.Bo<br>Inmediato Superior</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"><img src="../assets/logoticjpg.jpg" width="100" height="75"></td><td></td>
-                    </tr>
-                </table>
+                    </table>
+                </div>
             </div>
             <div class="card-footer">
 
@@ -139,7 +145,6 @@ export default {
                 }
             });
             this.sumaRetraso=sum;
-            console.log("La suma es "+this.sumaRetraso);
         },
         getMes(){
             if(this.reporte.mes==1){this.mes='Enero';}
@@ -171,6 +176,9 @@ export default {
             doc.text("ID app : "+this.reporte.persona.id,120,45);
             doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,50);
             doc.text("Correo : "+this.reporte.persona._10correo,120,55);
+            doc.setFontSize(15);
+            doc.text("Total Min. de Retraso : "+this.sumaRetraso+" min.",120,65);
+            doc.setFontSize(10);
             var finalY=65;
             autoTable(doc, {
                 theme: 'plain',

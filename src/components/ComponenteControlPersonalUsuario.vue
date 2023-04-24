@@ -4,17 +4,8 @@
             <div class="row">
                 <div class="card-header">
                     <div class="row">
-                        <div class=" col col-md-6 col-sm-6">
-                            <h3>Control de Personal Biometrico</h3>
-                        </div>
-                        <div class=" col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-primary" data-bs-toggle="modal" data-bs-target=#biometricoModal><span class="material-icons">&#xe145;</span>Biometrico</a>
-                        </div>
-                        <div class="col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-warning" data-bs-toggle="modal" data-bs-target=#horarioModal><span class="material-icons">&#xe145;</span>Horario</a>
-                        </div>
-                        <div class="col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-success" data-bs-toggle="modal" data-bs-target=#obsModal><span class="material-icons">&#xe145;</span>Obs</a>
+                        <div class=" col col-md-12 col-sm-12">
+                            <h3>Control de Asistencia</h3>
                         </div>
                     </div>
                 </div>
@@ -22,27 +13,27 @@
                     <div class="row">
                         <ul class="nav nav-tabs" id="myTabBiometrico" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#datos" type="button" role="tab"  aria-selected="true">Datos Biometrico</button>
+                                <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#datosUsuario" type="button" role="tab"  aria-selected="true">Biometrico</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#horario" type="button" role="tab"  aria-selected="true">Horarios</button>
+                                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#horarioUsuario" type="button" role="tab"  aria-selected="true">Horarios</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#observaciones" type="button" role="tab"  aria-selected="true">Obserbaciones</button>
+                                <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#observacionesUsuario" type="button" role="tab"  aria-selected="true">Obs</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#mensual" type="button" role="tab"  aria-selected="false">Reporte Mensual</button>
+                                <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#mensualUsuario" type="button" role="tab"  aria-selected="false">Reporte Mensual</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#dias" type="button" role="tab" aria-controls="contact" aria-selected="false">Reporte Segmentado</button>
+                                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#diasUsuario" type="button" role="tab" aria-controls="contact" aria-selected="false">Reporte Segmentado</button>
                             </li>
-                        </ul>
+                        </ul><!--termina Ul-->
 
-                        <div class="tab-content" id="myTabContentBiometrico">
+                        <div class="tab-content" id="myTabContentBiometricoUsuario">
                             <!--Datos del Biometrico-->
-                            <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="datos-tab">
+                            <div class="tab-pane fade show active" id="datosUsuario" role="tabpanel" aria-labelledby="datos-tab">
                                 <br>
-                                <ul v-for="perfil in listaPerfil" :key="perfil.id">
+                                <ul v-for="perfil in listaPerfilUsuario" :key="perfil.id">
                                     <li>ID Biometrico : {{perfil.id}}</li>
                                     <li>UID : {{perfil._01user_id}}</li>
                                     <li>Nombre : {{perfil._02nombre}}</li>
@@ -56,7 +47,7 @@
                             <!--Datos del Biometrico-->
 
                             <!--Horario-->
-                            <div class="tab-pane fade" id="horario" role="tabpanel" aria-labelledby="mensula-tab">
+                            <div class="tab-pane fade" id="horarioUsuario" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
                                 <table class="table">
                                     <thead>
@@ -74,43 +65,43 @@
                                     <tbody>
                                         <tr>
                                             <th>Ingreso Mañana</th>
-                                            <td>{{horarioPerfil._02lem}}</td>
-                                            <td>{{horarioPerfil._06mem}}</td>
-                                            <td>{{horarioPerfil._10miem}}</td>
-                                            <td>{{horarioPerfil._14jem}}</td>
-                                            <td>{{horarioPerfil._18vem}}</td>
-                                            <td>{{horarioPerfil._22sem}}</td>
-                                            <td>{{horarioPerfil._26dem}}</td>
+                                            <td>{{horarioPerfilUsuario._02lem}}</td>
+                                            <td>{{horarioPerfilUsuario._06mem}}</td>
+                                            <td>{{horarioPerfilUsuario._10miem}}</td>
+                                            <td>{{horarioPerfilUsuario._14jem}}</td>
+                                            <td>{{horarioPerfilUsuario._18vem}}</td>
+                                            <td>{{horarioPerfilUsuario._22sem}}</td>
+                                            <td>{{horarioPerfilUsuario._26dem}}</td>
                                         </tr>
                                         <tr>
                                             <th>Salida Mañana</th>
-                                            <td>{{horarioPerfil._03lsm}}</td>
-                                            <td>{{horarioPerfil._07msm}}</td>
-                                            <td>{{horarioPerfil._11mism}}</td>
-                                            <td>{{horarioPerfil._15jsm}}</td>
-                                            <td>{{horarioPerfil._19vsm}}</td>
-                                            <td>{{horarioPerfil._23ssm}}</td>
-                                            <td>{{horarioPerfil._27dsm}}</td>
+                                            <td>{{horarioPerfilUsuario._03lsm}}</td>
+                                            <td>{{horarioPerfilUsuario._07msm}}</td>
+                                            <td>{{horarioPerfilUsuario._11mism}}</td>
+                                            <td>{{horarioPerfilUsuario._15jsm}}</td>
+                                            <td>{{horarioPerfilUsuario._19vsm}}</td>
+                                            <td>{{horarioPerfilUsuario._23ssm}}</td>
+                                            <td>{{horarioPerfilUsuario._27dsm}}</td>
                                         </tr>
                                         <tr>
                                             <th>Ingreso Tarde</th>
-                                            <td>{{horarioPerfil._04let}}</td>
-                                            <td>{{horarioPerfil._08met}}</td>
-                                            <td>{{horarioPerfil._12miet}}</td>
-                                            <td>{{horarioPerfil._16jet}}</td>
-                                            <td>{{horarioPerfil._20vet}}</td>
-                                            <td>{{horarioPerfil._24set}}</td>
-                                            <td>{{horarioPerfil._28det}}</td>
+                                            <td>{{horarioPerfilUsuario._04let}}</td>
+                                            <td>{{horarioPerfilUsuario._08met}}</td>
+                                            <td>{{horarioPerfilUsuario._12miet}}</td>
+                                            <td>{{horarioPerfilUsuario._16jet}}</td>
+                                            <td>{{horarioPerfilUsuario._20vet}}</td>
+                                            <td>{{horarioPerfilUsuario._24set}}</td>
+                                            <td>{{horarioPerfilUsuario._28det}}</td>
                                         </tr>
                                         <tr>
                                             <th>Salida Tarde</th>
-                                            <td>{{horarioPerfil._05lst}}</td>
-                                            <td>{{horarioPerfil._09mst}}</td>
-                                            <td>{{horarioPerfil._13mist}}</td>
-                                            <td>{{horarioPerfil._17jst}}</td>
-                                            <td>{{horarioPerfil._21vst}}</td>
-                                            <td>{{horarioPerfil._25sst}}</td>
-                                            <td>{{horarioPerfil._29dst}}</td>
+                                            <td>{{horarioPerfilUsuario._05lst}}</td>
+                                            <td>{{horarioPerfilUsuario._09mst}}</td>
+                                            <td>{{horarioPerfilUsuario._13mist}}</td>
+                                            <td>{{horarioPerfilUsuario._17jst}}</td>
+                                            <td>{{horarioPerfilUsuario._21vst}}</td>
+                                            <td>{{horarioPerfilUsuario._25sst}}</td>
+                                            <td>{{horarioPerfilUsuario._29dst}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -118,7 +109,7 @@
                             <!--Horario-->
 
                             <!--Observaciones del Biometrico-->
-                            <div class="tab-pane fade" id="observaciones" role="tabpanel" aria-labelledby="datos-tab">
+                            <div class="tab-pane fade" id="observacionesUsuario" role="tabpanel" aria-labelledby="datos-tab">
                                 <br>
                                 <table class="table">
                                     <thead>
@@ -127,7 +118,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="lsobs in listaObs" :key="lsobs.id">
+                                        <tr v-for="lsobs in listaObsUsuario" :key="lsobs.id">
                                             <td>{{ lsobs.id }}</td><td>{{ lsobs._02uidobs }}</td><td>{{ lsobs._03fechainicio }}</td><td>{{ lsobs._04fechafin }}</td><td>{{ lsobs._09detalle }}</td><td>{{ lsobs._11tipo }}</td><td>{{ lsobs._12hora }}</td>
                                         </tr>
                                     </tbody>
@@ -139,11 +130,12 @@
                             </div>
                             <!--Observaciones del Biometrico-->
 
-                            <div class="tab-pane fade" id="mensual" role="tabpanel" aria-labelledby="mensula-tab">
+                            <!--Formulario Por mes -->
+                            <div class="tab-pane fade" id="mensualUsuario" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
                                 <div class="row">
                                     <div class="col col-md-6 col-sm-6">
-                                        <ul v-for="perfil in listaPerfil" :key="perfil.id">
+                                        <ul v-for="perfil in listaPerfilUsuario" :key="perfil.id">
                                             <li>ID Biometrico : {{perfil.id}}</li>
                                             <li>User ID : {{perfil._01user_id}}</li>
                                             <li>Nombre : {{perfil._02nombre}}</li>
@@ -160,7 +152,7 @@
                                                 Gestion :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select v-model="reporteMes.gestion" class="form-control">
+                                                <select v-model="reporteMesUsuario.gestion" class="form-control">
                                                     <option value="2021">2021</option>
                                                     <option value="2022">2022</option>
                                                     <option value="2023">2023</option>
@@ -173,7 +165,7 @@
                                                 Mes :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select v-model="reporteMes.mes" class="form-control">
+                                                <select v-model="reporteMesUsuario.mes" class="form-control">
                                                     <option value="1">Enero</option>
                                                     <option value="2">Febrero</option>
                                                     <option value="3">Marzo</option>
@@ -191,17 +183,19 @@
                                         </div>
                                         <br>
                                         <div class="mb-12 row">
-                                            <button class="form-control btn btn-success" @click="getReporteMes()">Ver Reporte</button>
+                                            <button class="form-control btn btn-success" @click="getReporteMesUsuario()">Ver Reporte</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="tab-pane fade" id="dias" role="tabpanel" aria-labelledby="dias-tab">
+                            <!--Termina Formulario por  Mes-->
+
+                            <!--Formulario por dias -->
+                            <div class="tab-pane fade" id="diasUsuario" role="tabpanel" aria-labelledby="dias-tab">
                                 <br>
                                 <div class="row">
                                     <div class="col col-md-6 col-sm-6">
-                                        <ul v-for="perfil in listaPerfil" :key="perfil.id">
+                                        <ul v-for="perfil in listaPerfilUsuario" :key="perfil.id">
                                             <li>ID Biometrico : {{perfil.id}}</li>
                                             <li>User ID : {{perfil._01user_id}}</li>
                                             <li>Nombre : {{perfil._02nombre}}</li>
@@ -209,7 +203,8 @@
                                             <li>Lugar : {{perfil._06lugar}}</li>
                                             <hr>
                                         </ul>
-                                    </div>
+                                    </div><!--Termina col6 Perfil Biometrico-->
+                                    
                                     <div class="col col-md-6 col-sm-6">
                                         <h3>Datos del Reporte</h3>
                                         <br>
@@ -218,7 +213,7 @@
                                                 Gestion :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select v-model="reporteMes.gestion" class="form-control">
+                                                <select v-model="reporteMesUsuario.gestion" class="form-control">
                                                     <option value="2021">2021</option>
                                                     <option value="2022">2022</option>
                                                     <option value="2023">2023</option>
@@ -231,7 +226,7 @@
                                                 Mes :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select v-model="reporteMes.mes" class="form-control">
+                                                <select v-model="reporteMesUsuario.mes" class="form-control">
                                                     <option value="1">Enero</option>
                                                     <option value="2">Febrero</option>
                                                     <option value="3">Marzo</option>
@@ -253,7 +248,7 @@
                                                 Inicio :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select  class="form-control" v-model="reporteMes.di">
+                                                <select  class="form-control" v-model="reporteMesUsuario.di">
                                                     <option v-for="i in 31" :key="i">{{i}}</option>
                                                 </select>
                                             </div>
@@ -265,7 +260,7 @@
                                                 Fin :
                                             </label>
                                             <div class="col-sm-6">
-                                                <select  class="form-control" v-model="reporteMes.df">
+                                                <select  class="form-control" v-model="reporteMesUsuario.df">
                                                     <option v-for="i in 31" :key="i">{{i}}</option>
                                                 </select>
                                             </div>
@@ -273,41 +268,40 @@
 
                                         <br>
                                         <div class="mb-12 row">
-                                            <button class="form-control btn btn-success" @click="getReporteMes()">Ver Reporte</button>
+                                            <button class="form-control btn btn-success" @click="getReporteMesUsuario()">Ver Reporte</button>
                                         </div>
-                                    </div>
-                                </div>
+
+                                    </div> <!--Termina col6 Formulario diasUsuario-->
+                                </div><!---Termina row diasUsuario-->
                             </div>
-                        </div>
-                    </div>
-                </div>
+                            <!--Termina Formulario por dias-->
 
-                <div class="card-footer"></div>
-            </div>
-        </div>
-    </div>
-    <br>
+                        </div><!--Termina el content del TAB-->
 
+                    </div><!--termina row-->
+                </div><!--Termina card-body-->
 
+                <div class="card-footer"></div><!--Termina Card Footer-->
 
-
+            </div><!--Termina el ROW-->
+        </div><!--Termina card-->
+    </div><!--termina row-->
 </template>
 <script>
-import BiometricoService from '@/services/biometricoService';
+import BiometricoServiceUsuario from '@/services/biometricoService';
 
 export default {
     name:'ComponenteControlPersonalUsuarioVue',
-    props:['persona'],
+    props:['personaUsuario'],
     data(){
         return{
-            biometricoService:null,
-            listaBiometrico:[],
-            listaPerfil:[],
-            id_bio:0,
-            id_horario:0,
-            getPB:true,
-            id_tipo:1,
-            reporteMes:{
+            biometricoServiceUsuario:null,
+            listaBiometricoUsuario:[],
+            listaPerfilUsuario:[],
+            id_horarioUsuario:0,
+            getPBUsuario:true,
+            reporteJson:'',
+            reporteMesUsuario:{
                 id_horario:'',
                 cif:'',
                 gestion:2023,
@@ -315,7 +309,7 @@ export default {
                 di:0,
                 df:0,
                 listaPerfil:[],
-                persona:{
+                personaUsuario:{
                     id:null,
                     _01cif:'',
                     _02ci:'',
@@ -327,9 +321,9 @@ export default {
                     _08sexo:'',
                     _09cel:'',
                     _10correo:''
-                },
+                }
             },
-            biometrico:{
+            biometricoUsuario:{
                 id:null,
                 _01user_id:0,
                 _02nombre:'',
@@ -339,9 +333,9 @@ export default {
                 _06lugar:'',
                 _07id_tipo:1
             },
-            horarioPerfil:{
+            horarioPerfilUsuario:{
                 id:0,
-                _01cif:this.persona._01cif,
+                _01cif:this.personaUsuario._01cif,
                 _02lem:'08:30',
                 _03lsm:'12:30',
                 _04let:'14:30',
@@ -371,61 +365,64 @@ export default {
                 _28det:'14:30',
                 _29dst:'18:30'
             },
-            reporteFinal:[],
-            listaObs:[]
+            listaObsUsuario:[],
+            james:{
+                nombre:'james'
+            }
         }
     },
     created(){
-        this.biometricoService= new BiometricoService();
+        this.biometricoServiceUsuario= new BiometricoServiceUsuario();
     },
     mounted(){
-        this.getLista();
+        this.getListaUsuario();
     },
     updated(){
-        if(this.persona._01cif>0 && this.getPB)
+        if(this.personaUsuario._01cif>0 && this.getPBUsuario)
         {
-            this.getPerfilBiometrico();
-            this.getPB=false;
+            this.getPerfilBiometricoUsuario();
+            this.getPBUsuario=false;
         }
     },
     methods:{
-        async getLista(){
-            await this.biometricoService.getListarCifCero().then(response => {
-                this.listaBiometrico = response.data;
+        async getListaUsuario(){
+            await this.biometricoServiceUsuario.getListarCifCero().then(response => {
+                this.listaBiometricoUsuario = response.data;
             });
         },
-        async getPerfilBiometrico(){
-            await this.biometricoService.getPerfil(this.persona._01cif).then(response=>{
-                this.listaPerfil=response.data;
-                if(this.listaPerfil.length>0){
-                    this.id_horario=this.listaPerfil[0]._05horario_id;
-                    this.getHorario();
+        async getPerfilBiometricoUsuario(){
+            await this.biometricoServiceUsuario.getPerfil(this.personaUsuario._01cif).then(response=>{
+                this.listaPerfilUsuario=response.data;
+                if(this.listaPerfilUsuario.length>0){
+                    this.id_horarioUsuario=this.listaPerfilUsuario[0]._05horario_id;
+                    this.getHorarioUsuario();
                 }
             });
         },
-        async getHorario(){
-            await this.biometricoService.getHorario(this.id_horario,this.persona._01cif).then(response=>{
-                this.horarioPerfil=response.data;
-                this.getObs();
+        async getHorarioUsuario(){
+            await this.biometricoServiceUsuario.getHorario(this.id_horarioUsuario,this.personaUsuario._01cif).then(response=>{
+                this.horarioPerfilUsuario=response.data;
+                this.getObsUsuario();
             });
         },
-        async getObs(){
-            await this.biometricoService.getObs(this.persona._01cif).then(response=>{
-                this.listaObs=response.data;
+        async getObsUsuario(){
+            await this.biometricoServiceUsuario.getObs(this.personaUsuario._01cif).then(response=>{
+                this.listaObsUsuario=response.data;
             });
         },
-        getReporteMes(){
-            this.reporteMes.cif=this.persona._01cif;
-            this.reporteMes.id_horario=this.id_horario;
-            this.reporteMes.listaPerfil=this.listaPerfil;
-            this.reporteMes.persona=this.persona;
-            
+        getReporteMesUsuario(){
+            this.reporteMesUsuario.cif=this.personaUsuario._01cif;
+            this.reporteMesUsuario.id_horario=this.id_horarioUsuario;
+            this.reporteMesUsuario.listaPerfil=this.listaPerfilUsuario;
+            this.reporteMesUsuario.personaUsuario=this.personaUsuario;
+            this.reporteJson=JSON.stringify(this.reporteMesUsuario);
             this.$router.push({
-                name: "reportePerfil",
+                name: "reporteUsuario",
                 params:{
-                    reporte:JSON.stringify(this.reporteMes)
+                    reporteusuario:this.reporteJson
                 }
-            });            
+            });
+
         }
     }
 }

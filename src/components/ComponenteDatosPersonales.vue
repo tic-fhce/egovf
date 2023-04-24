@@ -6,7 +6,9 @@
                 <h3>Datos Personales</h3>
             </div>
             <div class="col-sm-4">
-                <img src="../assets/logo.png" class="img-fluid rounded-start" alt="...">
+                <br>
+                <img src="../assets/user.png" class="img-fluid rounded-start" alt="...">
+                <br>
             </div>
             <div class="col-sm-8">
                 <div class="card-body">
@@ -49,9 +51,6 @@
                     </li>
                     <li class="nav-item" role="presentation">
                     <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#actualizar" type="button" role="tab"  aria-selected="false">Actualizar</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
