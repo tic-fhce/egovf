@@ -7,7 +7,17 @@
             </div>
         </div>
         <div class="row">
-            
+            <div class="col-sm-2" v-for="m in usuario.menu" :key="m.id">
+                <div class="col-sm-2" v-for="sub in m.subModel" :key="sub.id">
+                    <div class="card" style="width: 10rem;">
+                        <img src="../assets/reporte.jpg" class="card-img-top">
+                        <div class="card-body text-center">
+                            <p class="card-text ">{{ sub.obs }}</p>
+                            <router-link :to="sub.ruta" class="btn btn-success btn-lg">{{sub.titulo}}</router-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <ComponenteFooter/>

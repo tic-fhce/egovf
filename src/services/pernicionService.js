@@ -1,8 +1,8 @@
 import axios from "axios";
 
-//const pernicionUrl="http://200.7.161.114:8080/egovf/fhce/";
+const pernicionUrl="http://200.7.161.114:8080/egovf/fhce/";
 //const pernicionUrl="http://172.16.114.144:8083/fhce-egovf/";
-const pernicionUrl="http://192.168.31.45:8080/fhce-egovf/";
+//const pernicionUrl="http://192.168.31.45:8080/fhce-egovf/";
 
 export default class PernicionService{
     headersUsuario(token){
