@@ -26,7 +26,7 @@
                         <li>CIF : {{persona._01cif}}</li>
                         <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
                         <li>Correo : {{persona._10correo}}</li>
-                        <li>Celular : <a href="" target="_blank">{{persona._09cel}}</a></li>
+                        <li>Celular : <a :href=what+persona._09cel target="_blank">{{persona._09cel}}</a></li>
                         <li>Fecha N : {{persona._07fecha}}</li>
                         <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
                         <li v-if="persona._08sexo == 2">Sexo : Masculino</li>

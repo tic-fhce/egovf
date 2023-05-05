@@ -163,7 +163,8 @@ export default {
         pdf(){
             var img = new Image();
             img.src='/img/header.3697d19d.jpg';
-            const doc = new jsPDF('p','mm','letter');
+            //const doc = new jsPDF('p','mm','letter');
+            const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
             doc.addImage(img,'JPEG', 15, 7);
             doc.text("Universidad Mayor de San Andrés",55,18);
