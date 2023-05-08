@@ -60,7 +60,10 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{sumaRetraso}}</h2></th><th>min.</th>
+                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                            </tr>
+                            <tr>
+                                <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -76,7 +79,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-center"><img src="../assets/logoticjpg.jpg" width="100" height="75"></td><td></td>
+                            <td class="text-center"><img src="../assets/header.jpg" width="150px" height="40px"></td><td></td>
                         </tr>
                     </table>
                 </div>
@@ -103,6 +106,7 @@ export default {
             listaReporte:[],
             getPB:true,
             totalretraso:0,
+            totalanticipado:0,
             mes:''
         }
     },
@@ -139,12 +143,17 @@ export default {
         },
         sumaRetraso(){
             let sum = 0;
+            let res=0;
             this.listaReporte.forEach(element => {
                 for (let i = 0; i < element.retraso.length; i++) {
-                    sum +=parseInt(element.retraso[i],10);
+                    if(i==0 || i==2)
+                        sum +=parseInt(element.retraso[i],10);
+                    else
+                        res+=parseInt(element.retraso[i],10);
                 }
             });
-            this.sumaRetraso=sum;
+            this.totalretraso=sum;
+            this.totalanticipado=res;
         },
         getMes(){
             if(this.reporte.mes==1){this.mes='Enero';}
@@ -178,9 +187,10 @@ export default {
             doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,50);
             doc.text("Correo : "+this.reporte.persona._10correo,120,55);
             doc.setFontSize(15);
-            doc.text("Total Min. de Retraso : "+this.sumaRetraso+" min.",120,65);
+            doc.text("Retraso : "+this.totalretraso+" min.",120,65);
+            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,75);
             doc.setFontSize(10);
-            var finalY=65;
+            var finalY=75;
             autoTable(doc, {
                 theme: 'plain',
                 startY:finalY+25,

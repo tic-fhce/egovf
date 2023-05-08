@@ -1,8 +1,8 @@
 <template>
-    <nav v-if="cif == 0" class="navbar fixed-top navbar-expand-lg bg-primary">
+    <nav v-if="cif == 0" class="navbar fixed-top navbar-expand-lg menucolor">
         <div class="container justify-content-evenly">
             <router-link to="/" class="nav-link"><span class="material-icons-round">&#xe88a;</span></router-link>
-            <router-link to="/about" class="nav-link"><span class="material-icons-round">&#xe80c;</span></router-link>
+            <router-link to="/about" class="nav-link"><span class="material-icons-round">&#xebcc;</span></router-link>
             <router-link to="/sesion" class="nav-link"><span class="material-icons-round">&#xea77;</span></router-link>
         </div>
     </nav>
@@ -91,6 +91,9 @@ export default {
 }
 </script>
 <style scoped>
+.menucolor{
+    background-color: #015D82;
+}
 .material-icons{
     color: white;
     font-size: 1.4em;

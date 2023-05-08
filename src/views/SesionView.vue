@@ -171,7 +171,7 @@ export default {
                         icon: 'error',
                         title: 'Error',
                         text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.',
-                        footer: '<a href="">Why do I have this issue?</a>'
+                        footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
                     }).then((result)=>{
                         if (result.isConfirmed) {
                             location.reload();

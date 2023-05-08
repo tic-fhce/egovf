@@ -8,21 +8,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-              <table>
-                <thead>
-                  <tr>
-                    <td>ID</td><td>CIF</td><td>CI</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="usuario in usuarios" :key="usuario.id">
-                    <td>{{usuario.id}}</td>
-                    <td>{{usuario._01cif}}</td>
-                    <td>{{usuario._03ci}}</td>
-                  </tr>
-
-                </tbody>
-              </table>
+              
             </div>
             
         </div>

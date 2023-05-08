@@ -55,7 +55,10 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{sumaRetraso}}</h2></th><th>min.</th>
+                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                            </tr>
+                            <tr>
+                                <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -82,6 +85,7 @@ export default {
             listaReporte:[],
             getPB:true,
             totalretraso:0,
+            totalanticipado:0,
             mes:''
         }
     },
@@ -118,12 +122,17 @@ export default {
         },
         sumaRetraso(){
             let sum = 0;
+            let res=0;
             this.listaReporte.forEach(element => {
                 for (let i = 0; i < element.retraso.length; i++) {
-                    sum +=parseInt(element.retraso[i],10);
+                    if(i==0 || i==2)
+                        sum +=parseInt(element.retraso[i],10);
+                    else
+                        res+=parseInt(element.retraso[i],10);
                 }
             });
-            this.sumaRetraso=sum;
+            this.totalretraso=sum;
+            this.totalanticipado=res;
         },
         getMes(){
             if(this.reporteUsuario.mes==1){this.mes='Enero';}
