@@ -657,6 +657,7 @@ export default {
                     this.biometricoService.addHorario(this.horario).then(response=>{
                         if(response.status==200){
                             this.$swal.fire('Los Horarios fueron Agregados al Ciudadano Corectamente', '', 'success');
+                            location.reload();
                         }
                         else{
                             this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
@@ -678,9 +679,9 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.biometricoService.addObs(this.obs).then(response=>{
-                        console.log(response.status);
                         if(response.status==200){
                             this.$swal.fire('Las Observaciones fueron Agregados al Ciudadano Corectamente', '', 'success');
+                            location.reload();
                         }
                         else{
                             this.$swal.fire('Las Observaciones no fueron Guardados Error'+ response.status, '', 'error');

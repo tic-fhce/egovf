@@ -12,6 +12,10 @@
         <ComponenteDatosPersonaVue :cifCiudadano="cifCiudadano"/>
         <!-- Componente de Control de Personal -->
         <br>
+        <ComponenteModulosVue :cif="cifCiudadano"/>
+        <!-- Componente de Modulos para el Ciudadano -->
+        <br>
+
         <ComponenteControlPersonalVue :persona="persona" />
         <!-- Componente de Permisos en el Menu -->
         <br>
@@ -25,16 +29,20 @@ import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteControlPersonalVue from '@/components/ComponenteControlPersonal.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponentePernicionVue from '@/components/ComponentePernicion.vue';
+import ComponenteModulosVue from '@/components/ComponenteModulos.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 
+
 import PersonaService from '@/services/personaService';
+
 
 export default {
     name:'PerfilCiudadanoView',
     components:{
         ComponenteMenuVue,
-        ComponenteControlPersonalVue,
         ComponenteDatosPersonaVue,
+        ComponenteControlPersonalVue,
+        ComponenteModulosVue,
         ComponentePernicionVue,
         ComponenteFooterVue
     },
