@@ -56,6 +56,21 @@ const routes = [
     path: '/reporteUsuario:reporteusuario',
     name: 'reporteUsuario',
     component: () => import('../views/ReporteUsuarioView.vue')
+  },
+  {
+    path: '/biometrico:cifCiudadano',
+    name: 'biometrico',
+    component: () => import('../views/ModuloBiometricoView.vue')
+  },
+  {
+    path: '/pernicions:cifCiudadano',
+    name: 'pernicions',
+    component: () => import('../views/ModuloPernicionView.vue')
+  },
+  {
+    path: '/inventario:cifCiudadano',
+    name: 'inventario',
+    component: () => import('../views/ModuloInventarioView.vue')
   }
 ]
 

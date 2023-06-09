@@ -448,6 +448,8 @@
                     <option value="Entrada T.">Entrada Tarde</option>
                     <option value="Salida T.">Salida Tarde</option>
                     <option value="continuo">Continuo</option>
+                    <option value="horas">Horas de Servicio</option>
+                    <option value="extraordinario">Horario Extraordinario</option>
                     <option value="comision">Comisión</option>
                     <option value="permiso">Permiso</option>
                     <option value="asueto">Asueto</option>

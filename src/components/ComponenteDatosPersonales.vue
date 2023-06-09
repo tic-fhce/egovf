@@ -230,8 +230,6 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.usuarioService.updatePersona(this.persona).then(response=>{
-                        console.log("esta es la respuesta =====================");
-                        console.log(response.status);
                         if(response.status==200){
                             this.$swal.fire('Datos Guardados Corectamente', '', 'success');
                         }
@@ -254,8 +252,6 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.usuarioService.updateUsuario(this.egovf).then(response=>{
-                        console.log("esta es la respuesta =====================");
-                        console.log(response.status);
                         if(response.status==200){
                             this.$swal.fire('Datos Guardados Corectamente', '', 'success');
                         }

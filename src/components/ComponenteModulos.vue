@@ -18,7 +18,7 @@
                             <div class="card" style="width: 10rem;">
                                 <img src="../assets/reporte.jpg" class="card-img-top">
                                 <div class="card-body text-center">
-                                    {{ l._01nombre}}
+                                    <button class="btn btn-success" @click="getModulo(l._02ruta)">{{ l._01nombre}}</button>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
       </div>
       <div class="modal-body">
         <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Datos del Biometrico</label>
+            <label for="datos" class="col-sm-6 col-form-label">Modulo</label>
             <div class="col-sm-6">
                 <select v-model="id_modulo" class="form-control">
                     <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">{{lm._01nombre}}</option>
@@ -119,9 +119,7 @@ export default {
             });
         },
         async getListarModuloCif(){
-
             await this.moduloService.getListarModuloCif(this.cif).then((response)=>{
-                console.log(response.data);
                 this.listaModuloCif=response.data;
             });
         },
@@ -146,6 +144,14 @@ export default {
                     });           
                 } else if (result.isDenied) {
                     this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
+        },
+        getModulo(ruta){
+            this.$router.push({
+                name: ruta,
+                params:{
+                    cifCiudadano: this.cif,
                 }
             });
         }

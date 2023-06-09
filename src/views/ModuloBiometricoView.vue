@@ -7,14 +7,14 @@
             </div>
         </div>
         <!--Construccion de Componentes-->
-
+        
         <!-- Componente de Datos de Persona -->
         <br>
         <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano"/>
-        
-        <!-- Componente de Modulos para el Ciudadano -->
+                
+        <!-- Componente de Control de Personal -->
         <br>
-        <ComponenteModulosVue :cif="cifCiudadano"/>
+        <ComponenteControlPersonalVue :persona="persona" />
         
     </div>
     <ComponenteFooterVue/>
@@ -22,9 +22,10 @@
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteControlPersonalVue from '@/components/ComponenteControlPersonal.vue';
 import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
-import ComponenteModulosVue from '@/components/ComponenteModulos.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
+
 import PersonaService from '@/services/personaService';
 
 export default {
@@ -32,7 +33,7 @@ export default {
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesVue,
-        ComponenteModulosVue,
+        ComponenteControlPersonalVue,
         ComponenteFooterVue
     },
     data(){
@@ -77,6 +78,7 @@ export default {
     },
     methods:{
         getDatos(){
+            //cargamos datos del Usuario
             if(this.$cookies.get('cif')!=null){
                 this.usuario.token=this.$cookies.get('token');
                 this.usuario.cif=this.$cookies.get('cif');
@@ -87,6 +89,7 @@ export default {
             }
         },
         async getDatosPersona(){
+            //cargamos datos del Ciudadano
             this.personaService.headersUsuario(this.usuario.token);
             await this.personaService.getPersona(this.cifCiudadano).then((response) =>{
                 this.persona=response.data;

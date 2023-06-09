@@ -13,7 +13,6 @@ export default class ModuloService{
         return axios.get(moduloUrl+"listarAll");
     }
     getListarModuloCif(cif){
-        console.log(moduloUrl+"listarModuloCif?cif="+cif);
         return axios.get(moduloUrl+"listarModuloCif",{
             params: {
                 cif: cif
