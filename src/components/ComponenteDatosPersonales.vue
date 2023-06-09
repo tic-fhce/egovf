@@ -73,6 +73,7 @@
                             <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                             <li>Correo : {{egovf._05correo}}</li>
                             <li>Celular : <a href="#" data-bs-toggle="modal" data-bs-target=#celularmodal> {{egovf._06celular}}</a></li>
+                            <li>Contraseña : <a href="#" data-bs-toggle="modal" data-bs-target=#passmodalUsuario> Actualizar Contraseña</a></li>
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -133,6 +134,30 @@
   </div>
 </div>
 
+<!-- Modal  Contraseña-->
+<div class="modal fade" id="passmodalUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar Contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 row">
+            <label for="nueva" class="col-sm-6 col-form-label">Nueva Contraseña </label>
+            <div class="col-sm-6">
+                <input type="password" class="form-control" v-model="contra">
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updatePassAdmin()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
 <script>
@@ -178,7 +203,20 @@ export default {
                 _05correo:'',
                 _06celular:'',
                 _07pass:''
-            }
+            },
+            pass:{
+                id:null,
+                _01cif:'',
+                _02matricula:'',
+                _03ci:'',
+                _04complemento:'',
+                _05correo:'',
+                _06celular:'',
+                _07pass:'',
+                _08pass:'',
+                _09pass:''
+            },
+            contra:''
         }
     },
     mounted(){
@@ -257,6 +295,39 @@ export default {
                         }
                         else{
                             this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
+        },
+        updatePassAdmin(){
+            this.pass.id=this.persona.id;
+            this.pass._01cif=this.persona._01cif;
+            this.pass._02matricula=this.egovf._02matricula;
+            this.pass._03ci=this.persona._02ci;
+            this.pass._04complemento=this.persona._03complemento;
+            this.pass._05correo=this.persona._10correo;
+            this.pass._06celular=this.persona._09cel;
+            this.pass._07pass=this.contra;
+            this.pass._08pass=this.contra;
+            this.pass._09pass=this.contra;
+
+            this.$swal.fire({
+                title: 'Desea Realizar los Cambios',
+                showDenyButton: true,
+                confirmButtonText: 'Actualizar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.usuarioService.updatePassAdmin(this.pass).then(response=>{
+                        if(response.data==true){
+                            this.$swal.fire('Datos Guardados Corectamente', '', 'success');
+                        }
+                        else{
+                            this.$swal.fire('La Contraseña Actual no es Correcta Verifique e intente Nuevamente', '', 'error');
                         }
                     });
                     

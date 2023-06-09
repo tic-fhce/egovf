@@ -149,19 +149,19 @@
         <div class="mb-3 row">
             <label for="actual" class="col-sm-6 col-form-label">Contraseña Actual</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="contra" @keyup="botonesFuncion()">
+                <input type="password" class="form-control" v-model="contra" @keyup="botonesFuncion()">
             </div>
         </div>
         <div class="mb-3 row">
             <label for="nueva" class="col-sm-6 col-form-label">Nueva Contraseña </label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="pass._08pass" @keyup="botonesFuncion()">
+                <input type="password" class="form-control" v-model="pass._08pass" @keyup="botonesFuncion()">
             </div>
         </div>
         <div class="mb-3 row">
             <label for="confirmar" class="col-sm-6 col-form-label">Confirmar Nueva Contraseña </label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="pass._09pass" @keyup="botonesFuncion()">
+                <input type="password" class="form-control" v-model="pass._09pass" @keyup="botonesFuncion()">
             </div>
         </div>
         <div class="mb-3 row text-center">
@@ -280,8 +280,6 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.usuarioService.updatePersona(this.persona).then(response=>{
-                        console.log("esta es la respuesta =====================");
-                        console.log(response.status);
                         if(response.status==200){
                             this.$swal.fire('Datos Guardados Corectamente', '', 'success');
                         }
@@ -337,10 +335,15 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.usuarioService.updatePass(this.pass).then(response=>{
-                        console.log("esta es la respuesta para el CAmbio de pass=====================");
-                        console.log(response.data);
                         if(response.data==true){
                             this.$swal.fire('Datos Guardados Corectamente', '', 'success');
+                            this.$cookies.remove('token');
+                            this.$cookies.remove('cif');
+                            this.$cookies.remove('correo');
+                            this.$cookies.remove('celular');
+                            this.$cookies.remove('pass');
+                            this.$cookies.remove('menu');
+                            this.$router.push('/');
                         }
                         else{
                             this.$swal.fire('La Contraseña Actual no es Correcta Verifique e intente Nuevamente', '', 'error');

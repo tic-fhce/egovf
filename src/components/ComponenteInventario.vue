@@ -26,7 +26,7 @@
                         <tbody>
                             <tr v-for="lpc in listapc" :key="lpc.id">
                                 <td>{{ lpc.id }}</td><td>{{lpc._02codigo}}</td>
-                                <td>Micro : {{ lpc._06mmicro }} - {{lpc._07micro_capacidad}}<br>
+                                <td>Micro : {{ lpc._06micro }} - {{lpc._07micro_capacidad}}<br>
                                     RAM : {{ lpc._05capacidad }} - {{ lpc._04memorias }}<br>
                                     HHDD : {{ lpc._09disco }} <br>
                                     Fuente: {{ lpc._03fuente }}

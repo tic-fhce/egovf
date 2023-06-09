@@ -1,8 +1,8 @@
 import axios from "axios";
 
-
-const usuario_api="http://192.168.31.45:8080/fhce-egovf/";
-
+//const usuario_api="http://200.7.161.114:8080/egovf/fhce/";
+const usuario_api="http://172.16.114.144:8093/fhce-egovf/";
+//const usuario_api="http://192.168.31.45:8080/fhce-egovf/";
 
 export default class UsuarioService{
     getListaUsuario(){
@@ -36,5 +36,8 @@ export default class UsuarioService{
     }
     updatePass(usuario){
         return axios.put(usuario_api+"updatePass",usuario);
+    }
+    updatePassAdmin(usuario){
+        return axios.put(usuario_api+"updatePassAdmin",usuario);
     }
 }
