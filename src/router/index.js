@@ -71,6 +71,11 @@ const routes = [
     path: '/inventario:cifCiudadano',
     name: 'inventario',
     component: () => import('../views/ModuloInventarioView.vue')
+  },
+  {
+    path: '/record:gestion:mes:tipo',
+    name: 'record',
+    component: () => import('../views/ModuloRecordView.vue')
   }
 ]
 

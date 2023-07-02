@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col col-md-6 col-sm-6">
                         <h2 id="titulo">Reporte de Asistencia</h2>
-                </div>
+                    </div>
                     <div class="col col-md-4 col-sm-4">
                         <h2>{{mes}} de {{reporte.gestion}} </h2>
                     </div>
@@ -171,26 +171,26 @@ export default {
         },
         pdf(){
             var img = new Image();
-            img.src='/img/header.3697d19d.jpg';
+            img.src='/img/header.d2def491.jpg';
             //const doc = new jsPDF('p','mm','letter');
             const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
             doc.addImage(img,'JPEG', 15, 7);
-            doc.text("Universidad Mayor de San Andrés",55,18);
-            doc.text("Facultad de Humanidades y Ciencias de la Educación",55,23);
-            doc.text("Datos de Personales",20,40);
-            doc.text("CIF : "+this.reporte.persona._01cif,30,45);
-            doc.text("Nombre : "+this.reporte.persona._04nombre,30,50);
-            doc.text("Apellidos : "+this.reporte.persona._05paterno+" "+this.reporte.persona._06materno,30,55);
-            doc.text("Celular: "+this.reporte.persona._09cel,30,60);
-            doc.text("ID app : "+this.reporte.persona.id,120,45);
-            doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,50);
-            doc.text("Correo : "+this.reporte.persona._10correo,120,55);
+            doc.text("Universidad Mayor de San Andrés",65,18);
+            doc.text("Facultad de Humanidades y Ciencias de la Educación",65,23);
+            doc.text("Datos de Personales",20,45);
+            doc.text("CIF : "+this.reporte.persona._01cif,30,50);
+            doc.text("Nombre : "+this.reporte.persona._04nombre,30,55);
+            doc.text("Apellidos : "+this.reporte.persona._05paterno+" "+this.reporte.persona._06materno,30,60);
+            doc.text("Celular: "+this.reporte.persona._09cel,30,65);
+            doc.text("ID app : "+this.reporte.persona.id,120,50);
+            doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,55);
+            doc.text("Correo : "+this.reporte.persona._10correo,120,60);
             doc.setFontSize(15);
-            doc.text("Retraso : "+this.totalretraso+" min.",120,65);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,75);
+            doc.text("Retraso : "+this.totalretraso+" min.",120,75);
+            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,85);
             doc.setFontSize(10);
-            var finalY=75;
+            var finalY=95;
             autoTable(doc, {
                 theme: 'plain',
                 startY:finalY+25,

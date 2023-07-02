@@ -7,11 +7,14 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6"></div>
-        <div class="col-md-3 align-self-end text-end">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
+        <div class="col-md-2 align-self-end text-end">
+          <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
         </div>
-        <div class="col-md-3 align-self-end text-end">
-          <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs Ciudadano</button>
+        <div class="col-md-2 align-self-end text-end">
+          <button class="btn btn-warning btn-block" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs</button>
+        </div>
+        <div class="col-md-2 align-self-end text-end">
+          <button class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target=#recordModal><span class="material-icons">&#xe145;</span>Record</button>
         </div>
       </div>
       <hr>
@@ -42,7 +45,8 @@
         </div>
     </div>
     <ComponenteFooterVue/>
-<!-- Modal  Celular-->
+
+<!-- Modal  Ciudadano-->
 <div class="modal fade" id="personamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -236,6 +240,68 @@
   </div>
 </div>
 
+<!-- Modal  Record-->
+<div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="recordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Creacion de Record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="mb-3 row">
+            <label for="gestiones" class="col-sm-4 col-form-label">Gestion</label>
+            <div class="col-sm-8">
+              <select class="form-control" v-model="record.gestion">
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Mes</label>
+            <div class="col-sm-8">
+              <select class="form-control" v-model="record.mes">
+                <option value="1">Enero</option>
+                <option value="2">Febrero</option>
+                <option value="3">Marzo</option>
+                <option value="4">Abril</option>
+                <option value="5">Mayo</option>
+                <option value="6">Junio</option>
+                <option value="7">Julio</option>
+                <option value="8">Agosto</option>
+                <option value="9">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+              </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Record</label>
+            <div class="col-sm-8">
+              <select class="form-control" v-model="record.tipo">
+                <option value="1">Administrativo</option>
+                <option value="2">Docente / Aux</option>
+              </select>
+            </div>
+        </div>
+
+        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="getRecord()">Crear Record</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
 <script>
@@ -300,6 +366,11 @@ export default {
             detalle:'',
             tipo:'Seleccionar Tipo',
             hora:'08:30'
+          },
+          record:{
+            gestion:2023,
+            mes:0,
+            tipo:0
           }
         }
     },
@@ -338,7 +409,6 @@ export default {
         this.personaService.getListaCiudadanos().then(response => {
             this.listaCiudadanos = response.data;
             this.tabla();
-            console.log(response.status);
         });
       },
       perfil(cifAux){
@@ -460,6 +530,16 @@ export default {
                     this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });
+      },
+      getRecord(){
+        this.$router.push({
+          name: "record",
+          params:{
+            gestion: this.record.gestion,
+            mes:this.record.mes,
+            tipo:this.record.tipo
+          }
+        });
       }
     }
 }

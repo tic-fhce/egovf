@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const controlUrl="http://172.16.114.144:8094/fhce-egovf-scc/";
-//const controlUrl="http://192.168.31.45:8082/fhce-egovf-scc/";
+const controlUrl="http://192.168.31.45:8082/fhce-egovf-scc/";
 
 
 export default class BiometricoService{
@@ -97,6 +97,15 @@ export default class BiometricoService{
                 mes:reporte.mes,
                 di:reporte.di,
                 df:reporte.df
+            }
+        });
+    }
+    getRecord(record){
+        return axios.get(controlUrl+"marcado/reporteTotal",{
+            params:{
+                gestion:record.gestion,
+                mes:record.mes,
+                tipo:record.tipo
             }
         });
     }
