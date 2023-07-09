@@ -119,7 +119,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             record:{
                 gestion:2023,
@@ -162,6 +164,8 @@ export default {
                 this.usuario.celular=this.$cookies.get('celular');
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.menu=this.$cookies.get('menu');
+                this.usuario.unidad = this.$cookies.get('unidad');
+				this.usuario.sigla = this.$cookies.get('sigla');
             }
         },
         getMes(){

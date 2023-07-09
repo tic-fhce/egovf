@@ -2,7 +2,7 @@
 <div class="row">
     <div class="card col-sm-6">
         <div class="row">
-            <div class="card-header">
+            <div class="card-header headercolor">
                 <h3>Datos Personales</h3>
             </div>
             <div class="col-sm-4">
@@ -27,6 +27,7 @@
                         <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
                         <li>Correo : {{persona._10correo}}</li>
                         <li>Celular : <a :href=what+persona._09cel target="_blank">{{persona._09cel}}</a></li>
+                        <li>Unidad : {{ egovf._10sigla }}</li>
                         <li>Fecha N : {{persona._07fecha}}</li>
                         <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
                         <li v-if="persona._08sexo == 2">Sexo : Masculino</li>
@@ -41,7 +42,7 @@
     
     <div class="card col-sm-5">
         <div class="row">
-            <div class="card-header">
+            <div class="card-header headercolor">
                 <h3>Datos E-govf</h3>
             </div>
             <div class="card-body">
@@ -62,6 +63,7 @@
                             <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                             <li>Correo : {{egovf._05correo}}</li>
                             <li>Celular : {{egovf._06celular}}</li>
+                            <li>Unidad : {{ egovf._10sigla }}</li>
                         </ul>
                     </div>
                     <div class="tab-pane fade" id="actualizar" role="tabpanel" aria-labelledby="profile-tab">
@@ -73,6 +75,7 @@
                             <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                             <li>Correo : {{egovf._05correo}}</li>
                             <li>Celular : <a href="#" data-bs-toggle="modal" data-bs-target=#celularmodal> {{egovf._06celular}}</a></li>
+                            <li>Unidad : <a href="#" data-bs-toggle="modal" data-bs-target=#unidadmodal>UN {{ egovf._10sigla }} </a></li>
                             <li>Contraseña : <a href="#" data-bs-toggle="modal" data-bs-target=#passmodalUsuario> Actualizar Contraseña</a></li>
                         </ul>
                     </div>
@@ -158,12 +161,38 @@
   </div>
 </div>
 
+<!-- Modal Unidad-->
+<div class="modal fade" id="unidadmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar Unidad Facultativa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 row">
+            <label for="celular" class="col-sm-6 col-form-label">Unidad</label>
+            <div class="col-sm-6">
+                <select class="form-control" v-model="unidad.sigla">
+                    <option v-for="lu in listaUnidad" :value="lu._03sigla" :key="lu.id">{{lu._01unidad}}</option>
+                </select>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  @click="updateUnidad()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
 <script>
 import UsuarioService from '@/services/usuarioServices';
 import PersonaService from '@/services/personaService';
-
+import UnidadService from '@/services/unidadService';
 export default {
     name:'ComponenteDatosPersonalesVue',
     props:['cifCiudadano'],
@@ -171,6 +200,8 @@ export default {
         return{
             usuarioService:null,
             personaService:null,
+            unidadService:null,
+            listaUnidad:[],
             what:"https://api.whatsapp.com/send?phone=591",
             getPB:true,
             usuario:{
@@ -179,7 +210,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             persona:{
                 id:null,
@@ -202,7 +235,10 @@ export default {
                 _04complemento:'',
                 _05correo:'',
                 _06celular:'',
-                _07pass:''
+                _07pass:'',
+                _08unidad:'',
+                _09dependiente:'',
+                _10sigla:''
             },
             pass:{
                 id:null,
@@ -216,15 +252,23 @@ export default {
                 _08pass:'',
                 _09pass:''
             },
-            contra:''
+            contra:'',
+            unidad:{
+                id:0,
+                unidad:'',
+                dependencia:'',
+                sigla:''
+            }
         }
     },
     mounted(){
         //this.getDatosComponenteDatosPersona();
+        this.getListaUnidades();
     },
     created(){
         this.usuarioService= new UsuarioService();
         this.personaService = new PersonaService();
+        this.unidadService= new UnidadService();
     },
     updated(){
         if(this.cifCiudadano>0 && this.getPB)
@@ -241,6 +285,8 @@ export default {
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
             this.usuario.menu=this.$cookies.get('menu');
+            this.usuario.unidad = this.$cookies.get('unidad');
+            this.usuario.sigla = this.$cookies.get('sigla');
 
             // Creamos datos de Usuario
             
@@ -335,7 +381,52 @@ export default {
                     this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });
-        }
+        },
+        async getListaUnidades(){
+            await this.unidadService.getListaUnidad().then((response)=>{
+                this.listaUnidad = response.data;
+            });
+        },
+        updateUnidad(){
+            this.listaUnidad.forEach(element => {
+                if(element._03sigla == this.unidad.sigla){
+                    this.unidad.id = element.id; 
+                    this.unidad.unidad = element._01unidad;
+                    this.unidad.dependiente = element._02dependiente;
+                    return false;
+                }
+            });
+            this.$swal.fire({
+                title: 'Desea Realizar los Cambios',
+                showDenyButton: true,
+                confirmButtonText: 'Actualizar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.usuarioService.updateUnidad(this.egovf,this.unidad).then(response=>{
+                        if(response.status==200){
+                            this.unidadService.registrarPertenece(this.egovf,this.unidad).then(r =>{
+                                if(r.status==200){
+                                    this.$swal.fire('Datos Guardados Corectamente', '', 'success').then((result) => {
+                                        if(result)
+                                            location.reload();
+                                    });
+                                }
+                                else{
+                                    this.$swal.fire('Los Datos no fueron Guardados Error'+ r.status, '', 'error');
+                                }
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
+        },
     }
 }
 </script>

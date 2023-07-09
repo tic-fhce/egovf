@@ -31,4 +31,15 @@
 .btn-block { 
     display: block; 
     width: 100%; 
-} 
+}
+.espace{
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-block: 2%;
+    margin-top: 2%;
+}
+
+.headercolor{
+    background-color: #015D82;
+    color:white
+}

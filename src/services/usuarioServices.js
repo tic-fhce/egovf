@@ -39,4 +39,20 @@ export default class UsuarioService{
     updatePassAdmin(usuario){
         return axios.put(usuario_api+"updatePassAdmin",usuario);
     }
+    updateUnidad(usuario,unidad){
+        const auxUsuario={
+            id:usuario.id,
+            _01cif:usuario._01cif,
+            _02matricula:usuario._02matricula,
+            _03ci:usuario._03ci,
+            _04complemento:usuario._04complemento,
+            _05correo:usuario._05correo,
+            _06celular:usuario._06celular,
+            _07pass:usuario._07pass,
+            _08unidad:unidad.unidad,
+            _09dependiente:unidad.dependiente,
+            _10sigla:unidad.sigla
+        }
+        return axios.put(usuario_api+"updateUsuario",auxUsuario);
+    }
 }

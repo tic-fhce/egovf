@@ -76,7 +76,12 @@ const routes = [
     path: '/record:gestion:mes:tipo',
     name: 'record',
     component: () => import('../views/ModuloRecordView.vue')
-  }
+  },
+  {
+    path: '/moduloUnidad',
+    name: 'moduloUnidad',
+    component: () => import('../views/ModuloUnidadView.vue')
+  },
 ]
 
 const router = createRouter({

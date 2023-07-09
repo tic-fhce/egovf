@@ -41,7 +41,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             reporteUsuario:{
                 id_horario:'',
@@ -85,6 +87,8 @@ export default {
             this.usuarioUsuario.celular=this.$cookies.get('celular');
             this.usuarioUsuario.pass=this.$cookies.get('pass');
             this.usuarioUsuario.menu=this.$cookies.get('menu');
+            this.usuarioUsuario.unidad = this.$cookies.get('unidad');
+            this.usuarioUsuario.sigla = this.$cookies.get('sigla');
         }
       }
     }

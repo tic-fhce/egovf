@@ -2,7 +2,7 @@
     <div class="row">
         <div class="card col-md-12">
             <div class="row">
-                <div class="card-header">
+                <div class="card-header headercolor">
                     <div class="row">
                         <div class=" col col-md-6 col-sm-6">
                             <h3>Modulos Del Ciudadano</h3>
@@ -14,7 +14,7 @@
                 </div><!--End Card Header-->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-2" v-for="l in listaModuloCif" :key="l.id">
+                        <div class="col-sm-2 espace" v-for="l in listaModuloCif" :key="l.id">
                             <div class="card" style="width: 10rem;">
                                 <img src="../assets/reporte.jpg" class="card-img-top">
                                 <div class="card-body text-center">
@@ -74,7 +74,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             modulo:{
                 cif:0,
@@ -110,6 +112,9 @@ export default {
                 this.usuario.celular=this.$cookies.get('celular');
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.menu=this.$cookies.get('menu');
+                this.usuario.unidad = this.$cookies.get('unidad');
+                this.usuario.sigla = this.$cookies.get('sigla');
+                
                 this.moduloService.headersUsuario(this.usuario.token);
             }
         },

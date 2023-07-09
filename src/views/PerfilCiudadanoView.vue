@@ -45,7 +45,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             persona:{
                 id:null,
@@ -84,6 +86,8 @@ export default {
                 this.usuario.celular=this.$cookies.get('celular');
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.menu=this.$cookies.get('menu');
+                this.usuario.unidad = this.$cookies.get('unidad');
+                this.usuario.sigla = this.$cookies.get('sigla');
             }
         },
         async getDatosPersona(){

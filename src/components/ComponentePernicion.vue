@@ -90,7 +90,9 @@
                     correo:'',
                     celular:'',
                     pass:'',
-                    menun:[]
+                    menu:[],
+                    unidad:'',
+                    sigla:''
                 },
                 pernicion:{
                     cif:0,
@@ -118,6 +120,8 @@
                 this.usuario.celular=this.$cookies.get('celular');
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.menu=this.$cookies.get('menu');
+                this.usuario.unidad = this.$cookies.get('unidad');
+                this.usuario.sigla = this.$cookies.get('sigla');
 
                 // Creamos datos de Usuario
                 

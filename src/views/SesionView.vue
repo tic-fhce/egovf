@@ -153,7 +153,6 @@ export default {
                 "_06celular":this.loginnes.celular,
                 "_07pass":this.loginnes.pass
             };
-            console.log(payload);
             await this.usuarioService.getToken(payload).then(response=>{
                 if(response.data!=""){
                     this.usuarioService.headersUsuario(response.data.token);
@@ -163,6 +162,8 @@ export default {
                     this.$cookies.set('celular',response.data.celular);
                     this.$cookies.set('pass',response.data.pass);
                     this.$cookies.set('menu',JSON.stringify(response.data.menu));
+                    this.$cookies.set('unidad',response.data.unidad);
+                    this.$cookies.set('sigla',response.data.sigla);
                     //console.log(response.data.menu);
                     this.$router.push('/escritorio');
                 }

@@ -1,5 +1,6 @@
 <template>
     <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -7,19 +8,41 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-2" v-for="m in usuario.menu" :key="m.id">
-                <div class="col-sm-2" v-for="sub in m.subModel" :key="sub.id">
-                    <div class="card" style="width: 10rem;">
-                        <img src="../assets/reporte.jpg" class="card-img-top">
-                        <div class="card-body text-center">
-                            <p class="card-text ">{{ sub.obs }}</p>
-                            <router-link :to="sub.ruta" class="btn btn-success btn-lg">{{sub.titulo}}</router-link>
+            <div class="card col-md-12">
+                <div class="row">
+                    <div class="card-header headercolor">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Escritorio</h3>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>Unidad : {{ usuario.unidad }}</li>
+                                    <li>Sigla : {{ usuario.sigla }}</li>
+                                    <li>Usuario: {{ usuario.correo }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 espace" v-for="sub in subMenu" :key="sub.id">
+                                <div class="card" style="width: 10rem;">
+                                    <img src="../assets/reporte.jpg" class="card-img-top">
+                                    <div class="card-body text-center">
+                                        <p class="card-text ">{{ sub.obs }}</p>
+                                        <router-link :to="sub.ruta" class="btn btn-success btn-lg">{{sub.titulo}}</router-link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+
     <ComponenteFooter/>
 </template>
 
@@ -39,8 +62,11 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
-            }
+                menu:[],
+                unidad:'',
+                sigla:''
+            },
+            subMenu:[]
         }
     },
     computed:{
@@ -52,6 +78,15 @@ export default {
         this.usuario.celular=this.$cookies.get('celular');
         this.usuario.pass=this.$cookies.get('pass');
         this.usuario.menu=this.$cookies.get('menu');        
+        this.usuario.unidad = this.$cookies.get('unidad');
+        this.usuario.sigla = this.$cookies.get('sigla');
+
+        this.usuario.menu.forEach(element => {
+            element.subModel.forEach(e=> {
+                this.subMenu.push(e);
+            });
+        });
+        
     },
     beforeCreate(){ //antes de crear e ingresar verificamos la existencia del CIF
         console.log(this.$cookies.get('cif'));

@@ -13,10 +13,10 @@
         <!-- Componente de Datos de Persona -->
         <br>
         <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuarioUsuario.cif"/>
-
+        
         <!-- Componente de Reporte de Personal -->
         <br>
-        <ComponenteControlPersonalUsuarioVue :personaUsuario="personaUsuario" /> 
+        <ComponenteControlPersonalUsuarioVue :personaUsuario="personaUsuario" />
         <!-- Componente de Permisos en el Menu -->
 
         <br>
@@ -53,7 +53,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             personaUsuario:{
                 id:null,
@@ -90,6 +92,8 @@ export default {
                 this.usuarioUsuario.celular=this.$cookies.get('celular');
                 this.usuarioUsuario.pass=this.$cookies.get('pass');
                 this.usuarioUsuario.menu=this.$cookies.get('menu');
+                this.usuarioUsuario.unidad = this.$cookies.get('unidad');
+                this.usuarioUsuario.sigla = this.$cookies.get('sigla');
                 this.getDatosPersonaUsuario();
             }
         },

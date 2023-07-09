@@ -9,7 +9,7 @@
         <div class="row">
             <div class="card col-sm-6">
                 <div class="row">
-                    <div class="card-header">
+                    <div class="card-header headercolor">
                         <h3>Datos Personales</h3>
                     </div>
                     <div class="col-sm-4">
@@ -45,7 +45,7 @@
             </div>
             <div class="card col-sm-5">
                 <div class="row">
-                    <div class="card-header">
+                    <div class="card-header headercolor">
                         <h3>Datos E-govf</h3>
                     </div>
                     <div class="card-body">
@@ -209,7 +209,9 @@ export default {
                 correo:'',
                 celular:'',
                 pass:'',
-                menu:[]
+                menu:[],
+                unidad:'',
+                sigla:''
             },
             egovf:{
                 id:null,
@@ -251,6 +253,8 @@ export default {
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
             this.usuario.menu=this.$cookies.get('menu');
+            this.usuario.unidad = this.$cookies.get('unidad');
+            this.usuario.sigla = this.$cookies.get('sigla');
 
             this.usuarioService= new UsuarioService();
             this.usuarioService.headersUsuario(this.usuario.token);

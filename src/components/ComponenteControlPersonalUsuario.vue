@@ -2,7 +2,7 @@
     <div class="row">
         <div class="card col-md-12">
             <div class="row">
-                <div class="card-header">
+                <div class="card-header headercolor">
                     <div class="row">
                         <div class=" col col-md-12 col-sm-12">
                             <h3>Control de Asistencia</h3>

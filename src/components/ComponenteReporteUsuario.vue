@@ -2,7 +2,7 @@
 <div class="row">
     <div class="card">
         <div class="row">
-            <div class="card-header">
+            <div class="card-header headercolor">
                 <div class="row">
                     <div class="col-md-6">
                         <h2 id="titulo">Reporte de Asistencia</h2>

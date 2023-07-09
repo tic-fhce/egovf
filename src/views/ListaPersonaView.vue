@@ -6,43 +6,52 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-md-6"></div>
-        <div class="col-md-2 align-self-end text-end">
-          <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
-        </div>
-        <div class="col-md-2 align-self-end text-end">
-          <button class="btn btn-warning btn-block" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs</button>
-        </div>
-        <div class="col-md-2 align-self-end text-end">
-          <button class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target=#recordModal><span class="material-icons">&#xe145;</span>Record</button>
-        </div>
-      </div>
-      <hr>
-        <div class="row">
-          <div class="col-ms-12">
-            <div class="table-responsive">
-              <table id="personaTabla" class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="persona in listaCiudadanos" :key="persona.id">
-                    <th scope="row">{{persona.id}}</th>
-                    <td>{{persona._01cif}}</td>
-                    <td>{{persona._04nombre}} {{persona._05paterno}} {{persona._06materno}}<br>
-                    {{persona._02ci}} {{persona._03complemento}}
-                    </td>
-                    <td>{{persona._09cel}}</td>
-                    <td>{{persona._10correo}}</td>
-                    <td><button class="btn btn-success" @click="perfil(persona._01cif)">Perfil</button></td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="card col-md-12">
+          <div class="row">
+            <div class="card-header headercolor">
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>Ciudadanos e-GOVF</h3>
+                </div>
+                <div class="col-md-2 align-self-end text-end">
+                  <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
+                </div>
+                <div class="col-md-2 align-self-end text-end">
+                  <button class="btn btn-warning btn-block" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs</button>
+                </div>
+                <div class="col-md-2 align-self-end text-end">
+                  <button class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target=#recordModal><span class="material-icons">&#xe145;</span>Record</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="col-ms-12">
+                <div class="table-responsive">
+                  <table id="personaTabla" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="persona in listaCiudadanos" :key="persona.id">
+                        <th scope="row">{{persona.id}}</th>
+                        <td>{{persona._01cif}}</td>
+                        <td>{{persona._04nombre}} {{persona._05paterno}} {{persona._06materno}}<br>
+                        {{persona._02ci}} {{persona._03complemento}}
+                        </td>
+                        <td>{{persona._09cel}}</td>
+                        <td>{{persona._10correo}}</td>
+                        <td><button class="btn btn-success" @click="perfil(persona._01cif)">Perfil</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
     <ComponenteFooterVue/>
 
@@ -150,7 +159,6 @@
               <input type="email" class="form-control" v-model="persona._10correo" placeholder="Correo Electronico" required="true">
             </div>
         </div>
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -325,13 +333,19 @@ export default {
         return {
           personaService:null,
           biometricoService:null,
+          unidadService:null,
+          listaCiudadanos:[],
+          registro:[],
+          listaUnidad:[],
           usuario:{
             token:'',
             cif:'',
             correo:'',
             celular:'',
             pass:'',
-            menu:[]
+            menu:[],
+            unidad:'',
+            sigla:''
           },
           persona:{
             _01cif:0,
@@ -356,8 +370,6 @@ export default {
             cel:false,
             correo:false
           },
-          listaCiudadanos:[],
-          registro:[],
           obsall:{
             cif:null,
             uidobs:'',
@@ -380,7 +392,7 @@ export default {
         }
     },
     created(){
-      this.biometricoService= new BiometricoService();
+      this.biometricoService = new BiometricoService();
     },
     mounted(){
       this.getDatos();
@@ -400,15 +412,17 @@ export default {
             this.usuario.celular=this.$cookies.get('celular');
             this.usuario.pass=this.$cookies.get('pass');
             this.usuario.menu=this.$cookies.get('menu');
+            this.usuario.unidad = this.$cookies.get('unidad');
+            this.usuario.sigla = this.$cookies.get('sigla');
 
             this.personaService= new PersonaService();
             this.personaService.headersUsuario(this.usuario.token);
         }
       },
-      getListaCiudadanos(){
-        this.personaService.getListaCiudadanos().then(response => {
-            this.listaCiudadanos = response.data;
-            this.tabla();
+      async getListaCiudadanos(){
+        await this.personaService.getListaCiudadanos().then(response => {
+          this.listaCiudadanos = response.data;
+          this.tabla();
         });
       },
       perfil(cifAux){
@@ -420,6 +434,7 @@ export default {
         });
       },
       registrarPersona(){
+
         // funcion para el registro de un ciudadano
         this.personaFalse();
         if(this.persona._02ci=='' || this.persona._03complemento=='' || this.persona._04nombre=='' || this.persona._07fecha=='' || this.persona._08sexo=='' || this.persona._09cel=='' || this.persona._10correo==''){
