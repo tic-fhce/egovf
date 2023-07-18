@@ -29,7 +29,7 @@ import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import PersonaService from '@/services/personaService';
 
 export default {
-    name:'PerfilCiudadanoView',
+    name:'ModuloInventarioView',
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesVue,

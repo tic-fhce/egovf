@@ -2,19 +2,20 @@
     <div class="row">
         <div class="card col-md-12">
             <div class="row">
-                <div class="card-header">
+                <div class="card-header headercolor">
                     <div class="row">
                         <div class=" col col-md-6 col-sm-6">
                             <h3>Control de Personal Biometrico</h3>
                         </div>
-                        <div class=" col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-primary" data-bs-toggle="modal" data-bs-target=#biometricoModal><span class="material-icons">&#xe145;</span>Biometrico</a>
-                        </div>
-                        <div class="col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-warning" data-bs-toggle="modal" data-bs-target=#horarioModal><span class="material-icons">&#xe145;</span>Horario</a>
-                        </div>
-                        <div class="col col-md-2 col-sm-2">
-                            <a href="#" class="form-control btn btn-success" data-bs-toggle="modal" data-bs-target=#obsModal><span class="material-icons">&#xe145;</span>Obs</a>
+                        <div class="col-md-6 text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones de Biometrico</button>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#biometricoModal">Agregar Biometrico</a>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#horarioModal">Agregar Horario</a>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#obsModal">Agregar Observaciones</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,7 +139,8 @@
                                 </table>
                             </div>
                             <!--Observaciones del Biometrico-->
-
+                            
+                            <!--Reporte Mensual-->
                             <div class="tab-pane fade" id="mensual" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
                                 <div class="row">
@@ -174,15 +176,15 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select v-model="reporteMes.mes" class="form-control">
-                                                    <option value="1">Enero</option>
-                                                    <option value="2">Febrero</option>
-                                                    <option value="3">Marzo</option>
-                                                    <option value="4">Abril</option>
-                                                    <option value="5">Mayo</option>
-                                                    <option value="6">Junio</option>
-                                                    <option value="7">Julio</option>
-                                                    <option value="8">Agosto</option>
-                                                    <option value="9">Septiembre</option>
+                                                    <option value="01">Enero</option>
+                                                    <option value="02">Febrero</option>
+                                                    <option value="03">Marzo</option>
+                                                    <option value="04">Abril</option>
+                                                    <option value="05">Mayo</option>
+                                                    <option value="06">Junio</option>
+                                                    <option value="07">Julio</option>
+                                                    <option value="08">Agosto</option>
+                                                    <option value="09">Septiembre</option>
                                                     <option value="10">Octubre</option>
                                                     <option value="11">Noviembre</option>
                                                     <option value="12">Diciembre</option>
@@ -196,7 +198,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                            <!--Reporte Mensual-->
+
+                            <!-- Reporte Segmentado -->
                             <div class="tab-pane fade" id="dias" role="tabpanel" aria-labelledby="dias-tab">
                                 <br>
                                 <div class="row">
@@ -232,15 +236,15 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select v-model="reporteMes.mes" class="form-control">
-                                                    <option value="1">Enero</option>
-                                                    <option value="2">Febrero</option>
-                                                    <option value="3">Marzo</option>
-                                                    <option value="4">Abril</option>
-                                                    <option value="5">Mayo</option>
-                                                    <option value="6">Junio</option>
-                                                    <option value="7">Julio</option>
-                                                    <option value="8">Agosto</option>
-                                                    <option value="9">Septiembre</option>
+                                                    <option value="01">Enero</option>
+                                                    <option value="02">Febrero</option>
+                                                    <option value="03">Marzo</option>
+                                                    <option value="04">Abril</option>
+                                                    <option value="05">Mayo</option>
+                                                    <option value="06">Junio</option>
+                                                    <option value="07">Julio</option>
+                                                    <option value="08">Agosto</option>
+                                                    <option value="09">Septiembre</option>
                                                     <option value="10">Octubre</option>
                                                     <option value="11">Noviembre</option>
                                                     <option value="12">Diciembre</option>
@@ -254,7 +258,7 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select  class="form-control" v-model="reporteMes.di">
-                                                    <option v-for="i in 31" :key="i">{{i}}</option>
+                                                    <option v-for="i in 31" :key="i" value="{{ i }}">{{i}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -266,7 +270,7 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select  class="form-control" v-model="reporteMes.df">
-                                                    <option v-for="i in 31" :key="i">{{i}}</option>
+                                                    <option v-for="i in 31" :key="i" value="{{ i }}">{{i}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -278,6 +282,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Reporte Segmentado -->
                         </div>
                     </div>
                 </div>
@@ -292,7 +297,7 @@
 <div class="modal fade" id="biometricoModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Biometrico</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -327,7 +332,7 @@
 <div class="modal fade" id="horarioModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Nuevo Horario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -405,7 +410,7 @@
 <div class="modal fade" id="obsModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Observaciones de Asistencia</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -645,7 +650,6 @@ export default {
                     this.biometrico._07id_tipo=this.id_tipo;
                 }
             });
-            console.log(this.biometrico);
         },
         addHorario(){
             this.horario._01cif=this.persona._01cif;
@@ -721,13 +725,16 @@ export default {
         },
         getReporteMes(){
             this.reporteMes.cif=this.persona._01cif;
-            this.reporteMes.id_horario=this.id_horario;
-            this.reporteMes.listaPerfil=this.listaPerfil;
-            this.reporteMes.persona=this.persona;
+            if(this.reporteMes.di<10){
+                this.reporteMes.di='0'+this.reporteMes.di;
+            }
+            if(this.reporteMes.df<10){
+                this.reporteMes.df='0'+this.reporteMes.df;
+            }
             this.$router.push({
-                name: "reportePerfil",
+                name: "reporte",
                 params:{
-                    reporte:JSON.stringify(this.reporteMes)
+                    uri:this.reporteMes.cif+'j'+this.reporteMes.gestion+'m'+this.reporteMes.mes+'m'+this.reporteMes.di+'k'+this.reporteMes.df
                 }
             });
         }

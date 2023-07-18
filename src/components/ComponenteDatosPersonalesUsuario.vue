@@ -14,24 +14,24 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h4 class="card-title">CIF : {{persona._01cif}}</h4>
+                            <h4 class="card-title">CIF : {{personaUsuario._01cif}}</h4>
                             <h4 class="card-title">Unidad : {{usuario.sigla}}</h4>
                             <label for="nombre" class="col-md-6">Nombre : </label>
-                            <label for="nombre" class="col-md-6">{{persona._04nombre}}</label>
+                            <label for="nombre" class="col-md-6">{{personaUsuario._04nombre}}</label>
 
                             <label for="apellido" class="col-md-6">Apellidos : </label>
-                            <label for="nombre" class="col-md-6">{{persona._05paterno}} {{persona._06materno}}</label>
+                            <label for="nombre" class="col-md-6">{{personaUsuario._05paterno}} {{personaUsuario._06materno}}</label>
                         </div>
                         <div class="col">
                             <ul>
-                                <li>ID app : {{persona.id}}</li>
-                                <li>CIF : {{persona._01cif}}</li>
-                                <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
-                                <li>Correo : {{persona._10correo}}</li>
-                                <li>Celular : <a href="" target="_blank">{{persona._09cel}}</a></li>
-                                <li>Fecha N : {{persona._07fecha}}</li>
-                                <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
-                                <li v-if="persona._08sexo == 2">Sexo : Masculino</li>
+                                <li>ID app : {{personaUsuario.id}}</li>
+                                <li>CIF : {{personaUsuario._01cif}}</li>
+                                <li>C.I. : {{personaUsuario._02ci}} {{personaUsuario._03complemento}}</li>
+                                <li>Correo : {{personaUsuario._10correo}}</li>
+                                <li>Celular : <a href="" target="_blank">{{personaUsuario._09cel}}</a></li>
+                                <li>Fecha N : {{personaUsuario._07fecha}}</li>
+                                <li v-if="personaUsuario._08sexo == 1">Sexo : Femenino</li>
+                                <li v-if="personaUsuario._08sexo == 2">Sexo : Masculino</li>
                             </ul>
                         </div>
                     </div> 
@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import UsuarioService from '@/services/usuarioServices';
 import PersonaService from '@/services/personaService';
 
 export default {
@@ -52,7 +51,6 @@ export default {
     props:['cifCiudadano'],
     data(){
         return{
-            usuarioService:null,
             personaService:null,
             what:"https://api.whatsapp.com/send?phone=591",
             getPB:true,
@@ -66,7 +64,7 @@ export default {
                 unidad:'',
                 sigla:''
             },
-            persona:{
+            personaUsuario:{
                 id:null,
                 _01cif:'',
                 _02ci:'',
@@ -85,7 +83,6 @@ export default {
         //this.getDatosComponenteDatosPersona();
     },
     created(){
-        this.usuarioService= new UsuarioService();
         this.personaService = new PersonaService();
     },
     updated(){
@@ -106,20 +103,13 @@ export default {
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
 
-            // Creamos datos de Usuario
-            
-            this.usuarioService.headersUsuario(this.usuario.token);
-            this.usuarioService.getUsuario(this.cifCiudadano).then((response) =>{
-                this.egovf=response.data;
-            });
             // creamos los datos del Ciudadano
             
             this.personaService.headersUsuario(this.usuario.token);
             this.personaService.getPersona(this.cifCiudadano).then((response) =>{
-                this.persona=response.data;
+                this.personaUsuario=response.data;
             });
-            this.what+this.persona._09cel;
-            
+            this.what+this.personaUsuario._09cel;
         }
         
     }

@@ -2,13 +2,13 @@
 <div class="row">
     <div class="card col-md-12">
         <div class="row">
-            <div class="card-header">
+            <div class="card-header headercolor">
                 <div class="row">
                     <div class="col col-md-6 col-sm-6">
                         <h2 id="titulo">Reporte de Asistencia</h2>
                     </div>
                     <div class="col col-md-4 col-sm-4">
-                        <h2>{{mes}} de {{reporte.gestion}} </h2>
+                        <h2>{{mes}} de {{reporte.gestion}}</h2>
                     </div>
                     <div class="col col-md-2 col-sm-2">
                         <button class="form-control btn btn-success" @click="pdf()"><span class="material-icons">&#xe8ad;</span>Imprimir</button>
@@ -47,8 +47,16 @@
                                     {{value.turno[0]}}<br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
                                 </td>
                                 <td>
-                                    {{value.hora[0]}}<br>{{value.hora[1]}}<br>{{value.hora[2]}}<br>{{value.hora[3]}}
+                                    <span v-if="value.hora[0]=='Sin Marcar'" class="badge bg-danger">{{value.hora[0]}}</span>
+                                    <span v-else>{{value.hora[0]}}</span><br>
+                                    <span v-if="value.hora[1]=='Sin Marcar'" class="badge bg-danger">{{value.hora[1]}}</span>
+                                    <span v-else>{{value.hora[1]}}</span><br>
+                                    <span v-if="value.hora[2]=='Sin Marcar'" class="badge bg-danger">{{value.hora[2]}}</span>
+                                    <span v-else>{{value.hora[2]}}</span><br>
+                                    <span v-if="value.hora[3]=='Sin Marcar'" class="badge bg-danger">{{value.hora[3]}}</span>
+                                    <span v-else>{{value.hora[3]}}</span>
                                 </td>
+
                                 <td>
                                     {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
                                 </td>
@@ -114,7 +122,7 @@ export default {
         this.biometricoService= new BiometricoService();
     },
     updated(){
-        if(this.reporte.cif>0 && this.getPB)
+        if(this.reporte.cif>0 && this.getPB && this.reporte.id_horario>0)
         {
             this.getMes();
             if(this.reporte.di>0 && this.reporte.df>0)
@@ -125,8 +133,8 @@ export default {
         }
     },
     methods:{
-        getReporteMes(){
-            this.biometricoService.getReporteMes(this.reporte).then((result) => {
+        async getReporteMes(){
+            await this.biometricoService.getReporteMes(this.reporte).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso();
             }).catch((err) => {
@@ -182,7 +190,8 @@ export default {
             doc.text("CIF : "+this.reporte.persona._01cif,30,50);
             doc.text("Nombre : "+this.reporte.persona._04nombre,30,55);
             doc.text("Apellidos : "+this.reporte.persona._05paterno+" "+this.reporte.persona._06materno,30,60);
-            doc.text("Celular: "+this.reporte.persona._09cel,30,65);
+            doc.text("Celular : "+this.reporte.persona._09cel,30,65);
+            doc.text("Unidad : "+this.reporte.sigla,30,70);
             doc.text("ID app : "+this.reporte.persona.id,120,50);
             doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,55);
             doc.text("Correo : "+this.reporte.persona._10correo,120,60);

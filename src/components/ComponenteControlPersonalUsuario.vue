@@ -166,15 +166,15 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select v-model="reporteMesUsuario.mes" class="form-control">
-                                                    <option value="1">Enero</option>
-                                                    <option value="2">Febrero</option>
-                                                    <option value="3">Marzo</option>
-                                                    <option value="4">Abril</option>
-                                                    <option value="5">Mayo</option>
-                                                    <option value="6">Junio</option>
-                                                    <option value="7">Julio</option>
-                                                    <option value="8">Agosto</option>
-                                                    <option value="9">Septiembre</option>
+                                                    <option value="01">Enero</option>
+                                                    <option value="02">Febrero</option>
+                                                    <option value="03">Marzo</option>
+                                                    <option value="04">Abril</option>
+                                                    <option value="05">Mayo</option>
+                                                    <option value="06">Junio</option>
+                                                    <option value="07">Julio</option>
+                                                    <option value="08">Agosto</option>
+                                                    <option value="09">Septiembre</option>
                                                     <option value="10">Octubre</option>
                                                     <option value="11">Noviembre</option>
                                                     <option value="12">Diciembre</option>
@@ -227,15 +227,15 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select v-model="reporteMesUsuario.mes" class="form-control">
-                                                    <option value="1">Enero</option>
-                                                    <option value="2">Febrero</option>
-                                                    <option value="3">Marzo</option>
-                                                    <option value="4">Abril</option>
-                                                    <option value="5">Mayo</option>
-                                                    <option value="6">Junio</option>
-                                                    <option value="7">Julio</option>
-                                                    <option value="8">Agosto</option>
-                                                    <option value="9">Septiembre</option>
+                                                    <option value="01">Enero</option>
+                                                    <option value="02">Febrero</option>
+                                                    <option value="03">Marzo</option>
+                                                    <option value="04">Abril</option>
+                                                    <option value="05">Mayo</option>
+                                                    <option value="06">Junio</option>
+                                                    <option value="07">Julio</option>
+                                                    <option value="08">Agosto</option>
+                                                    <option value="09">Septiembre</option>
                                                     <option value="10">Octubre</option>
                                                     <option value="11">Noviembre</option>
                                                     <option value="12">Diciembre</option>
@@ -305,7 +305,7 @@ export default {
                 id_horario:'',
                 cif:'',
                 gestion:2023,
-                mes:1,
+                mes:0,
                 di:0,
                 df:0,
                 listaPerfil:[],
@@ -365,10 +365,7 @@ export default {
                 _28det:'14:30',
                 _29dst:'18:30'
             },
-            listaObsUsuario:[],
-            james:{
-                nombre:'james'
-            }
+            listaObsUsuario:[]
         }
     },
     created(){
@@ -412,17 +409,18 @@ export default {
         },
         getReporteMesUsuario(){
             this.reporteMesUsuario.cif=this.personaUsuario._01cif;
-            this.reporteMesUsuario.id_horario=this.id_horarioUsuario;
-            this.reporteMesUsuario.listaPerfil=this.listaPerfilUsuario;
-            this.reporteMesUsuario.personaUsuario=this.personaUsuario;
-            this.reporteJson=JSON.stringify(this.reporteMesUsuario);
+            if(this.reporteMesUsuario.di<10){
+                this.reporteMesUsuario.di='0'+this.reporteMesUsuario.di;
+            }
+            if(this.reporteMesUsuario.df<10){
+                this.reporteMesUsuario.df='0'+this.reporteMesUsuario.df;
+            }
             this.$router.push({
-                name: "reporteUsuario",
+                name: "usuarioReporte",
                 params:{
-                    reporteusuario:this.reporteJson
+                    uriu:this.reporteMesUsuario.gestion+'m'+this.reporteMesUsuario.mes+'m'+this.reporteMesUsuario.di+'k'+this.reporteMesUsuario.df
                 }
             });
-
         }
     }
 }

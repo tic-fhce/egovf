@@ -9,12 +9,12 @@
         <!--Construccion de Componentes-->
         <!-- Componente de Datos de Persona -->
         <br>
-        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif"/>
+        <ComponenteDatosPersonaVue :cifCiudadano="cifCiudadano"/>
         <!-- Componente de Reporte de Personal -->
         <br>
-        <!-- Componente de Reportes del Usuario -->
-        <ComponenteReporteUsuarioVue :reporteUsuario="reporteUsuario"/>
-        <!-- Componente de Reportes del Usuario -->
+        <!-- Componente de Reporte -->
+        <ComponenteReporteVue :reporte="reporte"/>
+        <!-- Componente de Reporte -->
     </div>
     <ComponenteFooterVue/>
 </template>
@@ -22,23 +22,26 @@
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
-import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
-import ComponenteReporteUsuarioVue from '@/components/ComponenteReporteUsuario.vue';
+import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
+import ComponenteReporteVue from '@/components/ComponenteReporte.vue';
 import BiometricoService from '@/services/biometricoService';
 import PersonaService from '@/services/personaService';
-
+import UsuarioService from '@/services/usuarioServices';
 export default {
-    name:'ReporteUsuarioView',
+    name:'ReporteView',
     components:{
         ComponenteMenuVue,
-        ComponenteDatosPersonalesUsuarioVue,
-        ComponenteReporteUsuarioVue,
+        ComponenteDatosPersonaVue,
+        ComponenteReporteVue,
         ComponenteFooterVue
     },
     data(){
         return {
             biometricoService:null,
             personaService:null,
+            usuarioService:null,
+            uri:'',
+            cifCiudadano:'',
             usuario:{
                 token:'',
                 cif:'',
@@ -49,15 +52,16 @@ export default {
                 unidad:'',
                 sigla:''
             },
-            reporteUsuario:{
+            reporte:{
                 id_horario:0,
                 cif:0,
+                sigla:'',
                 gestion:0,
                 mes:0,
                 di:0,
                 df:0,
                 listaPerfil:[],
-                personaUsuario:{
+                persona:{
                     id:null,
                     _01cif:'',
                     _02ci:'',
@@ -73,16 +77,19 @@ export default {
             }
         }
     },
+
     mounted(){
-        this.uriu=this.$route.params.uriu;
-        this.reporteUsuario.gestion = this.uriu.substring(0,4);
-        this.reporteUsuario.mes = this.uriu.substring(5,7);
-        this.reporteUsuario.di = this.uriu.substring(8,10);
-        this.reporteUsuario.df = this.uriu.slice(11);
-        this.getDatosUsuario();
-        this.getReportePersonaUsuario();
-        this.getReporteBiometricoUsuario();
-        
+        this.uri=this.$route.params.uri;
+        this.cifCiudadano = this.uri.substring(0,11);
+        this.reporte.cif=this.uri.substring(0,11);
+        this.reporte.gestion = this.uri.substring(12,16);
+        this.reporte.mes = this.uri.substring(17,19);
+        this.reporte.di = this.uri.substring(20,22);
+        this.reporte.df = this.uri.slice(23);
+        this.getDatos();
+        this.getReporteBiometrico();
+        this.getReportePersona();
+        this.getReporteUsuario();
     },
     beforeCreate(){        
         if(this.$cookies.get('cif')==null){
@@ -92,9 +99,10 @@ export default {
     created(){
         this.biometricoService = new BiometricoService();
         this.personaService = new PersonaService();
+        this.usuarioService = new UsuarioService();
     },
     methods:{
-      getDatosUsuario(){
+      getDatos(){
         if(this.$cookies.get('cif')!=null){
             this.usuario.token=this.$cookies.get('token');
             this.usuario.cif=this.$cookies.get('cif');
@@ -104,24 +112,29 @@ export default {
             this.usuario.menu=this.$cookies.get('menu');
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
-
-            this.reporteUsuario.cif = this.usuario.cif;
         }
       },
-      async getReportePersonaUsuario(){
+      async getReportePersona(){
         this.personaService.headersUsuario(this.usuario.token);
-        await this.personaService.getPersona(this.usuario.cif).then((response) =>{
-            this.reporteUsuario.personaUsuario=response.data;
+        await this.personaService.getPersona(this.reporte.cif).then((response) =>{
+            this.reporte.persona=response.data;
         });
       },
-      async getReporteBiometricoUsuario(){
-        await this.biometricoService.getPerfil(this.usuario.cif).then(response=>{
-            this.reporteUsuario.listaPerfil=response.data;
-            if(this.reporteUsuario.listaPerfil.length>0){
-                this.reporteUsuario.id_horario=this.reporteUsuario.listaPerfil[0]._05horario_id;
+      async getReporteUsuario(){
+        this.usuarioService.headersUsuario(this.usuario.token);
+        await this.usuarioService.getUsuario(this.reporte.cif).then((response) => {
+            this.reporte.sigla = response.data._10sigla;
+            console.log(this.reporte.sigla);
+        });
+      },
+      async getReporteBiometrico(){
+        await this.biometricoService.getPerfil(this.reporte.cif).then(response=>{
+            this.reporte.listaPerfil=response.data;
+            if(this.reporte.listaPerfil.length>0){
+                this.reporte.id_horario=this.reporte.listaPerfil[0]._05horario_id;
             }
         });
-      }
+        }
     }
 }
 </script>

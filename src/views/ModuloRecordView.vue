@@ -9,7 +9,7 @@
         <div class="row">
             <div class="card">
                 <div class="row">
-                    <div class="card-header">
+                    <div class="card-header headercolor">
                         <div class="row">
                             <div class="col-md-6">
                                 <h2>Record de Asistencia</h2>
@@ -54,7 +54,7 @@
                                 <tbody>
                                     <tr v-for="ciudadano in listaR" :key="ciudadano.id">
                                         <td>{{ciudadano.id}}</td>
-                                        <td>{{ciudadano.cif}}</td>
+                                        <td><button class="btn btn-success" @click="getReporteMes(ciudadano.cif)">{{ciudadano.cif}}</button></td>
                                         <td>{{ ciudadano.ci }}</td>
                                         <td>{{ ciudadano.nombre }}</td>
                                         <td>{{ ciudadano.retraso }}</td>
@@ -126,7 +126,9 @@ export default {
             record:{
                 gestion:2023,
                 mes:0,
-                tipo:0
+                tipo:0,
+                di:'00',
+                df:'00'
             },
             stadist:{
                 excelente:0,
@@ -188,13 +190,20 @@ export default {
             this.personaService.headersUsuario(this.usuario.token);
             await this.personaService.getListaCiudadanos().then((response) =>{
                 this.listaPersona=response.data;
-                console.log(this.listaPersona);
             });
+        },
+        getReporteMes(cif){
+            window.open(this.$router.resolve({
+                name: "reporte",
+                params:{
+                    uri:cif+'j'+this.record.gestion+'m'+this.record.mes+'m'+this.record.di+'k'+this.record.df
+                }
+            }).href,'_blank');
+            //window.open(routerData.href,'_blank');
         },
         async getRecord(){
             await  this.biometricoService.getRecord(this.record).then((response)=>{
                 this.listaRecord = response.data;
-                console.log(this.listaRecord);
             });
             var auxid=1;
             this.listaR=[];

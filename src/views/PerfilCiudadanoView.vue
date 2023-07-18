@@ -7,7 +7,7 @@
             </div>
         </div>
         <!--Construccion de Componentes-->
-
+        
         <!-- Componente de Datos de Persona -->
         <br>
         <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano"/>

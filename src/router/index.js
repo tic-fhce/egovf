@@ -53,11 +53,6 @@ const routes = [
     component: () => import('../views/PerfilCiudadanoUsuarioView.vue')
   },
   {
-    path: '/reporteUsuario:reporteusuario',
-    name: 'reporteUsuario',
-    component: () => import('../views/ReporteUsuarioView.vue')
-  },
-  {
     path: '/biometrico:cifCiudadano',
     name: 'biometrico',
     component: () => import('../views/ModuloBiometricoView.vue')
@@ -82,6 +77,26 @@ const routes = [
     name: 'moduloUnidad',
     component: () => import('../views/ModuloUnidadView.vue')
   },
+  {
+    path: '/moduloUsuarioUnidad',
+    name: 'moduloUsuarioUnidad',
+    component: () => import('../views/ModuloUnidadUsuarioView.vue')
+  },
+  {
+    path: '/reporte:uri',
+    name: 'reporte',
+    component: () => import('../views/ReporteView.vue')
+  },
+  {
+    path: '/usuarioReporte:uriu',
+    name: 'usuarioReporte',
+    component: () => import('../views/ReporteUsuarioView.vue')
+  },
+  {
+    path: '/image',
+    name: 'image',
+    component: () => import('../views/ImageView.vue')
+  }
 ]
 
 const router = createRouter({

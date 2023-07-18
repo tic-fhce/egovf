@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <ComponenteMenuVue :cif="usuarioUsuario.cif" :menu="usuarioUsuario.menu" />
+            <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
         </div>
         
         <div class="row">
@@ -12,7 +12,7 @@
         <!--Construccion de Componentes-->
         <!-- Componente de Datos de Persona -->
         <br>
-        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuarioUsuario.cif"/>
+        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif"/>
         
         <!-- Componente de Reporte de Personal -->
         <br>
@@ -37,7 +37,7 @@ import ComponenteControlPersonalUsuarioVue from '@/components/ComponenteControlP
 import PersonaServiceUsuario from '@/services/personaService';
 
 export default {
-    name:'ReporteUsuarioView',
+    name:'PerfilCiudadanoUsuarioView',
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesUsuarioVue,
@@ -47,7 +47,7 @@ export default {
     data(){
         return {
             personaServiceUsuario:null,
-            usuarioUsuario:{
+            usuario:{
                 token:'',
                 cif:'',
                 correo:'',
@@ -86,20 +86,20 @@ export default {
     methods:{
         getDatosUsuario(){
             if(this.$cookies.get('cif')!=null){
-                this.usuarioUsuario.token=this.$cookies.get('token');
-                this.usuarioUsuario.cif=this.$cookies.get('cif');
-                this.usuarioUsuario.correo=this.$cookies.get('correo');
-                this.usuarioUsuario.celular=this.$cookies.get('celular');
-                this.usuarioUsuario.pass=this.$cookies.get('pass');
-                this.usuarioUsuario.menu=this.$cookies.get('menu');
-                this.usuarioUsuario.unidad = this.$cookies.get('unidad');
-                this.usuarioUsuario.sigla = this.$cookies.get('sigla');
+                this.usuario.token=this.$cookies.get('token');
+                this.usuario.cif=this.$cookies.get('cif');
+                this.usuario.correo=this.$cookies.get('correo');
+                this.usuario.celular=this.$cookies.get('celular');
+                this.usuario.pass=this.$cookies.get('pass');
+                this.usuario.menu=this.$cookies.get('menu');
+                this.usuario.unidad = this.$cookies.get('unidad');
+                this.usuario.sigla = this.$cookies.get('sigla');
                 this.getDatosPersonaUsuario();
             }
         },
         getDatosPersonaUsuario(){
-            this.personaServiceUsuario.headersUsuario(this.usuarioUsuario.token);
-            this.personaServiceUsuario.getPersona(this.usuarioUsuario.cif).then((response) =>{
+            this.personaServiceUsuario.headersUsuario(this.usuario.token);
+            this.personaServiceUsuario.getPersona(this.usuario.cif).then((response) =>{
                 this.personaUsuario=response.data;
             });
         }

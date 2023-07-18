@@ -6,35 +6,44 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-md-6"></div>
-        <div class="col-md-6 align-self-end text-end">
-          <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#unidadmodal><span class="material-icons">&#xe145;</span>Unidad</button>
-        </div>
-      </div>
-      <hr>
-        <div class="row">
-          <div class="col-ms-12">
-            <div class="table-responsive">
-              <table id="unidadTabla" class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th><th>Unidad</th><th>Dependiente</th><th>Sigla</th><th>Telefono</th><th>Correo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="unidad in listaUnidad" :key="unidad.id">
-                    <th scope="row">{{unidad.id}}</th>
-                    <td>{{unidad._01unidad}}</td>
-                    <td>{{unidad._02dependiente}}</td>
-                    <td>{{unidad._03sigla}}</td>
-                    <td>{{unidad._04telefono}}</td>
-                    <td>{{unidad._05correo}}</td>
-                  </tr>
-                </tbody>
-              </table>
+        <div class="card col-md-12">
+          <div class="row">
+            <div class="card-header headercolor">
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>Unidades Academicas e-GOVF</h3>
+                </div>
+                <div class="col-md-6 align-self-end text-end">
+                  <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#unidadmodal><span class="material-icons">&#xe145;</span>Unidad</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="col-ms-12">
+                <div class="table-responsive">
+                  <table id="unidadTabla" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th><th>Unidad</th><th>Dependiente</th><th>Sigla</th><th>Telefono</th><th>Correo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="unidad in listaUnidad" :key="unidad.id">
+                        <th scope="row">{{unidad.id}}</th>
+                        <td>{{unidad._01unidad}}</td>
+                        <td>{{unidad._02dependiente}}</td>
+                        <td>{{unidad._03sigla}}</td>
+                        <td>{{unidad._04telefono}}</td>
+                        <td>{{unidad._05correo}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
     <ComponenteFooterVue/>
 
@@ -42,7 +51,7 @@
 <div class="modal fade" id="unidadmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Nueva Undiad</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -115,7 +124,7 @@ import $ from 'jquery';
 DataTable.use(DataTablesLib);
 
 export default {
-    name:'UnidadView',
+    name:'ModuloUnidadView',
     components:{
         ComponenteMenuVue,
         ComponenteFooterVue

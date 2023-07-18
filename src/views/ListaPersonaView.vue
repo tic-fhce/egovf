@@ -13,14 +13,15 @@
                 <div class="col-md-6">
                   <h3>Ciudadanos e-GOVF</h3>
                 </div>
-                <div class="col-md-2 align-self-end text-end">
-                  <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#personamodal><span class="material-icons">&#xe145;</span>Ciudadano</button>
-                </div>
-                <div class="col-md-2 align-self-end text-end">
-                  <button class="btn btn-warning btn-block" data-bs-toggle="modal" data-bs-target=#obsModalAll><span class="material-icons">&#xe145;</span>Obs</button>
-                </div>
-                <div class="col-md-2 align-self-end text-end">
-                  <button class="btn btn-success btn-block" data-bs-toggle="modal" data-bs-target=#recordModal><span class="material-icons">&#xe145;</span>Record</button>
+                <div class="col-md-6 text-end">
+                  <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones de los Ciudadanos</button>
+                    <div class="dropdown-menu">
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#personamodal">Agregar Ciudadano</a>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#obsModalAll">Agregar Observaciones</a>
+                      <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#recordModal">Extraer Record</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -42,7 +43,7 @@
                         </td>
                         <td>{{persona._09cel}}</td>
                         <td>{{persona._10correo}}</td>
-                        <td><button class="btn btn-success" @click="perfil(persona._01cif)">Perfil</button></td>
+                        <td><button class="btn btn-success btn-block" @click="perfil(persona._01cif)">Perfil</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -59,7 +60,7 @@
 <div class="modal fade" id="personamodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Nuevo Ciudadano</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -70,7 +71,7 @@
               <p class="text-danger" v-if="errorpersona.ci"> Celulda de Identidad.</p>
             </label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="persona._02ci" placeholder="Cedula de Identidad" required="true">
+                <input type="text" class="form-control" v-model="persona.ci" placeholder="Cedula de Identidad" required="true">
             </div>
         </div>
 
@@ -80,7 +81,7 @@
               <p class="text-danger" v-if="errorpersona.complemento"> Region Exp.</p>
             </label>
             <div class="col-sm-6">
-                <select class="form-control" v-model="persona._03complemento" required="true">
+                <select class="form-control" v-model="persona.complemento" required="true">
                   <option>Seleccionar Region Expedida</option>
                   <option value="lp">La Paz</option>
                   <option value="sc">Santa Cruz</option>
@@ -101,19 +102,19 @@
               <p class="text-danger" v-if="errorpersona.nombre">Nombres.</p>
             </label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" v-model="persona._04nombre" placeholder="Nombres" required="true">
+              <input type="text" class="form-control" v-model="persona.nombre" placeholder="Nombres" required="true">
             </div>
         </div>
         <div class="mb-3 row">
             <label for="paterno" class="col-sm-6 col-form-label">A. Paterno.</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" v-model="persona._05paterno" placeholder="Apellido Paterno">
+              <input type="text" class="form-control" v-model="persona.paterno" placeholder="Apellido Paterno">
             </div>
         </div>
         <div class="mb-3 row">
             <label for="materno" class="col-sm-6 col-form-label">A. Materno.</label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" v-model="persona._06materno" placeholder="Apellido Materno">
+              <input type="text" class="form-control" v-model="persona.materno" placeholder="Apellido Materno">
             </div>
         </div>
         <div class="mb-3 row">
@@ -122,7 +123,7 @@
               <p class="text-danger" v-if="errorpersona.fecha">Fecha de Nacimiento.</p>
             </label>
             <div class="col-sm-6">
-              <input type="date" class="form-control" v-model="persona._07fecha" required="true">
+              <input type="date" class="form-control" v-model="persona.fecha" required="true">
             </div>
         </div>
 
@@ -132,7 +133,7 @@
               <p class="text-danger" v-if="errorpersona.sexo">Sexo</p>
             </label>
             <div class="col-sm-6">
-              <select class="form-control" v-model="persona._08sexo" required="true">
+              <select class="form-control" v-model="persona.sexo" required="true">
                 <option>Seleccionar Sexo</option>
                 <option value="1">Femenino</option>
                 <option value="2">Masculino</option>
@@ -146,7 +147,7 @@
               <p class="text-danger" v-if="errorpersona.cel">Celular.</p>
             </label>
             <div class="col-sm-6">
-              <input type="text" class="form-control" v-model="persona._09cel" placeholder="Numero de Celular" required="true">
+              <input type="text" class="form-control" v-model="persona.cel" placeholder="Numero de Celular" required="true">
             </div>
         </div>
 
@@ -156,7 +157,7 @@
               <p class="text-danger" v-if="errorpersona.correo">E-mail.</p>
             </label>
             <div class="col-sm-6">
-              <input type="email" class="form-control" v-model="persona._10correo" placeholder="Correo Electronico" required="true">
+              <input type="email" class="form-control" v-model="persona.correo" placeholder="Correo Electronico" required="true">
             </div>
         </div>
       </div>
@@ -172,7 +173,7 @@
 <div class="modal fade" id="obsModalAll" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Observaciones de Asistencia a los Ciudadanos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -252,7 +253,7 @@
 <div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="recordModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Creacion de Record</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -273,15 +274,15 @@
             <label for="datos" class="col-sm-4 col-form-label">Mes</label>
             <div class="col-sm-8">
               <select class="form-control" v-model="record.mes">
-                <option value="1">Enero</option>
-                <option value="2">Febrero</option>
-                <option value="3">Marzo</option>
-                <option value="4">Abril</option>
-                <option value="5">Mayo</option>
-                <option value="6">Junio</option>
-                <option value="7">Julio</option>
-                <option value="8">Agosto</option>
-                <option value="9">Septiembre</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
                 <option value="10">Octubre</option>
                 <option value="11">Noviembre</option>
                 <option value="12">Diciembre</option>
@@ -348,16 +349,16 @@ export default {
             sigla:''
           },
           persona:{
-            _01cif:0,
-            _02ci:'',
-            _03complemento:'',
-            _04nombre:'',
-            _05paterno:'',
-            _06materno:'',
-            _07fecha:'',
-            _08sexo:'',
-            _09cel:'',
-            _10correo:''
+            cif:0,
+            ci:'',
+            complemento:'',
+            nombre:'',
+            paterno:'',
+            materno:'',
+            fecha:'',
+            sexo:'',
+            cel:'',
+            correo:''
           },
           errorpersona:{
             ci:false,
@@ -437,26 +438,26 @@ export default {
 
         // funcion para el registro de un ciudadano
         this.personaFalse();
-        if(this.persona._02ci=='' || this.persona._03complemento=='' || this.persona._04nombre=='' || this.persona._07fecha=='' || this.persona._08sexo=='' || this.persona._09cel=='' || this.persona._10correo==''){
+        if(this.persona.ci=='' || this.persona.complemento=='' || this.persona.nombre=='' || this.persona.fecha=='' || this.persona.sexo=='' || this.persona.cel=='' || this.persona.correo==''){
           this.$swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Los siguientes datos son incorrectos o no fueron llenados apropiadamente, verifique e intente nuevamente.',
           });
-          if(this.persona._02ci=='')
+          if(this.persona.ci=='')
             this.errorpersona.ci=true;
-          if(this.persona._03complemento=='')
+          if(this.persona.complemento=='')
             this.errorpersona.complemento=true;
-          if(this.persona._04nombre=='')
+          if(this.persona.nombre=='')
             this.errorpersona.nombre=true;
-          if(this.persona._07fecha=='')
+          if(this.persona.fecha=='')
             this.errorpersona.fecha=true;
-          if(this.persona._08sexo=='')
+          if(this.persona.sexo=='')
             this.errorpersona.sexo=true;
-          if(this.persona._09cel=='' || this.persona._09cel.length<7){
+          if(this.persona.cel=='' || this.persona.cel.length<7){
             this.errorpersona.cel=true;
           }
-          if(this.persona._10correo=='' || !this.persona._10correo.includes('@')){
+          if(this.persona.correo=='' || !this.persona.correo.includes('@')){
             this.errorpersona.correo=true;
           }
         }

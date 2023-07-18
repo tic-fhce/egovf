@@ -16,22 +16,41 @@
                                 <h3>Escritorio</h3>
                             </div>
                             <div class="col-md-6">
-                                <ul>
-                                    <li>Unidad : {{ usuario.unidad }}</li>
-                                    <li>Sigla : {{ usuario.sigla }}</li>
-                                    <li>Usuario: {{ usuario.correo }}</li>
-                                </ul>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-md-4 espace" style="width: 18rem;">
+                                <div class="card">
+                                    <h4 class="text-center">Datos de conexión</h4>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">CIF: {{ usuario.cif }}</li>
+                                            <li class="list-group-item">{{ usuario.unidad }}</li>
+                                            <li class="list-group-item">{{ usuario.sigla }}</li>
+                                            <li class="list-group-item"></li>
+                                        </ul>
+                                        <router-link to="/perfil" class="btn btn-success btn-lg btn-block">Mi Perfil</router-link>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-2 espace" v-for="sub in subMenu" :key="sub.id">
                                 <div class="card" style="width: 10rem;">
-                                    <img src="../assets/reporte.jpg" class="card-img-top">
+                                    <img :src="sub.imagen" class="card-img-top">
                                     <div class="card-body text-center">
                                         <p class="card-text ">{{ sub.obs }}</p>
-                                        <router-link :to="sub.ruta" class="btn btn-success btn-lg">{{sub.titulo}}</router-link>
+                                        <router-link :to="sub.ruta" class="btn btn-success btn-block">{{sub.titulo}}</router-link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 espace">
+                                <div class="card" style="width: 10rem;">
+                                    <img src="../assets/unidad.jpg" class="card-img-top">
+                                    <div class="card-body text-center">
+                                        <p class="card-text ">Unidades Academicas</p>
+                                        <router-link to="/moduloUsuarioUnidad" class="btn btn-success btn-block">Unidades</router-link>
                                     </div>
                                 </div>
                             </div>

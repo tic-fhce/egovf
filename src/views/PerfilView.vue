@@ -187,7 +187,7 @@ import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
 import UsuarioService from '@/services/usuarioServices';
 
 export default {
-    name:'EscritorioView',
+    name:'PerfilView',
     data(){
         return {
             persona:{
@@ -263,7 +263,6 @@ export default {
                 this.persona = response.data;
                 });
             this.usuarioService.getUsuario(this.usuario.cif).then(response=>{
-                console.log(response.data);
                 this.egovf=response.data;
             });
         }

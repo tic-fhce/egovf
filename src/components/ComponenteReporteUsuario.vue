@@ -43,7 +43,14 @@
                                     {{value.turno[0]}}<br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
                                 </td>
                                 <td>
-                                    {{value.hora[0]}}<br>{{value.hora[1]}}<br>{{value.hora[2]}}<br>{{value.hora[3]}}
+                                    <span v-if="value.hora[0]=='Sin Marcar'" class="badge bg-danger">{{value.hora[0]}}</span>
+                                    <span v-else>{{value.hora[0]}}</span><br>
+                                    <span v-if="value.hora[1]=='Sin Marcar'" class="badge bg-danger">{{value.hora[1]}}</span>
+                                    <span v-else>{{value.hora[1]}}</span><br>
+                                    <span v-if="value.hora[2]=='Sin Marcar'" class="badge bg-danger">{{value.hora[2]}}</span>
+                                    <span v-else>{{value.hora[2]}}</span><br>
+                                    <span v-if="value.hora[3]=='Sin Marcar'" class="badge bg-danger">{{value.hora[3]}}</span>
+                                    <span v-else>{{value.hora[3]}}</span>
                                 </td>
                                 <td>
                                     {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
@@ -93,18 +100,19 @@ export default {
         this.biometricoService= new BiometricoService();
     },
     updated(){
-        if(this.reporteUsuario.cif>0 && this.getPB)
+        if(this.reporteUsuario.cif>0 && this.getPB && this.reporteUsuario.id_horario>0)
         {
-            this.getMes();
+            console.log("es el mes "+this.reporteUsuario.mes);
+            this.getMesUsuario();
             if(this.reporteUsuario.di>0 && this.reporteUsuario.df>0)
-                this.getReporteMesDia();
+                this.getReporteMesDiaUsuario();
             else
-                this.getReporteMes();
+                this.getReporteMesUsuario();
             this.getPB=false;
         }
     },
     methods:{
-        getReporteMes(){
+        getReporteMesUsuario(){
             this.biometricoService.getReporteMes(this.reporteUsuario).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso();
@@ -112,7 +120,7 @@ export default {
                 console.log(err);
             });
         },
-        getReporteMesDia(){
+        getReporteMesDiaUsuario(){
             this.biometricoService.getReporteMesDia(this.reporteUsuario).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso();
@@ -134,7 +142,7 @@ export default {
             this.totalretraso=sum;
             this.totalanticipado=res;
         },
-        getMes(){
+        getMesUsuario(){
             if(this.reporteUsuario.mes==1){this.mes='Enero';}
             if(this.reporteUsuario.mes==2){this.mes='Febrero';}
             if(this.reporteUsuario.mes==3){this.mes='Marzo';}

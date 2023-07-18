@@ -12,19 +12,19 @@ export default class PersonaService{
         return axios.get(personaUrl+"listaPersona");
     }
     addPersona(persona){
-        var info = persona._07fecha.split('-');
+        var info = persona.fecha.split('-');
         var fecha= info[2] + '/' + info[1] + '/' + info[0];
         const aux={
             _01cif:0,
-            _02ci:persona._02ci,
-            _03complemento:persona._03complemento,
-            _04nombre:persona._04nombre.charAt(0).toUpperCase() + persona._04nombre.slice(1),
-            _05paterno:persona._05paterno.charAt(0).toUpperCase() + persona._05paterno.slice(1),
-            _06materno:persona._06materno.charAt(0).toUpperCase() + persona._06materno.slice(1),
+            _02ci:persona.ci,
+            _03complemento:persona.complemento,
+            _04nombre:persona.nombre.charAt(0).toUpperCase() + persona.nombre.slice(1),
+            _05paterno:persona.paterno.charAt(0).toUpperCase() + persona.paterno.slice(1),
+            _06materno:persona.materno.charAt(0).toUpperCase() + persona.materno.slice(1),
             _07fecha:fecha,
-            _08sexo:persona._08sexo,
-            _09cel:persona._09cel,
-            _10correo:persona._10correo
+            _08sexo:persona.sexo,
+            _09cel:persona.cel,
+            _10correo:persona.correo
         }
         return axios.post(personaUrl+"registrar",aux);
     }

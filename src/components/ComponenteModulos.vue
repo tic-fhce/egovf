@@ -59,7 +59,7 @@
 import ModuloService from '@/services/moduloService';
 
 export default {
-    name:'ComponenteModulosVUE',
+    name:'ComponenteModulosVue',
     props:['cif'],
     data(){
         return{

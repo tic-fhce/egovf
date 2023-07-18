@@ -35,7 +35,7 @@ import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
 DataTable.use(DataTablesLib);
 
 export default {
-    name:'ListaPersonaView',
+    name:'ListaMarcadoView',
     components:{
         ComponenteMenuVue
     },
