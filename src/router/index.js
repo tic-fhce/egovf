@@ -96,6 +96,11 @@ const routes = [
     path: '/image',
     name: 'image',
     component: () => import('../views/ImageView.vue')
+  },
+  {
+    path: '/moduloEvento',
+    name: 'moduloEvento',
+    component: () => import('../views/ModuloEventoView.vue')
   }
 ]
 

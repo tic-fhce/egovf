@@ -32,6 +32,7 @@
                                 <li>CIF : {{persona._01cif}}</li>
                                 <li>C.I. : {{persona._02ci}} {{persona._03complemento}}</li>
                                 <li>Correo : {{persona._10correo}}</li>
+                                <li>Unidad : {{ usuario.sigla }}</li>
                                 <li>Celular : {{persona._09cel}}</li>
                                 <li>Fecha N : {{persona._07fecha}}</li>
                                 <li v-if="persona._08sexo == 1">Sexo : Femenino</li>
@@ -67,6 +68,7 @@
                                     <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                                     <li>Correo : {{egovf._05correo}}</li>
                                     <li>Celular : {{egovf._06celular}}</li>
+                                    <li>Unidad : {{ usuario.sigla }}</li>
                                 </ul>
                             </div>
                             <div class="tab-pane fade" id="actualizar" role="tabpanel" aria-labelledby="profile-tab">
@@ -77,6 +79,7 @@
                                     <li>Matricula : <a href="#" data-bs-toggle="modal" data-bs-target=#matriculamodal>{{egovf._02matricula}}</a></li>
                                     <li>C.I. : {{egovf._03ci}} {{egovf._04complemento}}</li>
                                     <li>Correo : {{egovf._05correo}}</li>
+                                    <li>Unidad : {{ usuario.sigla }}</li>
                                     <li>Celular : <a href="#" data-bs-toggle="modal" data-bs-target=#celularmodal> {{egovf._06celular}}</a></li>
                                     <li>Contraseña : <a href="#" data-bs-toggle="modal" data-bs-target=#passmodal> Actualizar Contraseña</a></li>
                                 </ul>

@@ -37,7 +37,8 @@
                                     <li>ID Biometrico : {{perfil.id}}</li>
                                     <li>UID : {{perfil._01user_id}}</li>
                                     <li>Nombre : {{perfil._02nombre}}</li>
-                                    <li>Estado : {{perfil._04estado}}</li>
+                                    <li v-if="perfil._04estado==0">Estado : <span class="badge bg-success">Activo</span></li>
+                                    <li v-else>Estado : <span class="badge bg-danger">Inactivo</span></li>
                                     <li>Lugar : {{perfil._06lugar}}</li>
                                     <li v-if="perfil._07id_tipo===1">Tipo : Administrador</li>
                                     <li v-else>Tipo : Docente/Aux</li>
@@ -139,7 +140,8 @@
                                             <li>ID Biometrico : {{perfil.id}}</li>
                                             <li>User ID : {{perfil._01user_id}}</li>
                                             <li>Nombre : {{perfil._02nombre}}</li>
-                                            <li>Estado : {{perfil._04estado}}</li>
+                                            <li v-if="perfil._04estado==0">Estado : <span class="badge bg-success">Activo</span></li>
+                                            <li v-else>Estado : <span class="badge bg-danger">Inactivo</span></li>
                                             <li>Lugar : {{perfil._06lugar}}</li>
                                             <hr>
                                         </ul>
@@ -199,7 +201,8 @@
                                             <li>ID Biometrico : {{perfil.id}}</li>
                                             <li>User ID : {{perfil._01user_id}}</li>
                                             <li>Nombre : {{perfil._02nombre}}</li>
-                                            <li>Estado : {{perfil._04estado}}</li>
+                                            <li v-if="perfil._04estado==0">Estado : <span class="badge bg-success">Activo</span></li>
+                                            <li v-else>Estado : <span class="badge bg-danger">Inactivo</span></li>
                                             <li>Lugar : {{perfil._06lugar}}</li>
                                             <hr>
                                         </ul>

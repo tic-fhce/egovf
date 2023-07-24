@@ -47,7 +47,8 @@
                                     <li>ID Biometrico : {{perfil.id}}</li>
                                     <li>UID : {{perfil._01user_id}}</li>
                                     <li>Nombre : {{perfil._02nombre}}</li>
-                                    <li>Estado : {{perfil._04estado}}</li>
+                                    <li v-if="perfil._04estado==0">Estado : <button class="btn btn-success" @click="estadoInactibo(perfil)">Activo</button></li>
+                                    <li v-else>Estado : <button class="btn btn-danger" @click="estadoActibo(perfil)">Inactivo</button></li>
                                     <li>Lugar : {{perfil._06lugar}}</li>
                                     <li v-if="perfil._07id_tipo===1">Tipo : Administrador</li>
                                     <li v-else>Tipo : Docente/Aux</li>
@@ -735,6 +736,59 @@ export default {
                 name: "reporte",
                 params:{
                     uri:this.reporteMes.cif+'j'+this.reporteMes.gestion+'m'+this.reporteMes.mes+'m'+this.reporteMes.di+'k'+this.reporteMes.df
+                }
+            });
+        },
+        async estadoActibo(bio){
+            
+            await this.$swal.fire({
+                title: 'Desea cambiar el Estado de Biometrico al Ciudadano ? '+this.biometrico._02nombre,
+                showDenyButton: true,
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    bio._04estado=0;
+                    this.biometricoService.estadoBiometrico(bio).then(response=>{
+                        if(response.status==200){
+                            this.$swal.fire('Datos del Biometrico Actualizados Corectamente', '', 'success').then((result) => {
+                            if(result)
+                                location.reload();
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
+        },
+        async estadoInactibo(bio){
+            await this.$swal.fire({
+                title: 'Desea cambiar el Estado de Biometrico al Ciudadano ? '+this.biometrico._02nombre,
+                showDenyButton: true,
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    bio._04estado=1;
+                    this.biometricoService.estadoBiometrico(bio).then(response=>{
+                        if(response.status==200){
+                            this.$swal.fire('Datos del Biometrico Actualizados Corectamente', '', 'success').then((result) => {
+                            if(result)
+                                location.reload();
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });
         }

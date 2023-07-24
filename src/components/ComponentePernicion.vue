@@ -147,8 +147,10 @@
                     if (result.isConfirmed) {
                         this.pernicionService.addPernicion(this.pernicion).then(response=>{
                             if(response.status==200){
-                                this.$swal.fire('Permisos Agregados al Ciudadano Corectamente', '', 'success');
-                                location.reload();
+                                this.$swal.fire('Permisos Agregados al Ciudadano Corectamente', '', 'success').then((result) => {
+                                if(result)
+                                    location.reload();
+                                });
                             }
                             else{
                                 this.$swal.fire('Los Permisos no fueron Guardados Error'+ response.status, '', 'error');

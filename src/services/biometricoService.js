@@ -109,4 +109,8 @@ export default class BiometricoService{
             }
         });
     }
+    estadoBiometrico(bio){
+        console.log(bio);
+        return axios.put(controlUrl+"biometrico/estadoBiometrico",bio);
+    }
 }

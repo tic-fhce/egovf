@@ -14,6 +14,7 @@
                 <div class="card-body">
                     <div class="row">
                         <h4 class="card-title">CIF : {{persona._01cif}}</h4>
+                        <h4>Unidad : {{ egovf._10sigla }}</h4>
                         <label for="nombre" class="col-md-6">Nombre : </label>
                         <label for="nombre" class="col-md-6">{{persona._04nombre}}</label>
 
