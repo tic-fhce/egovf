@@ -31,19 +31,19 @@
                   <table id="personaTabla" class="table table-striped table-hover">
                     <thead>
                       <tr>
-                        <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
+                        <th>ID</th><th>CIF</th><th>Datos</th><th>Contacto</th><th>Unidad</th><th>Operaciones</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="persona in listaCiudadanos" :key="persona.id">
-                        <th scope="row">{{persona.id}}</th>
-                        <td>{{persona._01cif}}</td>
-                        <td>{{persona._04nombre}} {{persona._05paterno}} {{persona._06materno}}<br>
-                        {{persona._02ci}} {{persona._03complemento}}
+                      <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.id">
+                        <th scope="row">{{ciudadano.id}}</th>
+                        <td>{{ciudadano._01cif}}</td>
+                        <td>{{ciudadano._04nombre}} {{ciudadano._05paterno}} {{ciudadano._06materno}}<br>
+                        {{ciudadano._02ci}} {{ciudadano._03complemento}}
                         </td>
-                        <td>{{persona._09cel}}</td>
-                        <td>{{persona._10correo}}</td>
-                        <td><button class="btn btn-success btn-block" @click="perfil(persona._01cif)">Perfil</button></td>
+                        <td>{{ciudadano._10correo}} <br>{{ciudadano._09cel}}</td>
+                        <td>{{ ciudadano._10sigla }}<br> {{ ciudadano._08unidad }}</td>
+                        <td><button class="btn btn-success btn-block" @click="perfil(ciudadano._01cif)">Perfil</button></td>
                       </tr>
                     </tbody>
                   </table>

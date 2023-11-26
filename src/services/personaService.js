@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const personaUrl="http://172.16.114.144:8093/fhce-egovf/";
-const personaUrl="http://192.168.31.45:8080/fhce-egovf/";
+const personaUrl="http://192.168.31.45:8091/fhce-egovf/";
 
 
 export default class PersonaService{
@@ -10,6 +10,9 @@ export default class PersonaService{
     }
     getListaCiudadanos(){
         return axios.get(personaUrl+"listaPersona");
+    }
+    getListaPersonas(){
+        return axios.get(personaUrl+"listaPersonas");
     }
     addPersona(persona){
         var info = persona.fecha.split('-');
