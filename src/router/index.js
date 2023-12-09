@@ -101,6 +101,16 @@ const routes = [
     path: '/moduloEvento',
     name: 'moduloEvento',
     component: () => import('../views/ModuloEventoView.vue')
+  },
+  {
+    path: '/moduloBiometrico',
+    name: 'moduloBiometrico',
+    component: () => import('../views/ListaPersonalView.vue')
+  },
+  {
+    path: '/pCiudadanoBiometrico:cifCiudadano',
+    name: 'pCiudadanoBiometrico',
+    component: () => import('../views/PCiudadanoBiometricoView.vue')
   }
 ]
 

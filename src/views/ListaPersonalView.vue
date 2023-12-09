@@ -41,9 +41,9 @@
                       <td>{{person.nombre}}<br>
                       {{person.ci}} 
                       </td>
-                      <td>{{person.celualr}}</td>
+                      <td>{{person.celular}}</td>
                       <td>{{ person.correo}}</td>
-                      <td><button class="btn btn-success btn-block" @click="perfil(person.cif)">Perfil</button></td>
+                      <td><button class="btn btn-success btn-block" @click="ciudadanoBiometrico(person.cif)">Marcados</button></td>
                     </tr>
                   </tbody>
                 </table>
@@ -210,7 +210,7 @@ import $ from 'jquery';
 DataTable.use(DataTablesLib);
 
 export default {
-  name:'ListaBiometricoView',
+  name:'ListaPersonalView',
   components:{
       ComponenteMenuVue,
       ComponenteFooterVue
@@ -321,9 +321,9 @@ export default {
       });
       this.tabla();
     },
-    perfil(cifAux){
+    ciudadanoBiometrico(cifAux){
       this.$router.push({
-        name: "perfilCiudadano",
+        name: "pCiudadanoBiometrico",
         params:{
           cifCiudadano: cifAux,
         }

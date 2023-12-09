@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const controlUrl="http://172.16.114.144:8094/fhce-egovf-scc/";
-const controlUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
+const controlUrl="http://172.16.114.157:8092/fhce-egovf-scc/";
 
 
 export default class BiometricoService{

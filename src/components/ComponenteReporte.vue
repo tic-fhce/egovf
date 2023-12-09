@@ -221,8 +221,8 @@ export default {
             doc.text("Reporte de Asistencia " + this.mes +" "+this.reporte.gestion,20,finalY+10);
             autoTable(doc, {
                 startY:finalY+15,
-                margin: {left:20 },
-                styles:{fontSize:8},
+                margin: {left:15 },
+                styles:{fontSize:7.5},
                 html:'#printMarcado',
                 showFoot: 'lastPage'
             });
