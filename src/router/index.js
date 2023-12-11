@@ -103,9 +103,14 @@ const routes = [
     component: () => import('../views/ModuloEventoView.vue')
   },
   {
-    path: '/moduloBiometrico',
-    name: 'moduloBiometrico',
-    component: () => import('../views/ListaPersonalView.vue')
+    path: '/moduloReporte',
+    name: 'moduloReporte',
+    component: () => import('../views/ModuloReporteView.vue')
+  },
+  {
+    path: '/mReporteLista:tipo',
+    name: 'mReporteLista',
+    component: () => import('../views/MReporteListaView.vue')
   },
   {
     path: '/pCiudadanoBiometrico:cifCiudadano',

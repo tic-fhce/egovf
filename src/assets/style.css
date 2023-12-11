@@ -38,6 +38,10 @@
     margin-block: 2%;
     margin-top: 2%;
 }
+.bloques{
+    margin-bottom: 2%;
+    text-align: center;
+}
 
 .headercolor{
     background-color: #015D82;

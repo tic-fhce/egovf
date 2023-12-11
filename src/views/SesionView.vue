@@ -145,13 +145,13 @@ export default {
         async ingresar(){
             var payload={
                 "id":this.selector,
-                "_01cif":this.loginnes.cif,
-                "_02matricula":this.loginnes.matricula,
-                "_03ci":this.loginnes.ci,
-                "_04complemento":this.loginnes.complemento,
-                "_05correo":this.loginnes.correo,
-                "_06celular":this.loginnes.celular,
-                "_07pass":this.loginnes.pass
+                "cif":this.loginnes.cif,
+                "matricula":this.loginnes.matricula,
+                "ci":this.loginnes.ci,
+                "complemento":this.loginnes.complemento,
+                "correo":this.loginnes.correo,
+                "celular":this.loginnes.celular,
+                "pass":this.loginnes.pass
             };
             await this.usuarioService.getToken(payload).then(response=>{
                 if(response.data!=""){

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const inventarioUrl="http://172.16.114.144:8095/fhce-egovf-inv/";
-const inventarioUrl="http://172.16.114.157:8093/fhce-egovf-inv/";
+const inventarioUrl="http://192.169.31.45:8093/fhce-egovf-inv/";
 
 export default class InventarioService{
 

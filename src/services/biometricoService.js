@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const controlUrl="http://172.16.114.144:8094/fhce-egovf-scc/";
-const controlUrl="http://172.16.114.157:8092/fhce-egovf-scc/";
+const controlUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
 
 
 export default class BiometricoService{
@@ -10,6 +10,15 @@ export default class BiometricoService{
     }
     getListarBiometrico(){
         return axios.get(controlUrl+"biometrico/listarBiometrico");
+    }
+
+    // funcion getLbioemtrico debuelve una lista de personas registradas en el biometrico de acuerdo al parametro tipo
+    getLBiometricoTipo(tipo){
+        return axios.get(controlUrl+"biometrico/listarBiometricoTipo",{
+            params:{
+                tipo:tipo
+            }
+        });
     }
     updateBiometrico(biometrico){
         return axios.put(controlUrl+"biometrico/agregarBiometrico",biometrico);
