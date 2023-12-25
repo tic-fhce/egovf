@@ -16,7 +16,7 @@
         <!-- Componente de Reporte de Personal -->
         <br>
         
-        <ComponenteControlPersonalUsuarioVue :personaUsuario="personaUsuario" />
+        <ComponenteUMSccVue :personaUsuario="personaUsuario" />
         <!-- Componente de Permisos en el Menu -->
 
         <br>
@@ -31,7 +31,7 @@
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
-import ComponenteControlPersonalUsuarioVue from '@/components/ComponenteControlPersonalUsuario.vue';
+import ComponenteUMSccVue from '@/components/ComponenteUMScc.vue';
 import PersonaServiceUsuario from '@/services/personaService';
 
 export default {
@@ -39,7 +39,7 @@ export default {
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesUsuarioVue,
-        ComponenteControlPersonalUsuarioVue,
+        ComponenteUMSccVue,
         ComponenteFooterVue
     },
     data(){

@@ -91,7 +91,7 @@ export default {
     computed:{
         
     },
-    created(){
+    mounted(){
         this.usuario.menu=this.$cookies.get('menu'); 
 
         this.usuario.menu.forEach(element => {
@@ -107,8 +107,8 @@ export default {
         this.usuario.pass=this.$cookies.get('pass');       
         this.usuario.unidad = this.$cookies.get('unidad');
         this.usuario.sigla = this.$cookies.get('sigla');
-        
-        
+    },
+    created(){
         
     },
     beforeCreate(){ //antes de crear e ingresar verificamos la existencia del CIF

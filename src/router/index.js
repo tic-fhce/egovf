@@ -47,16 +47,33 @@ const routes = [
     name: 'reportePerfil',
     component: () => import('../views/ReportePerfilView.vue')
   },
-  {
-    path: '/perfilCiudadanoUsuario',
-    name: 'perfilCiudadanoUsuario',
-    component: () => import('../views/PerfilCiudadanoUsuarioView.vue')
+  
+  {// MODULO SISTEMA CONTENEDOR CONTROL
+    path: '/moduloscc:cifCiudadano',
+    name: 'moduloscc',
+    component: () => import('../views/scc/ModuloSccView.vue')
   },
   {
-    path: '/biometrico:cifCiudadano',
-    name: 'biometrico',
-    component: () => import('../views/ModuloBiometricoView.vue')
+    path: '/cModuloScc',
+    name: 'cCoduloScc',
+    component: () => import('../views/scc/CModuloSccView.vue')
   },
+  {
+    path: '/reporte:uri',
+    name: 'reporte',
+    component:() => import('../views/scc/ReporteView.vue')
+  },
+  {
+    path: '/uModuloScc',
+    name: '/uModuloScc',
+    component: () => import('../views/scc/UModuloSccView.vue')
+  },
+  {
+    path: '/usuarioReporte:uriu',
+    name: 'usuarioReporte',
+    component: () => import('../views/scc/ReporteUsuarioView.vue')
+  },
+  // Fin MOdulos SCC
   {
     path: '/pernicions:cifCiudadano',
     name: 'pernicions',
@@ -80,17 +97,7 @@ const routes = [
   {
     path: '/moduloUsuarioUnidad',
     name: 'moduloUsuarioUnidad',
-    component: () => import('../views/ModuloUnidadUsuarioView.vue')
-  },
-  {
-    path: '/reporte:uri',
-    name: 'reporte',
-    component: () => import('../views/ReporteView.vue')
-  },
-  {
-    path: '/usuarioReporte:uriu',
-    name: 'usuarioReporte',
-    component: () => import('../views/ReporteUsuarioView.vue')
+    component: () => import('../views/scc/ReporteView.vue')
   },
   {
     path: '/image',
@@ -101,11 +108,6 @@ const routes = [
     path: '/moduloEvento',
     name: 'moduloEvento',
     component: () => import('../views/ModuloEventoView.vue')
-  },
-  {
-    path: '/moduloReporte',
-    name: 'moduloReporte',
-    component: () => import('../views/ModuloReporteView.vue')
   },
   {
     path: '/mReporteLista:tipo',

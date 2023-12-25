@@ -5,11 +5,11 @@
                 <div class="card-header headercolor">
                     <div class="row">
                         <div class=" col col-md-6 col-sm-6">
-                            <h3>Control de Personal Biometrico</h3>
+                            <h3>Modulo SCC</h3>
                         </div>
                         <div class="col-md-6 text-end">
                             <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones de Biometrico</button>
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones</button>
                                 <div class="dropdown-menu">
                                     <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#biometricoModal">Agregar Biometrico</a>
                                     <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#horarioModal">Agregar Horario</a>
@@ -259,7 +259,7 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select  class="form-control" v-model="reporteMes.di">
-                                                    <option v-for="i in 31" :key="i" value="{{ i }}">{{i}}</option>
+                                                    <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -271,7 +271,7 @@
                                             </label>
                                             <div class="col-sm-6">
                                                 <select  class="form-control" v-model="reporteMes.df">
-                                                    <option v-for="i in 31" :key="i" value="{{ i }}">{{i}}</option>
+                                                    <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -484,7 +484,7 @@
 import BiometricoService from '@/services/biometricoService';
 
 export default {
-    name:'ComponenteControlPersonalVue',
+    name:'ComponenteMSccVue',
     props:['persona'],
     data(){
         return{

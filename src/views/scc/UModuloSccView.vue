@@ -1,43 +1,52 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
     <div class="container">
+        <div class="row">
+            <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+        </div>
+        
         <div class="row">
             <div class="margen">
                 
             </div>
         </div>
         <!--Construccion de Componentes-->
-        
         <!-- Componente de Datos de Persona -->
         <br>
-        <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano"/>
-                
-        <!-- Componente de Control de Personal -->
-        <br>
-        <!--<ComponenteControlPersonalVue :persona="persona" />-->
+        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif"/>
         
+        <!-- Componente de Reporte de Personal -->
+        <br>
+        <ComponenteUMSccVue :personaUsuario="personaUsuario" />
+        <!-- Componente de Permisos en el Menu -->
+
+        <br>
+        <div class="row">
+            <ComponenteFooterVue />
+        </div>
     </div>
-    <ComponenteFooterVue/>
+    
 </template>
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
-import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
+import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
+import ComponenteUMSccVue from '@/components/ComponenteUMScc.vue';
 
-import PersonaService from '@/services/personaService';
+
+import PersonaServiceUsuario from '@/services/personaService';
 
 export default {
-    name:'ModuloBiometricoView',
+    name:'UModuloSccView',
     components:{
         ComponenteMenuVue,
-        ComponenteDatosPersonalesVue,
+        ComponenteDatosPersonalesUsuarioVue,
+        ComponenteUMSccVue,
         ComponenteFooterVue
     },
     data(){
         return {
-            personaService:null,
-            cifCiudadano:'',
+            personaServiceUsuario:null,
             usuario:{
                 token:'',
                 cif:'',
@@ -48,7 +57,7 @@ export default {
                 unidad:'',
                 sigla:''
             },
-            persona:{
+            personaUsuario:{
                 id:null,
                 _01cif:'',
                 _02ci:'',
@@ -69,16 +78,13 @@ export default {
         }
     },
     created(){
-        this.personaService = new PersonaService();
+        this.personaServiceUsuario= new PersonaServiceUsuario();
     },
     mounted(){
-        this.cifCiudadano = this.$route.params.cifCiudadano;
-        this.getDatos();
-        this.getDatosPersona();
+        this.getDatosUsuario();
     },
     methods:{
-        getDatos(){
-            //cargamos datos del Usuario
+        getDatosUsuario(){
             if(this.$cookies.get('cif')!=null){
                 this.usuario.token=this.$cookies.get('token');
                 this.usuario.cif=this.$cookies.get('cif');
@@ -88,13 +94,13 @@ export default {
                 this.usuario.menu=this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.getDatosPersonaUsuario();
             }
         },
-        async getDatosPersona(){
-            //cargamos datos del Ciudadano
-            this.personaService.headersUsuario(this.usuario.token);
-            await this.personaService.getPersona(this.cifCiudadano).then((response) =>{
-                this.persona=response.data;
+        getDatosPersonaUsuario(){
+            this.personaServiceUsuario.headersUsuario(this.usuario.token);
+            this.personaServiceUsuario.getPersona(this.usuario.cif).then((response) =>{
+                this.personaUsuario=response.data;
             });
         }
     }

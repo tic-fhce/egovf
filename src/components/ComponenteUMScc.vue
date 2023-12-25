@@ -5,7 +5,7 @@
                 <div class="card-header headercolor">
                     <div class="row">
                         <div class=" col col-md-12 col-sm-12">
-                            <h3>Control de Asistencia</h3>
+                            <h3>Modulo Scc</h3>
                         </div>
                     </div>
                 </div>
@@ -294,7 +294,7 @@
 import BiometricoServiceUsuario from '@/services/biometricoService';
 
 export default {
-    name:'ComponenteControlPersonalUsuarioVue',
+    name:'ComponenteUMSccVue',
     props:['personaUsuario'],
     data(){
         return{

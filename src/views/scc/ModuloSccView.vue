@@ -14,7 +14,7 @@
                 
         <!-- Componente de Control de Personal -->
         <br>
-        <!--<ComponenteControlPersonalVue :persona="persona" />-->
+        <ComponenteMSccVue :persona="persona" />
         
     </div>
     <ComponenteFooterVue/>
@@ -22,16 +22,18 @@
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteMSccVue from '@/components/ComponenteMScc.vue';
 import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 
 import PersonaService from '@/services/personaService';
 
 export default {
-    name:'ModuloBiometricoView',
+    name:'ModuloSccView',
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesVue,
+        ComponenteMSccVue,
         ComponenteFooterVue
     },
     data(){

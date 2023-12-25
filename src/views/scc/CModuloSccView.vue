@@ -13,11 +13,11 @@
                     <div class="card-header headercolor">
                         <div class="row">
                             <div class="col-md-6">
-                                <h3>Reporte de Asistencia</h3>
+                                <h3>Modulo Scc</h3>
                             </div>
                             <div class="col-md-6 text-end">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones de los Ciudadanos</button>
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">Opciones Modulo Scc</button>
                                     <div class="dropdown-menu">
                                         <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#obsModalAll">Agregar Observaciones</a>
                                         <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#recordModal">Extraer Record</a>
@@ -33,9 +33,9 @@
 
                             <div class="col-md-4 bloques">
                                 <div class="card" style="width: 13rem;">
-                                    <img src="../assets/trabajo.jpg" class="card-img-top">
+                                    <img src="../../assets/trabajo.jpg" class="card-img-top">
                                     <div class="card-body text-center">
-                                        <p class="card-text ">Reportes del Personal Administrativo</p>
+                                        <p class="card-text ">Personal Administrativo</p>
                                         <button class="btn btn-success btn-block" @click="getModuloReporte(1)">Personal Admin</button>
                                     </div>
                                 </div>
@@ -43,9 +43,9 @@
 
                             <div class="col-md-4 bloques">
                                 <div class="card" style="width: 13rem;">
-                                    <img src="../assets/docente.jpg" class="card-img-top">
+                                    <img src="../../assets/docente.jpg" class="card-img-top">
                                     <div class="card-body text-center">
-                                        <p class="card-text ">Reportes del Personal Docente</p>
+                                        <p class="card-text ">Personal Docente</p>
                                         <button class="btn btn-success btn-block" @click="getModuloReporte(2)">Personal Docente</button>
                                     </div>
                                 </div>
@@ -53,9 +53,9 @@
 
                             <div class="col-md-4 bloques">
                                 <div class="card" style="width: 13rem;">
-                                    <img src="../assets//auxiliar.jpg" class="card-img-top">
+                                    <img src="../../assets//auxiliar.jpg" class="card-img-top">
                                     <div class="card-body text-center">
-                                        <p class="card-text ">Reportes del Personal Auxiliar</p>
+                                        <p class="card-text ">Personal Auxiliar</p>
                                         <button class="btn btn-success btn-block" @click="getModuloReporte(3)">Personal Auxiliar</button>
                                     </div>
                                 </div>
@@ -225,7 +225,7 @@ import ComponenteFooter from '@/components/ComponenteFooter.vue';
 import BiometricoService from '@/services/biometricoService';
 
 export default {
-    name:'ModuloReporteView',
+    name:'CModuloSccView',
     components:{
         ComponenteMenuVue,
         ComponenteFooter

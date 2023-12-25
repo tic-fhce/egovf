@@ -164,7 +164,6 @@ export default {
                     this.$cookies.set('menu',JSON.stringify(response.data.menu));
                     this.$cookies.set('unidad',response.data.unidad);
                     this.$cookies.set('sigla',response.data.sigla);
-                    //console.log(response.data.menu);
                     this.$router.push('/escritorio');
                 }
                 else{
