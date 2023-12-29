@@ -4,11 +4,30 @@
             <div class="row">
                 <div class="card-header headercolor">
                     <div class="row">
-                        <div class=" col col-md-12 col-sm-12">
-                            <h3>Modulo Scc</h3>
-                        </div>
+                        <nav class="navbar navbar-expand-lg navbar-dark">
+                            <div class="container-fluid">
+                                <label class="navbar-brand">Modulo SCC</label>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mscc" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="mscc">
+                                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Mis Reportes
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportemensualModal">Reporte Mensual</a></li>
+                                                <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportemensualsegmentadoModal">Reporte Segmentado</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="row">
                         <ul class="nav nav-tabs" id="myTabBiometrico" role="tablist">
@@ -20,12 +39,6 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#observacionesUsuario" type="button" role="tab"  aria-selected="true">Obs</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="actualizar-tab" data-bs-toggle="tab" data-bs-target="#mensualUsuario" type="button" role="tab"  aria-selected="false">Reporte Mensual</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#diasUsuario" type="button" role="tab" aria-controls="contact" aria-selected="false">Reporte Segmentado</button>
                             </li>
                         </ul><!--termina Ul-->
 
@@ -45,10 +58,10 @@
                                     <hr>
                                 </ul>
                             </div>
-                            <!--Datos del Biometrico-->
+                            <!--END Datos del Biometrico-->
 
                             <!--Horario-->
-                            <div class="tab-pane fade" id="horarioUsuario" role="tabpanel" aria-labelledby="mensula-tab">
+                            <div class="tab-pane fade table-responsive" id="horarioUsuario" role="tabpanel" aria-labelledby="mensula-tab">
                                 <br>
                                 <table class="table">
                                     <thead>
@@ -107,10 +120,10 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!--Horario-->
+                            <!--END Horario-->
 
                             <!--Observaciones del Biometrico-->
-                            <div class="tab-pane fade" id="observacionesUsuario" role="tabpanel" aria-labelledby="datos-tab">
+                            <div class="tab-pane fade table-responsive" id="observacionesUsuario" role="tabpanel" aria-labelledby="datos-tab">
                                 <br>
                                 <table class="table">
                                     <thead>
@@ -129,155 +142,7 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <!--Observaciones del Biometrico-->
-
-                            <!--Formulario Por mes -->
-                            <div class="tab-pane fade" id="mensualUsuario" role="tabpanel" aria-labelledby="mensula-tab">
-                                <br>
-                                <div class="row">
-                                    <div class="col col-md-6 col-sm-6">
-                                        <ul v-for="perfil in listaPerfilUsuario" :key="perfil.id">
-                                            <li>ID Biometrico : {{perfil.id}}</li>
-                                            <li>User ID : {{perfil._01user_id}}</li>
-                                            <li>Nombre : {{perfil._02nombre}}</li>
-                                            <li v-if="perfil._04estado==0">Estado : <span class="badge bg-success">Activo</span></li>
-                                            <li v-else>Estado : <span class="badge bg-danger">Inactivo</span></li>
-                                            <li>Lugar : {{perfil._06lugar}}</li>
-                                            <hr>
-                                        </ul>
-                                    </div>
-                                    <div class="col col-md-6 col-sm-6">
-                                        <h3>Datos del Reporte</h3>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Gestion :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select v-model="reporteMesUsuario.gestion" class="form-control">
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
-                                                    <option value="2023">2023</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Mes :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select v-model="reporteMesUsuario.mes" class="form-control">
-                                                    <option value="01">Enero</option>
-                                                    <option value="02">Febrero</option>
-                                                    <option value="03">Marzo</option>
-                                                    <option value="04">Abril</option>
-                                                    <option value="05">Mayo</option>
-                                                    <option value="06">Junio</option>
-                                                    <option value="07">Julio</option>
-                                                    <option value="08">Agosto</option>
-                                                    <option value="09">Septiembre</option>
-                                                    <option value="10">Octubre</option>
-                                                    <option value="11">Noviembre</option>
-                                                    <option value="12">Diciembre</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <button class="form-control btn btn-success" @click="getReporteMesUsuario()">Ver Reporte</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Termina Formulario por  Mes-->
-
-                            <!--Formulario por dias -->
-                            <div class="tab-pane fade" id="diasUsuario" role="tabpanel" aria-labelledby="dias-tab">
-                                <br>
-                                <div class="row">
-                                    <div class="col col-md-6 col-sm-6">
-                                        <ul v-for="perfil in listaPerfilUsuario" :key="perfil.id">
-                                            <li>ID Biometrico : {{perfil.id}}</li>
-                                            <li>User ID : {{perfil._01user_id}}</li>
-                                            <li>Nombre : {{perfil._02nombre}}</li>
-                                            <li v-if="perfil._04estado==0">Estado : <span class="badge bg-success">Activo</span></li>
-                                            <li v-else>Estado : <span class="badge bg-danger">Inactivo</span></li>
-                                            <li>Lugar : {{perfil._06lugar}}</li>
-                                            <hr>
-                                        </ul>
-                                    </div><!--Termina col6 Perfil Biometrico-->
-                                    
-                                    <div class="col col-md-6 col-sm-6">
-                                        <h3>Datos del Reporte</h3>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Gestion :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select v-model="reporteMesUsuario.gestion" class="form-control">
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
-                                                    <option value="2023">2023</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Mes :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select v-model="reporteMesUsuario.mes" class="form-control">
-                                                    <option value="01">Enero</option>
-                                                    <option value="02">Febrero</option>
-                                                    <option value="03">Marzo</option>
-                                                    <option value="04">Abril</option>
-                                                    <option value="05">Mayo</option>
-                                                    <option value="06">Junio</option>
-                                                    <option value="07">Julio</option>
-                                                    <option value="08">Agosto</option>
-                                                    <option value="09">Septiembre</option>
-                                                    <option value="10">Octubre</option>
-                                                    <option value="11">Noviembre</option>
-                                                    <option value="12">Diciembre</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Inicio :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select  class="form-control" v-model="reporteMesUsuario.di">
-                                                    <option v-for="i in 31" :key="i">{{i}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <label for="correo" class="col-sm-6 col-form-label">
-                                                Fin :
-                                            </label>
-                                            <div class="col-sm-6">
-                                                <select  class="form-control" v-model="reporteMesUsuario.df">
-                                                    <option v-for="i in 31" :key="i">{{i}}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <br>
-                                        <div class="mb-12 row">
-                                            <button class="form-control btn btn-success" @click="getReporteMesUsuario()">Ver Reporte</button>
-                                        </div>
-
-                                    </div> <!--Termina col6 Formulario diasUsuario-->
-                                </div><!---Termina row diasUsuario-->
-                            </div>
-                            <!--Termina Formulario por dias-->
+                            <!--END Observaciones del Biometrico-->
 
                         </div><!--Termina el content del TAB-->
 
@@ -285,10 +150,127 @@
                 </div><!--Termina card-body-->
 
                 <div class="card-footer"></div><!--Termina Card Footer-->
+            </div>
+        </div>
+    </div>
 
-            </div><!--Termina el ROW-->
-        </div><!--Termina card-->
-    </div><!--termina row-->
+<!-- Modal Reporte Mensual-->
+<div class="modal fade" id="reportemensualModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header headercolor">
+        <h5 class="modal-title">Reporte Mensual</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-12 row">
+            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
+            <div class="col-sm-6">
+                <select v-model="reporteMesUsuario.gestion" class="form-control">
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="mb-12 row">
+            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
+            <div class="col-sm-6">
+                <select v-model="reporteMesUsuario.mes" class="form-control">
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="getReporteMesUsuario()">Ver Reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Modal Reporte Mensual-->
+
+<!-- Modal Reporte Mensual Segmentado-->
+<div class="modal fade" id="reportemensualsegmentadoModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header headercolor">
+        <h5 class="modal-title">Reporte Mensual Segmentado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-12 row">
+            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
+            <div class="col-sm-6">
+                <select v-model="reporteMesUsuario.gestion" class="form-control">
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="mb-12 row">
+            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
+            <div class="col-sm-6">
+                <select v-model="reporteMesUsuario.mes" class="form-control">
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="mb-12 row">
+            <label for="inicio" class="col-sm-6 col-form-label">Inicio :</label>
+            <div class="col-sm-6">
+                <select  class="form-control" v-model="reporteMesUsuario.di">
+                    <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="mb-12 row">
+            <label for="fin" class="col-sm-6 col-form-label">Fin :</label>
+            <div class="col-sm-6">
+                <select  class="form-control" v-model="reporteMesUsuario.df">
+                    <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
+                </select>
+            </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="getReporteMesUsuario()">Ver Reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Modal Reporte Mensual Segmentado-->
+
 </template>
 <script>
 import BiometricoServiceUsuario from '@/services/biometricoService';
@@ -301,6 +283,7 @@ export default {
             biometricoServiceUsuario:null,
             listaBiometricoUsuario:[],
             listaPerfilUsuario:[],
+            listaObsUsuario:[],
             id_horarioUsuario:0,
             getPBUsuario:true,
             reporteJson:'',
@@ -339,36 +322,14 @@ export default {
             horarioPerfilUsuario:{
                 id:0,
                 _01cif:this.personaUsuario._01cif,
-                _02lem:'08:30',
-                _03lsm:'12:30',
-                _04let:'14:30',
-                _05lst:'18:30',
-                _06mem:'08:30',
-                _07msm:'12:30',
-                _08met:'14:30',
-                _09mst:'18:30',
-                _10miem:'08:30',
-                _11mism:'12:30',
-                _12miet:'14:30',
-                _13mist:'18:30',
-                _14jem:'08:30',
-                _15jsm:'12:30',
-                _16jet:'14:30',
-                _17jst:'18:30',
-                _18vem:'08:30',
-                _19vsm:'12:30',
-                _20vet:'14:30',
-                _21vst:'18:30',
-                _22sem:'08:30',
-                _23ssm:'12:30',
-                _24set:'14:30',
-                _25sst:'18:30',
-                _26dem:'08:30',
-                _27dsm:'12:30',
-                _28det:'14:30',
-                _29dst:'18:30'
-            },
-            listaObsUsuario:[]
+                _02lem:'08:30',_03lsm:'12:30',_04let:'14:30',_05lst:'18:30',
+                _06mem:'08:30',_07msm:'12:30',_08met:'14:30',_09mst:'18:30',
+                _10miem:'08:30',_11mism:'12:30',_12miet:'14:30',_13mist:'18:30',
+                _14jem:'08:30',_15jsm:'12:30',_16jet:'14:30',_17jst:'18:30',
+                _18vem:'08:30',_19vsm:'12:30',_20vet:'14:30',_21vst:'18:30',
+                _22sem:'08:30',_23ssm:'12:30',_24set:'14:30',_25sst:'18:30',
+                _26dem:'08:30',_27dsm:'12:30',_28det:'14:30',_29dst:'18:30'
+            }
         }
     },
     created(){

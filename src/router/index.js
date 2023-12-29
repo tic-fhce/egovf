@@ -73,6 +73,11 @@ const routes = [
     name: 'usuarioReporte',
     component: () => import('../views/scc/ReporteUsuarioView.vue')
   },
+  {
+    path: '/reporteLista:tipo',
+    name: 'reporteLista',
+    component: () => import('../views/scc/ReporteListaView.vue')
+  },
   // Fin MOdulos SCC
   {
     path: '/pernicions:cifCiudadano',
@@ -109,11 +114,7 @@ const routes = [
     name: 'moduloEvento',
     component: () => import('../views/ModuloEventoView.vue')
   },
-  {
-    path: '/mReporteLista:tipo',
-    name: 'mReporteLista',
-    component: () => import('../views/MReporteListaView.vue')
-  },
+
   {
     path: '/pCiudadanoBiometrico:cifCiudadano',
     name: 'pCiudadanoBiometrico',

@@ -289,7 +289,7 @@ export default {
       },
       getModuloReporte(tipo){
         this.$router.push({
-          name: "mReporteLista",
+          name: "reporteLista",
           params:{
             tipo: tipo,
           }

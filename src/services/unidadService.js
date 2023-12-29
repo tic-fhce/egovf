@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const controlUrl="http://172.16.114.144:8094/fhce-egovf-uni/";
-const unidadUrl="http://192.168.31.45:8094/fhce-egovf-uni/";
+const unidadUrl="http://172.16.114.157:8094/fhce-egovf-uni/";
+//const unidadUrl="http://192.168.31.45:8094/fhce-egovf-uni/";
 
 
 export default class UnidadService{

@@ -13,19 +13,23 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive-sm">
-                    <table class="table" id="printDatos">
-                        <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
-                        <tr v-for="perfil in reporteUsuario.listaPerfil" :key="perfil.id">
-                            <td>ID Biometrico : {{perfil.id}}</td>
-                            <td>User ID : {{perfil._01user_id}}</td>
-                            <td>Nombre : {{perfil._02nombre}}</td>
-                            <td>Lugar : {{perfil._06lugar}}</td>
-                        </tr>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="printDatos">
+                        <thead>
+                            <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="perfil in reporteUsuario.listaPerfil" :key="perfil.id">
+                                <td>ID Biometrico : {{perfil.id}}</td>
+                                <td>User ID : {{perfil._01user_id}}</td>
+                                <td>Nombre : {{perfil._02nombre}}</td>
+                                <td>Lugar : {{perfil._06lugar}}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <hr>
-                <div class="table-responsive-sm">
+                <div class="table-responsive">
                     <table class="table table-striped table-hover" id="printMarcado">
                         <thead>
                             <tr>

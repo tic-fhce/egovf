@@ -20,7 +20,7 @@
                 <table id="personalTabla" class="table table-striped table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th><th>CIF</th><th>Datos</th><th>Celular</th><th>Correo</th><th>Operaciones</th>
+                      <th>ID</th><th>CIF</th><th>Datos</th><th>Contacto</th><th>Unidad</th><th>Operaciones</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -30,8 +30,8 @@
                       <td>{{person.nombre}}<br>
                       {{person.ci}} 
                       </td>
-                      <td>{{person.celular}}</td>
-                      <td>{{ person.correo}}</td>
+                      <td>{{ person.correo}}<br>{{person.celular}}</td>
+                      <td>{{ person.sigla }}<br>{{ person.unidad }}</td>
                       <td><button class="btn btn-success btn-block" @click="personalBiometrico(person.cif)">Reporte</button></td>
                     </tr>
                   </tbody>
@@ -60,7 +60,7 @@ import $ from 'jquery';
 DataTable.use(DataTablesLib);
 
 export default {
-  name:'MReporteListaView',
+  name:'ReporteListaView',
   components:{
       ComponenteMenuVue,
       ComponenteFooterVue
@@ -71,7 +71,7 @@ export default {
         titulo:'',
         personaService:null,
         biometricoService:null,
-        listaPersonas:[],
+        listaCiudadanos:[],
         listaBiometrico:[],
         listaPersonal:null,
         usuario:{
@@ -133,8 +133,8 @@ export default {
       }
     },
     async getListaPersonas(){
-      await this.personaService.getListaPersonas().then(response => {
-        this.listaPersonas = response.data;
+      await this.personaService.getListaCiudadanos().then(response => {
+          this.listaCiudadanos = response.data;
       });
       this.getListaPersonal();
     },
@@ -148,14 +148,16 @@ export default {
       var auxid=1;
       this.listaPersonal=[];
       this.listaBiometrico.forEach(cif => {
-        this.listaPersonas.forEach(persona => {
+        this.listaCiudadanos.forEach(persona => {
           var biometrico={
             id:0,
             cif:0,
             ci:'',
             nombre:'',
             celular:'',
-            correo:''
+            correo:'',
+            sigla:'',
+            unidad:''
           };
           if(persona._01cif == cif._03cif){
             biometrico.id=auxid;
@@ -164,6 +166,8 @@ export default {
             biometrico.nombre=persona._04nombre+' '+persona._05paterno+' '+persona._06materno;
             biometrico.celular=persona._09cel;
             biometrico.correo=persona._10correo;
+            biometrico.sigla=persona._10sigla;
+            biometrico.unidad=persona._08unidad;
             auxid=auxid+1;
             this.listaPersonal.push(biometrico);
             return false;
