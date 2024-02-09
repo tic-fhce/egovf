@@ -8,6 +8,21 @@
     margin: 0.3em;
 }
 
+.material-icons-button{
+    
+    color: white;
+    font-size: 1em;
+    border-top: 0ch;
+    border-bottom: 0ch;
+}
+.material-i-dark{
+    
+    color: black;
+    font-size: 1em;
+    border-top: 0ch;
+    border-bottom: 0ch;
+}
+
 .material-icons-toast{
     color: rgb(255, 255, 255);
     font-size: 24px;
@@ -46,4 +61,7 @@
 .headercolor{
     background-color: #015D82;
     color:white
+}
+.tam{
+    width: 70%;
 }

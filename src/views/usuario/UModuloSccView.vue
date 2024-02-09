@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+            <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
         </div>
         
         <div class="row">
@@ -12,11 +12,11 @@
         <!--Construccion de Componentes-->
         <!-- Componente de Datos de Persona -->
         <br>
-        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif"/>
+        <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif" :egovfp="egovf"/>
         
         <!-- Componente de Reporte de Personal -->
         <br>
-        <ComponenteUMSccVue :personaUsuario="personaUsuario" />
+        <ComponenteUMSccVue :egovfp = "egovf" /> 
         <!-- Componente de Permisos en el Menu -->
 
         <br>
@@ -33,8 +33,7 @@ import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
 import ComponenteUMSccVue from '@/components/ComponenteUMScc.vue';
 
-
-import PersonaServiceUsuario from '@/services/personaService';
+import EgovfService from '@/services/egovf/egovfService';
 
 export default {
     name:'UModuloSccView',
@@ -46,7 +45,8 @@ export default {
     },
     data(){
         return {
-            personaServiceUsuario:null,
+            titulo:'Modulo SCC ',
+            egovfService :null,
             usuario:{
                 token:'',
                 cif:'',
@@ -57,18 +57,26 @@ export default {
                 unidad:'',
                 sigla:''
             },
-            personaUsuario:{
-                id:null,
-                _01cif:'',
-                _02ci:'',
-                _03complemento:'',
-                _04nombre:'',
-                _05paterno:'',
-                _06materno:'',
-                _07fecha:'',
-                _08sexo:'',
-                _09cel:'',
-                _10correo:''
+            egovf:{
+                idPersona:0,
+                nombre:'',
+                paterno:'',
+                materno:'',
+                fecha:'',
+                sexo:0,
+                idUsuario:0,
+                cif:0,
+                matricula:0,
+                ci:'',
+                ci_com:0,
+                complemento:'',
+                correo:'',
+                celular:'',
+                pass:'',
+                unidad:'',
+                dependiente:'',
+                sigla:'',
+                foto:''
             }
         }
     },
@@ -78,10 +86,11 @@ export default {
         }
     },
     created(){
-        this.personaServiceUsuario= new PersonaServiceUsuario();
+        this.egovfService = new EgovfService();
     },
     mounted(){
         this.getDatosUsuario();
+        this.getEgovf();
     },
     methods:{
         getDatosUsuario(){
@@ -94,13 +103,12 @@ export default {
                 this.usuario.menu=this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
-                this.getDatosPersonaUsuario();
             }
         },
-        getDatosPersonaUsuario(){
-            this.personaServiceUsuario.headersUsuario(this.usuario.token);
-            this.personaServiceUsuario.getPersona(this.usuario.cif).then((response) =>{
-                this.personaUsuario=response.data;
+        async getEgovf(){//Funcion que debuelve los datos del ciudadano 
+            this.egovfService.headersUsuario(this.usuario.token);
+            await this.egovfService.getEgovf(this.usuario.cif).then((response) =>{
+                this.egovf = response.data;
             });
         }
     }

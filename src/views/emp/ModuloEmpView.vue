@@ -8,13 +8,13 @@
         </div>
         <!--Construccion de Componentes-->
         
-        <!-- Componente de Datos de Persona -->
+        <!-- Componente de Datos de Persona  mandando como datos el cif del ciudadano y los datos del usuario-->
         <br>
         <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf"/>
                 
-        <!-- Componente de Control de Personal -->
+        <!-- Componente Modulo Empleado mandando como pros los datos del usuario -->
         <br>
-        <ComponenteMSccVue :mscc="egovf" :empleado="empleado"/>
+        <ComponenteMEmpVue :emp="egovf"/>
         
     </div>
     <ComponenteFooterVue/>
@@ -23,29 +23,27 @@
 <script>
 // Importamos los Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
-import ComponenteMSccVue from '@/components/ComponenteMScc.vue';
+import ComponenteMEmpVue from '@/components/ComponenteMEmp.vue';
 import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 // End
 
 // Declaramos los Servicios
 import EgovfService from '@/services/egovf/egovfService';
-import EmpleadoService from '@/services/emp/empleadoService';
 // End
 
 export default {
-    name:'ModuloSccView',
+    name:'ModuloEmpView',
     components:{
         ComponenteMenuVue,
         ComponenteDatosPersonalesVue,
-        ComponenteMSccVue,
+        ComponenteMEmpVue,
         ComponenteFooterVue
     },
     data(){
         return {
-            titulo:'Modulos MSCC',
+            titulo:'Modulos del Empleado',
             egovfService:null,
-            empleadoService:null,
             cifCiudadano:'',
             usuario:{
                 token:'',
@@ -75,18 +73,8 @@ export default {
                 pass:'',
                 unidad:'',
                 dependiente:'',
-                sigla:''
-            },
-            empleado:{
-                id:0,
-                cif:0,
-                empleado:'',
-                tipoempleado_id:0,
-                fecha:'',
-                estado:0,
-                salida:'',
-                contratos:[]
-            },
+                sigla:'',
+            }
         }
     },
     beforeCreate(){        
@@ -96,13 +84,11 @@ export default {
     },
     created(){
         this.egovfService = new EgovfService();
-        this.empleadoService = new EmpleadoService();
     },
     mounted(){
         this.cifCiudadano = this.$route.params.cifCiudadano;
         this.getDatos();
         this.getEgovf();
-        this.getEmpleado();
     },
     methods:{
         getDatos(){
@@ -122,13 +108,6 @@ export default {
             this.egovfService.headersUsuario(this.usuario.token);
             await this.egovfService.getEgovf(this.cifCiudadano).then((response) =>{
                 this.egovf = response.data;
-            });
-        },
-        async getEmpleado(){
-            this.egovfService.headersUsuario(this.usuario.token);
-            await this.empleadoService.getEmpleado(this.cifCiudadano).then((response) =>{
-                this.empleado = response.data;
-                console.log(this.empleado);
             });
         }
     }

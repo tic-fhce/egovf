@@ -14,10 +14,15 @@
                 </div><!--End Card Header-->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-2 espace" v-for="l in listaModuloCif" :key="l.id">
-                            <div class="card" style="width: 10rem;">
-                                <img src="../assets/reporte.jpg" class="card-img-top">
-                                <div class="card-body text-center">
+                        <div class="col-md-3 text-center espace" v-for="l in listaModuloCif" :key="l.id">
+                            <div class="card">
+                                <div class="card-header headercolor">
+                                    {{ l._01nombre }}
+                                </div>
+                                <div class="card-body">
+                                    <img src="../assets/reporte.jpg" class="tam">
+                                </div>
+                                <div class="card-footer">
                                     <button class="btn btn-success" @click="getModulo(l._02ruta)">{{ l._01nombre}}</button>
                                 </div>
                             </div>
@@ -32,7 +37,7 @@
 <div class="modal fade" id="moduloModal" tabindex="-1" aria-labelledby="moduloModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header headercolor">
         <h5 class="modal-title">Agregar Modulos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -140,8 +145,10 @@ export default {
                 if (result.isConfirmed) {
                     this.moduloService.addModulo(this.modulo).then(response=>{
                         if(response.status==200){
-                            this.$swal.fire('El Modulo fue Agregado al Ciudadano Corectamente', '', 'success');
-                            location.reload();
+                            this.$swal.fire('El Modulo fue Agregado al Ciudadano Corectamente', '', 'success').then((res)=>{
+                                if(res)
+                                    location.reload();
+                            });
                         }
                         else{
                             this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');

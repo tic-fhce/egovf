@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -9,7 +9,7 @@
         <!--Construccion de Componentes-->
         <!-- Componente de Datos de Persona -->
         <br>
-        <ComponenteDatosPersonaVue :cifCiudadano="cifCiudadano"/>
+        <ComponenteDatosPersonaVue :cifCiudadano="cifCiudadano" :egovfp="egovf"/>
         <!-- Componente de Reporte de Personal -->
         <br>
         <!-- Componente de Reporte -->
@@ -20,13 +20,17 @@
 </template>
 
 <script>
+// Importamos los Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteReporteVue from '@/components/ComponenteReporte.vue';
+// End
+
+// Declaramos los Servicios
+import EgovfService from '@/services/egovf/egovfService';
 import BiometricoService from '@/services/biometricoService';
-import PersonaService from '@/services/personaService';
-import UsuarioService from '@/services/usuarioServices';
+// End
 export default {
     name:'ReporteView',
     components:{
@@ -37,9 +41,9 @@ export default {
     },
     data(){
         return {
+            titulo:'Reporte de Asistencia',
             biometricoService:null,
-            personaService:null,
-            usuarioService:null,
+            egovfService:null,
             uri:'',
             cifCiudadano:'',
             usuario:{
@@ -53,7 +57,6 @@ export default {
                 sigla:''
             },
             reporte:{
-                id_horario:0,
                 cif:0,
                 sigla:'',
                 gestion:0,
@@ -61,20 +64,39 @@ export default {
                 di:0,
                 df:0,
                 listaPerfil:[],
+                listaHorario:[],
                 persona:{
                     id:null,
-                    _01cif:'',
-                    _02ci:'',
-                    _03complemento:'',
-                    _04nombre:'',
-                    _05paterno:'',
-                    _06materno:'',
-                    _07fecha:'',
-                    _08sexo:'',
-                    _09cel:'',
-                    _10correo:''
+                    ci:'',
+                    nombre:'',
+                    paterno:'',
+                    materno:'',
+                    celular:'',
+                    correo:'',
+                    foto:''
                 }
-            }
+            },
+            egovf:{
+                idPersona:0,
+                nombre:'',
+                paterno:'',
+                materno:'',
+                fecha:'',
+                sexo:0,
+                idUsuario:0,
+                cif:0,
+                matricula:0,
+                ci:'',
+                ci_com:0,
+                complemento:'',
+                correo:'',
+                celular:'',
+                pass:'',
+                unidad:'',
+                dependiente:'',
+                sigla:'',
+                foto:''
+            },
         }
     },
 
@@ -86,10 +108,11 @@ export default {
         this.reporte.mes = this.uri.substring(17,19);
         this.reporte.di = this.uri.substring(20,22);
         this.reporte.df = this.uri.slice(23);
+        
         this.getDatos();
+        this.getEgovf();
+        
         this.getReporteBiometrico();
-        this.getReportePersona();
-        this.getReporteUsuario();
     },
     beforeCreate(){        
         if(this.$cookies.get('cif')==null){
@@ -98,8 +121,7 @@ export default {
     },
     created(){
         this.biometricoService = new BiometricoService();
-        this.personaService = new PersonaService();
-        this.usuarioService = new UsuarioService();
+        this.egovfService = new EgovfService();
     },
     methods:{
       getDatos(){
@@ -114,27 +136,36 @@ export default {
             this.usuario.sigla = this.$cookies.get('sigla');
         }
       },
-      async getReportePersona(){
-        this.personaService.headersUsuario(this.usuario.token);
-        await this.personaService.getPersona(this.reporte.cif).then((response) =>{
-            this.reporte.persona=response.data;
-        });
-      },
-      async getReporteUsuario(){
-        this.usuarioService.headersUsuario(this.usuario.token);
-        await this.usuarioService.getUsuario(this.reporte.cif).then((response) => {
-            this.reporte.sigla = response.data._10sigla;
-            console.log(this.reporte.sigla);
-        });
-      },
-      async getReporteBiometrico(){
-        await this.biometricoService.getPerfil(this.reporte.cif).then(response=>{
-            this.reporte.listaPerfil=response.data;
-            if(this.reporte.listaPerfil.length>0){
-                this.reporte.id_horario=this.reporte.listaPerfil[0]._05horario_id;
-            }
-        });
-        }
+      async getEgovf(){
+            this.egovfService.headersUsuario(this.usuario.token);
+            await this.egovfService.getEgovf(this.cifCiudadano).then((response) =>{
+                this.egovf = response.data;
+            });
+            this.reporte.sigla =  this.egovf.sigla;
+
+            this.reporte.persona.id = this.egovf.idPersona;
+            this.reporte.persona.ci = this.egovf.ci;
+            this.reporte.persona.nombre = this.egovf.nombre;
+            this.reporte.persona.paterno = this.egovf.paterno;
+            this.reporte.persona.materno = this.egovf.materno;
+            this.reporte.persona.celular = this.egovf.celular;
+            this.reporte.persona.correo = this.egovf.correo;
+            this.reporte.persona.foto = this.egovf.foto;
+
+        },
+        async getReporteBiometrico(){
+            await this.biometricoService.getPerfil(this.reporte.cif).then(response=>{
+                this.reporte.listaPerfil = response.data;
+            });
+            this.getListaHorario();
+        },
+        async getListaHorario(){
+            await this.biometricoService.getListaHorario(this.cifCiudadano,this.reporte.gestion).then(response=>{
+                this.reporte.listaHorario = response.data;
+                console.log(this.reporte.listaHorario);
+            });
+        },
+
     }
 }
 </script>

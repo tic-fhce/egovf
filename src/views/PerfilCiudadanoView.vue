@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -8,9 +8,9 @@
         </div>
         <!--Construccion de Componentes-->
         
-        <!-- Componente de Datos de Persona -->
+        <!-- Componente de Datos de la Persona -->
         <br>
-        <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano"/>
+        <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf"/>
         
         <!-- Componente de Modulos para el Ciudadano -->
         <br>
@@ -21,11 +21,16 @@
 </template>
 
 <script>
+// Importamos los Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteModulosVue from '@/components/ComponenteModulos.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
-import PersonaService from '@/services/personaService';
+// End 
+
+// Declaramos los Servicios
+import EgovfService from '@/services/egovf/egovfService';
+// End
 
 export default {
     name:'PerfilCiudadanoView',
@@ -37,7 +42,8 @@ export default {
     },
     data(){
         return {
-            personaService:null,
+            titulo:'Modulos del Ciudadano',
+            egovfService:null,
             cifCiudadano:'',
             usuario:{
                 token:'',
@@ -49,18 +55,26 @@ export default {
                 unidad:'',
                 sigla:''
             },
-            persona:{
-                id:null,
-                _01cif:'',
-                _02ci:'',
-                _03complemento:'',
-                _04nombre:'',
-                _05paterno:'',
-                _06materno:'',
-                _07fecha:'',
-                _08sexo:'',
-                _09cel:'',
-                _10correo:''
+            egovf:{
+                idPersona:0,
+                nombre:'',
+                paterno:'',
+                materno:'',
+                fecha:'',
+                sexo:0,
+                idUsuario:0,
+                cif:0,
+                matricula:0,
+                ci:'',
+                ci_com:0,
+                complemento:'',
+                correo:'',
+                celular:'',
+                pass:'',
+                unidad:'',
+                dependiente:'',
+                sigla:'',
+                foto:''
             }
         }
     },
@@ -70,15 +84,16 @@ export default {
         }
     },
     created(){
-        this.personaService = new PersonaService();
+        this.egovfService = new EgovfService();
     },
     mounted(){
-        this.cifCiudadano = this.$route.params.cifCiudadano;
-        this.getDatos();
-        this.getDatosPersona();
+        this.cifCiudadano = this.$route.params.cifCiudadano; //resivimos el cif del ciudadano
+        this.getDatos(); // Llamamos los datos del Usuario
+        this.getEgovf(); //llamamos los datos del ciudadano
+
     },
     methods:{
-        getDatos(){
+        getDatos(){// Funcion que guarda los datos del Usuario en la View
             if(this.$cookies.get('cif')!=null){
                 this.usuario.token=this.$cookies.get('token');
                 this.usuario.cif=this.$cookies.get('cif');
@@ -90,10 +105,10 @@ export default {
                 this.usuario.sigla = this.$cookies.get('sigla');
             }
         },
-        async getDatosPersona(){
-            this.personaService.headersUsuario(this.usuario.token);
-            await this.personaService.getPersona(this.cifCiudadano).then((response) =>{
-                this.persona=response.data;
+        async getEgovf(){//Funcion que debuelve los datos del ciudadano 
+            this.egovfService.headersUsuario(this.usuario.token);
+            await this.egovfService.getEgovf(this.cifCiudadano).then((response) =>{
+                this.egovf = response.data;
             });
         }
     }

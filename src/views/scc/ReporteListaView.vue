@@ -179,7 +179,7 @@ export default {
     },
     personalBiometrico(cifAux){
       this.$router.push({
-        name: "biometrico",
+        name: "moduloscc",
         params:{
           cifCiudadano: cifAux,
         }

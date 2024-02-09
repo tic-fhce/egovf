@@ -1,17 +1,19 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
     <div class="container">
         <div class="row margen">
         </div>
     </div>
     <div class="container">
       <div class="row">
+        
         <div class="card col-md-12">
           <div class="row">
+            <!-- Menu de opciones de los Ciudadanos-->
             <div class="card-header headercolor">
               <div class="row">
                 <div class="col-md-6">
-                  <h3>Ciudadanos e-GOVF</h3>
+                  <h3>{{titulo}}</h3>
                 </div>
                 <div class="col-md-6 text-end">
                   <div class="dropdown">
@@ -25,6 +27,9 @@
                 </div>
               </div>
             </div>
+            <!-- End Menu de opciones de los Ciudadanos-->
+
+            <!-- Lista de Ciudadanos-->
             <div class="card-body">
               <div class="col-ms-12">
                 <div class="table-responsive">
@@ -35,21 +40,22 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.id">
-                        <th scope="row">{{ciudadano.id}}</th>
-                        <td>{{ciudadano._01cif}}</td>
-                        <td>{{ciudadano._04nombre}} {{ciudadano._05paterno}} {{ciudadano._06materno}}<br>
-                        {{ciudadano._02ci}} {{ciudadano._03complemento}}
+                      <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
+                        <th scope="row">{{ciudadano.idPersona}}</th>
+                        <td>{{ciudadano.cif}}</td>
+                        <td>{{ciudadano.nombre}} {{ciudadano.paterno}} {{ciudadano.materno}}<br>
+                        {{ciudadano.ci}}
                         </td>
-                        <td>{{ciudadano._10correo}} <br>{{ciudadano._09cel}}</td>
-                        <td>{{ ciudadano._10sigla }}<br> {{ ciudadano._08unidad }}</td>
-                        <td><button class="btn btn-success btn-block" @click="perfil(ciudadano._01cif)">Perfil</button></td>
+                        <td>{{ciudadano.correo}} <br>{{ciudadano.celular}}</td>
+                        <td>{{ ciudadano.sigla }}<br> {{ ciudadano.unidad }}</td>
+                        <td><button class="btn btn-success btn-block" @click="perfil(ciudadano.cif)">Perfil</button></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+            <!-- End Lista de Ciudadanos-->
           </div>
         </div>
       </div>
@@ -71,7 +77,7 @@
               <p class="text-danger" v-if="errorpersona.ci"> Celulda de Identidad.</p>
             </label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="persona.ci" placeholder="Cedula de Identidad" required="true">
+              <input type="text" class="form-control" v-model="persona.ci" placeholder="Cedula de Identidad" required="true">
             </div>
         </div>
 
@@ -163,13 +169,14 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary" @click="registrarPersona()">Guardar</button>
+        <button type="submit" class="btn btn-primary" @click="registrarCiudadano()">Guardar</button>
       </div>
     </div>
   </div>
 </div>
+<!-- End Modal  Ciudadano-->
 
-<!-- Modal  Obserbasiones-->
+<!-- Modal  Obserbasiones que hay que sacarlo-->
 <div class="modal fade" id="obsModalAll" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -249,7 +256,7 @@
   </div>
 </div>
 
-<!-- Modal  Record-->
+<!-- Modal  Record que hay que sacarlo-->
 <div class="modal fade" id="recordModal" tabindex="-1" aria-labelledby="recordModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -314,10 +321,16 @@
 </template>
 
 <script>
+// Importamos Componetes 
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
+
+//Importamos Servicios
 import PersonaService from '@/services/personaService';
 import BiometricoService from '@/services/biometricoService';
+import EgovfService from '@/services/egovf/egovfService';
+
+//Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
 import $ from 'jquery';
@@ -332,9 +345,10 @@ export default {
     },
     data(){
         return {
+          titulo:'Lista de Ciudadanos',
           personaService:null,
           biometricoService:null,
-          unidadService:null,
+          egovfService:null,
           listaCiudadanos:[],
           registro:[],
           listaUnidad:[],
@@ -394,10 +408,12 @@ export default {
     },
     created(){
       this.biometricoService = new BiometricoService();
+      this.egovfService = new EgovfService();
+      this.personaService = new PersonaService();
     },
     mounted(){
-      this.getDatos();
-      this.getListaCiudadanos();
+      this.getDatos(); // Llamamos los datos del Usuario
+      this.getListarCiudadano(); // Funcion que debuelve una lista de ciudadanos 
     },
     methods:{
       tabla(){
@@ -405,7 +421,7 @@ export default {
           $('#personaTabla').DataTable();
         });
       },
-      getDatos(){
+      getDatos(){// Funcion que guarda los datos del Usuario en la View
         if(this.$cookies.get('cif')!=null){
             this.usuario.token=this.$cookies.get('token');
             this.usuario.cif=this.$cookies.get('cif');
@@ -416,12 +432,12 @@ export default {
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
 
-            this.personaService= new PersonaService();
+            this.egovfService.headersUsuario(this.usuario.token);
             this.personaService.headersUsuario(this.usuario.token);
         }
       },
-      async getListaCiudadanos(){
-        await this.personaService.getListaCiudadanos().then(response => {
+      async getListarCiudadano(){ // Funcion que crea una lista de Ciudadanos 
+        await this.egovfService.getListarCiudadano().then(response => {
           this.listaCiudadanos = response.data;
           this.tabla();
         });
@@ -434,31 +450,30 @@ export default {
           }
         });
       },
-      registrarPersona(){
-
-        // funcion para el registro de un ciudadano
+      registrarCiudadano(){ // funcion para el registro de un ciudadano
         this.personaFalse();
-        if(this.persona.ci=='' || this.persona.complemento=='' || this.persona.nombre=='' || this.persona.fecha=='' || this.persona.sexo=='' || this.persona.cel=='' || this.persona.correo==''){
+        if(this.persona.ci == '' || this.persona.complemento == '' || this.persona.nombre == '' || this.persona.fecha == '' || this.persona.sexo == '' || this.persona.cel == '' || this.persona.correo == ''){
           this.$swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Los siguientes datos son incorrectos o no fueron llenados apropiadamente, verifique e intente nuevamente.',
+            icon: 'error',
+            title: 'Error',
+            text: 'Los siguientes datos son incorrectos o no fueron llenados apropiadamente, verifique e intente nuevamente.',
           });
-          if(this.persona.ci=='')
-            this.errorpersona.ci=true;
-          if(this.persona.complemento=='')
-            this.errorpersona.complemento=true;
-          if(this.persona.nombre=='')
-            this.errorpersona.nombre=true;
-          if(this.persona.fecha=='')
-            this.errorpersona.fecha=true;
-          if(this.persona.sexo=='')
-            this.errorpersona.sexo=true;
-          if(this.persona.cel=='' || this.persona.cel.length<7){
-            this.errorpersona.cel=true;
+          
+          if(this.persona.ci == '')
+            this.errorpersona.ci = true;
+          if(this.persona.complemento == '')
+            this.errorpersona.complemento = true;
+          if(this.persona.nombre == '')
+            this.errorpersona.nombre = true;
+          if(this.persona.fecha == '')
+            this.errorpersona.fecha = true;
+          if(this.persona.sexo == '')
+            this.errorpersona.sexo = true;
+          if(this.persona.cel == '' || this.persona.cel.length < 7){
+            this.errorpersona.cel = true;
           }
-          if(this.persona.correo=='' || !this.persona.correo.includes('@')){
-            this.errorpersona.correo=true;
+          if(this.persona.correo == '' || !this.persona.correo.includes('@')){
+            this.errorpersona.correo = true;
           }
         }
         else{
@@ -469,25 +484,25 @@ export default {
             confirmButtonText: 'Registrar',
             denyButtonText: 'Cancelar'}).then((result) => {
             if (result.isConfirmed) {
-              this.personaService.addPersona(this.persona).then(response=>{
-                this.registro=response.data;
-                var suma=this.registro[0]+this.registro[1]+this.registro[2];
+              this.personaService.addPersona(this.persona).then(response =>{
+                this.registro = response.data;
+                var suma = this.registro[0]+this.registro[1]+this.registro[2];
                 if(suma >0){
-                  if(this.registro[0]==1){
+                  if(this.registro[0] == 1){
                     this.$swal.fire({
                       icon: 'error',
                       title: 'Error',
                       text: 'La Cedula de Identidad ingresada ya existe, y le pertenece a otro ciudadano, verifique los datos e intente nuevamente .'
                     });
                   }
-                  if(this.registro[1]==1){
+                  if(this.registro[1] == 1){
                     this.$swal.fire({
                       icon: 'error',
                       title: 'Error',
                       text: 'La Correo Electronico ingresado ya existe, y le pertenece a otro ciudadano, verifique los datos e intente nuevamente.'
                     });
                   }
-                  if(this.registro[2]==1){
+                  if(this.registro[2] == 1){
                     this.$swal.fire({
                       icon: 'error',
                       title: 'Error',
@@ -496,7 +511,7 @@ export default {
                   }
                 }
                 else{
-                  if(response.status==200){
+                  if(response.status == 200){
                     this.$swal.fire('Datos Guardados Corectamente', '', 'success').then((result) => {
                       if(result)
                         location.reload();

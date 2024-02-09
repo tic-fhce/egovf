@@ -17,6 +17,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
     "material-icons": "^1.12.1",
+    "qrcode.vue": "^3.4.1",
     "vue": "^3.2.13",
     "vue-axios": "^3.5.2",
     "vue-cli": "^2.9.6",

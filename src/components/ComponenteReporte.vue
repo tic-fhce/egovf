@@ -2,6 +2,8 @@
 <div class="row">
     <div class="card col-md-12">
         <div class="row">
+            
+            <!-- Card Header -->
             <div class="card-header headercolor">
                 <div class="row">
                     <div class="col col-md-6 col-sm-6">
@@ -14,21 +16,41 @@
                         <button class="form-control btn btn-success" @click="pdf()"><span class="material-icons">&#xe8ad;</span>Imprimir</button>
                     </div>
                 </div>
-                
             </div>
+            <!-- End Card Header -->
+
+            <!-- Card body -->
             <div class="card-body">
+                <!-- Tabla Lista de Biometricos-->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="printDatos">
-                        <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
+                        <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
                         <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
-                            <td>ID Biometrico : {{perfil.id}}</td>
+                            <td>ID-B : {{perfil.id}}</td>
                             <td>User ID : {{perfil._01user_id}}</td>
                             <td>Nombre : {{perfil._02nombre}}</td>
-                            <td>Lugar : {{perfil._06lugar}}</td>
+                            <td>Lugar : {{perfil._08detalle}}</td>
+                            <td>Sigla : {{perfil._06lugar}}</td>
                         </tr>
                     </table>
                 </div>
-                    <hr>
+                <!-- End Tabla Lista de Biometricos-->
+                <hr>
+
+                <!-- Tabla Lista de Horarios-->
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="printHorario">
+                        <tr><td colspan="4" class="text-center"><h4>Horarios del Usuario</h4></td></tr>
+                        <tr v-for="horario in reporte.listaHorario" :key="horario.horario_id">
+                            <td>ID Horario : {{horario.horario_id}}</td>
+                            <td>Valido del : {{horario.fecha}}</td>
+                            <td>Hasta {{horario.valido}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- End Tabla Lista de Horarios-->
+                <hr>
+                <!-- Tabla Marcados -->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="printMarcado">
                         <thead>
@@ -76,24 +98,12 @@
                         </tfoot>
                     </table>
                 </div>
-                <div class="table-responsive">
-                    <table id="firma">
-                        <tr>
-                            <td>
-                                <p class="text-center">Lic. Jaime Montecinos Marquez<br>Responsable Unidad TIC</p>
-                            </td>
-                            <td>
-                                <p class="text-center">Vo.Bo<br>Inmediato Superior</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center"><img src="../assets/header.jpg" width="150px" height="40px"></td><td></td>
-                        </tr>
-                    </table>
-                </div>
+                <!-- End Tabla Marcados -->
             </div>
-            <div class="card-footer">
 
+            <!-- End  Card body -->
+            <div class="card-footer">
+                
             </div>
         </div>
     </div>
@@ -101,9 +111,13 @@
 </template>
 
 <script>
+// Importamos los Servicios
 import BiometricoService from '@/services/biometricoService';
+
+//Importamos Herramientas
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
 
 export default {
     name:'ComponenteReporteVue',
@@ -119,51 +133,40 @@ export default {
         }
     },
     created(){
-        this.biometricoService= new BiometricoService();
+        this.biometricoService = new BiometricoService(); //Instanciamos el Servicio
     },
     updated(){
-        if(this.reporte.cif>0 && this.getPB && this.reporte.id_horario>0)
+        if(this.reporte.cif > 0 && this.getPB)
         {
-            this.getMes();
-            if(this.reporte.di>0 && this.reporte.df>0)
-                this.getReporteMesDia();
-            else
-                this.getReporteMes();
-            this.getPB=false;
+            this.getMes(); // Funcion que Debuelbe el mes Literal
+            this.getReporteMes(); // Funcion que Contruye los Repostes del mes
+            this.getPB=false; // Valor que cambia para no actualizar constante mente 
         }
     },
     methods:{
-        async getReporteMes(){
+        async getReporteMes(){// Funcion que construye los reportes del mes
             await this.biometricoService.getReporteMes(this.reporte).then((result) => {
                 this.listaReporte=result.data;
-                this.sumaRetraso();
+                this.sumaRetraso(); // Funcion que suma los retrasos
             }).catch((err) => {
                 console.log(err);
             });
         },
-        getReporteMesDia(){
-            this.biometricoService.getReporteMesDia(this.reporte).then((result) => {
-                this.listaReporte=result.data;
-                this.sumaRetraso();
-            }).catch((err) => {
-                console.log(err);
-            });
-        },
-        sumaRetraso(){
+        sumaRetraso(){ //Funcion que suma los retrasos y los minutos de salida adelantada
             let sum = 0;
-            let res=0;
+            let res = 0;
             this.listaReporte.forEach(element => {
                 for (let i = 0; i < element.retraso.length; i++) {
-                    if(i==0 || i==2)
+                    if(i == 0 || i == 2)
                         sum +=parseInt(element.retraso[i],10);
                     else
                         res+=parseInt(element.retraso[i],10);
                 }
             });
-            this.totalretraso=sum;
-            this.totalanticipado=res;
+            this.totalretraso = sum;
+            this.totalanticipado = res;
         },
-        getMes(){
+        getMes(){// Funcion para colocar el Mes en formato Literal
             if(this.reporte.mes==1){this.mes='Enero';}
             if(this.reporte.mes==2){this.mes='Febrero';}
             if(this.reporte.mes==3){this.mes='Marzo';}
@@ -177,43 +180,76 @@ export default {
             if(this.reporte.mes==11){this.mes='Noviembre';}
             if(this.reporte.mes==12){this.mes='Diciembre';}
         },
-        pdf(){
+        pdf(){ //Funcion que Constuye el PDF del reporte
             var img = new Image();
-            img.src='/img/header.d2def491.jpg';
-            //const doc = new jsPDF('p','mm','letter');
-            const doc = new jsPDF('p','mm','legal');
+            img.src ='http://192.168.31.47/img/ima/logoticjpg.jpg';
+            const doc = new jsPDF('p','mm','letter');
+            //const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
-            doc.addImage(img,'JPEG', 15, 7);
-            doc.text("Universidad Mayor de San Andrés",65,18);
-            doc.text("Facultad de Humanidades y Ciencias de la Educación",65,23);
-            doc.text("Datos de Personales",20,45);
-            doc.text("CIF : "+this.reporte.persona._01cif,30,50);
-            doc.text("Nombre : "+this.reporte.persona._04nombre,30,55);
-            doc.text("Apellidos : "+this.reporte.persona._05paterno+" "+this.reporte.persona._06materno,30,60);
-            doc.text("Celular : "+this.reporte.persona._09cel,30,65);
-            doc.text("Unidad : "+this.reporte.sigla,30,70);
+            doc.addImage(img,'JPEG', (215/5), 14,15,10);
+            
+            img.src ='http://192.168.31.47/img/ima/logoumsa.jpg';
+            doc.addImage(img,'JPEG', (215/10), 12,6,12);
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text("Universidad Mayor de San Andrés",(215/2),18,{align:"center"});
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text("Facultad de Humanidades y Ciencias de la Educación",(215/2),23,{align:"center"});
+            doc.setFontSize(8);
+            doc.text("Unidad de Tecnologías de la Información y la Comunicación  UMSA-FHCE",(215/2),28,{align:"center"});
+
+            doc.setFontSize(15);
+
+            doc.text("Datos de Personales :",20,40);
+            
+            doc.setFontSize(10);
+            img.src = this.reporte.persona.foto;
+            doc.addImage(img,'JPEG', 20,47,30,30);
+
+            doc.text("CIF : "+this.reporte.cif,52,50);
+            doc.text("Nombre : "+this.reporte.persona.nombre,52,55);
+            doc.text("Apellidos : "+this.reporte.persona.paterno+" "+this.reporte.persona.materno,52,60);
+            doc.text("Celular : "+this.reporte.persona.celular,52,65);
+            doc.text("Unidad : "+this.reporte.sigla,52,70);
             doc.text("ID app : "+this.reporte.persona.id,120,50);
-            doc.text("C.I. : "+this.reporte.persona._02ci+" "+this.reporte.persona._03complemento,120,55);
-            doc.text("Correo : "+this.reporte.persona._10correo,120,60);
+            doc.text("C.I. : "+this.reporte.persona.ci,120,55);
+            doc.text("Correo : "+this.reporte.persona.correo,120,60);
             doc.setFontSize(15);
             doc.text("Retraso : "+this.totalretraso+" min.",120,75);
             doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,85);
             doc.setFontSize(10);
             var finalY=95;
-            autoTable(doc, {
-                theme: 'plain',
-                startY:finalY+25,
-                margin: {left:30 },
-                styles:{fontSize:10},
-                html:'#firma'
+            
+            if(this.reporte.cif != 20903198600){
+                doc.text("Lic. Jaime A. Montecinos Marquez",(215/4),finalY+25,{align:"center"});
+                doc.text("Responsable Unidad TIC.",(215/4),finalY+30,{align:"center"});
 
-            });
-            finalY = doc.lastAutoTable.finalY;
+                doc.text("Vo. Bo.",(162),finalY+25,{align:"center"});
+                doc.text("Inmediato Superior",(162),finalY+30,{align:"center"});
+            }
+            else{
+                doc.text("Vo. Bo.",(215/2),finalY+25,{align:"center"});
+                doc.text("Inmediato Superior",(215/2),finalY+30,{align:"center"});
+            }
+
+            finalY = finalY+45;
             autoTable(doc, {
+                theme:'striped',
                 startY:finalY,
                 margin: {left:20 },
                 styles:{fontSize:8},
                 html:'#printDatos',
+                showFoot: 'lastPage'
+            });
+            finalY = doc.lastAutoTable.finalY;
+            finalY = finalY+10;
+            autoTable(doc, {
+                startY:finalY,
+                margin: {left:20 },
+                styles:{fontSize:8},
+                html:'#printHorario',
                 showFoot: 'lastPage'
             });
             finalY = doc.lastAutoTable.finalY;
@@ -226,7 +262,7 @@ export default {
                 html:'#printMarcado',
                 showFoot: 'lastPage'
             });
-            doc.save(this.reporte.persona._01cif+'reporte.pdf');
+            doc.save(this.reporte.cif+'reporte.pdf');
         }
     }
 }
@@ -245,6 +281,6 @@ export default {
     border-bottom: 0ch;
 }
 .obserbaciones{
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 </style>

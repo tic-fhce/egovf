@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo" />
 
     <div class="container">
         <div class="row">
@@ -8,57 +8,40 @@
             </div>
         </div>
         <div class="row">
-            <div class="card col-md-12">
-                <div class="row">
+
+            <div class="col-md-3 espace">
+                <div class="card">
                     <div class="card-header headercolor">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h3>Escritorio</h3>
-                            </div>
-                            <div class="col-md-6">
-                                
-                            </div>
-                        </div>
+                        Datos de conexión
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 espace" style="width: 18rem;">
-                                <div class="card">
-                                    <h4 class="text-center">Datos de conexión</h4>
-                                    <div class="card-body">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">CIF: {{ usuario.cif }}</li>
-                                            <li class="list-group-item">{{ usuario.unidad }}</li>
-                                            <li class="list-group-item">{{ usuario.sigla }}</li>
-                                            <li class="list-group-item"></li>
-                                        </ul>
-                                        <router-link to="/perfil" class="btn btn-success btn-lg btn-block">Mi Perfil</router-link>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 espace" v-for="sub in subMenu" :key="sub.id">
-                                <div class="card" style="width: 10rem;">
-                                    <img :src="sub.imagen" class="card-img-top">
-                                    <div class="card-body text-center">
-                                        <p class="card-text ">{{ sub.obs }}</p>
-                                        <router-link :to="sub.ruta" class="btn btn-success btn-block">{{sub.titulo}}</router-link>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 espace">
-                                <div class="card" style="width: 10rem;">
-                                    <img src="../assets/unidad.jpg" class="card-img-top">
-                                    <div class="card-body text-center">
-                                        <p class="card-text ">Unidades Academicas</p>
-                                        <router-link to="/moduloUsuarioUnidad" class="btn btn-success btn-block">Unidades</router-link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">CIF: {{ usuario.cif }}</li>
+                            <li class="list-group-item">{{ usuario.unidad }}</li>
+                            <li class="list-group-item">{{ usuario.sigla }}</li>
+                            <li class="list-group-item"></li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <router-link to="/perfil" class="btn btn-success btn-lg btn-block">Mi Perfil</router-link>
                     </div>
                 </div>
             </div>
 
+            <div class="col-md-3 text-center espace" v-for="sub in subMenu" :key="sub.id">
+                <div class="card">
+                    <div class="card-header headercolor">
+                        {{ sub.obs }}
+                    </div>
+                    <div class="card-body">
+                        <img :src="sub.imagen" class="tam">
+                        <p>{{sub.titulo}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <router-link :to="sub.ruta" class="btn btn-success btn-block">{{sub.titulo}}</router-link>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -76,6 +59,8 @@ export default {
     },
     data(){
         return {
+            subMenu:[],
+            titulo:'Escritorio',
             usuario:{
                 cif:0,
                 correo:'',
@@ -84,15 +69,11 @@ export default {
                 menu:[],
                 unidad:'',
                 sigla:''
-            },
-            subMenu:[]
+            }
         }
     },
-    computed:{
-        
-    },
     mounted(){
-        this.usuario.menu=this.$cookies.get('menu'); 
+        //this.usuario.menu = this.$cookies.get('menu'); 
 
         this.usuario.menu.forEach(element => {
             element.subModel.forEach(e=> {
@@ -101,18 +82,17 @@ export default {
         });
 
 
-        this.usuario.cif=this.$cookies.get('cif');
-        this.usuario.correo=this.$cookies.get('correo');
-        this.usuario.celular=this.$cookies.get('celular');
-        this.usuario.pass=this.$cookies.get('pass');       
+        this.usuario.cif = this.$cookies.get('cif');
+        this.usuario.correo = this.$cookies.get('correo');
+        this.usuario.celular = this.$cookies.get('celular');
+        this.usuario.pass = this.$cookies.get('pass');       
         this.usuario.unidad = this.$cookies.get('unidad');
         this.usuario.sigla = this.$cookies.get('sigla');
     },
     created(){
-        
+        this.usuario.menu = this.$cookies.get('menu'); 
     },
     beforeCreate(){ //antes de crear e ingresar verificamos la existencia del CIF
-        console.log(this.$cookies.get('cif'));
         if(this.$cookies.get('cif')==0){
             this.$router.push('/');
         }

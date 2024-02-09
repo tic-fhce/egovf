@@ -27,11 +27,24 @@ const routes = [
     name: 'escritorio',
     component: () => import('../views/EscritorioView.vue')
   },
+  //MODULO USUARIO PERFILES
   {
     path: '/perfil',
     name: 'perfil',
-    component: () => import('../views/PerfilView.vue')
+    component: () => import('../views/usuario/PerfilView.vue')
   },
+  {
+    path: '/uModuloScc',
+    name: '/uModuloScc',
+    component: () => import('../views/usuario/UModuloSccView.vue')
+  },
+  {
+    path: '/usuarioReporte:uriu',
+    name: 'usuarioReporte',
+    component: () => import('../views/usuario/ReporteUsuarioView.vue')
+  },
+
+  //Fin MODULO USUARIO PERFILES
   {
     path: '/listaPersonas',
     name: 'listaPersonas',
@@ -47,7 +60,11 @@ const routes = [
     name: 'reportePerfil',
     component: () => import('../views/ReportePerfilView.vue')
   },
-  
+  {//MODULO EMPLEADO
+    path: '/moduloemp:cifCiudadano',
+    name: 'moduloemp',
+    component: () => import('../views/emp/ModuloEmpView.vue')
+  },
   {// MODULO SISTEMA CONTENEDOR CONTROL
     path: '/moduloscc:cifCiudadano',
     name: 'moduloscc',
@@ -62,16 +79,6 @@ const routes = [
     path: '/reporte:uri',
     name: 'reporte',
     component:() => import('../views/scc/ReporteView.vue')
-  },
-  {
-    path: '/uModuloScc',
-    name: '/uModuloScc',
-    component: () => import('../views/scc/UModuloSccView.vue')
-  },
-  {
-    path: '/usuarioReporte:uriu',
-    name: 'usuarioReporte',
-    component: () => import('../views/scc/ReporteUsuarioView.vue')
   },
   {
     path: '/reporteLista:tipo',

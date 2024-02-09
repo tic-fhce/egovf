@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const usuario_api="http://172.16.114.157:8091/fhce-egovf/";
-//const usuario_api="http://192.168.31.45:8091/fhce-egovf/";
+//const usuario_api="http://172.16.114.157:8091/fhce-egovf/";
+const usuario_api="http://192.168.31.45:8091/fhce-egovf/";
 
 export default class UsuarioService{
     getListaUsuario(){
@@ -38,31 +38,60 @@ export default class UsuarioService{
             }
         });
     }
-    updatePersona(persona){
+    updatePersona(egovf){//Servicio que actualiza los datos del Ciudadano
+        const persona ={
+            id:egovf.idPersona,
+            _01cif:egovf.cif,
+            _02ci:egovf.ci_com,
+            _03complemento:egovf.complemento,
+            _04nombre:egovf.nombre,
+            _05paterno:egovf.paterno,
+            _06materno:egovf.materno,
+            _07fecha:egovf.fecha,
+            _08sexo:egovf.sexo,
+            _09cel:egovf.celular,
+            _10correo:egovf.correo
+        }
         return axios.put(usuario_api+"updatePersona",persona);
     }
-    updateUsuario(usuario){
+    updateUsuario(egovf){//servicio para actualizar los datos del Usuario
+        const usuario={
+            id:egovf.idUsuario,
+            _01cif:egovf.cif,
+            _02matricula:egovf.matricula,
+            _03ci:egovf.ci_com,
+            _04complemento:egovf.complemento,
+            _05correo:egovf.correo,
+            _06celular:egovf.celular,
+            _07pass:egovf.pass,
+            _08unidad:egovf.unidad,
+            _09dependiente:egovf.dependiente,
+            _10sigla:egovf.sigla,
+            _11foto:egovf.foto
+
+        }
         return axios.put(usuario_api+"updateUsuario",usuario);
     }
-    updatePass(usuario){
-        return axios.put(usuario_api+"updatePass",usuario);
+    updatePass(pass){
+        return axios.put(usuario_api+"updatePass",pass);
     }
-    updatePassAdmin(usuario){
-        return axios.put(usuario_api+"updatePassAdmin",usuario);
+    updatePassAdmin(pass){//servicio para actualizar la contraceña del ciudadano
+        return axios.put(usuario_api+"updatePassAdmin",pass);
     }
-    updateUnidad(usuario,unidad){
+    updateUnidad(egovf,unidad){
         const auxUsuario={
-            id:usuario.id,
-            _01cif:usuario._01cif,
-            _02matricula:usuario._02matricula,
-            _03ci:usuario._03ci,
-            _04complemento:usuario._04complemento,
-            _05correo:usuario._05correo,
-            _06celular:usuario._06celular,
-            _07pass:usuario._07pass,
+            id:egovf.idUsuario,
+            _01cif:egovf.cif,
+            _02matricula:egovf.matricula,
+            _03ci:egovf.ci_com,
+            _04complemento:egovf.complemento,
+            _05correo:egovf.correo,
+            _06celular:egovf.celular,
+            _07pass:egovf.pass,
             _08unidad:unidad.unidad,
             _09dependiente:unidad.dependiente,
-            _10sigla:unidad.sigla
+            _10sigla:unidad.sigla,
+            _11foto:egovf.foto
         }
         return axios.put(usuario_api+"updateUsuario",auxUsuario);
     }

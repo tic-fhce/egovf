@@ -1,5 +1,5 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
     <div class="container">
         <div class="row margen">
         </div>
@@ -11,7 +11,7 @@
             <div class="card-header headercolor">
               <div class="row">
                 <div class="col-md-6">
-                  <h3>Unidades Academicas e-GOVF</h3>
+                  <h3>{{titulo}}</h3>
                 </div>
                 <div class="col-md-6 align-self-end text-end">
                   <button class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target=#unidadmodal><span class="material-icons">&#xe145;</span>Unidad</button>
@@ -131,6 +131,7 @@ export default {
     },
     data(){
         return {
+          titulo:'Unidades Academicas',
           unidadService:null,
           usuario:{
             token:'',

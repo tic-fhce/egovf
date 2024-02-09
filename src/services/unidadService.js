@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const unidadUrl="http://172.16.114.157:8094/fhce-egovf-uni/";
-//const unidadUrl="http://192.168.31.45:8094/fhce-egovf-uni/";
+//const unidadUrl="http://172.16.114.157:8094/fhce-egovf-uni/";
+const unidadUrl="http://192.168.31.45:8094/fhce-egovf-uni/";
 
 
 export default class UnidadService{
@@ -19,11 +19,11 @@ export default class UnidadService{
         }
         return axios.post(unidadUrl+"unidad/agregar",auxUnidad);
     }
-    registrarPertenece(usuario,unidad){
+    registrarPertenece(usuario,unidad){//Servicio para registrar la pertenencia del usuario con la unidad 
         var today = new Date();
         const auxPertenece = {
             _01id_unidad:unidad.id,
-            _02cif:usuario._01cif,
+            _02cif:usuario.cif,
             _03fecha:today.toLocaleDateString('en-US'),
             _04estado:true
         }

@@ -9,15 +9,15 @@
 
     <nav v-if="cif>0" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <router-link to="/escritorio" class="navbar-brand">e-FHCE</router-link>
+            <router-link to="/escritorio" class="navbar-brand">e-FHCE</router-link><label for="titulo" class="text-white bg-dark">// {{titulo}} ></label>  
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <router-link to="/escritorio" class="nav-link active">Inicio</router-link>
+                        <router-link to="/escritorio" class="nav-link active">Escritorio</router-link>
                     </li>
                     <li class="nav-item dropdown" v-for="m in menu" :key="m.id">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,7 +54,7 @@
 
 export default {
     name:'ComponenteMenuVue',
-    props:['cif','menu'],
+    props:['cif','menu','titulo'],
     data(){
         return{
             
