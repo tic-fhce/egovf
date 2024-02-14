@@ -1,16 +1,21 @@
 <template>
 <div class="row">
+    <div class="col col-md-12">
+        <h4>CIF : {{reporteUsuario.cif}}</h4>
+        <p>Total Minutos de Retraso : {{totalretraso}} min</p>
+        <p>Total Minutos de salida Anticipada : {{ totalanticipado }} min</p>
+    </div>
+</div>
+<br>
+<div class="row">
     <div class="card col-md-12">
         <div class="row">
 
             <!-- Card Header -->
             <div class="card-header headercolor">
                 <div class="row">
-                    <div class="col-md-8 col-sm-12 text-center">
-                        <h3 id="titulo">Reporte de Asistencia {{mes}} de {{reporteUsuario.gestion}}</h3>
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        <button class="form-control btn btn-success" @click="pdf()"><span class="material-icons">&#xe8ad;</span>Imprimir</button>
+                    <div class="col-md-12 col-sm-12 text-center">
+                        <h3 id="titulo">Verificacion QR - Reporte de Asistencia {{mes}} de {{reporteUsuario.gestion}}</h3>
                     </div>
                 </div>
             </div>
@@ -20,16 +25,16 @@
             <div class="card-body">
                 <!-- Tabla Lista de Biometricos-->
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="printDatos">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr><td colspan="4" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
                         </thead>
                         <tbody>
                             <tr v-for="perfil in reporteUsuario.listaPerfil" :key="perfil.id">
-                                <td>ID Biometrico : {{perfil.id}}</td>
-                                <td>User ID : {{perfil._01user_id}}</td>
-                                <td>Nombre : {{perfil._02nombre}}</td>
-                                <td>Lugar : {{perfil._06lugar}}</td>
+                                <td><strong>ID Biometrico : </strong>{{perfil.id}}</td>
+                                <td><strong>User ID : </strong>{{perfil._01user_id}}</td>
+                                <td><strong>Nombre : </strong>{{perfil._02nombre}}</td>
+                                <td><strong>Lugar : </strong>{{perfil._06lugar}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -39,12 +44,12 @@
 
                 <!-- Tabla Lista de Horarios-->
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="printHorario">
+                    <table class="table table-striped table-hover">
                         <tr><td colspan="4" class="text-center"><h4>Horarios del Usuario</h4></td></tr>
                         <tr v-for="horario in reporteUsuario.listaHorario" :key="horario.horario_id">
-                            <td>ID Horario : {{horario.horario_id}}</td>
-                            <td>Valido del : {{horario.fecha}}</td>
-                            <td>Hasta {{horario.valido}}</td>
+                            <td><strong>ID Horario : </strong>{{horario.horario_id}}</td>
+                            <td><strong>Valido del : </strong>{{horario.fecha}}</td>
+                            <td><strong>Hasta </strong>{{horario.valido}}</td>
                         </tr>
                     </table>
                 </div>
@@ -53,7 +58,7 @@
 
                 <!-- Tabla Marcados -->
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="printMarcado">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>#</th><th>Detalle</th><th>Lugar</th><th>Turno</th><th>Hora M.</th><th>Min. R.</th><th>Obs.</th>
@@ -101,9 +106,6 @@
                 <br>
             </div>
             <div class="card-footer">
-                <div class="ocult">
-                    <QrcodeVue :value="sms" :size="size" level="H" ref="qr"/>
-                </div>
             </div>
         </div>
     </div>
@@ -111,21 +113,16 @@
 </template>
 
 <script>
-// Importamos Componentes
-import QrcodeVue from 'qrcode.vue';
 
 //Importamos Servicios
 import BiometricoService from '@/services/biometricoService';
 
-//Importamos Herramientas
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 
 export default {
-    name:'ComponenteReporteUsuarioVue',
+    name:'ComponenteReporteLibreVue',
     props:['reporteUsuario'],
     components:{
-        QrcodeVue
+        
     },
     data(){
         return{
@@ -143,7 +140,7 @@ export default {
         this.biometricoService= new BiometricoService();
     },
     updated(){
-        if(this.reporteUsuario.cif>0 && this.getPB && this.reporteUsuario.id_horario>0)
+        if(this.reporteUsuario.cif>0 && this.getPB)
         {
             this.getMesUsuario();
             if(this.reporteUsuario.di>0 && this.reporteUsuario.df>0)
@@ -199,96 +196,6 @@ export default {
             if(this.reporteUsuario.mes==10){this.mes='Octubre';}
             if(this.reporteUsuario.mes==11){this.mes='Noviembre';}
             if(this.reporteUsuario.mes==12){this.mes='Diciembre';}
-        },
-        pdf(){ //Funcion que Constuye el PDF del reporte
-            var img = new Image();
-            
-            const doc = new jsPDF('p','mm','letter');
-            const contentHtml = this.$refs.qr.$el;
-            const qr = contentHtml.toDataURL("image/jpeg",0.8);
-
-            //const doc = new jsPDF('p','mm','legal');
-            doc.setFontSize(10);
-            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoticjpg.jpg';
-            doc.addImage(img,'JPEG', (215/5), 14,15,10);
-            
-            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoumsa.jpg';
-            doc.addImage(img,'JPEG', (215/10), 12,6,12);
-
-            doc.addImage(qr,'JPEG',160,12,40,40);
-            
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text("Universidad Mayor de San Andrés",(215/2),18,{align:"center"});
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text("Facultad de Humanidades y Ciencias de la Educación",(215/2),23,{align:"center"});
-            doc.setFontSize(8);
-            doc.text("Unidad de Tecnologías de la Información y la Comunicación  UMSA-FHCE",(215/2),28,{align:"center"});
-
-            doc.setFontSize(15);
-            doc.text("Datos de Personales :",20,40);
-            
-            doc.setFontSize(10);
-
-            img.src = this.reporteUsuario.personaUsuario.foto;
-            doc.addImage(img,'JPEG', 20,47,30,30);
-
-            doc.text("CIF : "+this.reporteUsuario.cif,52,50);
-            doc.text("Nombre : "+this.reporteUsuario.personaUsuario.nombre,52,55);
-            doc.text("Apellidos : "+this.reporteUsuario.personaUsuario.paterno+" "+this.reporteUsuario.personaUsuario.materno,52,60);
-            doc.text("Celular : "+this.reporteUsuario.personaUsuario.celular,52,65);
-            doc.text("Unidad : "+this.reporteUsuario.sigla,52,70);
-            doc.text("ID app : "+this.reporteUsuario.personaUsuario.id,120,50);
-            doc.text("C.I. : "+this.reporteUsuario.personaUsuario.ci,120,55);
-            doc.text("Correo : "+this.reporteUsuario.personaUsuario.correo,120,60);
-            doc.setFontSize(15);
-            doc.text("Retraso : "+this.totalretraso+" min.",120,75);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,85);
-            doc.setFontSize(10);
-            var finalY=95;
-            
-            if(this.reporteUsuario.cif != 20903198600){
-                doc.text("Lic. Jaime A. Montecinos Marquez",(215/4),finalY+25,{align:"center"});
-                doc.text("Responsable Unidad TIC.",(215/4),finalY+30,{align:"center"});
-
-                doc.text("Vo. Bo.",(162),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(162),finalY+30,{align:"center"});
-            }
-            else{
-                doc.text("Vo. Bo.",(215/2),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(215/2),finalY+30,{align:"center"});
-            }
-
-            finalY = finalY+45;
-            autoTable(doc, {
-                theme:'striped',
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printDatos',
-                showFoot: 'lastPage'
-            });
-            finalY = doc.lastAutoTable.finalY;
-            finalY = finalY+10;
-            autoTable(doc, {
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printHorario',
-                showFoot: 'lastPage'
-            });
-            finalY = doc.lastAutoTable.finalY;
-            doc.setFontSize(15);
-            doc.text("Reporte de Asistencia " + this.mes +" "+this.reporteUsuario.gestion,20,finalY+10);
-            autoTable(doc, {
-                startY:finalY+15,
-                margin: {left:15 },
-                styles:{fontSize:7.5},
-                html:'#printMarcado',
-                showFoot: 'lastPage'
-            });
-            doc.save(this.reporteUsuario.cif+'reporte.pdf');
         }
     }
 }
@@ -308,8 +215,5 @@ export default {
 }
 .obserbaciones{
     font-size: 0.9em;
-}
-.oculto{
-    display: none;
 }
 </style>

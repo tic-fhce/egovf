@@ -103,7 +103,9 @@
 
             <!-- End  Card body -->
             <div class="card-footer">
-                
+                <div class="oculto">
+                    <QrcodeVue :value="sms" :size="size" level="H" ref="qr"/>
+                </div>
             </div>
         </div>
     </div>
@@ -111,8 +113,12 @@
 </template>
 
 <script>
+// Importamos Componentes
+import QrcodeVue from 'qrcode.vue';
+
 // Importamos los Servicios
 import BiometricoService from '@/services/biometricoService';
+import UploadService from '@/services/upload/uploadService';
 
 //Importamos Herramientas
 import jsPDF from 'jspdf';
@@ -122,18 +128,25 @@ import autoTable from 'jspdf-autotable';
 export default {
     name:'ComponenteReporteVue',
     props:['reporte'],
+    components:{
+        QrcodeVue
+    },
     data(){
         return{
             biometricoService:null,
+            uploadService:null,
             listaReporte:[],
             getPB:true,
             totalretraso:0,
             totalanticipado:0,
-            mes:''
+            mes:'',
+            sms:'',
+            size:300
         }
     },
     created(){
         this.biometricoService = new BiometricoService(); //Instanciamos el Servicio
+        this.uploadService = new UploadService();
     },
     updated(){
         if(this.reporte.cif > 0 && this.getPB)
@@ -165,6 +178,8 @@ export default {
             });
             this.totalretraso = sum;
             this.totalanticipado = res;
+            const dir = this.$route.fullPath;
+            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'http://192.168.31.45:8080/#'+dir;
         },
         getMes(){// Funcion para colocar el Mes en formato Literal
             if(this.reporte.mes==1){this.mes='Enero';}
@@ -182,14 +197,20 @@ export default {
         },
         pdf(){ //Funcion que Constuye el PDF del reporte
             var img = new Image();
-            img.src ='http://192.168.31.47/img/ima/logoticjpg.jpg';
+            
             const doc = new jsPDF('p','mm','letter');
+            const contentHtml = this.$refs.qr.$el;
+            const qr = contentHtml.toDataURL("image/jpeg",0.8);
+
             //const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
+            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoticjpg.jpg';
             doc.addImage(img,'JPEG', (215/5), 14,15,10);
             
-            img.src ='http://192.168.31.47/img/ima/logoumsa.jpg';
+            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoumsa.jpg';
             doc.addImage(img,'JPEG', (215/10), 12,6,12);
+
+            doc.addImage(qr,'JPEG',160,12,40,40);
             
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
@@ -201,10 +222,10 @@ export default {
             doc.text("Unidad de Tecnologías de la Información y la Comunicación  UMSA-FHCE",(215/2),28,{align:"center"});
 
             doc.setFontSize(15);
-
             doc.text("Datos de Personales :",20,40);
             
             doc.setFontSize(10);
+
             img.src = this.reporte.persona.foto;
             doc.addImage(img,'JPEG', 20,47,30,30);
 
@@ -264,6 +285,7 @@ export default {
             });
             doc.save(this.reporte.cif+'reporte.pdf');
         }
+
     }
 }
 
@@ -282,5 +304,8 @@ export default {
 }
 .obserbaciones{
     font-size: 0.8em;
+}
+.oculto{
+    display: none;
 }
 </style>

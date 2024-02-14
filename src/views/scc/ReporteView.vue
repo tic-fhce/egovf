@@ -1,5 +1,6 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -22,6 +23,7 @@
 <script>
 // Importamos los Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonaVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteReporteVue from '@/components/ComponenteReporte.vue';
@@ -30,11 +32,13 @@ import ComponenteReporteVue from '@/components/ComponenteReporte.vue';
 // Declaramos los Servicios
 import EgovfService from '@/services/egovf/egovfService';
 import BiometricoService from '@/services/biometricoService';
+
 // End
 export default {
     name:'ReporteView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteDatosPersonaVue,
         ComponenteReporteVue,
         ComponenteFooterVue
@@ -96,19 +100,19 @@ export default {
                 dependiente:'',
                 sigla:'',
                 foto:''
-            },
+            }
         }
     },
 
     mounted(){
-        this.uri=this.$route.params.uri;
+        this.uri = this.$route.params.uri;
         this.cifCiudadano = this.uri.substring(0,11);
         this.reporte.cif=this.uri.substring(0,11);
         this.reporte.gestion = this.uri.substring(12,16);
         this.reporte.mes = this.uri.substring(17,19);
         this.reporte.di = this.uri.substring(20,22);
         this.reporte.df = this.uri.slice(23);
-        
+        this.reporte.uri = this.uri;
         this.getDatos();
         this.getEgovf();
         
@@ -134,6 +138,8 @@ export default {
             this.usuario.menu=this.$cookies.get('menu');
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
+
+            this.titulo=this.usuario.correo+'> '+this.titulo;
         }
       },
       async getEgovf(){
@@ -162,9 +168,8 @@ export default {
         async getListaHorario(){
             await this.biometricoService.getListaHorario(this.cifCiudadano,this.reporte.gestion).then(response=>{
                 this.reporte.listaHorario = response.data;
-                console.log(this.reporte.listaHorario);
             });
-        },
+        }
 
     }
 }

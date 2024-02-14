@@ -43,6 +43,12 @@ const routes = [
     name: 'usuarioReporte',
     component: () => import('../views/usuario/ReporteUsuarioView.vue')
   },
+  {
+    path: '/libreReporte:uriu',
+    name: 'libreReporte',
+    component: () => import('../views/usuario/ReporteLibreView.vue')
+  },
+  
 
   //Fin MODULO USUARIO PERFILES
   {

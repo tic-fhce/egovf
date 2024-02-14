@@ -19,8 +19,8 @@
   <section class="page-section menucolor" id="about">
     <div class="container">
       <div class="row">
-        <div class="col-lg-8">
-          <img src="../assets/fhceagua.png" width="120%">
+        <div class="col col-md-12 text-center">
+          <img src="../assets/fhceagua.png" class="img-fluid">
           <hr class="divider divider-light" />
           <p class="text-white-75 mb-4">Avanzando a la Tecnología con Sistemas Interoperables de Recursos Extendidos y desarrollados para satisfacer las necesidades Administrativas, Académicas y Humanitarias dentro de las Normativas ISO, con el fin de mejorar los Servicios de recursos de información.</p>
           <a class="btn btn-light btn-xl" href="https://fhce.umsa.bo" target="_blank">Conoce la Facultad</a>

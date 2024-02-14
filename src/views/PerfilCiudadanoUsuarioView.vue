@@ -1,4 +1,5 @@
 <template>
+    <ComponenteBarra :titulo="titulo"/>
     <div class="container">
         <div class="row">
             <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
@@ -28,7 +29,9 @@
 </template>
 
 <script>
+//Importamos Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
 import ComponenteControlPersonalUsuarioVue from '@/components/ComponenteControlPersonalUsuario.vue';
@@ -40,6 +43,7 @@ export default {
     name:'PerfilCiudadanoUsuarioView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteDatosPersonalesUsuarioVue,
         ComponenteControlPersonalUsuarioVue,
         ComponenteFooterVue
@@ -47,6 +51,7 @@ export default {
     data(){
         return {
             personaServiceUsuario:null,
+            titulo:'Perfil de Ciudadano',
             usuario:{
                 token:'',
                 cif:'',
@@ -94,6 +99,9 @@ export default {
                 this.usuario.menu=this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+
+                this.titulo=this.usuario.correo+'> '+this.titulo;
+
                 this.getDatosPersonaUsuario();
             }
         },

@@ -1,5 +1,6 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -23,6 +24,7 @@
 <script>
 // Importamos los Componentes
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteMSccVue from '@/components/ComponenteMScc.vue';
 import ComponenteDatosPersonalesVue from '@/components/ComponenteDatosPersonales.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
@@ -37,6 +39,7 @@ export default {
     name:'ModuloSccView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteDatosPersonalesVue,
         ComponenteMSccVue,
         ComponenteFooterVue
@@ -116,6 +119,8 @@ export default {
                 this.usuario.menu=this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+
+                this.titulo=this.usuario.correo+'> '+this.titulo;
             }
         },
         async getEgovf(){

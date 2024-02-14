@@ -1,9 +1,12 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
+    <ComponenteBarra :titulo="titulo2"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
+
     <div class="container">
         <div class="row margen">
         </div>
     </div>
+
     <div class="container">
       <div class="row">
         
@@ -323,6 +326,7 @@
 <script>
 // Importamos Componetes 
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 
 //Importamos Servicios
@@ -341,11 +345,13 @@ export default {
     name:'ListaPersonaView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteFooterVue
     },
     data(){
         return {
           titulo:'Lista de Ciudadanos',
+          titulo2:'Lista de Ciudadanos',
           personaService:null,
           biometricoService:null,
           egovfService:null,
@@ -431,6 +437,7 @@ export default {
             this.usuario.menu=this.$cookies.get('menu');
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
+            this.titulo2=this.usuario.correo+'> '+this.titulo2;
 
             this.egovfService.headersUsuario(this.usuario.token);
             this.personaService.headersUsuario(this.usuario.token);

@@ -549,7 +549,7 @@
 
 <!-- Modal Reporte Mensual-->
 <div class="modal fade" id="reportemensualModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header headercolor">
         <h5 class="modal-title">Reporte Mensual</h5>
@@ -585,7 +585,7 @@
 
 <!-- Modal Reporte Mensual Segmentado-->
 <div class="modal fade" id="reportemensualsegmentadoModal" tabindex="-1" aria-labelledby="biometricoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header headercolor">
         <h5 class="modal-title">Reporte Mensual Segmentado</h5>

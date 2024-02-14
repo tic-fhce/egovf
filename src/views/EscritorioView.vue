@@ -1,6 +1,7 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo" />
-
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+    
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -8,7 +9,6 @@
             </div>
         </div>
         <div class="row">
-
             <div class="col-md-3 espace">
                 <div class="card">
                     <div class="card-header headercolor">
@@ -49,12 +49,16 @@
 </template>
 
 <script>
+// Importamos Componetes 
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooter from '@/components/ComponenteFooter.vue';
+
 export default {
     name:'EscritorioView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteFooter
     },
     data(){
@@ -88,6 +92,7 @@ export default {
         this.usuario.pass = this.$cookies.get('pass');       
         this.usuario.unidad = this.$cookies.get('unidad');
         this.usuario.sigla = this.$cookies.get('sigla');
+        this.titulo=this.usuario.correo+'> '+this.titulo;
     },
     created(){
         this.usuario.menu = this.$cookies.get('menu'); 

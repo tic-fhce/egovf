@@ -9,9 +9,9 @@
 
     <nav v-if="cif>0" class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <router-link to="/escritorio" class="navbar-brand">e-FHCE</router-link><label for="titulo" class="text-white bg-dark">// {{titulo}} ></label>  
+            <router-link to="/escritorio" class="navbar-brand">e-FHCE</router-link>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                Menu <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 
@@ -54,7 +54,7 @@
 
 export default {
     name:'ComponenteMenuVue',
-    props:['cif','menu','titulo'],
+    props:['cif','menu'],
     data(){
         return{
             

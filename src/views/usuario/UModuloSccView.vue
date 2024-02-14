@@ -1,9 +1,8 @@
 <template>
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
+
     <div class="container">
-        <div class="row">
-            <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
-        </div>
-        
         <div class="row">
             <div class="margen">
                 
@@ -13,22 +12,19 @@
         <!-- Componente de Datos de Persona -->
         <br>
         <ComponenteDatosPersonalesUsuarioVue :cifCiudadano="usuario.cif" :egovfp="egovf"/>
-        
         <!-- Componente de Reporte de Personal -->
         <br>
         <ComponenteUMSccVue :egovfp = "egovf" /> 
         <!-- Componente de Permisos en el Menu -->
-
-        <br>
-        <div class="row">
-            <ComponenteFooterVue />
-        </div>
     </div>
+
+    <ComponenteFooterVue />
     
 </template>
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
 import ComponenteUMSccVue from '@/components/ComponenteUMScc.vue';
@@ -39,6 +35,7 @@ export default {
     name:'UModuloSccView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteDatosPersonalesUsuarioVue,
         ComponenteUMSccVue,
         ComponenteFooterVue
@@ -103,6 +100,8 @@ export default {
                 this.usuario.menu=this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+
+                this.titulo=this.usuario.correo+'> '+this.titulo;
             }
         },
         async getEgovf(){//Funcion que debuelve los datos del ciudadano 

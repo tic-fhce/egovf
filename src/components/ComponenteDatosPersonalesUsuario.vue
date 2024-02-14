@@ -5,12 +5,12 @@
             <div class="card-header headercolor">
                 <h3>Datos Personales</h3>
             </div>
-            <div class="col col-sm-4 col-md-4">
+            <div class="col col-sm-4 col-md-3">
                 <br>
                 <img :src="egovf.foto" class="img-fluid rounded-start" alt="...">
                 <br>
             </div>
-            <div class="col col-sm-8 col-md-8">
+            <div class="col col-sm-8 col-md-9">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">

@@ -1,5 +1,7 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" />
+    
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -93,6 +95,8 @@
             </div>
         </div>
     </div>
+
+    <ComponenteFooter/>
 
 <!-- Modal  Celular-->
 <div class="modal fade" id="celularmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -222,10 +226,16 @@
   </div>
 </div>
 <!--End Modal Foto-->
+
 </template>
 
 <script>
-import ComponenteMenuVue from '@/components/ComponenteMenu.vue'
+// Importamos Componetes 
+import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
+import ComponenteFooter from '@/components/ComponenteFooter.vue';
+
+//Importamos Servicios
 import UsuarioService from '@/services/usuarioServices';
 import EgovfService from '@/services/egovf/egovfService';
 import UploadService from '@/services/upload/uploadService';
@@ -233,7 +243,9 @@ import UploadService from '@/services/upload/uploadService';
 export default {
     name:'PerfilView',
     components:{
-        ComponenteMenuVue
+        ComponenteMenuVue,
+        ComponenteBarra,
+        ComponenteFooter
     },
     data(){
         return {
@@ -310,6 +322,7 @@ export default {
                 this.usuario.menu = this.$cookies.get('menu');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.titulo=this.usuario.correo+'> '+this.titulo;
 
                 this.usuarioService.headersUsuario(this.usuario.token);
             }

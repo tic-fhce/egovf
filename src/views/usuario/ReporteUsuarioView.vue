@@ -1,5 +1,7 @@
 <template>
-    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu" :titulo="titulo"/>
+    <ComponenteBarra :titulo="titulo"/>
+    <ComponenteMenuVue :cif="usuario.cif" :menu="usuario.menu"/>
+
     <div class="container">
         <div class="row">
             <div class="margen">
@@ -21,6 +23,7 @@
 
 <script>
 import ComponenteMenuVue from '@/components/ComponenteMenu.vue';
+import ComponenteBarra from '@/components/ComponenteBarra.vue';
 import ComponenteFooterVue from '@/components/ComponenteFooter.vue';
 import ComponenteDatosPersonalesUsuarioVue from '@/components/ComponenteDatosPersonalesUsuario.vue';
 import ComponenteReporteUsuarioVue from '@/components/ComponenteReporteUsuario.vue';
@@ -32,6 +35,7 @@ export default {
     name:'ReporteUsuarioView',
     components:{
         ComponenteMenuVue,
+        ComponenteBarra,
         ComponenteDatosPersonalesUsuarioVue,
         ComponenteReporteUsuarioVue,
         ComponenteFooterVue
@@ -53,25 +57,24 @@ export default {
                 sigla:''
             },
             reporteUsuario:{
-                id_horario:0,
                 cif:0,
+                sigla:'',
                 gestion:0,
                 mes:0,
                 di:0,
                 df:0,
                 listaPerfil:[],
+                listaHorario:[],
+                uri:'',
                 personaUsuario:{
                     id:null,
-                    _01cif:'',
-                    _02ci:'',
-                    _03complemento:'',
-                    _04nombre:'',
-                    _05paterno:'',
-                    _06materno:'',
-                    _07fecha:'',
-                    _08sexo:'',
-                    _09cel:'',
-                    _10correo:''
+                    ci:'',
+                    nombre:'',
+                    paterno:'',
+                    materno:'',
+                    celular:'',
+                    correo:'',
+                    foto:''
                 }
             },
             egovf:{
@@ -104,8 +107,11 @@ export default {
         this.reporteUsuario.di = this.uriu.substring(8,10);
         this.reporteUsuario.df = this.uriu.slice(11);
         this.getDatosUsuario();
-        this.getReportePersonaUsuario();
+        this.getEgovf();
+
+        //this.getReportePersonaUsuario();
         this.getReporteBiometricoUsuario();
+        this.reporteUsuario.uri = this.usuario.cif+'j'+this.uriu;
         
     },
     beforeCreate(){        
@@ -131,13 +137,8 @@ export default {
                 this.usuario.sigla = this.$cookies.get('sigla');
 
                 this.reporteUsuario.cif = this.usuario.cif;
+                this.titulo=this.usuario.correo+'> '+this.titulo;
             }
-        },
-        async getReportePersonaUsuario(){
-            this.personaService.headersUsuario(this.usuario.token);
-            await this.personaService.getPersona(this.usuario.cif).then((response) =>{
-                this.reporteUsuario.personaUsuario=response.data;
-            });
         },
         async getReporteBiometricoUsuario(){
             await this.biometricoService.getPerfil(this.usuario.cif).then(response=>{
@@ -146,12 +147,28 @@ export default {
                     this.reporteUsuario.id_horario=this.reporteUsuario.listaPerfil[0]._05horario_id;
                 }
             });
+            this.getListaHorario();
+        },
+        async getListaHorario(){
+            await this.biometricoService.getListaHorario(this.usuario.cif,this.reporteUsuario.gestion).then(response=>{
+                this.reporteUsuario.listaHorario = response.data;
+            });
         },
         async getEgovf(){//Funcion que debuelve los datos del ciudadano 
             this.egovfService.headersUsuario(this.usuario.token);
             await this.egovfService.getEgovf(this.usuario.cif).then((response) =>{
                 this.egovf = response.data;
             });
+            this.reporteUsuario.sigla =  this.egovf.sigla;
+
+            this.reporteUsuario.personaUsuario.id = this.egovf.idPersona;
+            this.reporteUsuario.personaUsuario.ci = this.egovf.ci;
+            this.reporteUsuario.personaUsuario.nombre = this.egovf.nombre;
+            this.reporteUsuario.personaUsuario.paterno = this.egovf.paterno;
+            this.reporteUsuario.personaUsuario.materno = this.egovf.materno;
+            this.reporteUsuario.personaUsuario.celular = this.egovf.celular;
+            this.reporteUsuario.personaUsuario.correo = this.egovf.correo;
+            this.reporteUsuario.personaUsuario.foto = this.egovf.foto;
         }
     }
 }

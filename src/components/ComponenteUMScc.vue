@@ -8,7 +8,7 @@
                             <div class="container-fluid">
                                 <label class="navbar-brand">Modulo SCC</label>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mscc" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
+                                    Memu <span class="navbar-toggler-icon"></span>
                                 </button>
                                 <div class="collapse navbar-collapse" id="mscc">
                                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -16,7 +16,11 @@
                                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Mis Reportes
                                             </a>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <ul v-if="egovfp.foto ==='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png'" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><button class="dropdown-item" @click="foto()">Reporte Mensual</button></li>
+                                                <li><button class="dropdown-item" @click="foto()">Reporte Segmentado</button></li>
+                                            </ul>
+                                            <ul v-else class="dropdown-menu" aria-labelledby="navbarDropdown">
                                                 <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportemensualModal">Reporte Mensual</a></li>
                                                 <li><a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reportemensualsegmentadoModal">Reporte Segmentado</a></li>
                                             </ul>
@@ -620,11 +624,9 @@ export default {
         async getListaHorario(){ // Funcion que llama una lista de Horarios del usuario deacuerdo a la gestion
             await this.biometricoServiceUsuario.getListaHorario(this.egovf.cif,this.obsgestion).then(response=>{
                 this.listaHorarios = response.data;
-                console.log(this.listaHorarios);
             });
         },
         getObsDetalle(id){// Funcion que Muestra el detalle de las Observaciones del Usuario
-            console.log(id);
             this.listaObsUsuario.forEach(obs =>{
                 if(obs.id === id){
                     this.obsDetalle.id = obs.id;
@@ -639,6 +641,17 @@ export default {
                 }
             });
         },
+        foto(){
+            this.$swal.fire({
+                title: 'Debe de Cambiar su foto de Perfil Para continuar', 
+                confirmButtonText: 'Actualizar Foto de Perfil',
+                icon : 'info'
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    this.$router.push('/perfil');
+                }
+            });
+        }
     }
 }
 </script>
