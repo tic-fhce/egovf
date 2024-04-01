@@ -1,0 +1,14 @@
+.headercolor{
+  background-color: #015D82;
+  color:white;
+}
+.font{
+  color: white;
+}
+.btn-block { 
+  display: block; 
+  width: 100%; 
+}
+.fontabla{
+  font-size: 12px;
+}
