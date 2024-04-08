@@ -23,8 +23,18 @@ export default class ModuloService{
     addModulo(modulo){
         const moduloaux={
             _01cif:modulo.cif,
-            _02id_modulo:modulo.idmodulo
+            _02id_modulo:modulo.idmodulo,
+            _03estado:1
         }
         return axios.post(moduloUrl+"moduloUsuario/agregarModulo",moduloaux);
+    }
+    updateModuloUsuario(cif,modulo,estado){
+        const moduloUsuario ={
+            id:0,
+            _01cif:cif,
+            _02id_modulo:modulo,
+            _03estado:estado
+        }
+        return axios.put(moduloUrl+"moduloUsuario/updateModuloUsuario",moduloUsuario);
     }
 }

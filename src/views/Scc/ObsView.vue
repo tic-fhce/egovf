@@ -204,80 +204,62 @@
             <h4 class="card-title">CIF : {{uobs.cif}}</h4>
         </div>
 
-        <form @submit.prevent="updateObs()" enctype="multipart/form-data">
-            
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
-                </div>
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
-                </div>
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
-                </div>
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
+            <div class="col-sm-8">
+                <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
-                    <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
-                </div>
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
-                    <select class="form-control" v-model="uobs.tipo" required="true">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="horas">Horas de Servicio</option>
-                        <option value="extraordinario">Horario Extraordinario</option>
-                        <option value="comision">Comisión</option>
-                        <option value="permiso">Permiso</option>
-                        <option value="asueto">Asueto</option>
-                    </select>
-                </div>
+        <div class="mb-3 row">
+            <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
+            <div class="col-sm-8">
+                <select class="form-control" v-model="uobs.tipo" required="true">
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="horas">Horas de Servicio</option>
+                    <option value="extraordinario">Horario Extraordinario</option>
+                    <option value="comision">Comisión</option>
+                    <option value="permiso">Permiso</option>
+                    <option value="asueto">Asueto</option>
+                </select>
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="uobs.hora">
-                </div>
+        <div class="mb-3 row">
+            <label for="datos" class="col-sm-4 col-form-label">Hora</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="uobs.hora">
             </div>
-
-            <div 
-            class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="file" class="form-control" @change="selectFile()" required="true">
-                </div>
-            </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
-                </div>
-            </div>
-
-        </form>
+        </div>
     </CModalBody>
     <CModalFooter>
         <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton @click="updateObsEmpleado()" class="font" color="success"><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</CButton>
     </CModalFooter>
 </CModal>
 <!-- END Modal Editar Obserbasiones-->
@@ -288,8 +270,8 @@
 
 import EgovfService from '@/services/egovf/egovfService';
 import UploadService from '@/services/upload/uploadService';
-import BiometricoService from '@/services/biometricoService';
 import EmpleadoService from '@/services/emp/empleadoService';
+import SccService from '@/services/scc/sccService';
 
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
@@ -311,7 +293,7 @@ export default {
             modalObsEditar:false,
             egovfService:null,
             uploadService:null,
-            biometricoService:null,
+            sccService:null,
             empleadoService:null,
             listaGestion:[],
             listaObs:[],
@@ -372,7 +354,7 @@ export default {
     },
     created(){
         this.egovfService = new EgovfService();
-        this.biometricoService = new BiometricoService();
+        this.sccService = new SccService();
         this.uploadService = new UploadService();
         this.empleadoService = new EmpleadoService();
     },
@@ -425,7 +407,7 @@ export default {
                             denyButtonText: 'Cancelar',
                             }).then((result) => {
                             if (result.isConfirmed) {
-                                this.biometricoService.addObsAll(this.obsall).then(response =>{
+                                this.sccService.addObsAll(this.obsall).then(response =>{
                                     if(response.status == 200){
                                         this.$swal.fire('Las Observaciones fueron Agregados Corectamente ','', 'success').then((res)=>{
                                             if(res)
@@ -462,7 +444,7 @@ export default {
             this.getListaObs();
         },
         async getListaObs(){
-            await this.biometricoService.getListaObs().then((response) =>{
+            await this.sccService.getListaObs().then((response) =>{
                 this.listaObs = response.data;
             });
             this.tablaObs();
@@ -534,7 +516,7 @@ export default {
                 denyButtonText: 'Cancelar',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    this.biometricoService.updateObs(uObs).then(response=>{
+                    this.sccService.updateObs(uObs).then(response=>{
                         if(response.status == 200){
                             this.$swal.fire('Observacion Actualizada Corectamente', '', 'success').then((res)=>{
                                 if(res)
@@ -551,48 +533,31 @@ export default {
                 }
             });
         },
-        async updateObs(){ //Funcion actualizar una Observacion del Usuario
-            const fromData = new FormData();
-            fromData.append('archivo',this.archivo);
-            try{
-                //primero subimos el archivo
-                await this.uploadService.addImagen(fromData).then((response)=>{
-                if(response.status == 200){
-                    this.uobs.url = this.uploadService.getUrl()+ response.data.nombre;
-                    this.uobs.imagen = response.data.nombre;
-                    this.$swal.fire({
-                        title: 'Deseas Actualizar la Observacion de Tu Asistencia ?',
-                        showDenyButton: true,
-                        icon:'info',
-                        confirmButtonText: 'Aceptar',
-                        denyButtonText: 'Cancelar',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.biometricoService.updateObsEmpleado(this.uobs).then(response =>{
-                                if(response.status == 200){
-                                    this.$swal.fire('La Observacion fue Actualizada Corectamente','', 'success').then((res)=>{
-                                        if(res)
-                                            location.reload();
-                                    });
-                                }
-                                else{
-                                    this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
-                                }
+        async updateObsEmpleado(){ //Funcion actualizar una Observacion del Usuario
+            this.$swal.fire({
+                title: 'Deseas Actualizar la Observacion de Tu Asistencia ?',
+                showDenyButton: true,
+                icon:'info',
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.sccService.updateObsEmpleado(this.uobs).then(response =>{
+                        if(response.status == 200){
+                            this.$swal.fire('La Observacion fue Actualizada Corectamente','', 'success').then((res)=>{
+                                if(res)
+                                    location.reload();
                             });
-                            
-                        } else if (result.isDenied) {
-                            this.$swal.fire('Datos Cancelados', '', 'info');
                         }
-                    });
-
-                }
-                else {
-                    this.$swal.fire('El archivo no pudo ser Guardado  ', '','error');
+                        else{
+                            this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
+                        }
+                    }); 
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });
-            }catch(err){
-                this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
-            }
+
         },
         setObs(id){// Funcion que carga los datos de las Observaciones del Usuario
             this.listaObs.forEach(obs =>{

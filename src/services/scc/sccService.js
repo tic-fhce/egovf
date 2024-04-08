@@ -24,6 +24,25 @@ export default class SccService{
     updateBiometrico(biometrico){
         return axios.put(msccUrl+"biometrico/agregarBiometrico",biometrico);
     }
+    updateBiometricoTipo(empleado,estado){
+        var tipo = 0;
+        if(estado == 1){
+            tipo = empleado.tipoempleado_id;
+        }
+        const biometrico ={
+            id:0,
+            _01user_id:0,
+            _02nombre:'',
+            _03cif:empleado.cif,
+            _04estado:0,
+            _05horario_id:0,
+            _06lugar:'',
+            _07id_tipo:tipo,
+            _08detalle:'',
+            _09sexo:0
+        }
+        return axios.put(msccUrl+"biometrico/updateBiometricoTipo",biometrico);
+    }
     // Funcion que debuelve informacion del perfil de usuario registrado en el biometrico
     getPerfil(cif){
         return axios.get(msccUrl+"biometrico/getPerfil",{

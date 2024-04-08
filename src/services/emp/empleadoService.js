@@ -42,6 +42,18 @@ export default class EmpleadoService{
         };
         return axios.post(empleadoUrl+"empleado/addEmpleado",empleadoaux);
     }
+    updateEstado(empleado,estado){
+        const fecha = new Date();
+        const empleadoaux = {
+            id:empleado.id,
+            _01cif:empleado.cif,
+            _02tipo_empleado_id:empleado.tipoempleado_id,
+            _03fecha: empleado.fecha,
+            _04estado:estado,
+            _05salida:fecha.toLocaleDateString('en-CA'),
+        };
+        return axios.put(empleadoUrl+"empleado/updateEmpleado",empleadoaux);
+    }
     addContrato(contrato){
         const fecha = new Date();
         let numero = contrato.numerocontrato;

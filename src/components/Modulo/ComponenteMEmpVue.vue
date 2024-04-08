@@ -27,8 +27,8 @@
                                     <td>Ingreso : {{ empleado.fecha }}</td>
                                     <td>Salida : {{ empleado.salida }}</td>
                                     <td>Estado :
-                                        <button v-if="empleado.estado==1" class="badge bg-success" style="width: 6rem;" >Activo</button>
-                                        <button v-else class="badge bg-danger" style="width: 6rem;">Inactivo</button>
+                                        <CButton v-if="empleado.estado === 1" color="success" class="font" size="sm" @click="updateEstado(0)">Activo</CButton>
+                                        <CButton v-else color="danger" class="font" size="sm" @click="updateEstado(1)">Inactivo</CButton>
                                     </td>
                                 </tr>
                             </tbody>
@@ -329,6 +329,8 @@ import UsuarioService from '@/services/usuarioServices';
 import EmpleadoService from '@/services/emp/empleadoService';
 import UnidadService from '@/services/unidadService';
 import MenuService from '@/services/usuario/menuService';
+import SccService from '@/services/scc/sccService';
+import ModuloService from '@/services/moduloService';
 import { CDropdown } from '@coreui/vue';
 
 // End
@@ -348,6 +350,8 @@ export default {
             empleadoService: null,
             unidadService: null,
             usuarioService: null,
+            moduloService: null,
+            sccService:null,
             menuService:null,
             verificado: 0,
             listaModulo: [],
@@ -454,6 +458,8 @@ export default {
         this.unidadService = new UnidadService();
         this.usuarioService = new UsuarioService();
         this.menuService = new MenuService();
+        this.sccService = new SccService();
+        this.moduloService = new ModuloService();
     },
     mounted() {
         this.getDatos();
@@ -721,6 +727,43 @@ export default {
                 }
                 else if (result.isDenied) {
                     this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
+        },
+        async updateEstado(estado){
+            this.moduloService.headersUsuario(this.usuario.token);
+            var sm='';
+            if(estado==1){
+                sm='Desea Activar al Empleado ?';
+            }
+            else{
+                sm='Desea Inactivar al Empleado ?';
+            }
+            await this.$swal.fire({
+                title: sm,
+                showDenyButton: true,
+                icon:'info',
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+            }).then((result)=>{
+                if (result.isConfirmed){
+                    this.empleadoService.updateEstado(this.empleado,estado).then((result)=>{
+                        if(result.status == 200)
+                        {
+                            this.sccService.updateBiometricoTipo(this.empleado,estado).then();
+                            this.moduloService.updateModuloUsuario(this.empleado.cif,1,estado).then();// 1 xq em id del modulo EMP es 1
+                            this.$swal.fire('El Ciudadano fue removido con exito', '', 'success').then((r) => {
+                                if (r)
+                                    location.reload();
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error' + result.status, '', 'error');         
+                        }   
+                    });
+                }
+                else{
+                    this.$swal.fire('Datos Cancelados','', 'info');
                 }
             });
         },
