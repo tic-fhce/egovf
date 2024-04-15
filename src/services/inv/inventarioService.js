@@ -84,4 +84,20 @@ export default class InventarioService{
         }
         return axios.post(inventarioUrl+"telefono/agregarTelefono",telefonoaux);
     }
+    // servicios para Ubicacion
+    addUbicacion(ubicacion){
+        const ubicacionaux = {
+            _01cif:ubicacion.cif,
+            _02ambiente:ubicacion.ambiente,
+            _03ubicacion:ubicacion.ubicacion
+        }
+        return axios.post(inventarioUrl+"ubicacion/addUbicacion",ubicacionaux);
+    }
+    getUbicacionCif(cif){
+        return axios.get(inventarioUrl+"ubicacion/getUbicacionCif",{
+            params: {
+                cif: cif
+            }
+        });
+    }
 }

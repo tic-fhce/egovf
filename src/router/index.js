@@ -110,7 +110,13 @@ const routes = [
         path: '/obsModuloScc',
         name: 'ObsView',
         component: () => import('@/views/Scc/ObsView.vue')
-      }
+      },
+      // MODULO SISTEMA DE INVENTARIO
+      {
+        path: '/moduloinv:cifCiudadano',
+        name: 'ModuloInvView',
+        component: () => import('@/views/Inv/ModuloInvView.vue')
+      },
     ]
   }
 ]

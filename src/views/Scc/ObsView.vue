@@ -20,16 +20,17 @@
                         <table class="table" id="obsTabla">
                             <thead>
                                 <tr>
-                                    <th>ID</th><th>CIF</th><th>UidObs</th><th>Tipo</th><th>Detalle</th><th>Opciones</th>
+                                    <th>ID</th><th>CIF</th><th>Empleado</th><th>UidObs</th><th>Tipo</th><th>Detalle</th><th>Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="lsobs in listaObs" :key="lsobs.id">
+                                <tr v-for="lsobs in listaObsCiudadanos" :key="lsobs.id">
                                     <th scope="row">{{ lsobs.id }}</th>
-                                    <td>{{ lsobs._01cif }}</td>
-                                    <td>{{ lsobs._02uidobs }}</td>
-                                    <td>{{ lsobs._11tipo }}</td>
-                                    <td>{{ lsobs._09detalle }}</td>
+                                    <td>{{ lsobs.cif }}</td>
+                                    <td>{{ lsobs.nombre }}</td>
+                                    <td>{{ lsobs.uidobs }}</td>
+                                    <td>{{ lsobs.tipo }}</td>
+                                    <td>{{ lsobs.detalle }}</td>
                                     <td>
                                         <CButtonGroup role="group">
                                             <CButton color="success" class="font" size="sm" @click="getObsDetalle(lsobs.id)"><CIcon icon="cil-featured-playlist"></CIcon></CButton>
@@ -57,61 +58,72 @@
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
-
         <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
-
+            <!--Input para Tipos de empleado-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Tipo</label>
+                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
                 <div class="col-sm-8">
                     <select v-model="obsall.cif" class="form-control" required="true">
                         <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">{{lte._01detalle}}</option>
                     </select>
                 </div>
             </div>
+            <!--Input para Tipos de empleado-->
 
+            <!--Input para el sexo de cada empleado-->
             <div class="mb-3 row">
                 <label for="sexo" class="col-sm-4 col-form-label">Caracteristica</label>
                 <div class="col-sm-8">
-                <select class="form-control" v-model="obsall.sexo" required="true">
-                    <option value="0">Todos</option>
-                    <option value="1">Femenino</option>
-                    <option value="2">Masculino</option>
-                </select>
+                    <select class="form-control" v-model="obsall.sexo" required="true">
+                        <option value="0">Todos</option>
+                        <option value="1">Femenino</option>
+                        <option value="2">Masculino</option>
+                    </select>
                 </div>
             </div>
+            <!--Input para el sexo de cada empleado-->
 
+            <!--Input para el identificativo de observaciones-->
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obsall.uidobs" required="true">
                 </div>
             </div>
+            <!--Input para el identificativo de observaciones-->
 
+            <!--Input para la fecha de Inicio-->
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
                 <div class="col-sm-8">
                     <input type="date" class="form-control" v-model="obsall.fechainicio" required="true">
                 </div>
             </div>
+            <!--Input para la fecha de Inicio-->
 
+            <!--Input para la fecha Fin-->
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
                 <div class="col-sm-8">
                     <input type="date" class="form-control" v-model="obsall.fechafin" required="true">
                 </div>
             </div>
+            <!--Input para la fecha Fin-->
 
+            <!--Input para el detalle de Obserbacion-->
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
                 <div class="col-sm-8">
                     <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
                 </div>
             </div>
+            <!--Input para el detalle de Obserbacion-->
 
+            <!--Input para el tipo de Observacion-->
             <div class="mb-3 row">
                 <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
                 <div class="col-sm-8">
-                    <select class="form-control" v-model="obsall.tipo" required="true">
+                    <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
                         <option value="Entrada T.">Entrada Tarde</option>
@@ -125,20 +137,25 @@
                     </select>
                 </div>
             </div>
+            <!--Input para el tipo de Observacion-->
 
+            <!--Input para la hora-->
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Hora</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obsall.hora">
                 </div>
             </div>
+            <!--Input para la hora-->
 
+            <!--Input para el Docuemtno-->
             <div class="mb-3 row">
                 <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
                 <div class="col-sm-8">
                     <input type="file" ref="obsfile" class="form-control" @change="selectFile()" required="true">
                 </div>
             </div>
+            <!--Input para el Docuemtno-->
             <hr> 
 
             <div class="mb-3 row text-center" >
@@ -298,6 +315,8 @@ export default {
             listaGestion:[],
             listaObs:[],
             listaTipoEmpleado:[],
+            listaCiudadanoEmpleado:[],
+            listaObsCiudadanos:[],
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
             archivo:'',
             usuario:{
@@ -447,6 +466,39 @@ export default {
             await this.sccService.getListaObs().then((response) =>{
                 this.listaObs = response.data;
             });
+            this.getListaCiudadanoEmpleado();
+        },
+        async getListaCiudadanoEmpleado(){ // Funcion que regresa una lista de Ciudadanos que son Empleados del ModuloEgovf
+            await this.egovfService.getListaEmpleado().then(response => {
+                this.listaCiudadanoEmpleado = response.data;
+            });
+            this.getListaObsCiudadano();
+        },
+        getListaObsCiudadano(){//Funcion que una las listas listaEmpelado y listaCiudadanoEmpleado
+            this.listaObsCiudadanos = [];
+            this.listaCiudadanoEmpleado.forEach(empleado =>{
+                this.listaObs.forEach(obs =>{
+                    var obsCiudadano ={
+                        id:0,
+                        cif:0,
+                        nombre:'',
+                        uidobs:'',
+                        tipo:'',
+                        detalle:''
+                    };
+                    if(empleado.cif == obs._01cif){
+                        obsCiudadano.id = obs.id;
+                        obsCiudadano.cif = obs._01cif;
+                        obsCiudadano.nombre = empleado.nombre + " " +empleado.paterno+" " + empleado.materno;
+                        obsCiudadano.uidobs = obs._02uidobs;
+                        obsCiudadano.tipo = obs._11tipo;
+                        obsCiudadano.detalle = obs._09detalle;
+                        this.listaObsCiudadanos.push(obsCiudadano);
+                        return false;
+                    }
+                    return true;
+                })
+            });
             this.tablaObs();
         },
         getObsDetalle(id){// Funcion que Muestra el detalle de las Observaciones del Usuario
@@ -592,6 +644,20 @@ export default {
                     cifCiudadano:cif
                 }
             });
+        },
+        getTipo(){
+            if(this.obsall.tipo == 'Entrada M.')
+                this.obsall.hora = '08:30';
+            if(this.obsall.tipo == 'Salida M.')
+                this.obsall.hora = '12:30';
+            if(this.obsall.tipo == 'Entrada T.')
+                this.obsall.hora = '14:30';
+            if(this.obsall.tipo == 'Salida T.')
+                this.obsall.hora = '18:30';
+            if(this.obsall.tipo == 'continuo')
+                this.obsall.hora = '16:30';
+            if(this.obsall.tipo == 'asueto')
+                this.obsall.hora = '08:30';
         }
     }
 }

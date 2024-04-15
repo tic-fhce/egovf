@@ -67,22 +67,26 @@
                         </CNav>
 
                         <CTabContent>
+                            <!--Modulos del Empleado-->
                             <CTabPane :visible="tab == 1">
-                                <br>
-                                <CCol :lg="2" class="text-center " v-for="l in listaModuloCif" :key="l.id">
-                                    <br>
-                                    <CCard>
-                                        <CCardImage orientation="top" :src=egovf.foto></CCardImage>
-                                        <CCardBody>
-                                            {{ l._01nombre }}
-                                        </CCardBody>
-                                        <CCardFooter class="text-center">
-                                            <CButton color="success" class="font" @click="getModulo(l._02ruta)">{{ l._01nombre}}</CButton>
-                                        </CCardFooter>
-                                    </CCard>
-                                </CCol>
+                                <CRow>
+                                    <CCol :lg="2" class="text-center " v-for="l in listaModuloCif" :key="l.id">
+                                        <br>
+                                        <CCard>
+                                            <CCardImage orientation="top" :src=egovf.foto></CCardImage>
+                                            <CCardBody>
+                                                {{ l._01nombre }}
+                                            </CCardBody>
+                                            <CCardFooter class="text-center">
+                                                <CButton color="success" class="font" @click="getModulo(l._02ruta)">{{ l._01nombre}}</CButton>
+                                            </CCardFooter>
+                                        </CCard>
+                                    </CCol>
+                                </CRow>
                             </CTabPane>
+                            <!--Modulos del Empleado-->
 
+                            <!--Contratos del Empleado-->
                             <CTabPane :visible="tab == 2">
                                 <br>
                                 <CCol :xs="12" class="table-responsive">
@@ -116,7 +120,9 @@
                                     </table>
                                 </CCol>
                             </CTabPane>
+                            <!--Contratos del Empleado-->
 
+                            <!--Menus del Empleado-->
                             <CTabPane :visible="tab == 3">
                                 <br>
                                 <CCol :xs="12" class="table-responsive">
@@ -148,7 +154,7 @@
                                     </table>
                                 </CCol>
                             </CTabPane>
-
+                            <!--Menus del Empleado-->
                         </CTabContent>    
                     </CCol>
                     <!-- End Tarjetas de Empleado-->
@@ -559,10 +565,16 @@ export default {
                 }
             });
         },
-        // Funcion para registrar al Empleado en un Modulo
-        async addEmpleadoModulo() {
+        async addEmpleadoModulo() {// Funcion para registrar al Empleado en un Modulo
+            var idmenu = 0;
             this.empleado_modulo.cif = this.egovf.cif;
             this.empleado_modulo.id_modulo = this.id_modulo;
+            
+            this.listaModulo.forEach(modulo => {
+                if(modulo.id == this.id_modulo){
+                    idmenu = modulo._04idmenu;
+                }
+            });
             await this.$swal.fire({
                 title: 'Desea Agregar el Modulo al Empleado ?',
                 showDenyButton: true,
@@ -572,6 +584,7 @@ export default {
                 if (result.isConfirmed) {
                     this.empleadoService.addEmpleadoModulo(this.empleado_modulo).then(response => {
                         if (response.status == 200) {
+                            this.menuService.addMenuUsuario(this.empleado_modulo.cif,idmenu).then();
                             this.$swal.fire('El Modulo fue Agregado al Empleado Corectamente', '', 'success').then((res) => {
                                 if (res)
                                     location.reload();

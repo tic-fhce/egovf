@@ -27,18 +27,20 @@
 
                     <!-- Modulos del Empleado-->
                     <CCol :xs="12">
-                        <CCol :lg="2" class="text-center " v-for="l in listaModuloCif" :key="l.id">
-                            <br>
-                            <CCard>
-                                <CCardImage orientation="top" :src=egovf.foto></CCardImage>
-                                <CCardBody>
-                                    {{ l._01nombre }}
-                                </CCardBody>
-                                <CCardFooter class="text-center">
-                                    <CButton color="success" class="font">{{ l._01nombre}}</CButton>
-                                </CCardFooter>
-                            </CCard>
-                        </CCol>    
+                        <CRow>
+                            <CCol :lg="2" class="text-center " v-for="l in listaModuloCif" :key="l.id">
+                                <br>
+                                <CCard>
+                                    <CCardImage orientation="top" :src=egovf.foto></CCardImage>
+                                    <CCardBody>
+                                        {{ l._01nombre }}
+                                    </CCardBody>
+                                    <CCardFooter class="text-center">
+                                        <CButton color="success" class="font">{{ l._01nombre}}</CButton>
+                                    </CCardFooter>
+                                </CCard>
+                            </CCol>    
+                        </CRow>
                     </CCol>
                     <!-- End Modulos del Empleado-->
                     

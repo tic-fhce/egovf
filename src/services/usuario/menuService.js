@@ -32,4 +32,12 @@ export default class MenuService{
         }
         return axios.put(menuUrl+"/updateMenuUsuario",menu);
     }
+    addMenuUsuario(cif,idmenu){
+        const menuUsuario = {
+            _01cif:cif,
+            _02idmenu:idmenu,
+            _03estado:1
+        }
+        return axios.post(menuUrl+"/addMenuUsuario",menuUsuario);
+    }
 }

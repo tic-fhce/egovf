@@ -94,6 +94,10 @@ import {
   cilDevices,
   cilTrash,
   cilHandshake,
+  cilPin,
+  cilScreenSmartphone,
+  cilPrint,
+  cilRss,
   
 } from '@coreui/icons'
 
@@ -167,6 +171,10 @@ export const iconsSet = Object.assign(
     cilDevices,
     cilTrash,
     cilHandshake,
+    cilPin,
+    cilScreenSmartphone,
+    cilPrint,
+    cilRss,
   },
   {
     cifUs,
