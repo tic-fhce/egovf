@@ -4,20 +4,56 @@ import axios from "axios";
 const inventarioUrl="http://192.168.31.45:8093/fhce-egovf-inv/";
 
 export default class InventarioService{
-
-    getListarPc(cif){
-        return axios.get(inventarioUrl+"pc/listar",{
+    //Servicios para CPU
+    getCpuCif(cif){
+        return axios.get(inventarioUrl+"cpu/getCpuCif",{
             params: {
                 cif: cif
             }
         });
     }
-    getListarMonitor(cif){
-        return axios.get(inventarioUrl+"monitor/listar",{
+    addCpu(pc){
+        const pcaux={
+            _01cif:pc.cif,
+            _02codigo:pc.codigo,
+            _03fuente:pc.fuente,
+            _04memorias:pc.memoria,
+            _05capacidad:pc.capacidadram,
+            _06micro:pc.micro,
+            _07micro_capacidad:pc.microcapacidad,
+            _08sistema:pc.sistema,
+            _09disco:pc.disco,
+            _10ip:pc.ip,
+            _11mac:pc.mac,
+            _12dns:pc.dns,
+            _13segmento:pc.segmento,
+            _14cortapico:pc.cortapico,
+            _15detalle:pc.detalle,
+            _16switch:'',
+            _17puerto:'',
+            _18vlan:'',
+            _19idubicacion:pc.ubicacion
+        }
+        return axios.post(inventarioUrl+"cpu/addCpu",pcaux);
+    }
+    //Servicios para el Monitor
+    getMonitorCif(cif){
+        return axios.get(inventarioUrl+"monitor/getMonitorCif",{
             params: {
                 cif: cif
             }
         });
+    }
+    addMonitor(monitor){
+        const monitoraux={
+            _01cif:monitor.cif,
+            _02codigo:monitor.codigo,
+            _03marca:monitor.marca,
+            _04pulgadas:monitor.pulgadas,
+            _05tipo:monitor.tipo,
+            _06idubicacion:monitor.ubicacion
+        }
+        return axios.post(inventarioUrl+"monitor/addMonitor",monitoraux);
     }
     getListarImpresora(cif){
         return axios.get(inventarioUrl+"impresora/listar",{
@@ -34,36 +70,7 @@ export default class InventarioService{
         });
     }
 
-    addPc(pc){
-        const pcaux={
-            _01cif:pc.cif,
-            _02codigo:pc.codigo,
-            _03fuente:pc.fuente,
-            _04memorias:pc.memoria,
-            _05capacidad:pc.capacidadram,
-            _06micro:pc.micro,
-            _07micro_capacidad:pc.capacidadmicro,
-            _08sistema:pc.sistema,
-            _09disco:pc.disco,
-            _10ip:pc.ip,
-            _11mac:pc.mac,
-            _12dns:pc.dns,
-            _13segmento:pc.segmento,
-            _14cortapico:pc.cortapico,
-            _15detalle:pc.detalle
-        }
-        return axios.post(inventarioUrl+"pc/agregarPc",pcaux);
-    }
-    addMonitor(monitor){
-        const monitoraux={
-            _01cif:monitor.cif,
-            _02codigo:monitor.codigo,
-            _03marca:monitor.marca,
-            _04pulgadas:monitor.pulgadas,
-            _05tipo:monitor.tipo
-        }
-        return axios.post(inventarioUrl+"monitor/agregarMonitor",monitoraux);
-    }
+    
     addImpresora(impresora){
         const impresoraaux={
             _01cif:impresora.cif,
@@ -89,7 +96,8 @@ export default class InventarioService{
         const ubicacionaux = {
             _01cif:ubicacion.cif,
             _02ambiente:ubicacion.ambiente,
-            _03ubicacion:ubicacion.ubicacion
+            _03latitud:ubicacion.latitud,
+            _04longitud:ubicacion.longitud
         }
         return axios.post(inventarioUrl+"ubicacion/addUbicacion",ubicacionaux);
     }
