@@ -474,7 +474,7 @@ export default {
             });
             this.getListaObsCiudadano();
         },
-        getListaObsCiudadano(){//Funcion que una las listas listaEmpelado y listaCiudadanoEmpleado
+        getListaObsCiudadano(){//Funcion que une las listas listaEmpelado y listaCiudadanoEmpleado
             this.listaObsCiudadanos = [];
             this.listaCiudadanoEmpleado.forEach(empleado =>{
                 this.listaObs.forEach(obs =>{

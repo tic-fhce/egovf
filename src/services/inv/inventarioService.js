@@ -18,7 +18,7 @@ export default class InventarioService{
             _02codigo:pc.codigo,
             _03fuente:pc.fuente,
             _04memorias:pc.memoria,
-            _05capacidad:pc.capacidadram,
+            _05capacidad:pc.capacidad,
             _06micro:pc.micro,
             _07micro_capacidad:pc.microcapacidad,
             _08sistema:pc.sistema,
@@ -35,6 +35,31 @@ export default class InventarioService{
             _19idubicacion:pc.ubicacion
         }
         return axios.post(inventarioUrl+"cpu/addCpu",pcaux);
+    }
+    updateCpu(pc){
+        const pcaux={
+            id:pc.id,
+            _01cif:pc.cif,
+            _02codigo:pc.codigo,
+            _03fuente:pc.fuente,
+            _04memorias:pc.memoria,
+            _05capacidad:pc.capacidad,
+            _06micro:pc.micro,
+            _07micro_capacidad:pc.microcapacidad,
+            _08sistema:pc.sistema,
+            _09disco:pc.disco,
+            _10ip:pc.ip,
+            _11mac:pc.mac,
+            _12dns:pc.mascara,
+            _13segmento:pc.segmento,
+            _14cortapico:pc.cortapico,
+            _15detalle:pc.detalle,
+            _16switch:pc.switch,
+            _17puerto:pc.puerto,
+            _18vlan:pc.vlan,
+            _19idubicacion:pc.ubicacion
+        }
+        return axios.put(inventarioUrl+"cpu/updateCpu",pcaux);
     }
     //Servicios para el Monitor
     getMonitorCif(cif){
@@ -55,41 +80,79 @@ export default class InventarioService{
         }
         return axios.post(inventarioUrl+"monitor/addMonitor",monitoraux);
     }
-    getListarImpresora(cif){
-        return axios.get(inventarioUrl+"impresora/listar",{
-            params: {
-                cif: cif
-            }
-        });
+    updateMonitor(monitor){
+        const monitoraux={
+            id:monitor.id,
+            _01cif:monitor.cif,
+            _02codigo:monitor.codigo,
+            _03marca:monitor.marca,
+            _04pulgadas:monitor.pulgadas,
+            _05tipo:monitor.tipo,
+            _06idubicacion:monitor.ubicacion
+        }
+        return axios.put(inventarioUrl+"monitor/updateMonitor",monitoraux);
     }
-    getListarTelefono(cif){
-        return axios.get(inventarioUrl+"telefono/listar",{
-            params: {
-                cif: cif
-            }
-        });
-    }
-
-    
+    //Servicios para la Impresora
     addImpresora(impresora){
         const impresoraaux={
             _01cif:impresora.cif,
             _02codigo:impresora.codigo,
             _03marca:impresora.marca,
             _04modelo:impresora.modelo,
-            _05detalle:impresora.detalle
+            _05detalle:impresora.detalle,
+            _06idubicacion:impresora.ubicacion
         }
-        return axios.post(inventarioUrl+"impresora/agregarImpresora",impresoraaux);
+        return axios.post(inventarioUrl+"impresora/addImpresora",impresoraaux);
     }
+    getImpresoraCif(cif){
+        return axios.get(inventarioUrl+"impresora/getImpresoraCif",{
+            params: {
+                cif: cif
+            }
+        });
+    }
+    updateImpresora(impresora){
+        const impresoraaux={
+            id:impresora.id,
+            _01cif:impresora.cif,
+            _02codigo:impresora.codigo,
+            _03marca:impresora.marca,
+            _04modelo:impresora.modelo,
+            _05detalle:impresora.detalle,
+            _06idubicacion:impresora.ubicacion
+        }
+        return axios.put(inventarioUrl+"impresora/updateImpresora",impresoraaux);
+    }
+    //Servicio para Telefono
     addTelefono(telefono){
         const telefonoaux={
             _01cif:telefono.cif,
             _02codigo:telefono.codigo,
             _03marca:telefono.marca,
             _04ip:telefono.ip,
-            _05interno:telefono.interno
+            _05interno:telefono.interno,
+            _06idubicacion:telefono.ubicacion
         }
-        return axios.post(inventarioUrl+"telefono/agregarTelefono",telefonoaux);
+        return axios.post(inventarioUrl+"telefono/addTelefono",telefonoaux);
+    }
+    getTelefonoCif(cif){
+        return axios.get(inventarioUrl+"telefono/getTelefonoCif",{
+            params: {
+                cif: cif
+            }
+        });
+    }
+    updateTelefono(telefono){
+        const telefonoaux={
+            id:telefono.id,
+            _01cif:telefono.cif,
+            _02codigo:telefono.codigo,
+            _03marca:telefono.marca,
+            _04ip:telefono.ip,
+            _05interno:telefono.interno,
+            _06idubicacion:telefono.ubicacion
+        }
+        return axios.put(inventarioUrl+"telefono/updateTelefono",telefonoaux);
     }
     // servicios para Ubicacion
     addUbicacion(ubicacion){
@@ -107,5 +170,15 @@ export default class InventarioService{
                 cif: cif
             }
         });
+    }
+    updateUbicacion(ubicacion){
+        const ubicacionaux = {
+            id: ubicacion.id,
+            _01cif:ubicacion.cif,
+            _02ambiente:ubicacion.ambiente,
+            _03latitud:ubicacion.latitud,
+            _04longitud:ubicacion.longitud
+        }
+        return axios.put(inventarioUrl+"ubicacion/updateUbicacion",ubicacionaux);
     }
 }
