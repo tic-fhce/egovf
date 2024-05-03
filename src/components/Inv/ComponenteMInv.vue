@@ -330,28 +330,28 @@
             <div class="mb-3 row">
                 <label for="ip" class="col-4 col-form-label">IP</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="cpu.ip" required="true">
+                    <input type="text" class="form-control" v-model="cpu.ip" required="true" placeholder="192.168.0.2" >
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label for="mascara" class="col-4 col-form-label">Mascara</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="cpu.mascara" required="true">
+                    <input type="text" class="form-control" v-model="cpu.mascara" required="true" placeholder="255.255.255.0">
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label for="segmento" class="col-4 col-form-label">Segmento</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="cpu.segmento" required="true">
+                    <input type="text" class="form-control" v-model="cpu.segmento" required="true" placeholder="192.168.0.1">
                 </div>
             </div>
 
             <div class="mb-3 row">
                 <label for="mac" class="col-4 col-form-label">MAC</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="cpu.mac" required="true">
+                    <input type="text" class="form-control" v-model="cpu.mac" required="true" placeholder="ab:cd:ef:gh:12">
                 </div>
             </div>
 

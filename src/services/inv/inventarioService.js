@@ -25,7 +25,7 @@ export default class InventarioService{
             _09disco:pc.disco,
             _10ip:pc.ip,
             _11mac:pc.mac,
-            _12dns:pc.dns,
+            _12dns:pc.mascara,
             _13segmento:pc.segmento,
             _14cortapico:pc.cortapico,
             _15detalle:pc.detalle,
@@ -180,5 +180,16 @@ export default class InventarioService{
             _04longitud:ubicacion.longitud
         }
         return axios.put(inventarioUrl+"ubicacion/updateUbicacion",ubicacionaux);
+    }
+    //Servicios para el Servicio
+    getTipo(){
+        return axios.get(inventarioUrl+"tipo/getTipo");
+    }
+    getPerteneceCif(cif){
+        return axios.get(inventarioUrl+"pertenece/getPerteneceCif",{
+            params: {
+                cif: cif
+            }
+        });
     }
 }

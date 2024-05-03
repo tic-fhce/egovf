@@ -117,6 +117,11 @@ const routes = [
         name: 'ModuloInvView',
         component: () => import('@/views/Inv/ModuloInvView.vue')
       },
+      {
+        path: '/umoduloinv',
+        name: 'UModuloInvView',
+        component: () => import('@/views/Usuario/UModuloInvView.vue')
+      },
     ]
   }
 ]
