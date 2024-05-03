@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 //const moduloUrl="https://stfhce.umsa.bo/egovf/fhce/";
-const moduloUrl="http://192.168.31.45:8091/fhce-egovf/";
+const moduloUrl="http://172.16.14.91:8091/fhce-egovf/";
 
 export default class ModuloService{
 

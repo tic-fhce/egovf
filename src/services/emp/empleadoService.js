@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const empleadoUrl="https://stfhce.umsa.bo/fhce-egovf-emp/";
-const empleadoUrl="http://192.168.31.45:8095/fhce-egovf-emp/";
+const empleadoUrl="http://172.16.14.91:8095/fhce-egovf-emp/";
 
 export default class EmpleadoService{
     

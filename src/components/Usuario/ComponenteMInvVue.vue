@@ -37,10 +37,13 @@
                                     <table id="atTabla" class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ID</th><th>Foto</th><th>CIF</th><th>Datos</th><th>Contacto</th><th>Unidad</th><th>Operaciones</th>
+                                                <th>ID</th><th>Codigo</th><th>Solicitud</th><th>Datos Solicitud</th><th>Datos de Solucion</th><th>Estado</th><th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <tr v-for="atencion in listaAtencion" :key="atencion.id">
+                                                <td>{{ atencion.id }}</td><td>{{atencion.codigo}}</td><td>Solicitud</td><td>Datos Solicitud</td><td>Datos de Solucion</td><td>Estado</td><td></td>
+                                            </tr>
                                             
                                         </tbody>
                                     </table>
@@ -208,11 +211,12 @@
         <ComponenteNombres :datos="datos" />
         <CRow>
             <CCol :lg="12">
-                <form action="">
+                <form @submit.prevent="addAtencion()">
+
                     <div class="mb-3 row">
                         <label for="tipo" class="col-sm-4 col-form-label">Revicion a :</label>
                         <div class="col-sm-8">
-                            <select class="form-control" v-model="asistencia.tipo" required="true" @change="getCodigo()">
+                            <select class="form-control" v-model="atencion.tipo" required="true" @change="getCodigo()">
                                 <option v-for="tipo in listaTipo" :key="tipo.id" :value="tipo.id">{{ tipo._01sigla }}</option>
                             </select>
                         </div>
@@ -221,11 +225,28 @@
                     <div class="mb-3 row">
                         <label for="codigo" class="col-sm-4 col-form-label">Codigo :</label>
                         <div class="col-sm-8">
-                            <select class="form-control" v-model="asistencia.codigo" required="true">
+                            <select class="form-control" v-model="atencion.codigo" required="true">
                                 <option v-for="pertenece in lpertenece" :key="pertenece.id"  :value="pertenece.codigo">{{ pertenece.codigo }}</option>
                             </select>
                         </div>
                     </div>
+
+                    <div class="mb-3 row">
+                        <label for="caracteristica" class="col-sm-4 col-form-label">Tipo de Revicion :</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" v-model="atencion.caracteristica" required="true">
+                                <option v-for="tipo in tipocaracteristica" :key="tipo.id"  :value="tipo.id">{{ tipo.detalle }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="detalle" class="col-4 col-form-label">Detalle : </label>
+                        <div class="col-8">
+                            <textarea class="form-control" v-model="atencion.detalle" required="true"></textarea>
+                        </div>
+                    </div>
+
                     <hr> 
 
                     <div class="mb-3 row text-center" >
@@ -252,6 +273,13 @@ import ComponenteNombres from '@/components/Ciudadano/ComponenteNombres.vue';
 import InventarioService from '@/services/inv/inventarioService';
 
 import UploadService from '@/services/upload/uploadService';
+
+//Importamos Herramientas 
+import DataTable from 'datatables.net-vue3';
+import DataTablesLib from 'datatables.net';
+import $ from 'jquery';
+
+DataTable.use(DataTablesLib);
 
 export default {
     name:'ComponenteMInvVue',
@@ -280,6 +308,10 @@ export default {
             listaTipo:[],
             listaPertenece:[],
             lpertenece:[],
+            caracteristica:[],
+            tipocaracteristica:[],
+
+            listaAtencion:[],
 
             getPB:true,
 
@@ -310,11 +342,12 @@ export default {
                 nombre:'',
                 apellido:''
             },
-            asistencia:{
+            atencion:{
                 cif:0,
                 codigo:0,
                 tipo:0,
-                caracteristica:0
+                caracteristica:0,
+                detalle:''
             }
         }
     },
@@ -331,6 +364,7 @@ export default {
         if(this.egovf.cif > 0 && this.getPB)
         {
             this.getPB = false; // cambiamos el valor para evitar la actualizacion constante
+            this.getAtencionCif();
             this.getUbicacionCif();
             this.getCpuCif();
             this.getMonitorCif();
@@ -338,14 +372,26 @@ export default {
             this.getTelefonoCif();
             this.getTipo();
             this.getPerteneceCif();
-            
+            this.getCaracteristica();
         }
         this.datos.cif = this.egovf.cif;
         this.datos.nombre = this.egovf.nombre;
         this.datos.apellido = this.egovf.paterno+' '+this.egovf.materno;
     },
     methods:{
+        tablaAtencion(){
+            this.$nextTick(()=>{
+                $('#atTabla').DataTable();
+            });
+        },
+        async getAtencionCif(){
+            await this.inventarioService.getAtencionCif(this.egovf.cif).then(response => {
+                this.listaAtencion = response.data;
+            });
+            console.log(this.listaAtencion);
+            this.tablaAtencion();
 
+        },
         async getUbicacionCif(){
             await this.inventarioService.getUbicacionCif(this.egovf.cif).then(response => {
                 this.listaUbicacion = response.data;
@@ -383,22 +429,72 @@ export default {
             });
         },
         getCodigo(){
-            var tipo = this.asistencia.tipo 
-            if(this.asistencia.tipo == 5)
+            var tipo = this.atencion.tipo 
+            if(this.atencion.tipo == 5)
             {
                 tipo = 1;
             }
             this.lpertenece = [];
-            var e ={
-                id:0,
-                codigo:0
-            };
             this.listaPertenece.forEach(pertenece => {
+                var e ={
+                    id:0,
+                    codigo:0
+                };
                 if(pertenece._06idtipo == tipo){
                     e.id = pertenece.id;
                     e.codigo = pertenece._02codigo;
                     this.lpertenece.push(e);
                     return false;
+                }
+            });
+            this.getTipoCaracteristica();
+        },
+        async getCaracteristica(){
+            await this.inventarioService.getCaracteristica().then(response => {
+                this.caracteristica = response.data;
+            });
+
+        },
+        getTipoCaracteristica(){
+            this.tipocaracteristica = [];
+            this.caracteristica.forEach(c => {
+                var e = {
+                    id:0,
+                    idtipo:0,
+                    detalle:''
+                };
+                if(c._01idtipo == this.atencion.tipo){
+                    e.id = c.id;
+                    e.idtipo = c._01idtipo;
+                    e.detalle = c._02detalle;
+                    this.tipocaracteristica.push(e);
+                }
+            });
+        },
+        async addAtencion(){// funcion para Solicitar Una Atencion
+            this.atencion.cif = this.egovf.cif;
+            await this.$swal.fire({
+                title: 'Desea Solicitar Asistencia Tecnica ?',
+                showDenyButton: true,
+                icon:'info',
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.inventarioService.addAtencion(this.atencion).then(response =>{
+                        if(response.status == 200){
+                            this.$swal.fire('La Solicitud fue enviada a la unidad correctamente, espere la llamada de los técnicos correspondientes.','', 'success').then((res)=>{
+                                if(res)
+                                    location.reload();
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error', ''+ response.status, 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });
         },
