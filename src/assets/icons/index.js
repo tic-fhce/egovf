@@ -98,6 +98,8 @@ import {
   cilScreenSmartphone,
   cilPrint,
   cilRss,
+  cilFolderOpen,
+  cilLan,
   
 } from '@coreui/icons'
 
@@ -175,6 +177,8 @@ export const iconsSet = Object.assign(
     cilScreenSmartphone,
     cilPrint,
     cilRss,
+    cilFolderOpen,
+    cilLan,
   },
   {
     cifUs,

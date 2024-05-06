@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const inventarioUrl="https://stfhce.umsa.bo/fhce-egovf-inv/";
-const inventarioUrl="http://172.16.14.91:8093/fhce-egovf-inv/";
+const inventarioUrl="http://192.168.31.45:8093/fhce-egovf-inv/";
 
 export default class InventarioService{
     //Servicios para CPU
@@ -216,6 +216,32 @@ export default class InventarioService{
         return axios.get(inventarioUrl+"atencion/getAtencionCif",{
             params: {
                 cif: cif
+            }
+        });
+    }
+    updateAtencion(atencion){
+        const atencionaux = {
+            id:atencion.id,
+            _01cif:atencion.cif,
+            _02codigo:atencion.codigo,
+            _03fechasolicitud:'',
+            _04horasolicitud:'',
+            _05idtipo:atencion.idtipo,
+            _06idcaracteristica:atencion.idcaracteristica,
+            _07especificacion:atencion.especificacion,
+            _08error:'',
+            _09detalle:'',
+            _10fechaatencion:'',
+            _11horaatencion:'',
+            _12estado:atencion.estado
+
+        }
+        return axios.put(inventarioUrl+"atencion/updateAtencion",atencionaux);
+    }
+    getListaEquipo(idtipo){
+        return axios.get(inventarioUrl+"equipo/getListaEquipo",{
+            params: {
+                id: idtipo
             }
         });
     }

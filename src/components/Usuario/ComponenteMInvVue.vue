@@ -30,19 +30,36 @@
 
                     <CTabContent>
 
-                        <!--Lista de CPU del Empleado-->
+                        <!--Lista de At del Empleado-->
                         <CTabPane :visible="tabInv == 1">
                             <CRow>
                                 <CCol :lg="12" class="table-responsive">
                                     <table id="atTabla" class="table table-striped table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ID</th><th>Codigo</th><th>Solicitud</th><th>Datos Solicitud</th><th>Datos de Solucion</th><th>Estado</th><th></th>
+                                                <th>ID</th><th>Resumen</th><th>Datos de Solicitud</th><th>Datos de Solucion</th><th>Estado</th><th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="atencion in listaAtencion" :key="atencion.id">
-                                                <td>{{ atencion.id }}</td><td>{{atencion.codigo}}</td><td>Solicitud</td><td>Datos Solicitud</td><td>Datos de Solucion</td><td>Estado</td><td></td>
+                                                <td>{{ atencion.id }}</td>                                                
+                                                <td>{{ atencion.equipo }}<br>{{ atencion.codigo }}</td>
+                                                <td>
+                                                    Fecha : {{ atencion.fechasolicitud }}<br>Hora : {{ atencion.horasolicitud }}
+                                                </td>
+                                                <td>
+                                                    Fecha : {{ atencion.fechaatencion }}<br>Hora : {{ atencion.atencion }}
+                                                </td>
+                                                <td>
+                                                    <CBadge color="success" v-if="atencion.estado === 1 ">Solicitud Atendida</CBadge>
+                                                    <CBadge color="warning" v-else>En Espera</CBadge>
+                                                </td>
+                                                <td>
+                                                    <CButtonGroup role="group">
+                                                        <CButton color="success" class="font" size="sm" @click="getAtencionDetalle(atencion.id)"><CIcon icon="cil-featured-playlist"></CIcon></CButton>
+                                                        <CButton color="warning" class="font" size="sm" @click="getAtUpdate(atencion.id)"><CIcon icon="cil-pencil"></CIcon></CButton>
+                                                    </CButtonGroup> 
+                                                </td>
                                             </tr>
                                             
                                         </tbody>
@@ -50,7 +67,7 @@
                                 </CCol>
                             </CRow>
                         </CTabPane>
-                        <!-- End Lista de CPU del Empleado-->
+                        <!-- End Lista de At del Empleado-->
 
                         <!--Lista de CPU del Empleado-->
                         <CTabPane :visible="tabInv == 2">
@@ -86,7 +103,7 @@
                                                     Vlan : {{ cpu.vlan }} 
                                                 </td>
                                                 <td>
-                                                    Fehca de Adicion : {{ cpu.fecha_add }}<br>Fecha de Traspaso : {{ cpu.fecha_del }}<br>Estado : <CBadge color="success" v-if="cpu.estado == 1">Activo</CBadge><CBadge color="danger" v-else>Inactivo</CBadge>
+                                                    Fecha de Adicion : {{ cpu.fecha_add }}<br>Fecha de Traspaso : {{ cpu.fecha_del }}<br>Estado : <CBadge color="success" v-if="cpu.estado == 1">Activo</CBadge><CBadge color="danger" v-else>Inactivo</CBadge>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -214,8 +231,8 @@
                 <form @submit.prevent="addAtencion()">
 
                     <div class="mb-3 row">
-                        <label for="tipo" class="col-sm-4 col-form-label">Revicion a :</label>
-                        <div class="col-sm-8">
+                        <label for="tipo" class="col-4 col-form-label">Revicion a :</label>
+                        <div class="col-8">
                             <select class="form-control" v-model="atencion.tipo" required="true" @change="getCodigo()">
                                 <option v-for="tipo in listaTipo" :key="tipo.id" :value="tipo.id">{{ tipo._01sigla }}</option>
                             </select>
@@ -223,8 +240,8 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="codigo" class="col-sm-4 col-form-label">Codigo :</label>
-                        <div class="col-sm-8">
+                        <label for="codigo" class="col-4 col-form-label">Codigo :</label>
+                        <div class="col-8">
                             <select class="form-control" v-model="atencion.codigo" required="true">
                                 <option v-for="pertenece in lpertenece" :key="pertenece.id"  :value="pertenece.codigo">{{ pertenece.codigo }}</option>
                             </select>
@@ -232,8 +249,8 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="caracteristica" class="col-sm-4 col-form-label">Tipo de Revicion :</label>
-                        <div class="col-sm-8">
+                        <label for="caracteristica" class="col-4 col-form-label">Tipo de Revicion :</label>
+                        <div class="col-8">
                             <select class="form-control" v-model="atencion.caracteristica" required="true">
                                 <option v-for="tipo in tipocaracteristica" :key="tipo.id"  :value="tipo.id">{{ tipo.detalle }}</option>
                             </select>
@@ -250,7 +267,7 @@
                     <hr> 
 
                     <div class="mb-3 row text-center" >
-                        <div class="col-sm-12 ">
+                        <div class="col-12 ">
                             <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Solicitar Asistencia Tecnica</button>
                         </div>
                     </div>
@@ -264,6 +281,131 @@
 </CModal>
 <!-- END Modal  AT-->
 
+
+<!-- Modal  Atencion Update -->
+<CModal :visible="modalAtencionDetalle" @close="clickModalAtencionDetalle(false)" size='lg'>
+    <CModalHeader class="headercolor" dismiss @close="clickModalAtencionDetalle(false)">
+        <CModalTitle>
+            <h5>Detalle Solicitud de Asistencia Tecnica</h5>
+        </CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+        <ComponenteNombres :datos="datos" />
+        <CRow>
+            <CCol :lg="12">
+                <CAlert color="success" v-if="atencionDetalle.estado === 1">Atendido</CAlert>
+                <CAlert color="warning" v-else>En Espera</CAlert>
+
+                <div class="mb-3 row">
+                    <label for="id" class="col-4 col-form-label"><strong>ID : </strong> {{ atencionDetalle.id }}</label>
+                    <label for="tipo" class="col-4 col-form-label"><strong>Tipo : </strong>{{ atencionDetalle.equipo }}</label>
+                    <label for="tipo" class="col-4 col-form-label"><strong>Codigo : </strong>{{ atencionDetalle.codigo}}</label>
+                </div>
+                <hr>
+                <div class="mb-3 row">
+                    <label for="fecha" class="col-6 col-form-label"><strong>Fecha de Solicitud : </strong></label>
+                    <label for="fecha" class="col-6 col-form-label">{{ atencionDetalle.fechasolicitud }} {{ atencionDetalle.horasolicitud }}</label>                    
+                </div>
+                
+                <div class="mb-3 row">
+                    <div class="col-4">
+                        <ul>
+                            <li v-for="resumen in atencionDetalle.resumen" :key="resumen.id">{{ resumen }}</li>                            
+                        </ul>
+                    </div>
+                    <div class="col-8">
+                        <ul>
+                            <li>Caracteristica : {{ atencionDetalle.caracteristica }}</li>
+                            <li>Detalle : {{ atencionDetalle.especificacion }}</li>                            
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="mb-3 row">
+                    <label for="fecha" class="col-6 col-form-label"><strong>Fecha de Atencion : </strong></label>
+                    <label for="fecha" class="col-6 col-form-label">{{ atencionDetalle.fechaatencion }} {{ atencionDetalle.horaatencion }}</label>                    
+                </div>
+                
+                <div class="mb-3 row">
+                    <label for="fecha" class="col-6 col-form-label">Error Encontrado : {{atencionDetalle.error}}</label>
+                    <label for="fecha" class="col-6 col-form-label">Solucion : {{atencionDetalle.detalle}}</label>
+                </div>
+            </CCol>
+        </CRow>
+    </CModalBody>
+    <CModalFooter>
+        <CButton @click="clickModalAtencionDetalle(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+    </CModalFooter>
+</CModal>
+<!-- END Modal  Atencion Detalle-->
+
+<!-- Modal  AT -->
+<CModal :visible="modalAtUpdate" @close="clickModalAtUpdate(false)">
+    <CModalHeader class="headercolor" dismiss @close="clickModalAtUpdate(false)">
+        <CModalTitle>
+            <h5>Editar Solicitud de Asistencia Tecnica</h5>
+        </CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+        <ComponenteNombres :datos="datos" />
+        <CRow>
+            <CCol :lg="12">
+                <form @submit.prevent="updateAtencion()">
+
+                    <div class="mb-3 row">
+                        <label for="tipo" class="col-4 col-form-label">Revicion a :</label>
+                        <div class="col-8">
+                            <select class="form-control" v-model="atencionDetalle.idtipo" required="true" @change="getCodigoUpdate()">
+                                <option v-for="tipo in listaTipo" :key="tipo.id" :value="tipo.id">{{ tipo._01sigla }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="codigo" class="col-4 col-form-label">Codigo :</label>
+                        <div class="col-8">
+                            <select class="form-control" v-model="atencionDetalle.codigo" required="true">
+                                <option v-for="pertenece in lpertenece" :key="pertenece.id"  :value="pertenece.codigo">{{ pertenece.codigo }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="caracteristica" class="col-4 col-form-label">Tipo de Revicion :</label>
+                        <div class="col-8">
+                            <select class="form-control" v-model="atencionDetalle.idcaracteristica" required="true">
+                                <option v-for="tipo in tipocaracteristica" :key="tipo.id"  :value="tipo.id">{{ tipo.detalle }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
+                        <label for="detalle" class="col-4 col-form-label">Detalle : </label>
+                        <div class="col-8">
+                            <textarea class="form-control" v-model="atencionDetalle.especificacion" required="true">
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <hr> 
+
+                    <div class="mb-3 row text-center" >
+                        <div class="col-12 ">
+                            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Solicitud de Asistencia Tecnica</button>
+                        </div>
+                    </div>
+                </form>
+            </CCol>
+        </CRow>
+    </CModalBody>
+    <CModalFooter>
+        <CButton @click="clickModalAtUpdate(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+    </CModalFooter>
+</CModal>
+<!-- END Modal  AT-->
+
+
 </template>
 
 <script>
@@ -271,8 +413,6 @@
 import ComponenteNombres from '@/components/Ciudadano/ComponenteNombres.vue';
 //Importamos Servicios
 import InventarioService from '@/services/inv/inventarioService';
-
-import UploadService from '@/services/upload/uploadService';
 
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
@@ -291,14 +431,8 @@ export default {
         return{
             tabInv:1,
             modalAt:false,
-            modalBiometrico:false,
-            modalHorario:false,
-            modalObs:false,
-            modalObsEditar:false,
-            modalMes:false,
-            modalDias:false,
-            
-            uploadService:null,
+            modalAtUpdate:false,
+            modalAtencionDetalle:false,
             inventarioService:null,
             listaUbicacion:[],
             listaCpu:[],
@@ -310,12 +444,8 @@ export default {
             lpertenece:[],
             caracteristica:[],
             tipocaracteristica:[],
-
             listaAtencion:[],
-
             getPB:true,
-
-            archivo:'',
             egovf:{
                 idPersona:0,
                 nombre:'',
@@ -348,31 +478,42 @@ export default {
                 tipo:0,
                 caracteristica:0,
                 detalle:''
+            },
+            atencionDetalle:{
+                id:0,
+                cif:0,
+                codigo:'',
+                fechasolicitud:'',
+                horasolicitud:'',
+                equipo:'',
+                idtipo:0,
+                idcaracteristica:0,
+                resumen:[],
+                caracteristica:'',
+                especificacion:'',
+                error:'',
+                detalle:'',
+                fechaatencion:'',
+                horaatencion:'',
+                estado:''
             }
         }
     },
     created(){
         //Creamos los Sercicios
-        this.uploadService = new UploadService();
         this.inventarioService = new InventarioService();
     },
     mounted(){
-        
     },
     updated(){
         this.egovf = this.mscc; // pasamos el props a objeto egovf
         if(this.egovf.cif > 0 && this.getPB)
         {
             this.getPB = false; // cambiamos el valor para evitar la actualizacion constante
-            this.getAtencionCif();
-            this.getUbicacionCif();
-            this.getCpuCif();
-            this.getMonitorCif();
-            this.getImpresoraCif();
-            this.getTelefonoCif();
-            this.getTipo();
-            this.getPerteneceCif();
-            this.getCaracteristica();
+            this.getAtencionCif(); // Llamamos las Atenciones del empleado
+            this.getTipo(); // Llamamos el tipo de equipo registrado para el empleado
+            this.getPerteneceCif(); // llamamos una lista de equipos pertenecientes al empleado 
+            this.getCaracteristica(); // llamamos una lista de posibles caracteristicas de fallas para la atencion
         }
         this.datos.cif = this.egovf.cif;
         this.datos.nombre = this.egovf.nombre;
@@ -384,51 +525,54 @@ export default {
                 $('#atTabla').DataTable();
             });
         },
-        async getAtencionCif(){
+        async getAtencionCif(){ // Funcion que trae una lista de atenciones del empleado
             await this.inventarioService.getAtencionCif(this.egovf.cif).then(response => {
                 this.listaAtencion = response.data;
+                this.tablaAtencion();
+                this.getUbicacionCif(); // llamamos una lista de ubicaciones del empleado 
             });
-            console.log(this.listaAtencion);
-            this.tablaAtencion();
-
         },
-        async getUbicacionCif(){
+        async getUbicacionCif(){// Funcion que trae una lista de Ubicaciones del usuario
             await this.inventarioService.getUbicacionCif(this.egovf.cif).then(response => {
                 this.listaUbicacion = response.data;
+                this.getCpuCif();// llamamos una lista de Cpu del en pleado
             });
         },
         async getCpuCif(){// funcion que trae una lista de cpus del empleado
             await this.inventarioService.getCpuCif(this.egovf.cif).then(response => {
                 this.listaCpu = response.data;
+                this.getMonitorCif();
             });
         },
-        async getMonitorCif(){// funcion que trae una lista de Monitores
+        async getMonitorCif(){// funcion que trae una lista de Monitores del empleado
             await this.inventarioService.getMonitorCif(this.egovf.cif).then(response => {
                 this.listaMonitor = response.data;
+                this.getImpresoraCif(); //llamamos una lista de Impresoras del empleado
             });
         },
-        async getImpresoraCif(){
+        async getImpresoraCif(){//Funcion que trae una lista de Impresoras del empleado
             await this.inventarioService.getImpresoraCif(this.egovf.cif).then(response => {
                 this.listaImpresora = response.data;
+                this.getTelefonoCif(); //llamamos una lista de telefonos
             });
         },
-        async getTelefonoCif(){
+        async getTelefonoCif(){//Funcion que trae una lista de telefonos del empleado
             await this.inventarioService.getTelefonoCif(this.egovf.cif).then(response => {
                 this.listaTelefono = response.data;
             });
         },
 
-        async getTipo(){
+        async getTipo(){//Funcion que trae una lista de tipos de equipos
             await this.inventarioService.getTipo().then(response => {
                 this.listaTipo = response.data;
             });
         },
-        async getPerteneceCif(){
+        async getPerteneceCif(){// Funcion que trae uan lista de equipos pertenecientes al empleado
             await this.inventarioService.getPerteneceCif(this.egovf.cif).then(response => {
                 this.listaPertenece = response.data;
             });
         },
-        getCodigo(){
+        getCodigo(){//Funcion que nos debuelve una lista de codigos del equipo
             var tipo = this.atencion.tipo 
             if(this.atencion.tipo == 5)
             {
@@ -447,15 +591,35 @@ export default {
                     return false;
                 }
             });
-            this.getTipoCaracteristica();
+            this.getTipoCaracteristica();// llamamos una lista de caracteristicas de errores 
         },
-        async getCaracteristica(){
+        getCodigoUpdate(){// Funcion que nos debuelve una lista de codigos para realizar uan actualzacion
+            var tipo = this.atencionDetalle.idtipo 
+            if(this.atencionDetalle.idtipo == 5)
+            {
+                tipo = 1;
+            }
+            this.lpertenece = [];
+            this.listaPertenece.forEach(pertenece => {
+                var e ={
+                    id:0,
+                    codigo:0
+                };
+                if(pertenece._06idtipo == tipo){
+                    e.id = pertenece.id;
+                    e.codigo = pertenece._02codigo;
+                    this.lpertenece.push(e);
+                    return false;
+                }
+            });
+            this.getTipoCaracteristicaUpdate();// llamamos una lista de caracteristicas para la actualizacion
+        },
+        async getCaracteristica(){// Funcion que trae una lista de Caracteristicas de error
             await this.inventarioService.getCaracteristica().then(response => {
                 this.caracteristica = response.data;
             });
-
         },
-        getTipoCaracteristica(){
+        getTipoCaracteristica(){// Funcion que permite unir y discriminar el tipo de caracteristica 
             this.tipocaracteristica = [];
             this.caracteristica.forEach(c => {
                 var e = {
@@ -471,7 +635,23 @@ export default {
                 }
             });
         },
-        async addAtencion(){// funcion para Solicitar Una Atencion
+        getTipoCaracteristicaUpdate(){// Funcion que permite unir y discriminar el tipo de caracteristica para la Actualizacion
+            this.tipocaracteristica = [];
+            this.caracteristica.forEach(c => {
+                var e = {
+                    id:0,
+                    idtipo:0,
+                    detalle:''
+                };
+                if(c._01idtipo == this.atencionDetalle.idtipo){
+                    e.id = c.id;
+                    e.idtipo = c._01idtipo;
+                    e.detalle = c._02detalle;
+                    this.tipocaracteristica.push(e);
+                }
+            });
+        },
+        async addAtencion(){// funcion para Agregar  Una Atencion
             this.atencion.cif = this.egovf.cif;
             await this.$swal.fire({
                 title: 'Desea Solicitar Asistencia Tecnica ?',
@@ -499,40 +679,86 @@ export default {
             });
         },
 
-        selectFile(){// Funcion que permite cambiar los datos del archivo
-            this.archivo = this.$refs.file.files[0];
+        async updateAtencion(){// funcion para Actualizar Una Atencion
+            await this.$swal.fire({
+                title: 'Desea Actualizar su Solicitud Asistencia Tecnica ?',
+                showDenyButton: true,
+                icon:'info',
+                confirmButtonText: 'Aceptar',
+                denyButtonText: 'Cancelar',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.inventarioService.updateAtencion(this.atencionDetalle).then(response =>{
+                        if(response.status == 200){
+                            this.$swal.fire('La Solicitud fue Actualizada y enviada a la unidad correctamente, espere la llamada de los técnicos correspondientes.','', 'success').then((res)=>{
+                                if(res)
+                                    location.reload();
+                            });
+                        }
+                        else{
+                            this.$swal.fire('Los Datos no fueron Guardados Error', ''+ response.status, 'error');
+                        }
+                    });
+                    
+                } else if (result.isDenied) {
+                    this.$swal.fire('Datos Cancelados', '', 'info');
+                }
+            });
         },
-        async downloadImg(Url,nombre) {// Funcion que permite Descargar imagen o documento
-            const blob = await (await fetch(Url)).blob();
-            const url = URL.createObjectURL(blob);
-            Object.assign(document.createElement('a'), { href: url, download: nombre }).click();
-            URL.revokeObjectURL(url);
+        getAtencionDetalle(id){// Funcion que Muestra el detalle de las Atenciones del Empleado
+            this.listaAtencion.forEach(atencion =>{
+                if(atencion.id === id){
+                    this.atencionDetalle.id = atencion.id,
+                    this.atencionDetalle.cif = atencion.cif,
+                    this.atencionDetalle.codigo = atencion.codigo,
+                    this.atencionDetalle.fechasolicitud = atencion.fechasolicitud,
+                    this.atencionDetalle.horasolicitud = atencion.horasolicitud,
+                    this.atencionDetalle.equipo = atencion.equipo,
+                    this.atencionDetalle.resumen = atencion.resumen,
+                    this.atencionDetalle.caracteristica = atencion.caracteristica,
+                    this.atencionDetalle.especificacion = atencion.especificacion,
+                    this.atencionDetalle.error = atencion.error,
+                    this.atencionDetalle.detalle = atencion.detalle,
+                    this.atencionDetalle.fechaatencion = atencion.fechaatencion,
+                    this.atencionDetalle.horaatencion = atencion.horaatencion,
+                    this.atencionDetalle.estado = atencion.estado
+                }
+            });
+            this.clickModalAtencionDetalle(true);
         },
-        clicktabScc(tabH){
-            this.tabScc = tabH;
+        getAtUpdate(id){// Funcion para editar las Atenciones del Empleado
+            this.listaAtencion.forEach(atencion =>{
+                if(atencion.id === id){
+                    this.atencionDetalle.id = atencion.id,
+                    this.atencionDetalle.cif = atencion.cif,
+                    this.atencionDetalle.codigo = atencion.codigo,
+                    this.atencionDetalle.fechasolicitud = atencion.fechasolicitud,
+                    this.atencionDetalle.horasolicitud = atencion.horasolicitud,
+                    this.atencionDetalle.equipo = atencion.equipo,
+                    this.atencionDetalle.resumen = atencion.resumen,
+                    this.atencionDetalle.caracteristica = atencion.caracteristica,
+                    this.atencionDetalle.especificacion = atencion.especificacion,
+                    this.atencionDetalle.error = atencion.error,
+                    this.atencionDetalle.detalle = atencion.detalle,
+                    this.atencionDetalle.fechaatencion = atencion.fechaatencion,
+                    this.atencionDetalle.horaatencion = atencion.horaatencion,
+                    this.atencionDetalle.estado = atencion.estado,
+                    this.atencionDetalle.idtipo = atencion.idtipo,
+                    this.atencionDetalle.idcaracteristica = atencion.idcaracteristica
+                }
+            });
+            this.getCodigoUpdate();
+            this.clickModalAtUpdate(true);
         },
         clickModalAt(at){
             this.modalAt = at;
         },
-        clickModalObs(cio){
-            this.modalObs = cio;
+        clickModalAtUpdate(at){
+            this.modalAtUpdate = at;
         },
-        clickModalObsEditar(cio){
-            this.modalObsEditar = cio;
+        clickModalAtencionDetalle(detalle){
+            this.modalAtencionDetalle = detalle;
         },
-        clickModalMes(rmes){
-            if(this.egovf.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
-                this.getFotoPerfil()
-            else
-                this.modalMes = rmes;
-        },
-        clickModalDias(dias){
-            if(this.egovf.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
-                this.getFotoPerfil()
-            else
-                this.modalDias = dias;
-        },
-
         clicktabInv(tabI){
             this.tabInv = tabI;
         },

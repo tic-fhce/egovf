@@ -15,12 +15,6 @@ import EgovfService from '@/services/egovf/egovfService';
 import EmpleadoService from '@/services/emp/empleadoService';
 // End
 
-//Importamos Herramientas 
-import DataTable from 'datatables.net-vue3';
-import DataTablesLib from 'datatables.net';
-import $ from 'jquery';
-
-DataTable.use(DataTablesLib);
 
 export default {
     name:'UModuloInvView',
@@ -90,11 +84,6 @@ export default {
         this.getEmpleado();
     },
     methods:{
-        tabla(){
-            this.$nextTick(()=>{
-            $('#atTabla').DataTable();
-            });
-        },
         getDatos(){
             //cargamos datos del Usuario
             if(this.$cookies.get('cif')!=null){
@@ -106,7 +95,6 @@ export default {
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
             }
-            this.tabla();
         },
         async getEgovf(){
             this.egovfService.headersUsuario(this.usuario.token);

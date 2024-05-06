@@ -122,6 +122,16 @@ const routes = [
         name: 'UModuloInvView',
         component: () => import('@/views/Usuario/UModuloInvView.vue')
       },
+      {
+        path: '/inventario',
+        name: 'InventarioInvView',
+        component: () => import('@/views/Inv/InventarioInvView.vue')
+      },
+      {
+        path: '/listaInventario:idtipo',
+        name: 'ListaInventarioView',
+        component: () => import('@/views/Inv/ListaInventarioView.vue')
+      },
     ]
   }
 ]
