@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <form>
                             <div class="mb-3 mt-2">
-                                <select class="form-control" v-model="selector" v-on:change="seleccionar()" required>
+                                <select class="form-control" v-model="selector" v-on:change="seleccionar()">
                                     <option value="0">Seleccionar Metodo de Identificacion</option>
                                     <option value="1">CIF</option>
                                     <option value="2">Matricula</option>

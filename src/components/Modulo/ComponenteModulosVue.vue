@@ -32,38 +32,40 @@
 
 <!-- Modal  MOdulo-->
 <CModal :visible="modalModulo" @close="clickModalModulo(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
-        <CModalTitle>
-            <h5>Agregar Modulos</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        
-        <div class="mb-3 row">
-            <h4 class="card-title">CIF : {{egovf.cif}}</h4>
-        </div>
-        <div class="mb-3 row">
-            <label for="nombre" class="col-4">Nombre : </label>
-            <label for="nombre" class="col-8">{{egovf.nombre}}</label>
-        </div>
-        <div class="mb-3 row">
-            <label for="apellido" class="col-4">Apellidos : </label>
-            <label for="nombre" class="col-8">{{egovf.paterno}} {{egovf.materno}}</label>
-        </div>
-        <hr>
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Modulo</label>
-            <div class="col-sm-6">
-                <select v-model="id_modulo" class="form-control">
-                    <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">{{lm._01nombre}}</option>
-                </select>
+    <form @submit.prevent="addModulo()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
+            <CModalTitle>
+                <h5>Agregar Modulos</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            
+            <div class="mb-3 row">
+                <h4 class="card-title">CIF : {{egovf.cif}}</h4>
             </div>
-        </div>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="addModulo()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar</CButton>
-    </CModalFooter>
+            <div class="mb-3 row">
+                <label for="nombre" class="col-4">Nombre : </label>
+                <label for="nombre" class="col-8">{{egovf.nombre}}</label>
+            </div>
+            <div class="mb-3 row">
+                <label for="apellido" class="col-4">Apellidos : </label>
+                <label for="nombre" class="col-8">{{egovf.paterno}} {{egovf.materno}}</label>
+            </div>
+            <hr>
+            <div class="mb-3 row">
+                <label for="datos" class="col-6 col-form-label">Modulo</label>
+                <div class="col-6">
+                    <select v-model="id_modulo" class="form-control" required="true">
+                        <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">{{lm._01nombre}}</option>
+                    </select>
+                </div>
+            </div>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Modulo-->
 

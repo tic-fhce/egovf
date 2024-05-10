@@ -1,7 +1,8 @@
 import axios from "axios";
 
 //const eventoUrl="https://stfhce.umsa.bo/fhce-egovf-even/";
-const eventoUrl="http://192.168.31.45:8085/fhce-egovf-even/";
+//const eventoUrl="http://192.168.31.45:8085/fhce-egovf-even/";
+const eventoUrl="http://172.16.114.157:8085/fhce-egovf-even/";
 
 
 export default class EventoService{

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 //const msccUrl="https://stfhce.umsa.bo/fhce-egovf-scc/";
-const msccUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
+//const msccUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
+const msccUrl="http://172.16.114.157:8092/fhce-egovf-scc/";
 
 
 export default class SccService{

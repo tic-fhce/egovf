@@ -37,24 +37,26 @@
 
                     <!-- Verificador del modulo de Empleados-->
                     <CCol :xs="12" v-if="verificado === 0" class=" text-center">
-                        <CCard class="card">
-                            <CCardHeader class="headercolor">
-                                Verificar Modulo Emp
-                            </CCardHeader>
-                            <CCardBody>
-                                <div class="mb-3 row">
-                                    <label for="datos" class="col-sm-6 col-form-label">Tipo de Empleado</label>
-                                    <div class="col-sm-6">
-                                        <select v-model="id_tipoEmpleado" class="form-control">
-                                            <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">{{lte._01detalle}}</option>
-                                        </select>
+                        <form @submit.prevent="addEmpleado()">
+                            <CCard class="card">
+                                <CCardHeader class="headercolor">
+                                    Verificar Modulo Emp
+                                </CCardHeader>
+                                <CCardBody>
+                                    <div class="mb-3 row">
+                                        <label for="datos" class="col-sm-6 col-form-label">Tipo de Empleado</label>
+                                        <div class="col-sm-6">
+                                            <select v-model="id_tipoEmpleado" class="form-control" required="true">
+                                                <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">{{lte._01detalle}}</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                            </CCardBody>
-                            <CCardFooter>
-                                <CButton color="success" class="font" @click="addEmpleado()">Verificar Modulo</CButton>
-                            </CCardFooter>
-                        </CCard>
+                                </CCardBody>
+                                <CCardFooter>
+                                    <button class="btn btn-success font" >Verificar Modulo</button>
+                                </CCardFooter>
+                            </CCard>
+                        </form>
                     </CCol>
                     <!-- End Verificador del modulo de Empleados-->
 
@@ -167,159 +169,165 @@
 
 <!-- Modal  Modulo-->
 <CModal :visible="modalModulo" @close="clickModalModulo(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
-        <CModalTitle>
-            <h5>Agregar Modulos</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Modulo</label>
-            <div class="col-sm-6">
-                <select v-model="id_modulo" class="form-control">
-                    <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">{{lm._01nombre}}</option>
-                </select>
+    <form @submit.prevent="addEmpleadoModulo()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
+            <CModalTitle>
+                <h5>Agregar Modulos</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="datos" class="col-6 col-form-label">Modulo</label>
+                <div class="col-6">
+                    <select v-model="id_modulo" class="form-control" required="true">
+                        <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">{{lm._01nombre}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-       
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton  @click="addEmpleadoModulo()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar Modulo</CButton>
-    </CModalFooter>
+        
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar Modulo</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Modulo-->
 
 <!-- Modal  Contrato-->
 <CModal :visible="modalContrato" @close="clickModalContrato(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
-        <CModalTitle>
-            <h5>Agregar Contrato</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="numero" class="col-sm-6 col-form-label">Numero de Contrato</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true">
+    <form @submit.prevent ="addContrato()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
+            <CModalTitle>
+                <h5>Agregar Contrato</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="numero" class="col-6 col-form-label">Numero de Contrato</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="servicio" class="col-sm-6 col-form-label">Servicios prestados</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="contrato.servicio" placeholder="Servicios Prestados" required="true">
+            <div class="mb-3 row">
+                <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="contrato.servicio" placeholder="Servicios Prestados" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Unidad </label>
-            <div class="col-sm-6">
-                <select v-model="contrato.unidad" class="form-control">
-                    <option v-for="unidad in listaUnidades" :value="unidad._01unidad" :key="unidad.id">{{unidad._01unidad}}</option>
-                </select>
+            <div class="mb-3 row">
+                <label for="datos" class="col-6 col-form-label">Unidad </label>
+                <div class="col-6">
+                    <select v-model="contrato.unidad" class="form-control" required="true">
+                        <option v-for="unidad in listaUnidades" :value="unidad._01unidad" :key="unidad.id">{{unidad._01unidad}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="inicio" class="col-sm-6 col-form-label">Fecha de Inicio</label>
-            <div class="col-sm-6">
-                <input type="date" class="form-control" v-model="contrato.inicio" placeholder="Inicio" required="true">
+            <div class="mb-3 row">
+                <label for="inicio" class="col-6 col-form-label">Fecha de Inicio</label>
+                <div class="col-6">
+                    <input type="date" class="form-control" v-model="contrato.inicio" placeholder="Inicio" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="fin" class="col-sm-6 col-form-label">Fecha de Conclucion </label>
-            <div class="col-sm-6">
-                <input type="date" class="form-control" v-model="contrato.fin" placeholder="fin" required="true">
+            <div class="mb-3 row">
+                <label for="fin" class="col-6 col-form-label">Fecha de Conclucion </label>
+                <div class="col-6">
+                    <input type="date" class="form-control" v-model="contrato.fin" placeholder="fin" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="detalle" class="col-sm-6 col-form-label">Detalle</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true">
+            <div class="mb-3 row">
+                <label for="detalle" class="col-6 col-form-label">Detalle</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true">
+                </div>
             </div>
-        </div>
-       
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalContrato(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton  @click="addContrato()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar Contrato</CButton>
-    </CModalFooter>
+        
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalContrato(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar Contrato</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Modulo-->
 
 <!-- Modal  Editar Contrato-->
 <CModal :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
-        <CModalTitle>
-            <h5>Editar Contrato</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="numero" class="col-sm-6 col-form-label">Numero de Contrato</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true">
+    <form @submit.prevent="updateContrato()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
+            <CModalTitle>
+                <h5>Editar Contrato</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="numero" class="col-6 col-form-label">Numero de Contrato</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="servicio" class="col-sm-6 col-form-label">Servicios prestados</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="setContrato.servicio" placeholder="Servicios Prestados" required="true">
+            <div class="mb-3 row">
+                <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="setContrato.servicio" placeholder="Servicios Prestados" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Unidad </label>
-            <div class="col-sm-6">
-                <select v-model="setContrato.unidad" class="form-control">
-                    <option v-for="unidad in listaUnidades" :value="unidad._01unidad" :key="unidad.id">{{unidad._01unidad}}</option>
-                </select>
+            <div class="mb-3 row">
+                <label for="datos" class="col-6 col-form-label">Unidad </label>
+                <div class="col-6">
+                    <select v-model="setContrato.unidad" class="form-control" required="true">
+                        <option v-for="unidad in listaUnidades" :value="unidad._01unidad" :key="unidad.id">{{unidad._01unidad}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="inicio" class="col-sm-6 col-form-label">Fecha de Inicio</label>
-            <div class="col-sm-6">
-                <input type="date" class="form-control" v-model="setContrato.inicio" placeholder="Inicio" required="true">
+            <div class="mb-3 row">
+                <label for="inicio" class="col-6 col-form-label">Fecha de Inicio</label>
+                <div class="col-6">
+                    <input type="date" class="form-control" v-model="setContrato.inicio" placeholder="Inicio" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="fin" class="col-sm-6 col-form-label">Fecha de Conclucion </label>
-            <div class="col-sm-6">
-                <input type="date" class="form-control" v-model="setContrato.fin" placeholder="fin" required="true">
+            <div class="mb-3 row">
+                <label for="fin" class="col-6 col-form-label">Fecha de Conclucion </label>
+                <div class="col-6">
+                    <input type="date" class="form-control" v-model="setContrato.fin" placeholder="fin" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="fin" class="col-sm-6 col-form-label">Gestion </label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="setContrato.gestion" placeholder="fin" required="true">
+            <div class="mb-3 row">
+                <label for="fin" class="col-6 col-form-label">Gestion </label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="setContrato.gestion" placeholder="fin" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="detalle" class="col-sm-6 col-form-label">Detalle</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true">
+            <div class="mb-3 row">
+                <label for="detalle" class="col-6 col-form-label">Detalle</label>
+                <div class="col-6">
+                    <input type="text" class="form-control" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true">
+                </div>
             </div>
-        </div>
-       
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalEditarContrato(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton  @click="actualizarContrato()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Actualizar Contrato</CButton>
-    </CModalFooter>
+        
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalEditarContrato(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Actualizar Contrato</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Editar Contrato-->
 
@@ -654,7 +662,7 @@ export default {
             });
         },
         // Funcion para Actualizar Un contrato 
-        async actualizarContrato() {
+        async updateContrato() {
             this.usuarioService.headersUsuario(this.usuario.token);
             this.listaUnidades.forEach(element => {
                 if (element._01unidad == this.setContrato.unidad) {

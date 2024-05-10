@@ -43,29 +43,30 @@
 
 <!-- Modal  Ciudadano-->
 <CModal :visible="modalCiudadano" @close="clickModalCiudadano(false)">
+  <form @submit.prevent="registrarCiudadano()">
     <CModalHeader class="headercolor" dismiss @close="clickModalCiudadano(false)">
         <CModalTitle>
-            <h5>Agregar Nuevo Ciudadano</h5>
+          <h4> <CIcon icon="cil-user" size="xl"/> Agregar Nuevo Ciudadano</h4>
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
         
         <div class="mb-3 row">
-            <label for="ci" class="col-sm-6 col-form-label">
+            <label for="ci" class="col-6 col-form-label">
               <p v-if="errorpersona.ci==false"> Celulda de Identidad.</p>
-              <p class="text-danger" v-if="errorpersona.ci"> Celulda de Identidad.</p>
+              <p class="text-danger" v-else> Celulda de Identidad.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <input type="text" class="form-control" v-model="persona.ci" placeholder="Cedula de Identidad" required="true">
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="region" class="col-sm-6 col-form-label">
+            <label for="region" class="col-6 col-form-label">
               <p v-if="errorpersona.complemento==false">Region Exp.</p>
-              <p class="text-danger" v-if="errorpersona.complemento"> Region Exp.</p>
+              <p class="text-danger" v-else> Region Exp.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
                 <select class="form-control" v-model="persona.complemento" required="true">
                   <option>Seleccionar Region Expedida</option>
                   <option value="lp">La Paz</option>
@@ -82,42 +83,42 @@
         </div>
 
         <div class="mb-3 row">
-            <label for="nombre" class="col-sm-6 col-form-label">
+            <label for="nombre" class="col-6 col-form-label">
               <p v-if="errorpersona.nombre==false">Nombres.</p>
-              <p class="text-danger" v-if="errorpersona.nombre">Nombres.</p>
+              <p class="text-danger" v-else>Nombres.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <input type="text" class="form-control" v-model="persona.nombre" placeholder="Nombres" required="true">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="paterno" class="col-sm-6 col-form-label">A. Paterno.</label>
-            <div class="col-sm-6">
+            <label for="paterno" class="col-6 col-form-label">A. Paterno.</label>
+            <div class="col-6">
               <input type="text" class="form-control" v-model="persona.paterno" placeholder="Apellido Paterno">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="materno" class="col-sm-6 col-form-label">A. Materno.</label>
-            <div class="col-sm-6">
+            <label for="materno" class="col-6 col-form-label">A. Materno.</label>
+            <div class="col-6">
               <input type="text" class="form-control" v-model="persona.materno" placeholder="Apellido Materno">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="fecha" class="col-sm-6 col-form-label">
+            <label for="fecha" class="col-6 col-form-label">
               <p v-if="errorpersona.fecha==false">Fecha de Nacimiento.</p>
-              <p class="text-danger" v-if="errorpersona.fecha">Fecha de Nacimiento.</p>
+              <p class="text-danger" v-else>Fecha de Nacimiento.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <input type="date" class="form-control" v-model="persona.fecha" required="true">
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="sexo" class="col-sm-6 col-form-label">
+            <label for="sexo" class="col-6 col-form-label">
               <p v-if="errorpersona.sexo==false">Sexo</p>
-              <p class="text-danger" v-if="errorpersona.sexo">Sexo</p>
+              <p class="text-danger" v-else>Sexo</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <select class="form-control" v-model="persona.sexo" required="true">
                 <option>Seleccionar Sexo</option>
                 <option value="1">Femenino</option>
@@ -127,21 +128,21 @@
         </div>
 
         <div class="mb-3 row">
-            <label for="celular" class="col-sm-6 col-form-label">
+            <label for="celular" class="col-6 col-form-label">
               <p v-if="errorpersona.cel==false">Celular.</p>
-              <p class="text-danger" v-if="errorpersona.cel">Celular.</p>
+              <p class="text-danger" v-else>Celular.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <input type="text" class="form-control" v-model="persona.cel" placeholder="Numero de Celular" required="true">
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="correo" class="col-sm-6 col-form-label">
+            <label for="correo" class="col-6 col-form-label">
               <p v-if="errorpersona.correo==false">E-mail.</p>
-              <p class="text-danger" v-if="errorpersona.correo">E-mail.</p>
+              <p class="text-danger" v-else>E-mail.</p>
             </label>
-            <div class="col-sm-6">
+            <div class="col-6">
               <input type="email" class="form-control" v-model="persona.correo" placeholder="Correo Electronico" required="true">
             </div>
         </div>
@@ -149,8 +150,9 @@
     </CModalBody>
     <CModalFooter>
         <CButton @click="clickModalCiudadano(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="registrarCiudadano()" color="success" class="font"><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
+        <button class="btn btn-success font" ><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</button>
     </CModalFooter>
+  </form>
 </CModal>
 <!-- End Modal  Ciudadano-->
 </template>

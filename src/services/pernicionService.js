@@ -2,7 +2,8 @@ import axios from "axios";
 
 
 //const pernicionUrl="https://stfhce.umsa.bo/egovf/fhce/";
-const pernicionUrl="http://192.168.31.45:8091/fhce-egovf/";
+//const pernicionUrl="http://192.168.31.45:8091/fhce-egovf/";
+const pernicionUrl="http://172.16.114.157:8091/fhce-egovf/";
 
 
 export default class PernicionService{
