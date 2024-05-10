@@ -45,123 +45,127 @@
 
 <!-- Modal  Add Equipo-->
 <CModal :visible="modalEquipo" @close="clickModalEquipo(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalEquipo(false)">
-        <CModalTitle>
-            <h5>Agregar Nuevo Equipo Biometrico</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        
-        <div class="mb-3 row">
-            <label for="detalle" class="col-4">Detalle</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipo.detalle" placeholder="Nombre del lugar donde se encuentra el Equipo Biometrico" required="true">
+    <form @submit.prevent="addEquipo()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalEquipo(false)">
+            <CModalTitle>
+                <h5>Agregar Nuevo Equipo Biometrico</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            
+            <div class="mb-3 row">
+                <label for="detalle" class="col-4">Detalle</label>
+                <div class="col-8">
+                <input type="text" class="form-control" v-model="equipo.detalle" placeholder="Nombre del lugar donde se encuentra el Equipo Biometrico" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="lugar" class="col-4">Lugar</label>
-            <div class="col-8">
-                <input type="text" class="form-control" v-model="equipo.lugar" placeholder="Iniciales del lugar donde se encuentra el Equipo Biometrico" required="true">
+            <div class="mb-3 row">
+                <label for="lugar" class="col-4">Lugar</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipo.lugar" placeholder="Iniciales del lugar donde se encuentra el Equipo Biometrico" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="ip" class="col-4">IP</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipo.ip" placeholder="Ip del equipo Biometrico" required="true">
+            <div class="mb-3 row">
+                <label for="ip" class="col-4">IP</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipo.ip" placeholder="192.168.0.1" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="puerto" class="col-4">Puerto</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipo.puerto" placeholder="Puerto del Equipo Biometrico">
+            <div class="mb-3 row">
+                <label for="puerto" class="col-4">Puerto</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipo.puerto" placeholder="0000" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="mac" class="col-4">MAC</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipo.mac" placeholder="MAC del equipo Biometrico">
+            <div class="mb-3 row">
+                <label for="mac" class="col-4">MAC</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipo.mac" placeholder="ab:cd:ef:12:34" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="codigo" class="col-4">Codigo</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipo.codigo" required="true" placeholder="Codigo de inventario del equipo">
+            <div class="mb-3 row">
+                <label for="codigo" class="col-4">Codigo</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipo.codigo" required="true" placeholder="Codigo de inventario del equipo">
+                </div>
             </div>
-        </div>
 
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalEquipo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="addEquipo()" color="success" class="font"><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalEquipo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Add Equipo-->
 
 <!-- Modal  Update Equipo-->
 <CModal :visible="modalEquipoUpdate" @close="clickModalEquipoUpdate(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalEquipoUpdate(false)">
-        <CModalTitle>
-            <h5>Actualizar Equipo Biometrico</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        
-        <div class="mb-3 row">
-            <label for="detalle" class="col-4">Detalle</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipoUpdate.detalle" placeholder="Nombre del lugar donde se encuentra el Equipo Biometrico" required="true">
+    <form @submit.prevent="updateEquipo()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalEquipoUpdate(false)">
+            <CModalTitle>
+                <h5>Actualizar Equipo Biometrico</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            
+            <div class="mb-3 row">
+                <label for="detalle" class="col-4">Detalle</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.detalle" placeholder="Nombre del lugar donde se encuentra el Equipo Biometrico" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="lugar" class="col-4">Lugar</label>
-            <div class="col-8">
-                <input type="text" class="form-control" v-model="equipoUpdate.lugar" placeholder="Iniciales del lugar donde se encuentra el Equipo Biometrico" required="true">
+            <div class="mb-3 row">
+                <label for="lugar" class="col-4">Lugar</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.lugar" placeholder="Iniciales del lugar donde se encuentra el Equipo Biometrico" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="ip" class="col-4">IP</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipoUpdate.ip" placeholder="Ip del equipo Biometrico" required="true">
+            <div class="mb-3 row">
+                <label for="ip" class="col-4">IP</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.ip" placeholder="192.168.0.1" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="puerto" class="col-4">Puerto</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipoUpdate.puerto" placeholder="Puerto del Equipo Biometrico">
+            <div class="mb-3 row">
+                <label for="puerto" class="col-4">Puerto</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.puerto" placeholder="0000" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="mac" class="col-4">MAC</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipoUpdate.mac" placeholder="MAC del equipo Biometrico">
+            <div class="mb-3 row">
+                <label for="mac" class="col-4">MAC</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.mac" placeholder="ab:cd:ef:12:34" required="true">
+                </div>
             </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="codigo" class="col-4">Codigo</label>
-            <div class="col-8">
-              <input type="text" class="form-control" v-model="equipoUpdate.codigo" required="true" placeholder="Codigo de inventario del equipo">
+            <div class="mb-3 row">
+                <label for="codigo" class="col-4">Codigo</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="equipoUpdate.codigo" required="true" placeholder="Codigo de inventario del equipo">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="codigo" class="col-4">Estado</label>
-            <div class="col-8">
-                <select class="form-control" v-model="equipoUpdate.estado" required="true">
-                    <option value="1">Activo</option>
-                    <option value="0">Inactivo</option>
-                </select>
+            <div class="mb-3 row">
+                <label for="codigo" class="col-4">Estado</label>
+                <div class="col-8">
+                    <select class="form-control" v-model="equipoUpdate.estado" required="true">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalEquipoUpdate(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="updateEquipo()" color="success" class="font"><CIcon icon="cil-cloud-upload" class="me-2"/>Actualizar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalEquipoUpdate(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-cloud-upload" class="me-2"/>Actualizar</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Update Equipo-->
 </template>

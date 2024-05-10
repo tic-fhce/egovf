@@ -2,7 +2,7 @@ import axios from "axios";
 
 //const msccUrl="https://stfhce.umsa.bo/fhce-egovf-scc/";
 //const msccUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
-const msccUrl="http://172.16.114.157:8092/fhce-egovf-scc/";
+const msccUrl="http://172.16.14.91:8092/fhce-egovf-scc/";
 
 
 export default class BiometricoService{
@@ -248,5 +248,10 @@ export default class BiometricoService{
             _07estado:equipo.estado
         };
         return axios.put(msccUrl+"equipo/updateEquipo",equipoaux);
+    }
+
+    //Avisos
+    getAviso(){
+        return axios.get(msccUrl+"aviso/getAviso");
     }
 }

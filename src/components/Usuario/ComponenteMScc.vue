@@ -318,47 +318,42 @@
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <CModalHeader class="headercolor text-center" dismiss @close="clickModalObs(false)">
-        <CModalTitle>
-            <h5>Registrar una Observacion de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos" />
+    <form @submit.prevent="addObs()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor text-center" dismiss @close="clickModalObs(false)">
+            <CModalTitle>
+                <h5>Registrar una Observacion de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos" />
 
-        <form @submit.prevent="addObs()" enctype="multipart/form-data">
-            
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="obs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="obs.fechainicio" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="obs.fechafin" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Detalle</label>
+                <div class="col-8">
                     <textarea class="form-control" v-model="obs.detalle" required="true"></textarea>
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
+                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <div class="col-8">
                     <select class="form-control" v-model="obs.tipo" required="true" @change="getTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
@@ -369,80 +364,66 @@
                     </select>
                 </div>
             </div>
-
             <div class="mb-3 row" v-if="obs.tipo != 'asueto'">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Hora</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="obs.hora">
                 </div>
             </div>
-
             <div 
             class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
+                <label for="archivo" class="col-4 col-form-label">Documento</label>
+                <div class="col-8">
                     <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
                 </div>
             </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observacion</button>
-                </div>
-            </div>
-
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observacion</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  Obserbasiones-->
 
 <!-- Modal Editar Obserbasiones-->
 <CModal :visible="modalObsEditar" @close="clickModalObsEditar(false)">
-    <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
-        <CModalTitle>
-            <h5>Actualizar la Observacion de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos" />
+    <form @submit.prevent="updateObs()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
+            <CModalTitle>
+                <h5>Actualizar la Observacion de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos" />
 
-        <form @submit.prevent="updateObs()" enctype="multipart/form-data">
-            
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Detalle</label>
+                <div class="col-8">
                     <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
                 </div>
             </div>
-
             <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
+                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <div class="col-8">
                     <select class="form-control" v-model="uobs.tipo" required="true" @change="getuTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
@@ -453,124 +434,120 @@
                     </select>
                 </div>
             </div>
-
             <div class="mb-3 row" v-if="uobs.tipo != 'asueto'">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Hora</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="uobs.hora">
                 </div>
             </div>
 
-            <div 
-            class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="file" class="form-control" @change="selectFile()" required="true">
-                </div>
-            </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
+            <div class="mb-3 row">
+                <label for="archivo" class="col-4 col-form-label">Documento</label>
+                <div class="col-8">
+                    <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
                 </div>
             </div>
 
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal Editar Obserbasiones-->
 
 <!-- Modal Reporte Mensual-->
 <CModal :visible="modalMes" @close="clickModalMes(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
-        <CModalTitle>
-            <h5>Reporte Mensual</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos" />
-        <hr>
-        <div class="mb-3 row">
-            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.gestion" class="form-control">
-                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                </select>
+    <form @submit.prevent="getReporteMes()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
+            <CModalTitle>
+                <h5>Reporte Mensual</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos" />
+            <hr>
+            <div class="mb-3 row">
+                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.gestion" class="form-control" required="true">
+                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.mes" class="form-control">
-                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="mes" class="col-6 col-form-label">Mes :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.mes" class="form-control" required="true">
+                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalMes(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="getReporteMes()" color="success" class="font"><CIcon icon="cil-file" class="me-2"/>Ver Reporte</CButton>
-    </CModalFooter>
+            
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalMes(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Reporte</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal Reporte Mensual-->
 
 <!-- Modal Reporte Mensual Segmentado-->
 <CModal :visible="modalDias" @close="clickModalDias(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
-        <CModalTitle>
-            <h5>Reporte Mensual Segmentado</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos" />
-        <hr>
-        <div class="mb-3 row">
-            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.gestion" class="form-control">
-                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                </select>
+    <form @submit.prevent="getReporteMes()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
+            <CModalTitle>
+                <h5>Reporte Mensual Segmentado</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos" />
+            <hr>
+            <div class="mb-3 row">
+                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.gestion" class="form-control" required="true">
+                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.mes" class="form-control">
-                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="mes" class="col-6 col-form-label">Mes :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.mes" class="form-control" required="true">
+                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="inicio" class="col-sm-6 col-form-label">Inicio :</label>
-            <div class="col-sm-6">
-                <select  class="form-control" v-model="reporteMes.di">
-                    <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="inicio" class="col-6 col-form-label">Inicio :</label>
+                <div class="col-6">
+                    <select  class="form-control" v-model="reporteMes.di" required="true">
+                        <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="fin" class="col-sm-6 col-form-label">Fin :</label>
-            <div class="col-sm-6">
-                <select  class="form-control" v-model="reporteMes.df">
-                    <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="fin" class="col-6 col-form-label">Fin :</label>
+                <div class="col-6">
+                    <select  class="form-control" v-model="reporteMes.df" required="true">
+                        <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalDias(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="getReporteMes()" color="success" class="font"><CIcon icon="cil-file" class="me-2"/>Ver Reporte</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalDias(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Reporte</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal Reporte Mensual Segmentado-->
 
@@ -608,6 +585,7 @@ export default {
             listaGestion:[],
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
             listaHorarios:[],
+            listaAviso:[],
             id_horario:0,
             getPB:true,
             obsgestion:0,
@@ -713,6 +691,7 @@ export default {
         //Creamos los Sercicios
         this.biometricoService = new BiometricoService();
         this.uploadService = new UploadService();
+        this.getAbiso();
     },
     mounted(){
         
@@ -1050,6 +1029,42 @@ export default {
                     location.reload();
                 }
             });
+        },
+
+        async getAbiso(){
+            const steps = []
+            await this.biometricoService.getAviso().then(response=>{
+                this.listaAviso = response.data;
+            });
+            this.listaAviso.forEach(aviso => {
+                steps.push(aviso.id);
+            });
+            
+            const Queue = this.$swal.mixin({
+                progressSteps: steps,
+                confirmButtonText: 'Siguiente >',
+                // optional classes to avoid backdrop blinking between steps
+                showClass: { backdrop: 'swal2-noanimation' },
+                hideClass: { backdrop: 'swal2-noanimation' },
+            })
+            ;(async () => {
+                const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+                this.listaAviso.forEach(async aviso => {
+                    
+                    Queue.fire({
+                        title: aviso._01titulo,
+                        currentProgressStep: aviso.id -1,
+                    });
+                    await sleep(1000);
+
+                });
+            })()
+        },
+        async getA(titulo , s ,Queue){
+            await Queue.fire({
+                    title: titulo,
+                    currentProgressStep: s,
+            })
         }
     }
 }

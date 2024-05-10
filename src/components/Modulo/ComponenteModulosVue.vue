@@ -62,8 +62,8 @@
             </div>
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar</button>
+                <CButton @click="clickModalModulo(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+                <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar</button>
         </CModalFooter>
     </form>
 </CModal>

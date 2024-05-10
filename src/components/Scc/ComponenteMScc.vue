@@ -321,158 +321,158 @@
 
 <!-- Modal  Biometrico-->
 <CModal :visible="modalBiometrico" @close="clickModalBiometrico(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalBiometrico(false)">
-        <CModalTitle>
-            <h5>Agregar Biometrico</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="tipo" class="col-4">Tipo :</label>
-            <label for="tipo" class="col-8">{{ empleado.empleado }}</label>
-        </div>
-        
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Datos del Biometrico</label>
-            <div class="col-sm-6">
-                <select v-model="id_bio" class="form-control" @change="datosChange()">
-                    <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">{{lista._02nombre}} {{lista._06lugar}}</option>
-                </select>
+    <form @submit.prevent="updateBiometrico()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalBiometrico(false)">
+            <CModalTitle>
+                <h5>Agregar Biometrico</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="tipo" class="col-4">Tipo :</label>
+                <label for="tipo" class="col-8">{{ empleado.empleado }}</label>
             </div>
-        </div>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalBiometrico(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="updateBiometrico()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar Biometrico</CButton>
-    </CModalFooter>
+            
+            <div class="mb-3 row">
+                <label for="datos" class="col-6 col-form-label">Datos del Biometrico</label>
+                <div class="col-6">
+                    <select v-model="id_bio" class="form-control" @change="datosChange()" required="true">
+                        <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">{{lista._02nombre}} {{lista._06lugar}}</option>
+                    </select>
+                </div>
+            </div>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalBiometrico(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar Biometrico</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  Biometrico-->
 
 <!-- Modal  Horario-->
 <CModal :visible="modalHorario" @close="clickModalHorario(false)" size="lg">
-    <CModalHeader class="headercolor" dismiss @close="clickModalHorario(false)">
-        <CModalTitle>
-            <h5>Agregar Nuevo Horario</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="tipo" class="col-4">Tipo :</label>
-            <label for="tipo" class="col-8">{{ empleado.empleado }}</label>
-        </div>
-        
-        <div class="mb-3 row table-responsive">
-            <br>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Horario</th>
-                        <th>Lunes</th>
-                        <th>Martes</th>
-                        <th>Miercoles</th>
-                        <th>Jueves</th>
-                        <th>Viernes</th>
-                        <th>Sabado</th>
-                        <th>Domingo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Ingreso Mañana</th>
-                        <td><input type="text" v-model="horario._02lem" size="5"></td>
-                        <td><input type="text" v-model="horario._06mem" size="5"></td>
-                        <td><input type="text" v-model="horario._10miem" size="5"></td>
-                        <td><input type="text" v-model="horario._14jem" size="5"></td>
-                        <td><input type="text" v-model="horario._18vem" size="5"></td>
-                        <td><input type="text" v-model="horario._22sem" size="5"></td>
-                        <td><input type="text" v-model="horario._26dem" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Salida Mañana</th>
-                        <td><input type="text" v-model="horario._03lsm" size="5"></td>
-                        <td><input type="text" v-model="horario._07msm" size="5"></td>
-                        <td><input type="text" v-model="horario._11mism" size="5"></td>
-                        <td><input type="text" v-model="horario._15jsm" size="5"></td>
-                        <td><input type="text" v-model="horario._19vsm" size="5"></td>
-                        <td><input type="text" v-model="horario._23ssm" size="5"></td>
-                        <td><input type="text" v-model="horario._27dsm" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Ingreso Tarde</th>
-                        <td><input type="text" v-model="horario._04let" size="5"></td>
-                        <td><input type="text" v-model="horario._08met" size="5"></td>
-                        <td><input type="text" v-model="horario._12miet" size="5"></td>
-                        <td><input type="text" v-model="horario._16jet" size="5"></td>
-                        <td><input type="text" v-model="horario._20vet" size="5"></td>
-                        <td><input type="text" v-model="horario._24set" size="5"></td>
-                        <td><input type="text" v-model="horario._28det" size="5"></td>
-                    </tr>
-                    <tr>
-                        <th>Salida Tarde</th>
-                        <td><input type="text" v-model="horario._05lst" size="5"></td>
-                        <td><input type="text" v-model="horario._09mst" size="5"></td>
-                        <td><input type="text" v-model="horario._13mist" size="5"></td>
-                        <td><input type="text" v-model="horario._17jst" size="5"></td>
-                        <td><input type="text" v-model="horario._21vst" size="5"></td>
-                        <td><input type="text" v-model="horario._25sst" size="5"></td>
-                        <td><input type="text" v-model="horario._29dst" size="5"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalHorario(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="addHorario()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Agregar Horario</CButton>
-    </CModalFooter>
+    <form @submit.prevent="addHorario()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalHorario(false)">
+            <CModalTitle>
+                <h5>Agregar Nuevo Horario</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="tipo" class="col-4">Tipo :</label>
+                <label for="tipo" class="col-8">{{ empleado.empleado }}</label>
+            </div>
+            
+            <div class="mb-3 row table-responsive">
+                <br>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Horario</th>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miercoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                            <th>Sabado</th>
+                            <th>Domingo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Ingreso Mañana</th>
+                            <td><input type="text" v-model="horario._02lem" size="5"></td>
+                            <td><input type="text" v-model="horario._06mem" size="5"></td>
+                            <td><input type="text" v-model="horario._10miem" size="5"></td>
+                            <td><input type="text" v-model="horario._14jem" size="5"></td>
+                            <td><input type="text" v-model="horario._18vem" size="5"></td>
+                            <td><input type="text" v-model="horario._22sem" size="5"></td>
+                            <td><input type="text" v-model="horario._26dem" size="5"></td>
+                        </tr>
+                        <tr>
+                            <th>Salida Mañana</th>
+                            <td><input type="text" v-model="horario._03lsm" size="5"></td>
+                            <td><input type="text" v-model="horario._07msm" size="5"></td>
+                            <td><input type="text" v-model="horario._11mism" size="5"></td>
+                            <td><input type="text" v-model="horario._15jsm" size="5"></td>
+                            <td><input type="text" v-model="horario._19vsm" size="5"></td>
+                            <td><input type="text" v-model="horario._23ssm" size="5"></td>
+                            <td><input type="text" v-model="horario._27dsm" size="5"></td>
+                        </tr>
+                        <tr>
+                            <th>Ingreso Tarde</th>
+                            <td><input type="text" v-model="horario._04let" size="5"></td>
+                            <td><input type="text" v-model="horario._08met" size="5"></td>
+                            <td><input type="text" v-model="horario._12miet" size="5"></td>
+                            <td><input type="text" v-model="horario._16jet" size="5"></td>
+                            <td><input type="text" v-model="horario._20vet" size="5"></td>
+                            <td><input type="text" v-model="horario._24set" size="5"></td>
+                            <td><input type="text" v-model="horario._28det" size="5"></td>
+                        </tr>
+                        <tr>
+                            <th>Salida Tarde</th>
+                            <td><input type="text" v-model="horario._05lst" size="5"></td>
+                            <td><input type="text" v-model="horario._09mst" size="5"></td>
+                            <td><input type="text" v-model="horario._13mist" size="5"></td>
+                            <td><input type="text" v-model="horario._17jst" size="5"></td>
+                            <td><input type="text" v-model="horario._21vst" size="5"></td>
+                            <td><input type="text" v-model="horario._25sst" size="5"></td>
+                            <td><input type="text" v-model="horario._29dst" size="5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalHorario(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/>Agregar Horario</button>
+        </CModalFooter>
+    </form>
+    
 </CModal>
 <!-- END Modal  Horario-->
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
-        <CModalTitle>
-            <h5>Agregar Observaciones de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-
-        <form @submit.prevent="addObs()" enctype="multipart/form-data">
-            
+    <form @submit.prevent="addObs()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
+            <CModalTitle>
+                <h5>Agregar Observaciones de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+        
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obs.uidobs" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
                 <div class="col-sm-8">
                     <input type="date" class="form-control" v-model="obs.fechainicio" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
                 <div class="col-sm-8">
                     <input type="date" class="form-control" v-model="obs.fechafin" required="true">
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
                 <div class="col-sm-8">
                     <textarea class="form-control" v-model="obs.detalle" required="true"></textarea>
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
                 <div class="col-sm-8">
@@ -490,123 +490,119 @@
                     </select>
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="datos" class="col-sm-4 col-form-label">Hora</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obs.hora">
                 </div>
             </div>
-
             <div class="mb-3 row">
                 <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
                 <div class="col-sm-8">
                     <input type="file" ref="file" class="form-control" @change="selectFile()" required="true">
                 </div>
             </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
-                </div>
-            </div>
-
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
+        </CModalFooter>
+    </form>
+    
 </CModal>
 <!-- END Modal  Obserbasiones-->
 
 <!-- Modal Reporte Mensual-->
 <CModal :visible="modalMes" @close="clickModalMes(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
-        <CModalTitle>
-            <h5>Reporte Mensual</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.gestion" class="form-control">
-                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                </select>
+    <form @submit.prevent="getReporteMes()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
+            <CModalTitle>
+                <h5>Reporte Mensual</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.gestion" class="form-control" required="true">
+                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.mes" class="form-control">
-                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="mes" class="col-6 col-form-label">Mes :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.mes" class="form-control" required="true">
+                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalMes(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="getReporteMes()" color="success" class="font"><CIcon icon="cil-file" class="me-2"/>Ver Reporte</CButton>
-    </CModalFooter>
+            
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalMes(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Reporte</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal Reporte Mensual-->
 
 <!-- Modal Reporte Mensual Segmentado-->
 <CModal :visible="modalDias" @close="clickModalDias(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
-        <CModalTitle>
-            <h5>Reporte Mensual Segmentado</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos"/>
-        <hr>
-        <div class="mb-3 row">
-            <label for="gestion" class="col-sm-6 col-form-label">Gestion :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.gestion" class="form-control">
-                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                </select>
+    <form @submit.prevent="getReporteMes()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
+            <CModalTitle>
+                <h5>Reporte Mensual Segmentado</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos"/>
+            <hr>
+            <div class="mb-3 row">
+                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.gestion" class="form-control" required="true">
+                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="mes" class="col-sm-6 col-form-label">Mes :</label>
-            <div class="col-sm-6">
-                <select v-model="reporteMes.mes" class="form-control">
-                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="mes" class="col-6 col-form-label">Mes :</label>
+                <div class="col-6">
+                    <select v-model="reporteMes.mes" class="form-control" required="true">
+                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="inicio" class="col-sm-6 col-form-label">Inicio :</label>
-            <div class="col-sm-6">
-                <select  class="form-control" v-model="reporteMes.di">
-                    <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="inicio" class="col-6 col-form-label">Inicio :</label>
+                <div class="col-6">
+                    <select  class="form-control" v-model="reporteMes.di" required="true">
+                        <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="mb-3 row">
-            <label for="fin" class="col-sm-6 col-form-label">Fin :</label>
-            <div class="col-sm-6">
-                <select  class="form-control" v-model="reporteMes.df">
-                    <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
-                </select>
+            <br>
+            <div class="mb-3 row">
+                <label for="fin" class="col-6 col-form-label">Fin :</label>
+                <div class="col-6">
+                    <select  class="form-control" v-model="reporteMes.df" required="true">
+                        <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalDias(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="getReporteMes()" color="success" class="font"><CIcon icon="cil-file" class="me-2"/>Ver Reporte</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalDias(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Reporte</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal Reporte Mensual Segmentado-->
 </template>
@@ -867,6 +863,21 @@ export default {
             try{
                 //primero subimos el archivo
                 await this.uploadService.addImagen(fromData).then((response)=>{
+                    /*const Toast = this.$swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = this.$swal.stopTimer;
+                            toast.onmouseleave = this.$swal.resumeTimer;
+                        }
+                        });
+                        Toast.fire({
+                        icon: "success",
+                        title: "Signed in successfully"
+                    });*/
                 if(response.status == 200){
                     this.obs.url = this.uploadService.getUrl()+ response.data.nombre;
                     this.obs.imagen = response.data.nombre;

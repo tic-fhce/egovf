@@ -148,36 +148,30 @@
 
 <!-- Modal  Actualizar Foto-->
 <CModal :visible="modalFoto" @close="clickModalFoto(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalFoto(false)">
-        <CModalTitle>
-            <h5>Actualizar Foto de Perfil</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <form @submit.prevent="updateFoto()" enctype="multipart/form-data">
-            <div class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Foto de Perfil</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()">
+    <form @submit.prevent="updateFoto()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor" dismiss @close="clickModalFoto(false)">
+            <CModalTitle>
+                <h5>Actualizar Foto de Perfil</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            
+                <div class="mb-3 row">
+                    <label for="archivo" class="col-sm-4 col-form-label">Foto de Perfil</label>
+                    <div class="col-sm-8">
+                        <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="md-3 row text-center">
-                <img :src="egovf.foto" class="img-fluid">
-            </div>
-            <br>
-
-            <div class="mb-3 row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4 text-center"><button class="btn btn-success btn-block font"><CIcon icon="cil-camera" class="me-2"/>Actualizar</button></div>
-                <div class="col-md-4"></div>
-            </div>
-        </form>
-       
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalFoto(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+                <br>
+                <div class="md-3 row text-center">
+                    <img :src="egovf.foto" class="img-fluid">
+                </div>        
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalFoto(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font"><CIcon icon="cil-camera" class="me-2"/>Actualizar</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- End Modal  Actualizar Foto-->
 

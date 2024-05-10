@@ -2,7 +2,7 @@ import axios from "axios";
 
 //const inventarioUrl="https://stfhce.umsa.bo/fhce-egovf-inv/";
 //const inventarioUrl="http://192.168.31.45:8093/fhce-egovf-inv/";
-const inventarioUrl="http://172.16.114.157:8093/fhce-egovf-inv/";
+const inventarioUrl="http://172.16.14.91:8093/fhce-egovf-inv/";
 
 export default class InventarioService{
     //Servicios para CPU

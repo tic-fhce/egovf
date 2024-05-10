@@ -35,6 +35,7 @@
                                         <CButtonGroup role="group">
                                             <CButton color="success" class="font" size="sm" @click="getObsDetalle(lsobs.id)"><CIcon icon="cil-featured-playlist"></CIcon></CButton>
                                             <CButton color="warning" class="font" size="sm" @click="setObs(lsobs.id)"><CIcon icon="cil-pencil"></CIcon></CButton>
+                                            <CButton color="secondary" class="font" size="sm" @click="setImg(lsobs.id)"><CIcon icon="cil-clipboard"></CIcon></CButton>
                                         </CButtonGroup>                                      
                                     </td>
                                 </tr>
@@ -52,28 +53,28 @@
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
-        <CModalTitle>
-            <h5>Agregar Observaciones de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
+    <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
+            <CModalTitle>
+                <h5>Agregar Observaciones de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            
             <!--Input para Tipos de empleado-->
             <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
+                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <div class="col-8">
                     <select v-model="obsall.cif" class="form-control" required="true">
                         <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">{{lte._01detalle}}</option>
                     </select>
                 </div>
             </div>
             <!--Input para Tipos de empleado-->
-
             <!--Input para el sexo de cada empleado-->
             <div class="mb-3 row">
-                <label for="sexo" class="col-sm-4 col-form-label">Caracteristica</label>
-                <div class="col-sm-8">
+                <label for="sexo" class="col-4 col-form-label">Caracteristica</label>
+                <div class="col-8">
                     <select class="form-control" v-model="obsall.sexo" required="true">
                         <option value="0">Todos</option>
                         <option value="1">Femenino</option>
@@ -82,47 +83,42 @@
                 </div>
             </div>
             <!--Input para el sexo de cada empleado-->
-
             <!--Input para el identificativo de observaciones-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="obsall.uidobs" required="true">
                 </div>
             </div>
             <!--Input para el identificativo de observaciones-->
-
             <!--Input para la fecha de Inicio-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="obsall.fechainicio" required="true">
                 </div>
             </div>
             <!--Input para la fecha de Inicio-->
-
             <!--Input para la fecha Fin-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
+                <div class="col-8">
                     <input type="date" class="form-control" v-model="obsall.fechafin" required="true">
                 </div>
             </div>
             <!--Input para la fecha Fin-->
-
             <!--Input para el detalle de Obserbacion-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Detalle</label>
+                <div class="col-8">
                     <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
                 </div>
             </div>
             <!--Input para el detalle de Obserbacion-->
-
             <!--Input para el tipo de Observacion-->
             <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
+                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <div class="col-8">
                     <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
@@ -138,37 +134,27 @@
                 </div>
             </div>
             <!--Input para el tipo de Observacion-->
-
             <!--Input para la hora-->
             <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-                <div class="col-sm-8">
+                <label for="datos" class="col-4 col-form-label">Hora</label>
+                <div class="col-8">
                     <input type="text" class="form-control" v-model="obsall.hora">
                 </div>
             </div>
             <!--Input para la hora-->
-
             <!--Input para el Docuemtno-->
             <div class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="obsfile" class="form-control" @change="selectFile()" required="true">
+                <label for="archivo" class="col-4 col-form-label">Documento</label>
+                <div class="col-8">
+                    <input type="file" ref="obsfile" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
                 </div>
             </div>
-            <!--Input para el Docuemtno-->
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
-                </div>
-            </div>
-
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  Obserbasiones-->
 
@@ -211,73 +197,109 @@
 
 <!-- Modal Editar Obserbasiones-->
 <CModal :visible="modalObsEditar" @close="clickModalObsEditar(false)">
-    <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
-        <CModalTitle>
-            <h5>Actualizar la Observacion de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <div class="mb-3 row">
-            <h4 class="card-title">CIF : {{uobs.cif}}</h4>
-        </div>
-
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
+    <form @submit.prevent="updateObsEmpleado()">
+        <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
+            <CModalTitle>
+                <h5>Actualizar la Observacion de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <div class="mb-3 row">
+                <label for="cif" class="col-4 col-form-label">CIF</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="uobs.cif" required="true" placeholder="CIF">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-            <div class="col-sm-8">
-                <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
+            <div class="mb-3 row">
+                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-            <div class="col-sm-8">
-                <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
+            <div class="mb-3 row">
+                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
+                <div class="col-8">
+                    <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-            <div class="col-sm-8">
-                <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
+            <div class="mb-3 row">
+                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
+                <div class="col-8">
+                    <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-            <div class="col-sm-8">
-                <select class="form-control" v-model="uobs.tipo" required="true">
-                    <option value="Entrada M.">Entrada Mañana</option>
-                    <option value="Salida M.">Salida Mañana</option>
-                    <option value="Entrada T.">Entrada Tarde</option>
-                    <option value="Salida T.">Salida Tarde</option>
-                    <option value="continuo">Continuo</option>
-                    <option value="horas">Horas de Servicio</option>
-                    <option value="extraordinario">Horario Extraordinario</option>
-                    <option value="comision">Comisión</option>
-                    <option value="permiso">Permiso</option>
-                    <option value="asueto">Asueto</option>
-                </select>
+            <div class="mb-3 row">
+                <label for="datos" class="col-4 col-form-label">Detalle</label>
+                <div class="col-8">
+                    <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="uobs.hora">
+            <div class="mb-3 row">
+                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <div class="col-8">
+                    <select class="form-control" v-model="uobs.tipo" required="true">
+                        <option value="Entrada M.">Entrada Mañana</option>
+                        <option value="Salida M.">Salida Mañana</option>
+                        <option value="Entrada T.">Entrada Tarde</option>
+                        <option value="Salida T.">Salida Tarde</option>
+                        <option value="continuo">Continuo</option>
+                        <option value="horas">Horas de Servicio</option>
+                        <option value="extraordinario">Horario Extraordinario</option>
+                        <option value="comision">Comisión</option>
+                        <option value="permiso">Permiso</option>
+                        <option value="asueto">Asueto</option>
+                    </select>
+                </div>
             </div>
-        </div>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="updateObsEmpleado()" class="font" color="success"><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</CButton>
-    </CModalFooter>
+
+            <div class="mb-3 row">
+                <label for="datos" class="col-4 col-form-label">Hora</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" v-model="uobs.hora">
+                </div>
+            </div>
+            <CCol>
+                <img :src="uobs.url" alt="" class="img-fluid">
+            </CCol>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
+        </CModalFooter>
+    </form>
+</CModal>
+<!-- END Modal Editar Obserbasiones-->
+
+<!-- Modal IMG Obserbasiones-->
+<CModal :visible="modalImgEditar" @close="clickModalImgEditar(false)">
+    <form @submit.prevent="updateImgEmpleado()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor text-center" dismiss @close="clickModalImgEditar(false)">
+            <CModalTitle>
+                <h5>Actualizar Imagen de Observacion</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+
+            <div class="mb-3 row">
+                <label for="imagen" class="col-4 col-form-label">Documento</label>
+                <div class="col-8">
+                    <input type="file" ref="obsfileimg" class="form-control" accept="image/png,image/jpeg" @change="selectFileImg()" required="true">
+                </div>
+            </div>
+            <CCol>
+                <img :src="uobs.url" alt="" class="img-fluid">
+            </CCol>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalImgEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal Editar Obserbasiones-->
 
@@ -308,6 +330,7 @@ export default {
             modalObs:false,
             modalDetalleObs:false,
             modalObsEditar:false,
+            modalImgEditar:false,
             egovfService:null,
             uploadService:null,
             sccService:null,
@@ -385,6 +408,9 @@ export default {
     methods:{
         selectFile(){// Funcion que permite cambiar los datos del archivo
             this.archivo = this.$refs.obsfile.files[0];
+        },
+        selectFileImg(){// Funcion que permite cambiar los datos del archivo
+            this.archivo = this.$refs.obsfileimg.files[0];
         },
         tablaObs(){
             this.$nextTick(()=>{
@@ -611,6 +637,49 @@ export default {
             });
 
         },
+        async updateImgEmpleado(){ //Funcion actualizar una Observacion del Usuario
+            const fromData = new FormData();
+            fromData.append('archivo',this.archivo);
+            try{
+                await this.uploadService.addImagen(fromData).then((response)=>{
+                    if(response.status == 200){
+                        this.uobs.url = this.uploadService.getUrl()+ response.data.nombre;
+                        this.uobs.imagen = response.data.nombre;
+                        this.$swal.fire({
+                            title: 'Desea agregar la Observacione de Asistencia a los Empleados?',
+                            showDenyButton: true,
+                            icon:'info',
+                            confirmButtonText: 'Aceptar',
+                            denyButtonText: 'Cancelar',
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.sccService.updateObsEmpleado(this.uobs).then(response =>{
+                                    if(response.status == 200){
+                                        this.$swal.fire('El Documento fue Actualizado Corectamente ','', 'success').then((res)=>{
+                                            if(res)
+                                                location.reload();
+                                        });
+                                    }
+                                    else{
+                                        this.$swal.fire('El Documento no fue Guardad Error'+ response.status, '', 'error');
+                                    }
+                                });
+                                
+                            } else if (result.isDenied) {
+                                this.$swal.fire('Datos Cancelados', '', 'info');
+                            }
+                        });
+
+                    }
+                    else {
+                        this.$swal.fire('El archivo no pudo ser Guardado  ','', 'error');
+                    }
+                });
+            }catch(err){
+                this.$swal.fire('El archivo no pudo ser Guardado  '+ err, 'error');
+            }
+
+        },
         setObs(id){// Funcion que carga los datos de las Observaciones del Usuario
             this.listaObs.forEach(obs =>{
                 if(obs.id === id){
@@ -628,6 +697,23 @@ export default {
             });
             this.clickModalObsEditar(true);
         },
+        setImg(id){// Funcion que carga los datos de las Observaciones del Usuario
+            this.listaObs.forEach(obs =>{
+                if(obs.id === id){
+                    this.uobs.id = id;
+                    this.uobs.cif = obs._01cif;
+                    this.uobs.uidobs = obs._02uidobs;
+                    this.uobs.fechainicio = obs._03fechainicio;
+                    this.uobs.fechafin = obs._04fechafin;
+                    this.uobs.detalle = obs._09detalle;
+                    this.uobs.imagen = obs._10imagen;
+                    this.uobs.tipo  = obs._11tipo;
+                    this.uobs.hora = obs._12hora;
+                    this.uobs.url = obs._15url;
+                }
+            });
+            this.clickModalImgEditar(true);
+        },
         clickModalObs(cio){
             this.modalObs = cio;
         },
@@ -636,6 +722,9 @@ export default {
         },
         clickModalObsEditar(cio){
             this.modalObsEditar = cio;
+        },
+        clickModalImgEditar(cio){
+            this.modalImgEditar = cio;
         },
         moduloScc(cif){
             this.$router.push({

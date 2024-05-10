@@ -2,7 +2,7 @@ import axios from "axios";
 
 //const egovfUrl="https://stfhce.umsa.bo/egovf/fhce/";
 //const egovfUrl="http://192.168.31.45:8091/fhce-egovf/";
-const egovfUrl="http://172.16.114.157:8091/fhce-egovf/";
+const egovfUrl="http://172.16.14.91:8091/fhce-egovf/";
 
 
 export default class EgovfService{
