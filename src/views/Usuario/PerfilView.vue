@@ -97,8 +97,8 @@
     <CModalBody>
         <ComponenteNombres :datos="datos"/>
         <div class="mb-3 row">
-            <label for="celular" class="col-sm-6 col-form-label">Nuevo Numero de Celular : </label>
-            <div class="col-sm-6">
+            <label for="celular" class="col-6 col-form-label">Nuevo Numero de Celular : </label>
+            <div class="col-6">
                 <input type="text" class="form-control" v-model="egovf.celular">
             </div>
         </div>

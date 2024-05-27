@@ -1,5 +1,5 @@
 <template>
-  <CHeader position="sticky" class="mb-4 headercolor">
+  <CHeader position="sticky" class="mb-4 menustyleheader">
     <CContainer fluid>
       <CHeaderToggler class="ps-1" @click="$store.commit('toggleSidebar')">
         <CIcon icon="cil-menu" size="lg" class="font" />
@@ -86,3 +86,9 @@ export default {
 
 }
 </script>
+<style scoped>
+  .menustyleheader{
+    background-color: #3c4b64;
+    color: white;
+  }
+</style>

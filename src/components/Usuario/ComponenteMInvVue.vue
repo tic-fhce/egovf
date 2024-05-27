@@ -48,7 +48,7 @@
                                                     Fecha : {{ atencion.fechasolicitud }}<br>Hora : {{ atencion.horasolicitud }}
                                                 </td>
                                                 <td>
-                                                    Fecha : {{ atencion.fechaatencion }}<br>Hora : {{ atencion.atencion }}
+                                                    Fecha : {{ atencion.fechaatencion }}<br>Hora : {{ atencion.horaatencion }}
                                                 </td>
                                                 <td>
                                                     <CBadge color="success" v-if="atencion.estado === 1 ">Solicitud Atendida</CBadge>
@@ -57,7 +57,7 @@
                                                 <td>
                                                     <CButtonGroup role="group">
                                                         <CButton color="success" class="font" size="sm" @click="getAtencionDetalle(atencion.id)"><CIcon icon="cil-featured-playlist"></CIcon></CButton>
-                                                        <CButton color="warning" class="font" size="sm" @click="getAtUpdate(atencion.id)"><CIcon icon="cil-pencil"></CIcon></CButton>
+                                                        <CButton v-if="atencion.estado === 0" color="warning" class="font" size="sm" @click="getAtUpdate(atencion.id)"><CIcon icon="cil-pencil"></CIcon></CButton>
                                                     </CButtonGroup> 
                                                 </td>
                                             </tr>
@@ -219,17 +219,16 @@
 
 <!-- Modal  AT -->
 <CModal :visible="modalAt" @close="clickModalAt(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalAt(false)">
-        <CModalTitle>
-            <h5>Solicitud de Asistencia Tecnica</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <ComponenteNombres :datos="datos" />
-        <CRow>
-            <CCol :lg="12">
-                <form @submit.prevent="addAtencion()">
-
+    <form @submit.prevent="addAtencion()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalAt(false)">
+            <CModalTitle>
+                <h5>Solicitud de Asistencia Tecnica</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+            <ComponenteNombres :datos="datos" />
+            <CRow>
+                <CCol :lg="12">
                     <div class="mb-3 row">
                         <label for="tipo" class="col-4 col-form-label">Revicion a :</label>
                         <div class="col-8">
@@ -263,26 +262,19 @@
                             <textarea class="form-control" v-model="atencion.detalle" required="true"></textarea>
                         </div>
                     </div>
-
-                    <hr> 
-
-                    <div class="mb-3 row text-center" >
-                        <div class="col-12 ">
-                            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Solicitar Asistencia Tecnica</button>
-                        </div>
-                    </div>
-                </form>
-            </CCol>
-        </CRow>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalAt(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+                </CCol>
+            </CRow>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalAt(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Solicitar Asistencia Tecnica</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  AT-->
 
 
-<!-- Modal  Atencion Update -->
+<!-- Modal  Atencion -->
 <CModal :visible="modalAtencionDetalle" @close="clickModalAtencionDetalle(false)" size='lg'>
     <CModalHeader class="headercolor" dismiss @close="clickModalAtencionDetalle(false)">
         <CModalTitle>
@@ -531,6 +523,7 @@ export default {
                 this.tablaAtencion();
                 this.getUbicacionCif(); // llamamos una lista de ubicaciones del empleado 
             });
+            console.log(this.listaAtencion);
         },
         async getUbicacionCif(){// Funcion que trae una lista de Ubicaciones del usuario
             await this.inventarioService.getUbicacionCif(this.egovf.cif).then(response => {

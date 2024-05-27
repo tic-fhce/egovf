@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const inventarioUrl="https://stfhce.umsa.bo/fhce-egovf-inv/";
-//const inventarioUrl="http://192.168.31.45:8093/fhce-egovf-inv/";
-const inventarioUrl="http://172.16.14.91:8093/fhce-egovf-inv/";
+const inventarioUrl="http://192.168.31.45:8093/fhce-egovf-inv/";
+//const inventarioUrl="http://172.16.14.91:8093/fhce-egovf-inv/";
 
 export default class InventarioService{
     //Servicios para CPU
@@ -220,6 +220,9 @@ export default class InventarioService{
             }
         });
     }
+    getAtencionEspera(){
+        return axios.get(inventarioUrl+"atencion/getAtencionEspera");
+    }
     updateAtencion(atencion){
         const atencionaux = {
             id:atencion.id,
@@ -238,6 +241,25 @@ export default class InventarioService{
 
         }
         return axios.put(inventarioUrl+"atencion/updateAtencion",atencionaux);
+    }
+    updateRegistroAtencion(atencion){
+        const atencionaux = {
+            id:atencion.idAtencion,
+            _01cif:atencion.cif,
+            _02codigo:atencion.codigo,
+            _03fechasolicitud:atencion.fechasolicitud,
+            _04horasolicitud:atencion.horasolicitud,
+            _05idtipo:atencion.idTipo,
+            _06idcaracteristica:atencion.idCaracteristica,
+            _07especificacion:atencion.especificacion,
+            _08error:atencion.error,
+            _09detalle:atencion.detalle,
+            _10fechaatencion:'',
+            _11horaatencion:'',
+            _12estado:1
+
+        }
+        return axios.put(inventarioUrl+"atencion/updateRegistroAtencion",atencionaux);
     }
     getListaEquipo(idtipo){
         return axios.get(inventarioUrl+"equipo/getListaEquipo",{

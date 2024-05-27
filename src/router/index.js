@@ -111,6 +111,11 @@ const routes = [
         name: 'ObsView',
         component: () => import('@/views/Scc/ObsView.vue')
       },
+      {// Avisos
+        path: '/avisos',
+        name: 'AvisoView',
+        component: () => import('@/views/Scc/AvisoView.vue')
+      },
       // MODULO SISTEMA DE INVENTARIO
       {
         path: '/moduloinv:cifCiudadano',
@@ -126,6 +131,11 @@ const routes = [
         path: '/inventario',
         name: 'InventarioInvView',
         component: () => import('@/views/Inv/InventarioInvView.vue')
+      },
+      {
+        path: '/atespera',
+        name: 'AtEsperaInvView',
+        component: () => import('@/views/Inv/AtEsperaInvView.vue')
       },
       {
         path: '/listaInventario:idtipo',

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const menuUrl="https://stfhce.umsa.bo/egovf/fhce/";
-//const menuUrl="http://192.168.31.45:8091/fhce-egovf/menu";
-const menuUrl="http://172.16.14.91:8091/fhce-egovf/menu";
+const menuUrl="http://192.168.31.45:8091/fhce-egovf/menu";
+//const menuUrl="http://172.16.14.91:8091/fhce-egovf/menu";
 
 export default class MenuService{
 

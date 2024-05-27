@@ -28,7 +28,7 @@
           <CIcon customClassName="nav-icon" :icon="item.icono"/> {{ item.titulo }}
         </template>
         <CNavItem v-for="subitem in item.menuObj" :key="subitem.id">
-          <router-link :to="subitem.ruta" class="nav-link" >{{ subitem.titulo }}</router-link>
+          <router-link :to="subitem.ruta" class="nav-link menustyle" >{{ subitem.titulo }}</router-link>
         </CNavItem>
       </CNavGroup>
       
@@ -61,3 +61,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+  .menustyle{
+    font-size: small;
+    margin-top: -5px;
+    margin-bottom: -5px;
+  }
+</style>

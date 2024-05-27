@@ -22,8 +22,7 @@
                                     <th scope="row">{{inventario.idEquipo}}</th>
                                     <td>
                                         {{inventario.nombre}} {{inventario.paterno}} {{inventario.materno}}<br>
-                                        {{inventario.ci}}<br>
-                                        {{inventario.celular}}
+                                        {{inventario.ci}}
                                     </td>
                                     <td>
                                         Tipo : {{ inventario.tipo }}<br>Codigo : {{ inventario.codigo }} <br>
@@ -41,98 +40,40 @@
         </CCol>
     </CRow>
 
-<!-- Modal  Obserbasiones-->
-<CModal :visible="modalObs" @close="clickModalObs(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
+<!-- Modal  Equipo Detalle-->
+<CModal :visible="modalEquipoDetalle" @close="clickModalEquipoDetalle(false)" size="lg">
+    <CModalHeader class="headercolor" dismiss @close="clickModalEquipoDetalle(false)">
         <CModalTitle>
-            <h5>Agregar Observaciones de Asistencia</h5>
+            <h5>Detalle</h5>
         </CModalTitle>
     </CModalHeader>
-
     <CModalBody>
-        <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
-            <div class="mb-3 row">
-                <label for="sexo" class="col-sm-4 col-form-label">Caracteristica</label>
-                <div class="col-sm-8">
-                <select class="form-control" v-model="obsall.sexo" required="true">
-                    <option value="0">Todos</option>
-                    <option value="1">Femenino</option>
-                    <option value="2">Masculino</option>
-                </select>
-                </div>
+        <div class="mb-3 row">
+            <div class="col-6">
+              <h2>Datos del Propietario</h2>
+              <img :src="equipoDetalle.foto" width="50%"/>
+              <hr>
+              <ul>
+                <li>CIF : {{ equipoDetalle.cif }}</li>
+                <li>Nombre : {{ equipoDetalle.nombre }} {{ equipoDetalle.paterno }} {{ equipoDetalle.materno }}</li>
+                <li>C.I. : {{ equipoDetalle.ci }}</li>
+                <li>Correo : {{ equipoDetalle.correo }}</li>
+                <li>Unidad : {{ equipoDetalle.sigla }}</li>
+              </ul>
             </div>
-
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.uidobs" required="true">
-                </div>
+            <div class="col-6">
+              <h2>Equipo - {{ equipoDetalle.tipo }}</h2>
+              <label>Codigo : {{ equipoDetalle.codigo }}</label><hr>
+              <ul v-for="r in equipoDetalle.resumen" :key="r.id">
+                <li>{{ r }}</li>
+              </ul>
             </div>
+        </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="obsall.fechainicio" required="true">
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="obsall.fechafin" required="true">
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
-                    <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
-                    <select class="form-control" v-model="obsall.tipo" required="true">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="horas">Horas de Servicio</option>
-                        <option value="extraordinario">Horario Extraordinario</option>
-                        <option value="comision">Comisión</option>
-                        <option value="permiso">Permiso</option>
-                        <option value="asueto">Asueto</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.hora">
-                </div>
-            </div>
-
-            <div class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="obsfile" class="form-control" @change="selectFile()" required="true">
-                </div>
-            </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
-                </div>
-            </div>
-
-        </form>
     </CModalBody>
     <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton @click="clickModalEquipoDetalle(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton @click="getModuloInv(equipoDetalle.cif)" color="success" class="font"><CIcon icon="cil-devices" class="me-2"/>Ver Inventario</CButton>
     </CModalFooter>
 </CModal>
 <!-- END Modal  Obserbasiones-->
@@ -159,8 +100,7 @@ export default {
     data(){
         return {
             titulo:'Inventario',
-            modalObs:false,
-            modalRecord:false,
+            modalEquipoDetalle:false,
             empleadoService:null,
             egovfService:null,
             inventarioService:null,
@@ -184,6 +124,23 @@ export default {
                 detalle:'',
                 corto:'',
                 foto:''
+            },
+            equipoDetalle:{
+                idPersona : 0,
+                cif : 0,
+                nombre : '',
+                paterno : '',
+                materno : '',
+                ci : '',
+                correo : '',
+                celular : '',
+                sigla : '',
+                unidad : '',
+                foto : '',
+                idEquipo : 0,
+                tipo : '',
+                codigo : 0,
+                resumen : []
             }
         }
     },
@@ -269,6 +226,7 @@ export default {
                         e.tipo = equipo.tipo;
                         e.codigo = equipo.codigo;
                         e.resumen = equipo.resumen;
+                        console.log(e.resumen);
                         this.listaInventario.push(e);
                         return false;
                     }
@@ -284,15 +242,22 @@ export default {
             });
             this.titulo = this.tipoEmpleadoObj.detalle;
         },
-        clickModalObs(cio){
-            this.modalObs = cio;
+        getEquipoDetalle(id){
+            this.listaInventario.forEach(inventario => {
+                if(inventario.idEquipo == id){
+                    this.equipoDetalle = inventario;
+                }
+            });
+            this.clickModalEquipoDetalle(true);
         },
-        clickModalRecord(modal){
-            this.modalRecord = modal;
+        clickModalEquipoDetalle(cio){
+            this.modalEquipoDetalle = cio;
         },
-        moduloScc(cif){
+        
+        getModuloInv(cif){
+            this.clickModalEquipoDetalle(false);
             this.$router.push({
-                name: "ModuloSccView",
+                name: "ModuloInvView",
                 params:{
                     cifCiudadano:cif
                 }

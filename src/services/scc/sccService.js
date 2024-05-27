@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //const msccUrl="https://stfhce.umsa.bo/fhce-egovf-scc/";
-//const msccUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
-const msccUrl="http://172.16.14.91:8092/fhce-egovf-scc/";
+const msccUrl="http://192.168.31.45:8092/fhce-egovf-scc/";
+//const msccUrl="http://172.16.14.91:8092/fhce-egovf-scc/";
 
 
 export default class SccService{
@@ -256,5 +256,28 @@ export default class SccService{
     }
     updateEquipo(equipo){
         return axios.put(msccUrl+"equipo/updateEquipo",equipo);
+    }
+    //Services para el MODELO AVISO
+    addAviso(aviso){
+        const auxAviso={
+            _01titulo : aviso.titulo,
+            _02detalle : aviso.detalle,
+            _03icon : aviso.icon,
+            _04estado : 1
+        }
+        return axios.post(msccUrl+"aviso/addAviso",auxAviso);
+    }
+    getAvisoAll(){
+        return axios.get(msccUrl+"aviso/getAvisoAll");
+    }
+    updateAviso(aviso){
+        const auxAviso={
+            id : aviso.id,
+            _01titulo : aviso.titulo,
+            _02detalle : aviso.detalle,
+            _03icon : aviso.icon,
+            _04estado : aviso.estado
+        }
+        return axios.put(msccUrl+"aviso/updateAviso",auxAviso);
     }
 }

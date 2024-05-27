@@ -1032,12 +1032,16 @@ export default {
         },
 
         async getAbiso(){
-            const steps = []
+            const steps = [];
+            var x = 0;
+            var c = 0;
             await this.biometricoService.getAviso().then(response=>{
                 this.listaAviso = response.data;
             });
             this.listaAviso.forEach(aviso => {
-                steps.push(aviso.id);
+                steps.push(x+1);
+                x = x+1;
+                c = aviso.id;
             });
             
             const Queue = this.$swal.mixin({
@@ -1048,37 +1052,19 @@ export default {
                 hideClass: { backdrop: 'swal2-noanimation' },
             })
             ;(async () => {
-                await Queue.fire({
-                    title: this.listaAviso[0]._01titulo,
-                    icon: this.listaAviso[0]._03icon,
-                    text: this.listaAviso[0]._02detalle,
-                    currentProgressStep: 0,
-                })
-                await Queue.fire({
-                    title: this.listaAviso[1]._01titulo,
-                    icon: this.listaAviso[1]._03icon,
-                    text: this.listaAviso[1]._02detalle,
-                    currentProgressStep: 1,
-                })
-                await Queue.fire({
-                    title: this.listaAviso[2]._01titulo,
-                    icon: this.listaAviso[2]._03icon,
-                    text: this.listaAviso[2]._02detalle,
-                    currentProgressStep: 2,
-                })
-                await Queue.fire({
-                    title: this.listaAviso[3]._01titulo,
-                    icon: this.listaAviso[3]._03icon,
-                    text: this.listaAviso[3]._02detalle,
-                    currentProgressStep: 3,
-                })
-                await Queue.fire({
-                    title: this.listaAviso[4]._01titulo,
-                    icon: this.listaAviso[4]._03icon,
-                    text: this.listaAviso[4]._02detalle,
-                    currentProgressStep: 4,
-                    confirmButtonText: 'OK'
-                })
+                if(this.listaAviso.length>0){
+                    x = 0;
+                    c = c +1;
+                    while (x < this.listaAviso.length){
+                        await Queue.fire({
+                            title: this.listaAviso[x]._01titulo,
+                            icon: this.listaAviso[x]._03icon,
+                            text: this.listaAviso[x]._02detalle,
+                            currentProgressStep: x,
+                        })
+                        x = x+1;
+                    }
+                }
             })()
         }
     }
