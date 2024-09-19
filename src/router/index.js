@@ -142,6 +142,17 @@ const routes = [
         name: 'ListaInventarioView',
         component: () => import('@/views/Inv/ListaInventarioView.vue')
       },
+      //MODULO SRA
+      {
+        path: '/ambientes',
+        name: "AmbientesView",
+        component:()=> import("../modules/egovf-sra/views/AmbientesView.vue") 
+      },
+      {
+        path: '/eventos',
+        name: "EventosView",
+        component:()=> import("../modules/egovf-sra/views/EventosView.vue")
+      }
     ]
   }
 ]
