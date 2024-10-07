@@ -6,7 +6,7 @@
                     <CRow>
                         <CCol :lg="6">{{ titulo }}</CCol>
                         <CCol :lg="6" class="text-end">
-                            <CButton v-if="opciones" @click="clickModalCiudadano(true)" color="success" class="font" size="sm"><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
+                            <CButton v-if="opciones" @click="changeAction()" color="success" class="font" size="sm"><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
                         </CCol>
                     </CRow>
                 </CCardHeader>
@@ -29,15 +29,25 @@
             </CCard>
         </CCol>
     </CRow>
+
+    <ModalData :active="action" :name="nameModal" />
 </template>
 <script setup>
+import ModalData from './ModalData.vue';
+import { ref } from 'vue';
 
+const action=ref(false);
 const props = defineProps({
     titulo: String,
     lista: Object,
     opciones: Boolean,
     listaOpciones: Array,
+    nameModal: String,
 })
+
+const changeAction=()=>{
+    action.value=!action.value;
+}
 
 const verEstado = (keyIndex, ambiente) => {
     const keys = Object.keys(ambiente);
@@ -46,5 +56,5 @@ const verEstado = (keyIndex, ambiente) => {
     }
 }
 
-console.log(props.titulo);
+console.log(props.nameModal);
 </script>

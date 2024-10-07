@@ -1,5 +1,5 @@
 <template>
-    <TableUi :lista="dataTable" titulo="Lista de eventos" :opciones="false" />    
+    <TableUi :lista="dataTable" titulo="Lista de eventos" opciones="true" nameModal="Agregar Evento" />    
 </template>
 
 <script setup>
