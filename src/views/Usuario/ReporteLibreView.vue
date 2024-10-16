@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="margen">
-                
+
             </div>
         </div>
         <ComponenteReporteLibreVue :reporteUsuario="reporte"/>
@@ -15,7 +15,7 @@
 import ComponenteReporteLibreVue from '@/components/Usuario/ComponenteReporteLibre.vue';
 
 // Declaramos los Servicios
-import SccService from '@/services/scc/sccService';
+import SccService from '@scc/services/sccService';
 
 export default {
     name:'ReporteLibreView',
@@ -42,7 +42,7 @@ export default {
     },
     mounted(){
         this.uri = this.$route.params.uriu;
-        
+
         this.cifCiudadano = this.uri.substring(0,11);
         this.reporte.cif=this.uri.substring(0,11);
         this.reporte.gestion = this.uri.substring(12,16);
@@ -104,7 +104,7 @@ export default {
 .margen{
     margin-top: 100px;
     padding:4em;
-    
+
 }
 hr {
   margin: 1rem 0;

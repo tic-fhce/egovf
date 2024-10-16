@@ -1,11 +1,15 @@
 <template>
+  <!-- Componente de Datos de la Persona -->
+  <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf" />
+  <br />
+
   <!-- Componente de Reporte -->
   <ComponenteReporteVue :reporte="reporte" :uri="uri" />
   <!-- Componente de Reporte -->
 </template>
 <script>
 // Importamos los Componentes
-
+import ComponenteDatosPersonalesVue from "@/components/Ciudadano/ComponenteDatosPersonalesVue.vue";
 import ComponenteReporteVue from "@scc/components/ComponenteReporte.vue";
 // End
 
@@ -15,8 +19,9 @@ import BiometricoService from "@/services/biometricoService";
 
 // End
 export default {
-  name: "UReporteView",
+  name: "ReporteView",
   components: {
+    ComponenteDatosPersonalesVue,
     ComponenteReporteVue,
   },
   data() {
@@ -81,7 +86,7 @@ export default {
 
   mounted() {
     this.uri = this.$route.params.uri;
-    this.cifCiudadano = this.$cookies.get("cif");
+    this.cifCiudadano = this.uri.substring(0, 11);
     this.reporte.cif = this.uri.substring(0, 11);
     this.reporte.gestion = this.uri.substring(12, 16);
     this.reporte.mes = this.uri.substring(17, 19);
@@ -90,6 +95,7 @@ export default {
     this.reporte.uri = this.uri;
     this.getDatos();
     this.getEgovf();
+
     this.getReporteBiometrico();
   },
   beforeCreate() {

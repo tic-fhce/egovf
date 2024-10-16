@@ -6,6 +6,7 @@ module.exports = defineConfig({
       alias: {
         "@styles": path.resolve(__dirname, "src/styles"),
         "@env": path.resolve(__dirname, "src/env.js"),
+        "@scc": path.resolve(__dirname, "src/modules/egovf-scc"),
       },
     },
   },
