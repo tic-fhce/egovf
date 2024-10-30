@@ -3,7 +3,7 @@
   import AboutUs from '../sections/home/About/AboutUs.vue';
   import ServicesComponent from '../sections/home/Services/ServicesComponent.vue';
   import FooterComponent from '../sections/home/Footer/FooterComponent.vue';
-  import SliderComponent from '../sections/Slider/SliderComponent.vue';
+  import SliderComponent from '../sections/home/Slider/SliderComponent.vue';
 
 
 </script>

@@ -13,11 +13,36 @@ const props = defineProps({
     required: true,
     // eslint-disable-next-line vue/require-valid-default-prop
     default:[
-      'https://picsum.photos/id/10/900/400',
-      'https://picsum.photos/id/20/900/400',
-      'https://picsum.photos/id/30/900/400',
-      'https://picsum.photos/id/40/900/400',
-      'https://picsum.photos/id/50/900/400',
+      {
+        urlImage: 'https://picsum.photos/id/1/900/400',
+        tag: 'tag1',
+        title: 'title1'
+      },
+      {
+        urlImage: 'https://picsum.photos/id/2/900/400',
+        tag: 'tag2',
+        title: 'title2'
+      },
+      {
+        urlImage: 'https://picsum.photos/id/3/900/400',
+        tag: 'tag3',
+        title: 'title3'
+      },
+      {
+        urlImage: 'https://picsum.photos/id/4/900/400',
+        tag: 'tag4',
+        title: 'title4'
+      },
+      {
+        urlImage: 'https://picsum.photos/id/5/900/400',
+        tag: 'tag5',
+        title: 'title5'
+      },
+      {
+        urlImage: 'https://picsum.photos/id/6/900/400',
+        tag: 'tag6',
+        title: 'title6'
+      }
     ]
   },
   controls: {
@@ -33,6 +58,7 @@ const props = defineProps({
     default: 3000
   }
 })
+
 
 //const slides = toRef(props, 'slides')
 const { slides,
