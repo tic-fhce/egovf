@@ -12,3 +12,43 @@
 .fontabla{
   font-size: 12px;
 }
+
+:root {
+  --size-page: 1280px;
+  --color-primary: #00222F;
+  --color-secondary: #146696;
+  --color-third: #2ba179;
+
+  --color-white: #fff;
+  --color-gray: #909090;
+  --color-black: #101518;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+html {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  font-size: 16px;  
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+
+/*  Utilities  */
+
+.container {
+  max-width: var(--size-page);
+  margin-inline: auto;
+}

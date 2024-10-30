@@ -16,6 +16,11 @@ const routes = [
         component: () => import('@/views/Front/HomeView.vue')
       },
       {
+        path:'/home2',
+        name:'HomeView2',
+        component: () => import('@/modules/home/views/HomeView.vue')
+      },
+      {
         path:'/sesion',
         name:'SesionView',
         component:()=> import('@/views/Front/SesionView.vue')
