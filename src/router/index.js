@@ -13,17 +13,13 @@ const routes = [
       {
         path:'/home',
         name:'HomeView',
-        component: () => import('@/views/Front/HomeView.vue')
-      },
-      {
-        path:'/home2',
-        name:'HomeView2',
         component: () => import('@/modules/home/views/HomeView.vue')
       },
       {
         path:'/sesion',
         name:'SesionView',
-        component:()=> import('@/views/Front/SesionView.vue')
+        // component:()=> import('@/views/Front/SesionView.vue')
+        component:()=> import('@/modules/home/views/SessionView.vue')
       },
       {
         path:'/libreReporte:uriu',

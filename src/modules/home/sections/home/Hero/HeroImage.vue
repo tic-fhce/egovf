@@ -4,8 +4,7 @@
 
 <template>
   <section class="hero">
-    <video src="/hero-video.mp4" autoplay playsinline muted loop></video>
-    <!-- <video src="/hero-video.mp4"></video> -->
+     <img src="/hero-image.jpg" alt="hero-image">
 
     <div class="brand">
       <h1>
@@ -29,7 +28,7 @@
     position: relative;    
   }  
 
-  video{
+  img{
     display: block;
     width: 100%;
     height: 100%;
@@ -60,7 +59,7 @@
   }
 
   span {
-    color: var(--color-black);
+    color: var(--color-white);
     font-weight: normal;
     font-size: 1.2rem;
     padding-block: .5rem;

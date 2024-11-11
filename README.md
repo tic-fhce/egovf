@@ -24,15 +24,15 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # Cambios realizados
-1. Estilos base en -> assets/estilos/estilo.css
+1. Estilos base en -> assets/estilos/estilo.css [x]
 2. Añadiendo logo y video en la carpeta public
 ## Componentes remplazados
-components/Front/ComponenteMenu.vue
+components/Front/ComponenteMenu.vue [x]
 modules/home/components/HeaderNavigation.vue
 
-borrar comentarios  en -> layouts/FrontLayout.vue
+borrar comentarios  en -> layouts/FrontLayout.vue [x]
 
 ## Cambio en la vista de home
-Cambio en -> src/views/Front/HomeView.vue
+Cambio en -> src/views/Front/HomeView.vue [x]
 Por -> src/modules/home/views/HomeView.vue
 cambiar la ruta y borrar el fronthomeview del proyecto
