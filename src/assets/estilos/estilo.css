@@ -17,10 +17,13 @@
   --size-page: 1280px;
   --color-primary: #00222F;
   --color-secondary: #146696;
+  --color-secondary-light: #068bd8;
   --color-third: #2ba179;
+  --color-third-light: #00bd7e;
 
   --color-white: #fff;
   --color-gray: #909090;
+  --color-gray-dark: #313131;
   --color-black: #101518;
 }
 

@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue';
+import FormLogin from '../components/Session/FormLogin.vue'
+import FormRegister from '../components/Session/FormRegister.vue'
 
 const isLogin = ref(true)
 
@@ -13,28 +15,10 @@ const isLogin = ref(true)
       </div>
       <div class="credentials">
       <Transition>
-        <form action="" class="signin" v-if="isLogin">
-          <legend>Inicia Sesion</legend>
-          <label for="name">
-            <input type="text" placeholder="name" />
-          </label>
-          <label for="name">
-            <input type="text" placeholder="lastname" />
-          </label>
-          <button type="submit">Enviar</button>
-          <button type="button" @click="() => { isLogin = false }">Crear cuenta</button>
-        </form>
+        <FormLogin v-model="isLogin" />
       </Transition>
         <Transition>
-          <form action="" class="signup" v-if="!isLogin">
-            <legend>Crea tu cuenta</legend>
-            <label for="name">
-              Phone:
-              <input type="text" placeholder="name" />
-            </label>
-            <button type="submit">Enviar</button>
-            <button type="button" @click="() => { isLogin = true }">Iniciar sesion</button>
-          </form>
+          <FormRegister v-model="isLogin" />
         </Transition>
       </div>
     </div>
@@ -47,7 +31,7 @@ const isLogin = ref(true)
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .wrapper {
@@ -56,27 +40,50 @@ const isLogin = ref(true)
   justify-content: center;
   position: relative;
   background-color: var(--color-white);
-  width: clamp(300px, 100%, 700px);
+  width: clamp(300px, 100%, 500px);
   flex-wrap: wrap;
   height: auto;
-  box-shadow: 50px 50px 50px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border-radius: .5rem;
+  overflow: hidden;
 }
 
 .wrapper .logo {
-  max-width: 300px;
+  max-width: 50px;
+  height: auto;
   width: 100%;
-  height: 100%;
   text-align: center;
-  background-color: var(--color-white);
+  position: absolute;
+  top: 0%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  margin-inline: auto;  
+  overflow: hidden;
+}
+
+@media (min-width: 720px) {
+  .wrapper {
+    width: clamp(300px, 100%, 700px);
+    box-shadow: 0px 20px 30px rgba(0, 0, 0, .7);
+  }
+  
+  .wrapper .logo {
+    position: static;
+    border-radius: 0;
+    max-width: 250px;
+    height: 100%;
+    padding: 1.5rem;
+  }
 }
 
 .wrapper img {
   height: auto;
   width: 100%;
   flex-basis: 100%;
-  max-width: 200px;
-  height: auto;
-  padding-block: 1rem;
+  height: auto;  
+  object-fit: cover;
+  padding-top: .5rem;
 }
 
 .wrapper .credentials {
@@ -93,54 +100,6 @@ const isLogin = ref(true)
 }
 
 .wrapper .signup {}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: var(--color-white);
-  width: 100%;
-  position:absolute;  
-  padding: 1.5rem;
-}
-
-legend {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--color-white);
-  text-transform: uppercase;
-}
-
-input {
-  width: 100%;
-  display: block;
-  padding: .3rem;
-  border: none;
-  outline: none;
-  border-radius: .2rem;
-  background-color: var(--color-white);
-}
-
-.label {
-  display: block;
-}
-
-button {
-  font-size: 1rem;
-  border-radius: .2rem;
-  padding-block: .3rem;
-  text-transform: capitalize;
-  border: 0;
-  background-color: var(--color-third);
-  color: var(--color-white);
-  font-weight: 700;
-  transition: background .5s ease, color .5s ease;
-
-  &:hover {
-    background-color: var(--color-secondary);
-  }
-}
 
 .v-enter-active,
 .v-leave-active {
