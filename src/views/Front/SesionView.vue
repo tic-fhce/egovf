@@ -161,6 +161,7 @@ export default {
             console.log(payload);
             await this.usuarioService.getToken(payload).then(response=>{
                 if(response.data!=""){
+                  console.log(response.data);                  
                     this.usuarioService.headersUsuario(response.data.token);
                     this.$cookies.set('token',response.data.token);
                     this.$cookies.set('cif',response.data.cif);

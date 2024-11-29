@@ -1,56 +1,89 @@
 <script setup>
-import { defineModel, ref } from 'vue'
+import UsuarioService from '@/services/usuarioServices.js';
+import { nextTick, ref, watch } from 'vue'
+import { useRouter } from 'vue-router';
+import { useCookies } from '../../utils/cookiesManager';
+import Swal from 'sweetalert2'
+
+const userService = new UsuarioService()
+
+const form = ref(null)
+
+const router = useRouter()
+
+const { setUserCookies } = useCookies()
+
+// para el registro
+// si es estudiante matricula - carnet - fecha de nacimiento
+// estudiante - docente - administrativo - persona no vinculada
 
 const textForm = {
-  ma: 'Ingrese su Matricula',
-  em: 'Ingrese su Correo Electronico',
-  po: 'Ingrese su Telefono',
-  ci: 'Ingrese su Cedula',
-  cif: 'Ingrese su CIF'
+  1: 'Ingrese su CIF',
+  2: 'Ingrese su Matricula',
+  3: 'Ingrese su Cedula',
+  4: 'Ingrese su Correo Electronico',
+  5: 'Ingrese su Telefono',
 }
 
 const valuesForm = {
-  ma: { name: 'matricula', placeholder: 'Matricula Universitaria' },
-  em: { name: 'correo', placeholder: 'Correo Electronico' },
-  po: { name: 'celular', placeholder: 'Numero de Celular' },
-  ci: { name: 'ci', placeholder: 'Complemento C.I.' },
-  cif: { name: 'cif', placeholder: 'Ingrese su Codigo de Identificacion Facultativa' }
+  1: { name: 'cif', placeholder: 'Codigo de Identificacion Facultativa' },
+  2: { name: 'matricula', placeholder: 'Matricula Universitaria' },
+  3: { name: 'ci', placeholder: 'Complemento C.I.' },
+  4: { name: 'correo', placeholder: 'Correo Electronico' },
+  5: { name: 'celular', placeholder: 'Numero de Celular' },
 }
 
-const isLogin = defineModel()
+const method = ref(4) // principal method to be called is method 4 email
 
-const method = ref('ma')
-
-const login = (e) => {
+const login = async (e) => {
   e.preventDefault()
-  console.log(Object.fromEntries(new FormData(e.target).entries()))
+  const data = Object.fromEntries(new FormData(e.target).entries())
+  // console.log(data)
+  const res = await userService.getToken(data)
+  // console.log(res)
+  if (res.data != "") {
+    // console.log("ok")
+    userService.headersUsuario(res.data.token);
+    setUserCookies(res.data)
+    router.push('/egovf')
+  } else {
+    // console.error("error")
+    Swal.fire({
+      icon: 'error',
+      title: 'Credenciales Incorrectas',
+      text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.',
+      footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
+    })
+  }
 }
+
+watch(method, async () => {
+  const nameInput = valuesForm[method.value].name
+  await nextTick();
+  form.value[`${nameInput}`].value = '';
+  form.value.pass.value = '';
+})
 
 </script>
 
 <template>
-  <form class="signin" v-if="isLogin" @submit="login">
+  <form class="signin" @submit="login" id="form" ref="form">
     <legend>Inicia Sesion
       <h2> {{ textForm[method] }} </h2>
     </legend>
     <label for="name">
-      <select class="method" name="method" id="method" v-model="method">
-        <option value="ma" selected>Matricula</option>
-        <option value="em">Correo electronico</option>
-        <option value="po">Telefono</option>
-        <option value="ci">Cedula</option>
-        <option value="cif">CIF</option>
+      <select class="method" name="id" id="method" v-model="method">
+        <option value="1">CIF</option>
+        <option value="2" selected>Matricula</option>
+        <option value="3">Cedula</option>
+        <option value="4">Correo electronico</option>
+        <option value="5">Telefono</option>
       </select>
     </label>
     <label for="credential" v-if="method">
-      <input 
-        :name="valuesForm[method].name" 
-        :placeholder="valuesForm[method].placeholder"
-        type="text" 
-        required 
-        :class="{ 'ext-active': method == 'ci' }"
-      />
-      <select class="ext" name="ext" id="ext" v-if="method == 'ci'">
+      <input :name="valuesForm[method].name" :placeholder="valuesForm[method].placeholder" type="text" required
+        :class="{ 'ext-active': method == 3 }" />
+      <select class="ext" name="complemento" id="complemento" v-if="method == 3">
         <option value="lp">lp</option>
         <option value="sc">sc</option>
         <option value="cb">cb</option>
@@ -63,10 +96,13 @@ const login = (e) => {
       </select>
     </label>
     <label for="password">
-      <input name="pass" type="password" placeholder="Contraseña" />
+      <input id="password" name="pass" type="password" placeholder="Contraseña" />
     </label>
     <button type="submit">Ingresar</button>
-    <button type="button" @click="() => { isLogin = false }">Crear cuenta</button>
+    <div class="options">
+      <button type="button" @click="() => { router.push('/register') }">Crear cuenta</button>
+      <button type="button">¿Olvidaste tu contraseña?</button>
+    </div>
   </form>
 </template>
 
@@ -145,7 +181,7 @@ select.ext:focus {
   border-radius: .2rem 0 0 .2rem;
 }
 
-button {
+button[type="submit"] {
   font-size: 1rem;
   border-radius: .2rem;
   padding-block: .3rem;
@@ -161,11 +197,21 @@ button {
   }
 }
 
+.options {
+  display: flex;
+  justify-content: space-between;
+}
+
 button[type="button"] {
-  background-color: var(--color-secondary);
+  color: var(--color-gray);
+  background-color: transparent;
+  transition: color .5s ease;
+  border: none;
+  font-weight: 500;
+  text-transform: underline;
 
   &:hover {
-    background-color: var(--color-secondary-light);
+    color: var(--color-secondary-light);
   }
 }
 </style>

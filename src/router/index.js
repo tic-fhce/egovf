@@ -18,9 +18,19 @@ const routes = [
       {
         path:'/sesion',
         name:'SesionView',
-        // component:()=> import('@/views/Front/SesionView.vue')
         component:()=> import('@/modules/home/views/SessionView.vue')
       },
+      {
+        path: '/register',
+        name: 'RegisterView',
+        component: () => import('@/modules/home/views/RegisterView.vue')
+      },
+      {
+        // eliminar esta parte luego de que el login este funcional
+        path:'/sesion2',
+        name:'SesionView2',
+        component:()=> import('@/views/Front/SesionView.vue')
+      },      
       {
         path:'/libreReporte:uriu',
         name:'ReporteLibreView',

@@ -1,9 +1,5 @@
 <script setup>
-import { ref } from 'vue';
 import FormLogin from '../components/Session/FormLogin.vue'
-import FormRegister from '../components/Session/FormRegister.vue'
-
-const isLogin = ref(true)
 
 </script>
 
@@ -14,12 +10,7 @@ const isLogin = ref(true)
         <img src="/logotic.png" alt="Logo tic umsa">
       </div>
       <div class="credentials">
-      <Transition>
-        <FormLogin v-model="isLogin" />
-      </Transition>
-        <Transition>
-          <FormRegister v-model="isLogin" />
-        </Transition>
+        <FormLogin/>
       </div>
     </div>
   </div>
@@ -49,12 +40,12 @@ const isLogin = ref(true)
 }
 
 .wrapper .logo {
-  max-width: 50px;
+  max-width: 40px;
   height: auto;
   width: 100%;
   text-align: center;
   position: absolute;
-  top: 0%;
+  top: .5rem;
   left: 0;
   right: 0;
   z-index: 1;
@@ -101,13 +92,4 @@ const isLogin = ref(true)
 
 .wrapper .signup {}
 
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
 </style>

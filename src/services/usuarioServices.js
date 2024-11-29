@@ -1,7 +1,8 @@
 import axios from "axios";
 
 //const usuario_api="https://stfhce.umsa.bo/egovf/fhce/";
-const usuario_api="http://192.168.31.45:8091/fhce-egovf/";
+// const usuario_api="http://192.168.31.45:8091/fhce-egovf/";
+const usuario_api="http://localhost:8091/fhce-egovf/";
 //const usuario_api="http://172.16.14.91:8091/fhce-egovf/";
 
 export default class UsuarioService{
@@ -21,6 +22,8 @@ export default class UsuarioService{
             "_06celular":payload.celular,
             "_07pass":payload.pass
         };
+        console.log(login);
+        
         return axios.post(usuario_api+"loginUsuario",login);
     }
     headersUsuario(token){
