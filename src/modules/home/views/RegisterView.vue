@@ -1,17 +1,79 @@
 <script setup>
-import { defineAsyncComponent, ref, shallowRef } from 'vue';
+import { defineAsyncComponent, ref, markRaw } from 'vue';
 
-import FormStudent from '../components/Register/FormStudent.vue';
-const FormTeacher = defineAsyncComponent(() => import('../components/Register/FormTeacher.vue'))
-const FormAdministrative = defineAsyncComponent(() => import('../components/Register/FormAdministrative.vue'))
-const FormOther = defineAsyncComponent(() => import('../components/Register/FormOther.vue'))
+const FormStudent = markRaw(defineAsyncComponent(() => import('../components/Register/FormStudent.vue')))
+const FormTeacher = markRaw(defineAsyncComponent(() => import('../components/Register/FormTeacher.vue')))
+const FormAdministrative = markRaw(defineAsyncComponent(() => import('../components/Register/FormAdministrative.vue')))
+const FormOther = markRaw(defineAsyncComponent(() => import('../components/Register/FormOther.vue')))
 
-const layoutForm = shallowRef(FormStudent)
-const selectedForm = ref('student')
+import imgStudent from '@/assets/img/home/register/student.png';
+import imgTeacher from '@/assets/img/home/register/teacher.png';
+import imgAdministrative from '@/assets/img/home/register/administrative.png';
+import imgOther from '@/assets/img/home/register/other.png';
 
-const handleForm = (cmp, opt) => {
-  layoutForm.value = cmp
-  selectedForm.value = opt
+const layoutForm = ref([
+  {
+    cmp: FormStudent,
+    name: 'student',
+    img: imgStudent,
+    selected: true
+  },
+  {
+    cmp: FormTeacher,
+    name: 'teacher',
+    img: imgTeacher,
+    selected: false
+  },
+  {
+    cmp: FormAdministrative,
+    name: 'administrative',
+    img: imgAdministrative,
+    selected: false
+  },
+  {
+    cmp: FormOther,
+    name: 'other',
+    img: imgOther,
+    selected: false
+  }
+]);
+
+const showDropdown = ref(false)
+
+const handleForm = (newLayout, index) => {    
+
+  // TODO: ver si refactorizar ya que siempre hace esta busqueda para ver si cambiar o no el form
+  const prevIndex = layoutForm.value.findIndex(x => x.selected)
+
+  console.log(layoutForm.value);
+  
+  if (newLayout.cmp == layoutForm.value[prevIndex].cmp) {
+    if(window.innerWidth < 480) {
+      showDropdown.value = !showDropdown.value
+      const prev = layoutForm.value[0]
+      layoutForm.value[0] = newLayout
+      layoutForm.value[prevIndex] = prev
+      layoutForm.value[prevIndex].transform = 'translateY(0%)'
+      console.log(layoutForm.value);
+    }
+    return
+  }
+  
+  if(window.innerWidth < 480) showDropdown.value = false
+  
+
+  if (window.innerWidth < 480) {
+    layoutForm.value[index] = layoutForm.value[prevIndex]
+
+    layoutForm.value[index].selected = false
+
+    layoutForm.value[prevIndex] = newLayout
+    layoutForm.value[prevIndex].selected = true
+  }else {
+    layoutForm.value[prevIndex].selected = false
+    layoutForm.value[index].selected = true
+  }
+
 }
 
 </script>
@@ -20,27 +82,25 @@ const handleForm = (cmp, opt) => {
   <section class="register container">
     <aside class="options">
       <h2>Ingresar como:</h2>
-      <ul>
-        <li :class="{ 'selected' : (selectedForm === 'student') }" @click="handleForm(FormStudent, 'student')">
-          <img src="@/assets/img/home/register/student.png" alt="student">
-          <h6 href="">Estudiante</h6>
+      <ul :class="{ 'show': showDropdown }">
+        <li v-for="(option, index) in layoutForm" :key="option.name" :class="{ 'selected': option.selected }"
+          @click="handleForm(option, index)"
+          :style="{ transform: `translateY(${(showDropdown ? index : 0) * 100}` + '%)' }">
+          <img :src="option.img" :alt="`Image for ${option.name}`" />
+          <h6>{{ option.name }}</h6>
         </li>
-        <li :class="{ 'selected' : (selectedForm === 'teacher') }" @click="handleForm(FormTeacher, 'teacher')">
-          <img src="@/assets/img/home/register/teacher.png" alt="teacher">
-          <h6 href="">Docente</h6>
-        </li>
-        <li :class="{ 'selected' : (selectedForm === 'administrative') }" @click="handleForm(FormAdministrative, 'administrative')">
-          <img src="@/assets/img/home/register/administrative.png" alt="administrative">
-          <h6 href="">Administrativo</h6>
-        </li>
-        <li :class="{ 'selected' : (selectedForm === 'other') }" @click="handleForm(FormOther, 'other')">
-          <img src="@/assets/img/home/register/other.png" alt="other">
-          <h6 href="">Persona no vinculada</h6>
-        </li>
+        <div class="arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M19 2a3 3 0 0 1 3 3v14a3 3 0 0 1 -3 3h-14a3 3 0 0 1 -3 -3v-14a3 3 0 0 1 3 -3zm-6.387 5.21a1 1 0 0 0 -1.32 .083l-.083 .094a1 1 0 0 0 .083 1.32l2.292 2.293h-5.585l-.117 .007a1 1 0 0 0 .117 1.993h5.585l-2.292 2.293l-.083 .094a1 1 0 0 0 1.497 1.32l4 -4l.073 -.082l.074 -.104l.052 -.098l.044 -.11l.03 -.112l.017 -.126l.003 -.075l-.007 -.118l-.029 -.148l-.035 -.105l-.054 -.113l-.071 -.111a1.008 1.008 0 0 0 -.097 -.112l-4 -4z" />
+          </svg>
+        </div>
       </ul>
     </aside>
     <div class="credentials">
-      <component :is="layoutForm" />
+      <!-- <component :is="layoutForm[0].cmp" /> -->
+      <component :is="layoutForm.find(x => x.selected).cmp" />
     </div>
     <br><br><br><br><br>
   </section>
@@ -54,7 +114,7 @@ const handleForm = (cmp, opt) => {
   gap: .5rem;
 }
 
-.options img{
+.options img {
   width: 100%;
   height: auto;
   max-width: 50px;
@@ -68,20 +128,56 @@ const handleForm = (cmp, opt) => {
   flex-direction: row;
   position: relative;
   flex-wrap: wrap;
-  
-  min-height: 65px;
+  color: var(--color-white);
+
+  /* min-height: 65px; */
+  height: 65px;
   width: 100%;
 }
+
 .options ul li {
   display: flex;
   align-items: center;
   gap: .5rem;
-  border-radius: .5rem;
+  /* border-radius: .5rem; */
   padding: .5rem;
   cursor: pointer;
   height: 65px;
   flex-grow: 1;
   width: 100%;
+  color: var(--color-white);
+  position: absolute;
+  background-color: var(--color-white);
+  color: var(--color-gray-dark);
+  transition: transform .3s ease,
+    background-color .3s ease,
+    color .3s ease;
+}
+
+.options ul li:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.options ul .arrow {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  pointer-events: none;
+  transition: transform .3s ease;
+}
+
+.options ul.show .arrow {
+  transform: rotate(90deg);
+}
+
+.options ul li:nth-child(n) {
+  z-index: 9;
 }
 
 .options ul li span {
@@ -94,16 +190,34 @@ const handleForm = (cmp, opt) => {
   color: var(--color-white);
   transition: all .3s ease;
   transform: translateY(0);
+  z-index: 10;
 }
 
 .credentials {
   flex-grow: 1;
 }
 
-@media (min-width: 480px) {
-  .options li {
-    max-width: 50%;
+@media (max-width: 480px) {
+  .options ul li {
+    transform: translateY(0%);
   }
+}
+
+@media (min-width: 480px) {
+  .options ul {
+    max-height: auto;
+    height: auto;
+  }
+  .options ul li {
+    max-width: 50%;
+    position: relative;
+  }
+
+  .options .arrow {
+    display: none;
+    opacity: 0;
+  }
+
 }
 
 @media (min-width: 768px) {
@@ -113,11 +227,11 @@ const handleForm = (cmp, opt) => {
   }
 
   .options {
-    width: 35%;
+    max-width: 35%;
   }
-  .options li {
+
+  .options ul li {
     max-width: 100%;
   }
 }
-
 </style>
