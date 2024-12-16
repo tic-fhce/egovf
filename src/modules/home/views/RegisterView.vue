@@ -1,5 +1,5 @@
 <script setup>
-import { defineAsyncComponent, ref, markRaw } from 'vue';
+import { defineAsyncComponent, ref, markRaw, onMounted, onBeforeUnmount, onBeforeUpdate, onUpdated } from 'vue';
 
 const FormStudent = markRaw(defineAsyncComponent(() => import('../components/Register/FormStudent.vue')))
 const FormTeacher = markRaw(defineAsyncComponent(() => import('../components/Register/FormTeacher.vue')))
@@ -40,41 +40,94 @@ const layoutForm = ref([
 
 const showDropdown = ref(false)
 
-const handleForm = (newLayout, index) => {    
+const handleForm = (newLayout, index) => {
 
   // TODO: ver si refactorizar ya que siempre hace esta busqueda para ver si cambiar o no el form
   const prevIndex = layoutForm.value.findIndex(x => x.selected)
 
-  console.log(layoutForm.value);
-  
   if (newLayout.cmp == layoutForm.value[prevIndex].cmp) {
-    if(window.innerWidth < 480) {
+    console.log('entra aqui');
+
+    if (window.innerWidth < 480) {
+      console.log('luego aqui');
+
       showDropdown.value = !showDropdown.value
-      const prev = layoutForm.value[0]
-      layoutForm.value[0] = newLayout
-      layoutForm.value[prevIndex] = prev
-      layoutForm.value[prevIndex].transform = 'translateY(0%)'
-      console.log(layoutForm.value);
+
+      const selectedLayout = layoutForm.value[prevIndex]
+      const copyLayout = JSON.parse(JSON.stringify(layoutForm.value))
+
+      copyLayout.splice(prevIndex, 1)
+
+      const newLayoutForm = [selectedLayout, ...copyLayout]
+      layoutForm.value = newLayoutForm
+
+      // const prev = layoutForm.value[0]
+
+      // layoutForm.value[0] = newLayout
+      // layoutForm.value[prevIndex] = prev
+
     }
     return
   }
-  
-  if(window.innerWidth < 480) showDropdown.value = false
-  
+
+  if (window.innerWidth < 480) showDropdown.value = false
+
+  console.log('Llego aqui');
 
   if (window.innerWidth < 480) {
-    layoutForm.value[index] = layoutForm.value[prevIndex]
+    console.log('aqui peto');
 
-    layoutForm.value[index].selected = false
+    // layoutForm.value[index] = layoutForm.value[prevIndex]
 
-    layoutForm.value[prevIndex] = newLayout
-    layoutForm.value[prevIndex].selected = true
-  }else {
+    // layoutForm.value[index].selected = false
+
+    // layoutForm.value[prevIndex] = newLayout
+    // layoutForm.value[prevIndex].selected = true
+    const selectedLayout = JSON.parse(JSON.stringify(newLayout))
+    selectedLayout.selected = true
+    const copyLayout = JSON.parse(JSON.stringify(layoutForm.value))
+    copyLayout.splice(prevIndex, 1)
+
+    console.log(newLayout);
+    console.log(selectedLayout);
+    console.log(copyLayout);
+    
+    
+    
+
+    const newLayoutForm = [selectedLayout, ...copyLayout]
+    console.log(newLayoutForm);
+    
+    layoutForm.value = newLayoutForm
+  } else {
     layoutForm.value[prevIndex].selected = false
     layoutForm.value[index].selected = true
   }
 
 }
+
+const calcSizeWindow = () => {
+  if (window.innerWidth > 480) {
+    showDropdown.value = false
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', calcSizeWindow)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', calcSizeWindow)
+})
+
+onBeforeUpdate(() => {
+  console.log('beforeUpdate')
+
+})
+
+onUpdated(() => {
+  console.log('updated')
+})
 
 </script>
 
@@ -130,7 +183,6 @@ const handleForm = (newLayout, index) => {
   flex-wrap: wrap;
   color: var(--color-white);
 
-  /* min-height: 65px; */
   height: 65px;
   width: 100%;
 }
@@ -147,11 +199,10 @@ const handleForm = (newLayout, index) => {
   width: 100%;
   color: var(--color-white);
   position: absolute;
+  inset: 0;
   background-color: var(--color-white);
   color: var(--color-gray-dark);
-  transition: transform .3s ease,
-    background-color .3s ease,
-    color .3s ease;
+  transition: all 2s ease;
 }
 
 .options ul li:hover {
@@ -188,8 +239,6 @@ const handleForm = (newLayout, index) => {
 .options ul li.selected {
   background-color: var(--color-primary);
   color: var(--color-white);
-  transition: all .3s ease;
-  transform: translateY(0);
   z-index: 10;
 }
 
@@ -197,20 +246,16 @@ const handleForm = (newLayout, index) => {
   flex-grow: 1;
 }
 
-@media (max-width: 480px) {
-  .options ul li {
-    transform: translateY(0%);
-  }
-}
-
 @media (min-width: 480px) {
   .options ul {
     max-height: auto;
     height: auto;
   }
+
   .options ul li {
     max-width: 50%;
     position: relative;
+    transform: translateY(0%) !important;
   }
 
   .options .arrow {
