@@ -51,6 +51,8 @@
 }
 .credentials form label span {
   position: absolute;
+  display: inline-block;
+  height: fit-content;
   left: 0;
   bottom: 0;
   top: 0;

@@ -1,21 +1,55 @@
+<script setup>
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { reactive } from 'vue';
+
+const payload = reactive({
+  ci: '',
+  mat: '',
+  password: '',
+  confirm_password: '',
+})
+
+const rules = {
+  ci: { required },
+}
+
+const v$ = useVuelidate(rules, payload)
+
+// Función para validar el formulario
+const handleSubmit = async (event) => {
+  event.preventDefault()
+  const isValid = await v$.value.$validate()
+  if (!isValid) {
+    console.error('validation failed')
+    return
+  }
+  console.log(payload)
+
+}
+
+</script>
+
 <template>
-  <form>
+  <form @submit="handleSubmit">
     <h2>Crea una cuenta de Estudiante</h2>
+    {{ payload }}
     <label for="ci">
-      <input type="text" id="ci" name="ci" required placeholder="">
+      <input v-model="payload.ci" type="text" id="ci" name="ci" required placeholder="">
       <span>Cedula de Identidad</span>
+      <div class="error">{{  v$?.ci?.$errors[0]?.$message  }}</div>
     </label>
     <label for="mat">
-      <input type="text" id="mat" name="mat" required placeholder=" ">
+      <input v-model="payload.mat" type="text" id="mat" name="mat" required placeholder=" ">
       <span>Matricula</span>
     </label>
     <div class="credentials__password">
       <label for="password">
-        <input type="password" id="password" name="password" required placeholder=" ">
+        <input v-model="payload.password" type="password" id="password" required name="password" placeholder=" ">
         <span>Contraseña</span>
       </label>
       <label for="password2">
-        <input type="password" id="password2" name="password2" required placeholder=" ">
+        <input v-model="payload.confirm_password" type="password" id="password2" required name="password2" placeholder=" ">
         <span>Repetir Contraseña</span>
       </label>
     </div>
@@ -70,6 +104,8 @@
 
 .credentials form label span {
   position: absolute;
+  display: inline-block;
+  height: fit-content;
   left: 0;
   bottom: 0;
   top: 0;
@@ -115,5 +151,16 @@
 .credentials__password label {
   flex-basis: 220px;
   flex-grow: 1;
+}
+
+div.error {
+  color: red;
+  position: absolute;
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+  top: -40%;
+  right: 0;
+  font-size: .85rem;
 }
 </style>

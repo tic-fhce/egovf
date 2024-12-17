@@ -22,7 +22,7 @@ export default class UsuarioService{
             "_06celular":payload.celular,
             "_07pass":payload.pass
         };
-        console.log(login);
+        // console.log(login);
         
         return axios.post(usuario_api+"loginUsuario",login);
     }

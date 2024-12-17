@@ -39,20 +39,23 @@ const login = async (e) => {
   e.preventDefault()
   const data = Object.fromEntries(new FormData(e.target).entries())
   // console.log(data)
-  const res = await userService.getToken(data)
-  // console.log(res)
-  if (res.data != "") {
-    // console.log("ok")
+  try {    
+    const res = await userService.getToken(data)
+    if (res.data == "") {
+      throw {
+        title: 'Credenciales Incorrectas',
+        text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.'
+      }
+    }    
     userService.headersUsuario(res.data.token);
     setUserCookies(res.data)
     router.push('/egovf')
-  } else {
-    // console.error("error")
+  } catch (error) {
     Swal.fire({
       icon: 'error',
-      title: 'Credenciales Incorrectas',
-      text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.',
-      footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
+      title: error?.title ?? 'Servidor no encontrado',
+      text: error?.text ?? 'El servidor no está respondiendo, comuniquese con el administrador.',
+      // footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
     })
   }
 }

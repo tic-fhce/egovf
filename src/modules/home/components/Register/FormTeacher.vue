@@ -2,7 +2,7 @@
   <form>
     <h2>Crea una cuenta de Docente</h2>
     <label for="ci">
-      <input type="text" id="ci" name="ci" required placeholder="">
+      <input type="text" id="ci" name="ci" required placeholder=" ">
       <span>Cedula de Identidad</span>
     </label>
     <label for="cif">
@@ -29,7 +29,7 @@
   height: auto;
 }
 
-.credentials form{
+.credentials form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -57,17 +57,21 @@
 .credentials form label {
   width: 100%;
   border-bottom: 1px solid var(--color-gray-dark);
-  position:relative;
+  position: relative;
   padding-block: .5rem;
   cursor: text;
 }
+
 .credentials form input {
   width: 100%;
   border: 0;
   outline: 0;
 }
+
 .credentials form label span {
   position: absolute;
+  display: inline-block;
+  height: fit-content;
   left: 0;
   bottom: 0;
   top: 0;
@@ -78,9 +82,9 @@
   transform-origin: left top;
 }
 
-.credentials form input:focus ~ span,
-.credentials form input:valid ~ span,
-.credentials form input:not(:placeholder-shown) ~ span{
+.credentials form input:focus~span,
+.credentials form input:valid~span,
+.credentials form input:not(:placeholder-shown)~span {
   align-items: flex-start;
   top: -40%;
   transform: scale(0.8);
@@ -106,7 +110,7 @@
 
 .credentials__password {
   display: flex;
-  gap: 1rem;  
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
