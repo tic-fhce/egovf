@@ -6,7 +6,10 @@
 	<div class="about">
 		<div class="wrapper">
 			<div class="image">
-				<img src="/about.jpg" alt="Imagen de la facultad">
+				<picture>
+					<source srcset="/about.webp" type="image/webp">
+					<img src="/about.jpg" alt="Imagen de la facultad">
+				</picture>
 			</div>
 			<div class="content">
 				<img src="/logoumsa.png" alt="Logo de la umsa">

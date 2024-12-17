@@ -1,30 +1,24 @@
 <template>
   <form>
     <h2>Crea una cuenta de Docente</h2>
-    <label for="name">
-      <input type="text" id="name" name="name" required placeholder=" ">
-      <span>Nombre</span>
-    </label>
-    <label for="paterno">
-      <input type="text" id="paterno" name="paterno" required placeholder=" ">
-      <span>Paterno</span>
+    <label for="ci">
+      <input type="text" id="ci" name="ci" required placeholder="">
+      <span>Cedula de Identidad</span>
     </label>
     <label for="cif">
       <input type="text" id="cif" name="cif" required placeholder=" ">
       <span>CIF</span>
     </label>
-    <label for="email">
-      <input type="email" id="email" name="email" required placeholder=" ">
-      <span>Correo electronico</span>
-    </label>
-    <label for="password">
-      <input type="password" id="password" name="password" required placeholder=" ">
-      <span>Contraseña</span>
-    </label>
-    <label for="password2">
-      <input type="password" id="password2" name="password2" required placeholder=" ">
-      <span>Repetir Contraseña</span>
-    </label>
+    <div class="credentials__password">
+      <label for="password">
+        <input type="password" id="password" name="password" required placeholder=" ">
+        <span>Contraseña</span>
+      </label>
+      <label for="password2">
+        <input type="password" id="password2" name="password2" required placeholder=" ">
+        <span>Repetir Contraseña</span>
+      </label>
+    </div>
     <button type="submit">Crear Cuenta</button>
   </form>
 </template>
@@ -42,7 +36,22 @@
 }
 
 .credentials form h2 {
-  margin-bottom: 0;
+  padding-bottom: .25rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  position: relative;
+  width: fit-content;
+}
+
+.credentials form h2::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-color: var(--color-third);
+  bottom: -.5rem;
+  left: 0;
+  right: 0;
 }
 
 .credentials form label {
@@ -93,5 +102,16 @@
 
 .credentials form button:hover {
   background-color: var(--color-secondary);
+}
+
+.credentials__password {
+  display: flex;
+  gap: 1rem;  
+  flex-wrap: wrap;
+}
+
+.credentials__password label {
+  flex-basis: 220px;
+  flex-grow: 1;
 }
 </style>

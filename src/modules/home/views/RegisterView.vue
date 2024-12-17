@@ -1,38 +1,38 @@
 <script setup>
-import { defineAsyncComponent, ref, markRaw, onMounted, onBeforeUnmount, onBeforeUpdate, onUpdated } from 'vue';
+import { defineAsyncComponent, ref, markRaw, onMounted, onBeforeUnmount, shallowRef } from 'vue';
 
 const FormStudent = markRaw(defineAsyncComponent(() => import('../components/Register/FormStudent.vue')))
 const FormTeacher = markRaw(defineAsyncComponent(() => import('../components/Register/FormTeacher.vue')))
 const FormAdministrative = markRaw(defineAsyncComponent(() => import('../components/Register/FormAdministrative.vue')))
 const FormOther = markRaw(defineAsyncComponent(() => import('../components/Register/FormOther.vue')))
 
-import imgStudent from '@/assets/img/home/register/student.png';
-import imgTeacher from '@/assets/img/home/register/teacher.png';
-import imgAdministrative from '@/assets/img/home/register/administrative.png';
-import imgOther from '@/assets/img/home/register/other.png';
+import imgStudent from '@/assets/img/home/register/student.webp';
+import imgTeacher from '@/assets/img/home/register/teacher.webp';
+import imgAdministrative from '@/assets/img/home/register/administrative.webp';
+import imgOther from '@/assets/img/home/register/other.webp';
 
-const layoutForm = ref([
+const layoutForm = shallowRef([
   {
     cmp: FormStudent,
-    name: 'student',
+    name: 'Estudiante',
     img: imgStudent,
     selected: true
   },
   {
     cmp: FormTeacher,
-    name: 'teacher',
+    name: 'Docente',
     img: imgTeacher,
     selected: false
   },
   {
     cmp: FormAdministrative,
-    name: 'administrative',
+    name: 'Administrativo',
     img: imgAdministrative,
     selected: false
   },
   {
     cmp: FormOther,
-    name: 'other',
+    name: 'Persona Externa',
     img: imgOther,
     selected: false
   }
@@ -40,75 +40,44 @@ const layoutForm = ref([
 
 const showDropdown = ref(false)
 
-const handleForm = (newLayout, index) => {
+const handleForm = (newLayout, index) => {  
+  const prevIndexSelected = layoutForm.value.findIndex(x => x.selected)
 
-  // TODO: ver si refactorizar ya que siempre hace esta busqueda para ver si cambiar o no el form
-  const prevIndex = layoutForm.value.findIndex(x => x.selected)
-
-  if (newLayout.cmp == layoutForm.value[prevIndex].cmp) {
-    console.log('entra aqui');
-
+  // Si esque le da click al mismo layout entonces no hace nada
+  if(newLayout.cmp == layoutForm.value[prevIndexSelected].cmp) {
     if (window.innerWidth < 480) {
-      console.log('luego aqui');
-
       showDropdown.value = !showDropdown.value
-
-      const selectedLayout = layoutForm.value[prevIndex]
-      const copyLayout = JSON.parse(JSON.stringify(layoutForm.value))
-
-      copyLayout.splice(prevIndex, 1)
-
-      const newLayoutForm = [selectedLayout, ...copyLayout]
-      layoutForm.value = newLayoutForm
-
-      // const prev = layoutForm.value[0]
-
-      // layoutForm.value[0] = newLayout
-      // layoutForm.value[prevIndex] = prev
-
     }
-    return
+    return;
   }
-
-  if (window.innerWidth < 480) showDropdown.value = false
-
-  console.log('Llego aqui');
+  
+  const newLayoutForm = [...layoutForm.value]
+  newLayoutForm[prevIndexSelected].selected = false
+  newLayoutForm[index].selected = true
 
   if (window.innerWidth < 480) {
-    console.log('aqui peto');
-
-    // layoutForm.value[index] = layoutForm.value[prevIndex]
-
-    // layoutForm.value[index].selected = false
-
-    // layoutForm.value[prevIndex] = newLayout
-    // layoutForm.value[prevIndex].selected = true
-    const selectedLayout = JSON.parse(JSON.stringify(newLayout))
-    selectedLayout.selected = true
-    const copyLayout = JSON.parse(JSON.stringify(layoutForm.value))
-    copyLayout.splice(prevIndex, 1)
-
-    console.log(newLayout);
-    console.log(selectedLayout);
-    console.log(copyLayout);
-    
-    
-    
-
-    const newLayoutForm = [selectedLayout, ...copyLayout]
-    console.log(newLayoutForm);
-    
-    layoutForm.value = newLayoutForm
-  } else {
-    layoutForm.value[prevIndex].selected = false
-    layoutForm.value[index].selected = true
+    showDropdown.value = false
+    setTimeout(() => {
+      const selectedLayout = newLayoutForm[index]
+      newLayoutForm.splice(index, 1)
+      newLayoutForm.unshift(selectedLayout)
+    }, 300);
   }
 
+  layoutForm.value = newLayoutForm
 }
 
 const calcSizeWindow = () => {
   if (window.innerWidth > 480) {
     showDropdown.value = false
+  }
+  if (window.innerWidth < 480) {
+    const newLayoutForm = [...layoutForm.value]
+    const indexSelected = newLayoutForm.findIndex(x => x.selected)
+    const selectedLayout = newLayoutForm[indexSelected]
+    newLayoutForm.splice(indexSelected, 1)
+    newLayoutForm.unshift(selectedLayout)
+    layoutForm.value = newLayoutForm
   }
 }
 
@@ -118,15 +87,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', calcSizeWindow)
-})
-
-onBeforeUpdate(() => {
-  console.log('beforeUpdate')
-
-})
-
-onUpdated(() => {
-  console.log('updated')
 })
 
 </script>
@@ -176,6 +136,10 @@ onUpdated(() => {
   aspect-ratio: 1 / 1;
 }
 
+.options h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
 .options ul {
   display: flex;
   flex-direction: row;
@@ -191,7 +155,7 @@ onUpdated(() => {
   display: flex;
   align-items: center;
   gap: .5rem;
-  /* border-radius: .5rem; */
+  border-radius: .5rem;
   padding: .5rem;
   cursor: pointer;
   height: 65px;
@@ -202,7 +166,9 @@ onUpdated(() => {
   inset: 0;
   background-color: var(--color-white);
   color: var(--color-gray-dark);
-  transition: all 2s ease;
+  transition: background .3s ease-in-out,
+    color .3s ease-in-out,
+    transform .3s ease-in-out;
 }
 
 .options ul li:hover {

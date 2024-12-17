@@ -1,6 +1,6 @@
 <template>
   <form>
-    <h2>Crea una cuenta de Administrativo</h2>
+    <h2>Crear cuenta Administrativo</h2>
     <label for="name">
       <input type="text" id="name" name="name" required placeholder=" ">
       <span>Nombre</span>
@@ -38,7 +38,22 @@
 }
 
 .credentials form h2 {
-  margin-bottom: 0;
+  padding-bottom: .25rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 500;
+  position: relative;
+  width: fit-content;
+}
+
+.credentials form h2::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-color: var(--color-third);
+  bottom: -.5rem;
+  left: 0;
+  right: 0;
 }
 
 .credentials form label {
