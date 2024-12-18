@@ -70,7 +70,7 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-image: radial-gradient(circle at 50% 50%, #000000, var(--color-secondary) 10%, var(--color-primary) 100%); */
+  /* background-image: radial-gradient(circle at 50% 50%, #000000, var(--color-secondary) 50%, var(--color-primary) 100%); */
   background-color: var(--color-primary);
 }
 </style>

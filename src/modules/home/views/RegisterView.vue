@@ -145,6 +145,7 @@ onBeforeUnmount(() => {
   flex-direction: row;
   position: relative;
   flex-wrap: wrap;
+  margin-bottom: 0;
   color: var(--color-white);
 
   height: 65px;

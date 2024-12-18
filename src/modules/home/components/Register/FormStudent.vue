@@ -1,6 +1,6 @@
 <script setup>
 import { useVuelidate } from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import { helpers, maxLength, minLength, required } from '@vuelidate/validators';
 import { reactive } from 'vue';
 
 const payload = reactive({
@@ -10,8 +10,24 @@ const payload = reactive({
   confirm_password: '',
 })
 
+const numeric = helpers.regex(/[1-9]+$/)
+
 const rules = {
-  ci: { required },
+  ci: {
+    required: helpers.withMessage('Este campo es requerido', required),
+    minLength: helpers.withMessage('El campo debe tener minimo 4 caracteres', minLength(4)),
+    maxLength: helpers.withMessage('El campo debe tener maximo 10 caracteres', maxLength(10)),
+    numeric: helpers.withMessage('El campo debe ser numérico', numeric),
+  },
+  mat: {
+    required: helpers.withMessage('Este campo es requerido', required),
+  },
+  password: {
+    required: helpers.withMessage('Este campo es requerido', required),
+  },
+  confirm_password: {
+    required: helpers.withMessage('Este campo es requerido', required),
+  },
 }
 
 const v$ = useVuelidate(rules, payload)
@@ -31,26 +47,29 @@ const handleSubmit = async (event) => {
 </script>
 
 <template>
+  <h2>Crea una cuenta de Estudiante</h2>
   <form @submit="handleSubmit">
-    <h2>Crea una cuenta de Estudiante</h2>
-    {{ payload }}
     <label for="ci">
       <input v-model="payload.ci" type="text" id="ci" name="ci" required placeholder="">
       <span>Cedula de Identidad</span>
-      <div class="error">{{  v$?.ci?.$errors[0]?.$message  }}</div>
+      <div class="error">{{ v$?.ci?.$errors[0]?.$message }}</div>
     </label>
     <label for="mat">
       <input v-model="payload.mat" type="text" id="mat" name="mat" required placeholder=" ">
       <span>Matricula</span>
+      <div class="error">{{ v$?.mat?.$errors[0]?.$message }}</div>
     </label>
     <div class="credentials__password">
       <label for="password">
         <input v-model="payload.password" type="password" id="password" required name="password" placeholder=" ">
         <span>Contraseña</span>
+        <div class="error">{{ v$?.password?.$errors[0]?.$message }}</div>
       </label>
       <label for="password2">
-        <input v-model="payload.confirm_password" type="password" id="password2" required name="password2" placeholder=" ">
+        <input v-model="payload.confirm_password" type="password" id="password2" required name="password2"
+          placeholder=" ">
         <span>Repetir Contraseña</span>
+        <div class="error">{{ v$?.confirm_password?.$errors[0]?.$message }}</div>
       </label>
     </div>
     <button type="submit">Crear Cuenta</button>
@@ -63,21 +82,16 @@ const handleSubmit = async (event) => {
   height: auto;
 }
 
-.credentials form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.credentials form h2 {
+.credentials h2 {
   padding-bottom: .25rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 500;
   position: relative;
   width: fit-content;
+  margin-bottom: 2.5rem;
 }
 
-.credentials form h2::before {
+.credentials h2::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -86,6 +100,12 @@ const handleSubmit = async (event) => {
   bottom: -.5rem;
   left: 0;
   right: 0;
+}
+
+.credentials form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .credentials form label {
@@ -144,8 +164,14 @@ const handleSubmit = async (event) => {
 
 .credentials__password {
   display: flex;
-  gap: 1rem;
+  gap: 2.5rem;
   flex-wrap: wrap;
+}
+
+@media (min-width: 480px) {
+  .credentials__password {
+    gap: 1rem;
+  }
 }
 
 .credentials__password label {
@@ -157,10 +183,18 @@ div.error {
   color: red;
   position: absolute;
   display: inline-block;
-  height: fit-content;
   width: fit-content;
-  top: -40%;
+  height: 20px;
+  bottom: -60%;
   right: 0;
+  left: 0;
+  width: 100%;
   font-size: .85rem;
+  white-space: nowrap;
+  /* Para que no exista saltos de linea */
+  text-overflow: ellipsis;
+  /* Para que el texto si sale de la caja sea ... */
+  overflow: hidden;
+  /* Para que el texto no se salga de la caja */
 }
 </style>
