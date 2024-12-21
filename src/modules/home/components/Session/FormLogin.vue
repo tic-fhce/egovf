@@ -13,10 +13,6 @@ const router = useRouter()
 
 const { setUserCookies } = useCookies()
 
-// para el registro
-// si es estudiante matricula - carnet - fecha de nacimiento
-// estudiante - docente - administrativo - persona no vinculada
-
 const textForm = {
   1: 'Ingrese su CIF',
   2: 'Ingrese su Matricula',
@@ -26,11 +22,11 @@ const textForm = {
 }
 
 const valuesForm = {
-  1: { name: 'cif', placeholder: 'Codigo de Identificacion Facultativa' },
-  2: { name: 'matricula', placeholder: 'Matricula Universitaria' },
-  3: { name: 'ci', placeholder: 'Complemento C.I.' },
-  4: { name: 'correo', placeholder: 'Correo Electronico' },
-  5: { name: 'celular', placeholder: 'Numero de Celular' },
+  1: { name: 'cif', placeholder: 'Codigo de Identificacion Facultativa', inputType: 'number' },
+  2: { name: 'matricula', placeholder: 'Matricula Universitaria', inputType: 'number' },
+  3: { name: 'ci', placeholder: 'Complemento C.I.', inputType: 'number' },
+  4: { name: 'correo', placeholder: 'Correo Electronico', inputType: 'email' },
+  5: { name: 'celular', placeholder: 'Numero de Celular', inputType: 'number' },
 }
 
 const method = ref(4) // principal method to be called is method 4 email
@@ -39,14 +35,16 @@ const login = async (e) => {
   e.preventDefault()
   const data = Object.fromEntries(new FormData(e.target).entries())
   // console.log(data)
-  try {    
+  try {            
     const res = await userService.getToken(data)
+        
     if (res.data == "") {
       throw {
         title: 'Credenciales Incorrectas',
         text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.'
       }
-    }    
+    }  
+    
     userService.headersUsuario(res.data.token);
     setUserCookies(res.data)
     router.push('/egovf')
@@ -84,7 +82,7 @@ watch(method, async () => {
       </select>
     </label>
     <label for="credential" v-if="method">
-      <input :name="valuesForm[method].name" :placeholder="valuesForm[method].placeholder" type="text" required
+      <input :name="valuesForm[method].name" :placeholder="valuesForm[method].placeholder" :type="valuesForm[method].inputType" required
         :class="{ 'ext-active': method == 3 }" />
       <select class="ext" name="complemento" id="complemento" v-if="method == 3">
         <option value="lp">lp</option>
@@ -157,6 +155,10 @@ select.method {
 option {
   background-color: var(--color-white);
   color: var(--color-gray-dark);
+}
+
+option:first-child {
+  border-radius: 0;
 }
 
 select.method:focus,

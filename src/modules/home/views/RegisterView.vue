@@ -147,6 +147,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   margin-bottom: 0;
   color: var(--color-white);
+  z-index: 20;
 
   height: 65px;
   width: 100%;
@@ -170,6 +171,7 @@ onBeforeUnmount(() => {
   transition: background .3s ease-in-out,
     color .3s ease-in-out,
     transform .3s ease-in-out;
+  z-index: 20;
 }
 
 .options ul li:hover {

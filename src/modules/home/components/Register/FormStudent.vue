@@ -2,7 +2,19 @@
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators';
 import { reactive } from 'vue';
+import RegisterService from '../../services/RegisterService';
 
+/**
+ * Sin contraseñas******
+ * Estudiante
+  * Matricula - CI
+  * Docente
+  * CI - Fecha de nacimiento
+  * Administrativo
+  * CI - Fecha de nacimiento
+  * Otros
+  * email - phone - nombre - paterno - materno
+ */
 const payload = reactive({
   ci: '',
   mat: '',
@@ -10,7 +22,7 @@ const payload = reactive({
   confirm_password: '',
 })
 
-const numeric = helpers.regex(/[1-9]+$/)
+const numeric = helpers.regex(/^[1-9]+[0-9]*$/)
 
 const rules = {
   ci: {
@@ -21,6 +33,9 @@ const rules = {
   },
   mat: {
     required: helpers.withMessage('Este campo es requerido', required),
+    minLength: helpers.withMessage('El campo debe tener minimo 4 caracteres', minLength(4)),
+    maxLength: helpers.withMessage('El campo debe tener maximo 10 caracteres', maxLength(10)),
+    numeric: helpers.withMessage('El campo debe ser numérico', numeric),
   },
   password: {
     required: helpers.withMessage('Este campo es requerido', required),
@@ -42,6 +57,14 @@ const handleSubmit = async (event) => {
   }
   console.log(payload)
 
+  try {
+    const res = await RegisterService.postRegister({ payload })
+    console.log(res)
+  }catch(error) {
+    console.error(error)
+    alert('Error al registrar')
+  }
+
 }
 
 </script>
@@ -59,7 +82,7 @@ const handleSubmit = async (event) => {
       <span>Matricula</span>
       <div class="error">{{ v$?.mat?.$errors[0]?.$message }}</div>
     </label>
-    <div class="credentials__password">
+    <div class="credentials__group">
       <label for="password">
         <input v-model="payload.password" type="password" id="password" required name="password" placeholder=" ">
         <span>Contraseña</span>
@@ -162,23 +185,27 @@ const handleSubmit = async (event) => {
   background-color: var(--color-secondary);
 }
 
-.credentials__password {
+.credentials__group {
   display: flex;
   gap: 2.5rem;
   flex-wrap: wrap;
 }
 
 @media (min-width: 480px) {
-  .credentials__password {
+  .credentials__group {
+    gap: 2.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .credentials__group {
     gap: 1rem;
   }
 }
 
-.credentials__password label {
+.credentials__group label {
   flex-basis: 220px;
   flex-grow: 1;
 }
-
 div.error {
   color: red;
   position: absolute;
