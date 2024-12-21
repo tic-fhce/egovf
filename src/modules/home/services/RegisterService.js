@@ -26,7 +26,7 @@ export default class RegisterService {
 
       console.log(data)
 
-      return response
+      return data
     }catch(error) {
       console.log(error)
       throw new Error('Error al registrar')

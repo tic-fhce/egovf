@@ -4,6 +4,7 @@ import { nextTick, ref, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useCookies } from '../../utils/cookiesManager';
 import Swal from 'sweetalert2'
+import ModalDialog from '../ForgotPassword/ModalDialog.vue';
 
 const userService = new UsuarioService()
 
@@ -102,7 +103,8 @@ watch(method, async () => {
     <button type="submit">Ingresar</button>
     <div class="options">
       <button type="button" @click="() => { router.push('/register') }">Crear cuenta</button>
-      <button type="button">¿Olvidaste tu contraseña?</button>
+      <!-- <button type="button">¿Olvidaste tu contraseña?</button> -->
+      <ModalDialog type="link" title="¿Olvidaste tu contraseña?" />
     </div>
   </form>
 </template>

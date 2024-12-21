@@ -2,6 +2,8 @@
 import { useVuelidate } from '@vuelidate/core';
 import { email, helpers, maxLength, minLength, required } from '@vuelidate/validators';
 import { reactive } from 'vue'
+import RegisterService from '../../services/RegisterService';
+import Swal from 'sweetalert2'
 
 const payload = reactive({
   name: '',
@@ -45,14 +47,33 @@ const rules = {
 
 const v$ = useVuelidate(rules, payload)
 
+// Función para validar el formulario
 const handleSubmit = async (event) => {
   event.preventDefault()
   const isValid = await v$.value.$validate()
-  if(!isValid) {
+  if (!isValid) {
     console.error('validation failed')
     return
   }
   console.log(payload)
+
+  try {
+    const res = await RegisterService.postRegister({ payload })
+    console.log(res)
+    Swal.fire({
+      icon: 'success',
+      title: 'Registro Exitoso',
+      text: 'El registro fue exitoso, continua con tu sesion.'
+    })
+  }catch(error) {
+    console.error(error)
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al registrar',
+      text: 'El registro no fue exitoso, verifique e intente Nuevamente, o comuníquese con el administrador.'
+    })
+  }
+
 }
 
 </script>

@@ -3,6 +3,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators';
 import { reactive } from 'vue';
 import RegisterService from '../../services/RegisterService';
+import Swal from 'sweetalert2'
 
 /**
  * Sin contraseñas******
@@ -60,9 +61,18 @@ const handleSubmit = async (event) => {
   try {
     const res = await RegisterService.postRegister({ payload })
     console.log(res)
+    Swal.fire({
+      icon: 'success',
+      title: 'Registro Exitoso',
+      text: 'El registro fue exitoso, continua con tu sesion.'
+    })
   }catch(error) {
     console.error(error)
-    alert('Error al registrar')
+    Swal.fire({
+      icon: 'error',
+      title: 'Error al registrar',
+      text: 'El registro no fue exitoso, verifique e intente Nuevamente, o comuníquese con el administrador.'
+    })
   }
 
 }
