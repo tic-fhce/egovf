@@ -18,6 +18,7 @@ const dialogRef = ref()
 const open = ref(false)
 
 const credential = ref('')
+const code = ref('')
 const isValidCredential = ref(false)
 const isError = ref('')
 const isLoading = ref(false)
@@ -70,6 +71,7 @@ const handleSubmit = async () => {
 watch(open, () => {
   credential.value = ''
   isError.value = ''
+  code.value = ''
   isValidCredential.value = false
 })
 
