@@ -23,7 +23,7 @@ export default class UsuarioService {
       _06celular: payload.celular,
       _07pass: payload.pass,
     };
-    return axios.post(usuario_api + "loginUsuario", login);
+    return axios.post(usuario_api + "login", login);
   }
   headersUsuario(token) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;

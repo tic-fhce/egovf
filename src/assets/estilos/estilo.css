@@ -1,5 +1,6 @@
 .headercolor{
-  background-color: #015D82;
+  /*background-color: #015D82;*/
+  background-color: var(--color-primary);
   color:white;
 }
 .font{
@@ -11,4 +12,69 @@
 }
 .fontabla{
   font-size: 12px;
+}
+
+:root {
+  --size-page: 1280px;
+  --color-primary: #00222F;
+  --color-secondary: #146696;
+  --color-secondary-light: #068bd8;
+  --color-third: #2ba179;
+  --color-third-light: #00bd7e;
+
+  --color-white: #fff;
+  --color-gray: #909090;
+  --color-gray-light: #b9b9b9;
+  --color-gray-dark: #313131;
+  --color-black: #101518;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+html {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  font-size: 16px;  
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+
+/*  Utilities  */
+
+.container {
+  max-width: var(--size-page);
+  margin-inline: auto;
+}
+
+/* List element */
+.lista {
+  counter-increment: index; 
+  display: flex;
+  align-items: center;
+  padding: 6px 30px;
+  box-sizing: border-box;
+}
+
+
+/* Element counter */
+.lista::before {
+  font-size: 1.5rem;
+  text-align: right;
+  font-weight: bold;
+  min-width: 25px;
+  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  align-self: flex-start;
 }

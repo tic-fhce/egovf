@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import { API_URL_EGOVF_UNIV } from "@/env";
+import { API_URL_EGOVF_UNI } from "@/env";
 //const unidadUrl="https://stfhce.umsa.bo/fhce-egovf-uni/";
 //const unidadUrl="http://192.168.31.45:8094/fhce-egovf-uni/";
 //const unidadUrl="http://172.16.14.91:8094/fhce-egovf-uni/";
-const unidadUrl = API_URL_EGOVF_UNIV;
+const unidadUrl = API_URL_EGOVF_UNI;
 
 export default class UnidadService {
   getListaUnidad() {

@@ -17,7 +17,7 @@ import ComponenteMInvVue from '@/components/Inv/ComponenteMInv.vue';
 
 // Declaramos los Servicios
 import EgovfService from '@/services/egovf/egovfService';
-import EmpleadoService from '@/services/emp/empleadoService';
+import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
 // End
 
 export default {

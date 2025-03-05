@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ComponenteSidebar :menu="menu"/>
+    <ComponenteSidebar :modulo="modulo"/>
     <div class="wrapper d-flex flex-column min-vh-100 bg-light">
       <ComponenteHeader :cif="usuario.cif" :foto="usuario.foto"/>
       <div class="body flex-grow-1 px-3">
@@ -16,7 +16,9 @@
 
 <script>
 // Importamos Servicios
-import MenuService from '@/services/usuario/menuService'
+//import MenuService from '@/services/usuario/menuService'
+//import MenuService from '@/modules/egovf/services/menuService'
+import ModuloService from '@/modules/egovf/services/moduloService'
 
 // Importamos Herramientas
 import { CContainer } from '@coreui/vue'
@@ -35,8 +37,8 @@ export default {
   data(){
     return {
       titulo:'Escritorio',
-      menu:[],
-      menuService:null,
+      modulo:[],
+      moduloService:null,
       usuario:{
         token:'',
         cif:0,
@@ -50,7 +52,7 @@ export default {
     }
   },
   created(){
-    this.menuService = new MenuService();
+    this.moduloService = new ModuloService();
   },
   mounted(){
     this.usuario.token=this.$cookies.get('token');
@@ -62,15 +64,16 @@ export default {
     this.usuario.sigla = this.$cookies.get('sigla');
     this.usuario.foto = this.$cookies.get('foto');
 
-    this.menuService.headersUsuario(this.usuario.token);
-
-    this.getMenu();
+    this.moduloService.headersUsuario(this.usuario.token);
+    
+    this.getModuloCif();
   },
   methods:{
-    async getMenu(){
-      await this.menuService.getMenu(this.usuario.cif).then((response) =>{
-        this.menu = response.data;
+    async getModuloCif(){
+      await this.moduloService.getModuloCif(this.usuario.cif).then((response) =>{
+        this.modulo = response.data;
       });
+      console.log(this.modulo);
     }
   }
 }

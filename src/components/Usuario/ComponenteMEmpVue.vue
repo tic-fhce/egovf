@@ -88,7 +88,7 @@
 <script>
 
 // Importamos  los Servicios
-import EmpleadoService from '@/services/emp/empleadoService';
+import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
 
 // End
 

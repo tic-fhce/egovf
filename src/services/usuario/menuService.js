@@ -1,16 +1,14 @@
 import axios from "axios";
-import { API_URL_EGOVF } from "@/env";
-//const menuUrl="https://stfhce.umsa.bo/egovf/fhce/";
-// const menuUrl="http://192.168.31.45:8091/fhce-egovf/menu";
-const menuUrl = API_URL_EGOVF + "menu";
+import { API_URL_EGOVF_USER } from "@/env";
 
-//const menuUrl="http://172.16.14.91:8091/fhce-egovf/menu";
+const menuUrl = API_URL_EGOVF_USER;
 
 export default class MenuService {
   headersUsuario(token) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
   }
   getMenu(cif) {
+    console.log(menuUrl);
     return axios.get(menuUrl + "/getMenu", {
       params: {
         cif: cif,

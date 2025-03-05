@@ -13,12 +13,14 @@ const routes = [
       {
         path: "/home",
         name: "HomeView",
-        component: () => import("@/views/Front/HomeView.vue"),
+        //component: () => import("@/views/Front/HomeView.vue"),
+        component: () => import('@/modules/egovf/views/HomeView.vue')
       },
       {
         path: "/sesion",
         name: "SesionView",
-        component: () => import("@/views/Front/SesionView.vue"),
+        //component: () => import("@/views/Front/SesionView.vue"),
+        component:()=> import('@/modules/egovf/views/SessionView.vue')
       },
       {
         path: "/libreReporte:uriu",
@@ -41,40 +43,42 @@ const routes = [
       {
         path: "/perfil",
         name: "PerfilView",
-        component: () => import("@/views/Usuario/PerfilView.vue"),
+        component: () => import("@/modules/egovf/views/Usuario/PerfilView.vue"),
       },
       {
         path: "/listadeciudadanos",
         name: "ListaView",
-        component: () => import("@/views/Ciudadano/ListaView.vue"),
+        component: () => import("@/modules/egovf/views/Ciudadano/ListaView.vue"),
       },
       {
         path: "/perfilCiudadano:cifCiudadano",
         name: "PerfilCiudadanoView",
-        component: () => import("@/views/Ciudadano/PerfilCiudadanoView.vue"),
+        component: () => import("@/modules/egovf/views/Ciudadano/PerfilCiudadanoView.vue"),
       },
       //MODULO EMPLEADO
       {
+        // verificado
         path: "/moduloemp:cifCiudadano",
         name: "ModuloEmpView",
-        component: () => import("@/views/Empleado/ModuloEmpView.vue"),
+        component: () => import("@/modules/egovf-emp/views/ModuloEmpView.vue"),
       },
       {
+        //verificado
         path: "/tipoempleado",
         name: "TipoEmpleadoView",
-        component: () => import("@/views/Empleado/TipoEmpleadoView.vue"),
+        component: () => import("@/modules/egovf-emp/views/TipoEmpleadoView.vue"),
       },
-      {
+      {//Verificado
         path: "/listaEmpleado:id",
         name: "ListaEmpleadoView",
-        component: () => import("@/views/Empleado/ListaEmpleadoView.vue"),
+        component: () => import("@/modules/egovf-emp/views/ListaEmpleadoView.vue"),
       },
       // END MODULO EMPLEADO
       // MODULO SISTEMA CONTENEDOR CONTROL
-      {
+      {//revisado
         path: "/moduloscc:cifCiudadano",
         name: "ModuloSccView",
-        component: () => import("@scc/views/ModuloSccView.vue"),
+        component: () => import("@/modules/egovf-scc/views/ModuloSccView.vue"),
       },
       {
         path: "/listaEquipo",
@@ -82,9 +86,34 @@ const routes = [
         component: () => import("@scc/views/ListaEquipoView.vue"),
       },
       {
+        //revisado
         path: "/umoduloscc",
         name: "UModuloSccView",
-        component: () => import("@/views/Usuario/UModuloSccView.vue"),
+        component: () => import("@/modules/egovf-scc/views/UModuloSccView.vue"),
+      },
+      {
+        //revisado nuevo
+        path: "/menumoduloscc",
+        name: "ModuloSccMenuView",
+        component: () => import("@/modules/egovf-scc/views/ModuloSccMenuView.vue"),
+      },
+      {
+        //revisado nuevo
+        path: "/observaciones",
+        name: "ObservacionesView",
+        component: () => import("@/modules/egovf-scc/views/ObservacionesView.vue"),
+      },
+      {
+        //revisado nuevo
+        path: "/biometricos",
+        name: "BiometricosView",
+        component: () => import("@/modules/egovf-scc/views/BiometricosView.vue"),
+      },
+      {
+        //revisado nuevo
+        path: "/horarios",
+        name: "HorariosView",
+        component: () => import("@/modules/egovf-scc/views/HorariosView.vue"),
       },
       {
         path: "/umoduloemp",
@@ -93,15 +122,22 @@ const routes = [
       },
       {
         // MODULO SISTEMA CONTENEDOR CONTROL
+        //revisado
         path: "/reporte:uri",
         name: "ReporteView",
-        component: () => import("@scc/views/ReporteView.vue"),
+        component: () => import("@/modules/egovf-scc/views/ReporteView.vue"),
       },
       {
         // MODULO SISTEMA CONTENEDOR CONTROL REPORTE DE ASISTENCIAS PARA EL USUARIO
         path: "/ureporte:uri",
         name: "UReporteView",
         component: () => import("@/views/Usuario/UReporteView.vue"),
+      },
+      {
+        // revisado Nuevo
+        path: "/usuarioreporte:uri",
+        name: "UsuarioReporteView",
+        component: () => import("@/modules/egovf-scc/views/UsuarioReporteView.vue"),
       },
       {
         // MODULO SISTEMA CONTENEDOR CONTROL

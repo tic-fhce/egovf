@@ -189,7 +189,7 @@
 <script>
 
 import EgovfService from '@/services/egovf/egovfService';
-import EmpleadoService from '@/services/emp/empleadoService';
+import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
 import UploadService from '@/services/upload/uploadService';
 import BiometricoService from '@/services/biometricoService';
 

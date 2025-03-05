@@ -9,13 +9,13 @@
 </template>
 <script>
 // Importamos los Componentes
-import ComponenteDatosPersonalesVue from "@/components/Ciudadano/ComponenteDatosPersonalesVue.vue";
-import ComponenteReporteVue from "@scc/components/ComponenteReporte.vue";
+import ComponenteDatosPersonalesVue from "@/modules/egovf/components/Ciudadano/ComponenteDatosPersonalesVue.vue";
+import ComponenteReporteVue from "@/modules/egovf-scc/components/ComponenteReporte.vue";
 // End
 
 // Declaramos los Servicios
-import EgovfService from "@/services/egovf/egovfService";
-import BiometricoService from "@/services/biometricoService";
+import EgovfService from "@/modules/egovf/services/egovfService";
+import SccService from "@/modules/egovf-scc/services/sccService";
 
 // End
 export default {
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       titulo: "Reporte de Asistencia",
-      biometricoService: null,
+      sccService: null,
       egovfService: null,
       uri: "",
       cifCiudadano: "",
@@ -104,7 +104,7 @@ export default {
     }
   },
   created() {
-    this.biometricoService = new BiometricoService();
+    this.sccService = new SccService();
     this.egovfService = new EgovfService();
   },
   methods: {
@@ -117,8 +117,6 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
-
-        this.titulo = this.usuario.correo + "> " + this.titulo;
       }
     },
     async getEgovf() {
@@ -138,17 +136,13 @@ export default {
       this.reporte.persona.foto = this.egovf.foto;
     },
     async getReporteBiometrico() {
-      await this.biometricoService
-        .getPerfil(this.reporte.cif)
-        .then((response) => {
+      await this.sccService.getPerfil(this.reporte.cif).then((response) => {
           this.reporte.listaPerfil = response.data;
         });
       this.getListaHorario();
     },
     async getListaHorario() {
-      await this.biometricoService
-        .getListaHorario(this.cifCiudadano, this.reporte.gestion)
-        .then((response) => {
+      await this.sccService.getListaHorario(this.cifCiudadano, this.reporte.gestion).then((response) => {
           this.reporte.listaHorario = response.data;
         });
     },

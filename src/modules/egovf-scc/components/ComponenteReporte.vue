@@ -7,8 +7,7 @@
             <CCard>
                 <CCardHeader class="headercolor">
                     <CRow>
-                        <CCol :lg="4" class="text-center">Reporte de Asistencia </CCol>
-                        <CCol :lg="4" class="text-center">{{mes}} de {{reporte.gestion}}</CCol>
+                        <CCol :lg="8" class="text-center">Reporte de Asistencia del mes de {{mes}} de {{reporte.gestion}}</CCol>
                         <CCol :lg="4" class="text-end">
                             <CButton @click="pdf()" color="success" class="font" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar PDF</CButton>
                         </CCol>
@@ -22,10 +21,10 @@
                                 <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
                                 <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
                                     <td><CBadge color="light">ID-B : {{perfil.id}}</CBadge></td>
-                                    <td><CBadge color="light">User ID : {{perfil._01user_id}}</CBadge></td>
-                                    <td><CBadge color="light">Nombre : {{perfil._02nombre}}</CBadge></td>
-                                    <td><CBadge color="light">Lugar : {{perfil._08detalle}}</CBadge></td>
-                                    <td><CBadge color="light">Sigla : {{perfil._06lugar}}</CBadge></td>
+                                    <td><CBadge color="light">User ID : {{perfil.user_id}}</CBadge></td>
+                                    <td><CBadge color="light">Nombre : {{perfil.nombre}}</CBadge></td>
+                                    <td><CBadge color="light">Lugar : {{perfil.detalle}}</CBadge></td>
+                                    <td><CBadge color="light">Sigla : {{perfil.lugar}}</CBadge></td>
                                 </tr>
                             </table>
                         </CCol>
@@ -82,7 +81,7 @@
                                         </td>
                                         
                                         <td>
-                                            <div class="obserbaciones" v-for="listobs in value.obserModel" :key="listobs.id"><CBadge color="warning">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
+                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id"><CBadge color="warning">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -92,6 +91,9 @@
                                     </tr>
                                     <tr>
                                         <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th><th></th><th></th><th></th><th>Total Eventos Sin Marcar</th><th><h2>{{totalsin}}</h2></th><th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -113,7 +115,7 @@
 import QrcodeVue from 'qrcode.vue';
 
 // Importamos los Servicios
-import BiometricoService from '@/services/biometricoService';
+import SccService from '@/modules/egovf-scc/services/sccService';
 import UploadService from '@/services/upload/uploadService';
 
 //Importamos Herramientas
@@ -128,19 +130,20 @@ export default {
     },
     data(){
         return{
-            biometricoService:null,
+            sccService:null,
             uploadService:null,
             listaReporte:[],
             getPB:true,
             totalretraso:0,
             totalanticipado:0,
+            totalsin:0,
             mes:'',
             sms:'',
             size:300
         }
     },
     created(){
-        this.biometricoService = new BiometricoService(); //Instanciamos el Servicio
+        this.sccService = new SccService(); //Instanciamos el Servicio
         this.uploadService = new UploadService();
     },
     updated(){
@@ -154,9 +157,10 @@ export default {
     },
     methods:{
         async getReporteMes(){// Funcion que construye los reportes del mes
-            await this.biometricoService.getReporteMes(this.reporte).then((result) => {
+            await this.sccService.getReporteMes(this.reporte).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso(); // Funcion que suma los retrasos
+                console.log(this.listaReporte);
             }).catch((err) => {
                 console.log(err);
             });
@@ -164,6 +168,7 @@ export default {
         sumaRetraso(){ //Funcion que suma los retrasos y los minutos de salida adelantada
             let sum = 0;
             let res = 0;
+            let sin = 0;
             this.listaReporte.forEach(element => {
                 for (let i = 0; i < element.retraso.length; i++) {
                     if(i == 0 || i == 2)
@@ -171,9 +176,13 @@ export default {
                     else
                         res+=parseInt(element.retraso[i],10);
                 }
+                for (let j = 0 ; j<element.hora.length;j++){
+                    if(element.hora[j]=="Sin Marcar") sin +=1; 
+                }
             });
             this.totalretraso = sum;
             this.totalanticipado = res;
+            this.totalsin = sin;
             const dir = '/libreReporte'+this.uri;
             this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo/#'+dir;
         },
@@ -193,7 +202,7 @@ export default {
         },
         pdf(){ //Funcion que Constuye el PDF del reporte
             var img = new Image();
-            
+            const fecha = new Date();
             const doc = new jsPDF('p','mm','letter');
             const contentHtml = this.$refs.qr.$el;
             const qr = contentHtml.toDataURL("image/jpeg",0.8);
@@ -237,8 +246,11 @@ export default {
             doc.text("C.I. : "+this.reporte.persona.ci,120,55);
             doc.text("Correo : "+this.reporte.persona.correo,120,60);
             doc.setFontSize(15);
-            doc.text("Retraso : "+this.totalretraso+" min.",120,75);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,85);
+            doc.text("Retraso : "+this.totalretraso+" min.",120,70);
+            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,77);
+            doc.text("Sin Marcar : "+this.totalsin,120,84);
+            doc.setFontSize(6);
+            doc.text("Fecha de Imprecion : "+fecha,120,90);
             doc.setFontSize(10);
             var finalY=95;
             
@@ -274,7 +286,7 @@ export default {
             });
             finalY = doc.lastAutoTable.finalY;
             doc.setFontSize(15);
-            doc.text("Reporte de Asistencia " + this.mes +" "+this.reporte.gestion,(215/2),finalY+10,{align:"center"});
+            doc.text("Reporte de Asistencia del mes de " + this.mes +" del "+this.reporte.gestion,(215/2),finalY+10,{align:"center"});
             autoTable(doc, {
                 startY:finalY+15,
                 margin: {left:15 },
@@ -282,7 +294,7 @@ export default {
                 html:'#printMarcado',
                 showFoot: 'lastPage'
             });
-            doc.save(this.reporte.cif+'reporte.pdf');
+            doc.save(this.reporte.cif+this.mes+'reporte.pdf');
         }
 
     }

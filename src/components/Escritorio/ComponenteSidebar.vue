@@ -11,11 +11,11 @@
         })
     "
   >
-    <CSidebarBrand>
+    <CSidebarBrand class="brant">
       <img :src="logo" width="20%"/>
     </CSidebarBrand>
     
-    <CSidebarNav>
+    <CSidebarNav class="brant">
       <CNavItem>
         <router-link to="/escritorio" class="nav-link">
           <CIcon customClassName="nav-icon" icon="cil-home"/> Escritorio
@@ -23,11 +23,11 @@
       </CNavItem>
       
       <!--Menu-->
-      <CNavGroup v-for="item in menu" :key="item.id">
+      <CNavGroup v-for="item in modulo" :key="item.id">
         <template #togglerContent>
           <CIcon customClassName="nav-icon" :icon="item.icono"/> {{ item.titulo }}
         </template>
-        <CNavItem v-for="subitem in item.menuObj" :key="subitem.id">
+        <CNavItem v-for="subitem in item.menuDtoObj" :key="subitem.id">
           <router-link :to="subitem.ruta" class="nav-link menustyle" >{{ subitem.titulo }}</router-link>
         </CNavItem>
       </CNavGroup>
@@ -47,7 +47,7 @@ import logo  from '@/assets/img/logobtic.png'
 import { CNavGroup} from '@coreui/vue'
 export default {
   name: 'ComponenteSidebar',
-  props:['menu'],
+  props:['modulo'],
   components: {
     CNavGroup
   },
@@ -64,8 +64,13 @@ export default {
 
 <style scoped>
   .menustyle{
+    background-color: var(--color-primary);  
     font-size: small;
     margin-top: -5px;
     margin-bottom: -5px;
+  }
+
+  .brant{
+    background-color: var(--color-primary); 
   }
 </style>

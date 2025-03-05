@@ -9,21 +9,21 @@
 
 <script>
 // Importamos los Componentes
-import ComponenteDatosPersonalesVue from "@/components/Ciudadano/ComponenteDatosPersonalesVue.vue";
-import ComponenteMSccVue from "@scc/components/ComponenteMScc.vue";
+import ComponenteDatosPersonalesVue from '@/modules/egovf/components/Ciudadano/ComponenteDatosPersonalesVue.vue';
+import ComponenteMSccVue from "@/modules/egovf-scc/components/ComponenteMScc.vue";
 
 // End
 
 // Declaramos los Servicios
-import EgovfService from "@/services/egovf/egovfService";
-import EmpleadoService from "@/services/emp/empleadoService";
+import EgovfService from "@/modules/egovf/services/egovfService";
+import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
 // End
 
 export default {
   name: "ModuloSccView",
   components: {
     ComponenteDatosPersonalesVue,
-    ComponenteMSccVue,
+    ComponenteMSccVue
   },
   data() {
     return {
@@ -110,9 +110,7 @@ export default {
     },
     async getEmpleado() {
       this.egovfService.headersUsuario(this.usuario.token);
-      await this.empleadoService
-        .getEmpleado(this.cifCiudadano)
-        .then((response) => {
+      await this.empleadoService.getEmpleado(this.cifCiudadano).then((response) => {
           this.empleado = response.data;
         });
     },

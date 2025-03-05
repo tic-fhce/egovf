@@ -61,8 +61,21 @@ export default {
     }
   },
   methods:{
-    salir(){
-      this.$swal.fire({
+    async salir(){
+      const result = await this.$swal.fire({
+        title: '¿Desea salir del sistema?',
+        icon: 'info',
+        showDenyButton: true,
+        confirmButtonText: 'Aceptar',
+        denyButtonText: 'Cancelar',
+      });
+      if (result.isConfirmed) {
+        this.limpiarCookies();
+        this.$router.push('/');
+      } else if (result.isDenied) {
+        this.$router.push('/escritorio');
+      }
+      /*this.$swal.fire({
         title: 'Desea Salir del Sistema ',
         showDenyButton: true,
         icon:'info',
@@ -70,17 +83,25 @@ export default {
         denyButtonText: 'Cancelar',
         }).then((result) => {
           if (result.isConfirmed) {
+            this.$cookies.remove('token');
             this.$cookies.remove('cif');
-            this.$router.push('/home');
+            this.$cookies.remove('correo');
+            this.$cookies.remove('celular');
+            this.$cookies.remove('pass');
+            this.$router.push('/');
+            location.reload();
           } else if (result.isDenied) {
             this.$router.push('/escritorio');
           }
-          location.reload();
-      });
+          
+      });*/
             
     },
     perfil(){
       this.$router.push('/perfil');      
+    },
+    limpiarCookies() {
+      ['token', 'cif', 'correo', 'celular', 'pass'].forEach(cookie => this.$cookies.remove(cookie));
     }
   }
 
@@ -88,7 +109,7 @@ export default {
 </script>
 <style scoped>
   .menustyleheader{
-    background-color: #3c4b64;
+    background-color: var(--color-primary);  
     color: white;
   }
 </style>

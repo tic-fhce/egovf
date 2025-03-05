@@ -18,7 +18,7 @@
 
 <script>
 
-import EmpleadoService from '@/services/emp/empleadoService';
+import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
 
 export default {
     name:'TipoEmpleadoView',

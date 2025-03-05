@@ -4,31 +4,21 @@
       <CCard>
         <CCardHeader class="headercolor">
           <CRow>
-            <CCol :lg="6"
-              ><label class="d-none d-md-flex me-auto"
-                >Modulos Del Empleado</label
-              >
+            <CCol :lg="6">
+              <label class="d-none d-md-flex me-auto">Modulos Del Empleado</label>
             </CCol>
             <CCol :lg="6" class="text-end">
               <CDropdown variant="btn-group">
-                <CDropdownToggle color="success" class="font" size="sm"
-                  ><CIcon
-                    icon="cil-menu"
-                    class="me-2"
-                  />Opciones</CDropdownToggle
-                >
+                <CDropdownToggle color="success" class="font" size="sm">
+                  <CIcon icon="cil-menu" class="me-2" />Opciones</CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem
-                    ><CButton @click="clickModalModulo(true)" size="sm"
-                      >Agregar Modulo</CButton
-                    ></CDropdownItem
-                  >
+                  <CDropdownItem>
+                    <CButton @click="clickModalModulo(true)" size="sm">Agregar Modulo</CButton>
+                    </CDropdownItem>
                   <CDropdownDivider />
-                  <CDropdownItem
-                    ><CButton @click="clickModalContrato(true)" size="sm"
-                      >Agregar Contrato</CButton
-                    ></CDropdownItem
-                  >
+                  <CDropdownItem>
+                    <CButton @click="clickModalContrato(true)" size="sm">Agregar Contrato</CButton>
+                    </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             </CCol>
@@ -66,43 +56,6 @@
               </tbody>
             </table>
           </CCol>
-
-          <!-- Verificador del modulo de Empleados-->
-          <CCol :xs="12" v-if="verificado === 0" class="text-center">
-            <form @submit.prevent="addEmpleado()">
-              <CCard class="card">
-                <CCardHeader class="headercolor">
-                  Verificar Modulo Emp
-                </CCardHeader>
-                <CCardBody>
-                  <div class="mb-3 row">
-                    <label for="datos" class="col-sm-6 col-form-label"
-                      >Tipo de Empleado</label
-                    >
-                    <div class="col-sm-6">
-                      <select
-                        v-model="id_tipoEmpleado"
-                        class="form-control"
-                        required="true"
-                      >
-                        <option
-                          v-for="lte in listaTipoEmpleado"
-                          :value="lte.id"
-                          :key="lte.id"
-                        >
-                          {{ lte._01detalle }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </CCardBody>
-                <CCardFooter>
-                  <button class="btn btn-success font">Verificar Modulo</button>
-                </CCardFooter>
-              </CCard>
-            </form>
-          </CCol>
-          <!-- End Verificador del modulo de Empleados-->
 
           <!-- Tarjetas de Empleado-->
           <CCol :xs="12">
@@ -143,28 +96,12 @@
               <!--Modulos del Empleado-->
               <CTabPane :visible="tab == 1">
                 <CRow>
-                  <CCol
-                    :lg="2"
-                    class="text-center"
-                    v-for="l in listaModuloCif"
-                    :key="l.id"
-                  >
+                  <CCol :lg="3" class="text-center" v-for="l in listaModuloCif" :key="l.id">
                     <br />
                     <CCard>
-                      <CCardImage
-                        orientation="top"
-                        :src="egovf.foto"
-                      ></CCardImage>
-                      <CCardBody>
-                        {{ l._01nombre }}
-                      </CCardBody>
+                      <CIcon customClassName="nav-icon" :icon="l.imagen"/> 
                       <CCardFooter class="text-center">
-                        <CButton
-                          color="success"
-                          class="font"
-                          @click="getModulo(l._02ruta)"
-                          >{{ l._01nombre }}</CButton
-                        >
+                        <CButton color="success" class="font" @click="getModulo(l.ruta)">{{ l.nombre }}</CButton>
                       </CCardFooter>
                     </CCard>
                   </CCol>
@@ -302,7 +239,7 @@
           <div class="col-6">
             <select v-model="id_modulo" class="form-control" required="true">
               <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">
-                {{ lm._01nombre }}
+                {{ lm.nombre }}
               </option>
             </select>
           </div>
@@ -323,11 +260,7 @@
   <!-- Modal  Contrato-->
   <CModal :visible="modalContrato" @close="clickModalContrato(false)">
     <form @submit.prevent="addContrato()">
-      <CModalHeader
-        class="headercolor"
-        dismiss
-        @close="clickModalContrato(false)"
-      >
+      <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
         <CModalTitle>
           <h5>Agregar Contrato</h5>
         </CModalTitle>
@@ -336,101 +269,65 @@
         <ComponenteNombres :datos="datos" />
         <hr />
         <div class="mb-3 row">
-          <label for="numero" class="col-6 col-form-label"
-            >Numero de Contrato</label
-          >
+          <label for="numero" class="col-6 col-form-label">Numero de Contrato</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="contrato.numerocontrato"
-              placeholder="Numero de contrato"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-6 col-form-label"
-            >Servicios prestados</label
-          >
+          <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="contrato.servicio"
-              placeholder="Servicios Prestados"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="contrato.servicio" placeholder="Servicios Prestados" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Unidad </label>
+          <label for="servicio" class="col-6 col-form-label">Tipo de Empleado</label>
           <div class="col-6">
-            <select
-              v-model="contrato.unidad"
-              class="form-control"
-              required="true"
-            >
-              <option
-                v-for="unidad in listaUnidades"
-                :value="unidad._01unidad"
-                :key="unidad.id"
-              >
-                {{ unidad._01unidad }}
+            <select v-model="contrato.idTipoEmpleado" class="form-control" required="true">
+              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+                {{ lte.detalle }}
               </option>
             </select>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="inicio" class="col-6 col-form-label"
-            >Fecha de Inicio</label
-          >
+          <label for="datos" class="col-6 col-form-label">Unidad </label>
           <div class="col-6">
-            <input
-              type="date"
-              class="form-control"
-              v-model="contrato.inicio"
-              placeholder="Inicio"
-              required="true"
-            />
+            <select v-model="contrato.unidad" class="form-control" required="true" >
+              <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
+                {{ unidad.unidad }}
+              </option>
+            </select>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="fin" class="col-6 col-form-label"
-            >Fecha de Conclucion
-          </label>
+          <label for="inicio" class="col-6 col-form-label">Fecha de Inicio</label>
           <div class="col-6">
-            <input
-              type="date"
-              class="form-control"
-              v-model="contrato.fin"
-              placeholder="fin"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="contrato.inicio" placeholder="Inicio" required="true" />
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="fin" class="col-6 col-form-label" >Fecha de Conclucion </label>
+          <div class="col-6">
+            <input type="date" class="form-control" v-model="contrato.fin" placeholder="fin" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="detalle" class="col-6 col-form-label">Detalle</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="contrato.detalle"
-              placeholder="Detalle del Contrato"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true" />
           </div>
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalContrato(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalContrato(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Contrato
         </button>
@@ -440,16 +337,9 @@
   <!-- End Modal  Modulo-->
 
   <!-- Modal  Editar Contrato-->
-  <CModal
-    :visible="modalEditarContrato"
-    @close="clickModalEditarContrato(false)"
-  >
+  <CModal :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
     <form @submit.prevent="updateContrato()">
-      <CModalHeader
-        class="headercolor"
-        dismiss
-        @close="clickModalEditarContrato(false)"
-      >
+      <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
         <CModalTitle>
           <h5>Editar Contrato</h5>
         </CModalTitle>
@@ -458,117 +348,61 @@
         <ComponenteNombres :datos="datos" />
         <hr />
         <div class="mb-3 row">
-          <label for="numero" class="col-6 col-form-label"
-            >Numero de Contrato</label
-          >
+          <label for="numero" class="col-6 col-form-label" >Numero de Contrato</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="setContrato.numerocontrato"
-              placeholder="Numero de contrato"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-6 col-form-label"
-            >Servicios prestados</label
-          >
+          <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="setContrato.servicio"
-              placeholder="Servicios Prestados"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="setContrato.servicio" placeholder="Servicios Prestados" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="datos" class="col-6 col-form-label">Unidad </label>
           <div class="col-6">
-            <select
-              v-model="setContrato.unidad"
-              class="form-control"
-              required="true"
-            >
-              <option
-                v-for="unidad in listaUnidades"
-                :value="unidad._01unidad"
-                :key="unidad.id"
-              >
-                {{ unidad._01unidad }}
+            <select v-model="setContrato.unidad" class="form-control" required="true">
+              <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
+                {{ unidad.unidad }}
               </option>
             </select>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="inicio" class="col-6 col-form-label"
-            >Fecha de Inicio</label
-          >
+          <label for="inicio" class="col-6 col-form-label" >Fecha de Inicio</label>
           <div class="col-6">
-            <input
-              type="date"
-              class="form-control"
-              v-model="setContrato.inicio"
-              placeholder="Inicio"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="setContrato.inicio" placeholder="Inicio" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="fin" class="col-6 col-form-label"
-            >Fecha de Conclucion
-          </label>
+          <label for="fin" class="col-6 col-form-label">Fecha de Conclucion </label>
           <div class="col-6">
-            <input
-              type="date"
-              class="form-control"
-              v-model="setContrato.fin"
-              placeholder="fin"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="setContrato.fin" placeholder="fin" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="fin" class="col-6 col-form-label">Gestion </label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="setContrato.gestion"
-              placeholder="fin"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="setContrato.gestion" placeholder="fin" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="detalle" class="col-6 col-form-label">Detalle</label>
           <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              v-model="setContrato.detalle"
-              placeholder="Detalle del Contrato"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true" />
           </div>
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton
-          @click="clickModalEditarContrato(false)"
-          color="danger"
-          class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalEditarContrato(false)" color="danger" class="font" >
+          <CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-check-alt" class="me-2" />Actualizar Contrato
         </button>
@@ -580,13 +414,13 @@
 
 <script>
 //Importamos Componentes
-import ComponenteNombres from "@/components/Ciudadano/ComponenteNombres.vue";
+import ComponenteNombres from "@/modules/egovf/components/Ciudadano/ComponenteNombres.vue";
 
 // Importamos  los Servicios
-import UsuarioService from "@/services/usuarioServices";
-import EmpleadoService from "@/services/emp/empleadoService";
-import UnidadService from "@/services/unidadService";
-import MenuService from "@/services/usuario/menuService";
+import UsuarioService from "@/modules/egovf/services/usuarioService";
+import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
+import UnidadService from "@/modules/egovf-uni/services/unidadService";
+import MenuService from "@/modules/egovf/services/menuService";
 import SccService from "@scc/services/sccService";
 import ModuloService from "@/services/moduloService";
 import { CDropdown } from "@coreui/vue";
@@ -611,7 +445,6 @@ export default {
       moduloService: null,
       sccService: null,
       menuService: null,
-      verificado: 0,
       listaModulo: [],
       listaModuloCif: [],
       listaTipoEmpleado: [],
@@ -660,6 +493,7 @@ export default {
         fin: "",
         gestion: 0,
         detalle: "",
+        idTipoEmpleado:0
       },
       setContrato: {
         id: 0,
@@ -672,6 +506,7 @@ export default {
         fin: "",
         gestion: 0,
         detalle: "",
+        idTipoEmpleado:0
       },
       unidad: {
         id: 0,
@@ -722,7 +557,7 @@ export default {
   mounted() {
     this.getDatos();
     this.getListaTipoEmpleado();
-    this.getListaUnidades();
+    this.getUnidades();
   },
   updated() {
     this.egovf = this.emp;
@@ -752,18 +587,16 @@ export default {
       }
     },
     //Funcion para listar las Undiades
-    async getListaUnidades() {
-      await this.unidadService.getListaUnidad().then((response) => {
+    async getUnidades() {
+      await this.unidadService.getUnidades().then((response) => {
         this.listaUnidades = response.data;
       });
     },
     async getEmpleado() {
+      //Corregido funcionando
       //Funcion para listar Los Datos del empleado como tambien sus contratos
-      await this.empleadoService
-        .getEmpleado(this.egovf.cif)
-        .then((response) => {
+      await this.empleadoService.getEmpleado(this.egovf.cif).then((response) => {
           this.empleado = response.data;
-          this.verificado = this.empleado.id;
           this.contratos = this.empleado.contratos;
         });
       this.getMenuModulo();
@@ -776,67 +609,16 @@ export default {
     },
     // Funcion para listar los Modulos para el Empleado
     async getListarEmpleadoModulo() {
-      await this.empleadoService
-        .getListarEmpleadoModulo(this.egovf.cif)
-        .then((response) => {
+      await this.empleadoService.getListarEmpleadoModulo(this.egovf.cif).then((response) => {
           this.listaModulo = response.data;
+          console.log(this.listaModulo);
         });
     },
     // Funcion que lista los Modulos del Empleado
     async getListarEmpleadoModuloCif() {
-      await this.empleadoService
-        .getListarEmpleadoModuloCif(this.egovf.cif)
-        .then((response) => {
+      await this.empleadoService.getListarEmpleadoModuloCif(this.egovf.cif).then((response) => {
           this.listaModuloCif = response.data;
-        });
-    },
-    async addEmpleado() {
-      // Funcion para registrar al Empleado con el tipo de empleado
-      this.usuarioService.headersUsuario(this.usuario.token);
-      await this.$swal
-        .fire({
-          title: "Desea Verificar el Modulo del Empleado ?",
-          showDenyButton: true,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-          denyButtonText: "Cancelar",
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.usuarioService.addPerfil(this.emp.cif).then((response) => {
-              if (response.status == 200) {
-                this.empleadoService
-                  .addEmpleado(this.emp.cif, this.id_tipoEmpleado)
-                  .then((response) => {
-                    if (response.status == 200) {
-                      this.$swal
-                        .fire(
-                          "Se Verifico al tipo de empleado Corectamente",
-                          "",
-                          "success"
-                        )
-                        .then((res) => {
-                          if (res) location.reload();
-                        });
-                    } else {
-                      this.$swal.fire(
-                        "Los Datos no fueron Guardados Error" + response.status,
-                        "",
-                        "error"
-                      );
-                    }
-                  });
-              } else {
-                this.$swal.fire(
-                  "Los Datos no fueron Guardados Error",
-                  "" + response.status,
-                  "error"
-                );
-              }
-            });
-          } else if (result.isDenied) {
-            this.$swal.fire("Datos Cancelados", "", "info");
-          }
+          console.log(this.listaModuloCif);
         });
     },
     async addEmpleadoModulo() {
@@ -891,18 +673,19 @@ export default {
     async addContrato() {
       // Funcion para Agregar Un contrato Al empelado
       this.usuarioService.headersUsuario(this.usuario.token);
+
       this.listaUnidades.forEach((element) => {
-        if (element._01unidad == this.contrato.unidad) {
+        if (element.unidad == this.contrato.unidad) {
           this.unidad.id = element.id;
-          this.unidad.unidad = element._01unidad;
-          this.unidad.dependiente = element._02dependiente;
-          this.unidad.sigla = element._03sigla;
+          this.unidad.unidad = element.unidad;
+          this.unidad.dependiente = element.dependiente;
+          this.unidad.sigla = element.sigla;
           return false;
         }
       });
       this.contrato.cif = this.egovf.cif;
-      this.contrato.id = this.empleado.id;
-      this.egovf.idPersona = this.empleado.tipoempleado_id;
+      this.egovf.idPersona = this.contrato.idtipo;
+
       await this.$swal
         .fire({
           title: "Desea Agregar Contrato al Empleado ?",
@@ -914,49 +697,24 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.empleadoService.addContrato(this.contrato).then((response) => {
-              if (response.status == 200) {
-                this.usuarioService
-                  .updateUnidad(this.egovf, this.unidad)
-                  .then((respon) => {
+              if (response.status == 201) {
+                this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                     if (respon.status == 200) {
-                      this.unidadService
-                        .registrarPertenece(this.egovf, this.unidad)
-                        .then((res) => {
-                          if (res.status == 200) {
-                            this.$swal
-                              .fire(
-                                "El Comtrato fue Agregado al Empleado Corectamente",
-                                "",
-                                "success"
-                              )
-                              .then((r) => {
+                      this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
+                          if (res.status == 201) {
+                            this.$swal.fire("El Comtrato fue Agregado al Empleado Corectamente","","success").then((r) => {
                                 if (r) location.reload();
                               });
-                          } else {
-                            this.$swal.fire(
-                              "Los Datos de Unidad no fueron Guardados Error" +
-                                response.status,
-                              "",
-                              "error"
-                            );
+                          } else { 
+                            this.$swal.fire("Los Datos de Unidad no fueron Guardados Error" +response.status,"","error");
                           }
                         });
                     } else {
-                      this.$swal.fire(
-                        "Los Datos del Usuario No fueron Actualizados" +
-                          response.status,
-                        "",
-                        "error"
-                      );
+                      this.$swal.fire("Los Datos del Usuario No fueron Actualizados" +response.status,"","error");
                     }
                   });
               } else {
-                this.$swal.fire(
-                  "Los Datos del Contrato no fueron Guardados Error" +
-                    response.status,
-                  "",
-                  "error"
-                );
+                this.$swal.fire("Los Datos del Contrato no fueron Guardados Error" +response.status,"","error");
               }
             });
           } else if (result.isDenied) {
@@ -968,11 +726,11 @@ export default {
     async updateContrato() {
       this.usuarioService.headersUsuario(this.usuario.token);
       this.listaUnidades.forEach((element) => {
-        if (element._01unidad == this.setContrato.unidad) {
+        if (element.unidad == this.setContrato.unidad) {
           this.unidad.id = element.id;
-          this.unidad.unidad = element._01unidad;
-          this.unidad.dependiente = element._02dependiente;
-          this.unidad.sigla = element._03sigla;
+          this.unidad.unidad = element.unidad;
+          this.unidad.dependiente = element.dependiente;
+          this.unidad.sigla = element.sigla;
           return false;
         }
       });
@@ -986,52 +744,25 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.empleadoService
-              .setContrato(this.setContrato)
-              .then((response) => {
+            this.empleadoService.setContrato(this.setContrato).then((response) => {
                 if (response.status == 200) {
-                  this.usuarioService
-                    .updateUnidad(this.egovf, this.unidad)
-                    .then((respon) => {
+                  this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                       if (respon.status == 200) {
-                        this.unidadService
-                          .registrarPertenece(this.egovf, this.unidad)
-                          .then((res) => {
+                        this.unidadService.registrarPertenece(this.egovf, this.unidad).then((res) => {
                             if (res.status == 200) {
-                              this.$swal
-                                .fire(
-                                  "El Comtrato fue Actializado al Empleado Corectamente",
-                                  "",
-                                  "success"
-                                )
-                                .then((r) => {
+                              this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
                                   if (r) location.reload();
                                 });
                             } else {
-                              this.$swal.fire(
-                                "Los Datos de Unidad no fueron Guardados Error" +
-                                  response.status,
-                                "",
-                                "error"
-                              );
+                              this.$swal.fire("Los Datos de Unidad no fueron Guardados Error" + response.status,"", "error");
                             }
                           });
                       } else {
-                        this.$swal.fire(
-                          "Los Datos del Usuario No fueron Actualizados" +
-                            response.status,
-                          "",
-                          "error"
-                        );
+                        this.$swal.fire("Los Datos del Usuario No fueron Actualizados" + response.status,"","error");
                       }
                     });
                 } else {
-                  this.$swal.fire(
-                    "Los Datos del Contrato no fueron Guardados Error" +
-                      response.status,
-                    "",
-                    "error"
-                  );
+                  this.$swal.fire("Los Datos del Contrato no fueron Guardados Error" + response.status,"","error");
                 }
               });
           } else if (result.isDenied) {
@@ -1040,9 +771,7 @@ export default {
         });
     },
     async getMenuModulo() {
-      await this.menuService
-        .getMenuModulo(this.egovf.cif, "Modulo EMP")
-        .then((response) => {
+      await this.menuService.getMenuModulo(this.egovf.cif, "Modulo EMP").then((response) => {
           this.menu = response.data;
         });
     },
@@ -1163,12 +892,13 @@ export default {
       this.modalEditarContrato = modal;
     },
     getContrato(id) {
+      console.log(this.contratos);
       this.contratos.forEach((con) => {
         if (con.id === id) {
           this.setContrato.id = con.id;
           this.setContrato.cif = this.egovf.cif;
           this.setContrato.empleado = this.empleado.id;
-          this.setContrato.numerocontrato = con.numeroContrato;
+          this.setContrato.numerocontrato = con.numero_contrato;
           this.setContrato.servicio = con.servicio;
           this.setContrato.unidad = con.unidad;
           this.setContrato.inicio = con.inicio;

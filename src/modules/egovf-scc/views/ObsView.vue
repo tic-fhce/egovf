@@ -450,7 +450,7 @@
 <script>
 import EgovfService from "@/services/egovf/egovfService";
 import UploadService from "@/services/upload/uploadService";
-import EmpleadoService from "@/services/emp/empleadoService";
+import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
 import SccService from "@scc/services/sccService";
 
 //Importamos Herramientas
