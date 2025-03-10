@@ -5,8 +5,8 @@
         <br />
         <CCard>
             <CCardHeader class="headercolor text-center">Observaciones</CCardHeader>
-            <CCardBody>
-                <CIcon customClassName="nav-icon" icon="cil-featured-playlist"/> 
+            <CCardBody class="text-center">
+                <CIcon customClassName="nav-icon" icon="cil-featured-playlist" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
                 <CButton color="success" class="font" @click="getOpciones(direcciones[0])">Ingresar</CButton>
@@ -19,8 +19,8 @@
         <br />
         <CCard>
             <CCardHeader class="headercolor text-center">Reporte Mensual</CCardHeader>
-            <CCardBody>
-                <CIcon customClassName="nav-icon" icon="cil-clipboard"/> 
+            <CCardBody class="text-center">
+                <CIcon customClassName="nav-icon" icon="cil-clipboard" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
                 <CButton color="success" class="font" @click="clickModalMes(true)">Ingresar</CButton>
@@ -33,8 +33,8 @@
         <br />
         <CCard>
             <CCardHeader class="headercolor text-center">R. Segmentado</CCardHeader>
-            <CCardBody>
-                <CIcon customClassName="nav-icon" icon="cil-clipboard"/> 
+            <CCardBody class="text-center">
+                <CIcon customClassName="nav-icon" icon="cil-clipboard" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
                 <CButton color="success" class="font" @click="clickModalDias(true)">Ingresar</CButton>
@@ -47,8 +47,8 @@
         <br />
         <CCard>
             <CCardHeader class="headercolor text-center">Biometricos</CCardHeader>
-            <CCardBody>
-                <CIcon customClassName="nav-icon" icon="cil-monitor"/> 
+            <CCardBody class="text-center">
+                <CIcon customClassName="nav-icon" icon="cil-monitor" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
                 <CButton color="success" class="font" @click="getOpciones(direcciones[1])">Ingresar</CButton>
@@ -61,8 +61,8 @@
         <br />
         <CCard>
             <CCardHeader class="headercolor text-center">Horarios</CCardHeader>
-            <CCardBody>
-                <CIcon customClassName="nav-icon" icon="cil-calendar"/> 
+            <CCardBody class="text-center">
+                <CIcon customClassName="nav-icon" icon="cil-calendar" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
                 <CButton color="success" class="font" @click="getOpciones(direcciones[2])">Ingresar</CButton>
@@ -337,3 +337,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+.menuicon {
+    width: 100px;  /* Ajusta el tamaño según necesites */
+    height: 100px;
+}
+</style>

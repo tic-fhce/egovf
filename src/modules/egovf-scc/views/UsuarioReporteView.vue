@@ -3,12 +3,45 @@
         {{ reporte.cif }}
     </div>
     <CRow>
+        <CCol :lg="4"><br />
+            <CCard>
+                <CCardHeader class="headercolor text-center">
+                    Total Dias de Descuento
+                </CCardHeader>
+                <CCardBody class="text-center">
+                    <h2>{{totalsin}}</h2>
+                </CCardBody>
+            </CCard>
+        </CCol>
+        <CCol :lg="4"><br />
+            <CCard>
+                <CCardHeader class="headercolor text-center">
+                    Total Minutos
+                </CCardHeader>
+                <CCardBody class="text-center">
+                    <h2>{{totalretraso}}</h2>
+                </CCardBody>
+            </CCard>
+        </CCol>
+        <CCol :lg="4"><br />
+            <CCard>
+                <CCardHeader class="headercolor text-center">
+                    Total de Salidas
+                </CCardHeader>
+                <CCardBody class="text-center">
+                    <h2>{{totalanticipado}}</h2>
+                </CCardBody>
+            </CCard>
+        </CCol>
+    </CRow>
+    <br>
+    <CRow>
         <CCol :lg="12">
             <CCard>
                 <CCardHeader class="headercolor">
                     <CRow>
                         <CCol :lg="8" class="text-center">Reporte de Asistencia  mes de {{mes}} de {{reporte.gestion}}</CCol>
-                        <CCol :lg="4" class="text-end">
+                        <CCol :lg="4" class="text-center">
                             <CButton @click="mensage()" color="success" class="font" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar PDF</CButton>
                         </CCol>
                     </CRow>
@@ -93,7 +126,7 @@
                                         <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                                     </tr>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Eventos Sin Marcar</th><th><h2>{{totalsin}}</h2></th><th></th>
+                                        <th></th><th></th><th></th><th></th><th>Total Dias de Descuento</th><th><h2>{{totalsin}}</h2></th><th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -274,16 +307,24 @@ export default {
             let sum = 0;
             let res = 0;
             let sin = 0;
+            
             this.listaReporte.forEach(element => {
-                for (let i = 0; i < element.retraso.length; i++) {
-                    if(i == 0 || i == 2)
-                        sum +=parseInt(element.retraso[i],10);
-                    else
-                        res+=parseInt(element.retraso[i],10);
+                // Verificar si hay retraso o "Sin Marcar"
+                const tieneRetraso = element.retraso.some(valor => valor > 0);
+                const tieneSinMarcar = element.hora.includes("Sin Marcar");
+
+                if (tieneRetraso || tieneSinMarcar) {
+                    sin += 1;
                 }
-                for (let j = 0 ; j<element.hora.length;j++){
-                    if(element.hora[j]=="Sin Marcar") sin +=1; 
-                }
+                // Sumar retrasos según índice par o impar
+                element.retraso.forEach((valor, i) => {
+                    if (i % 2 === 0) {
+                        sum += parseInt(valor, 10);
+                    } else {
+                        res += parseInt(valor, 10);
+                    }
+                });
+
             });
             this.totalretraso = sum;
             this.totalanticipado = res;

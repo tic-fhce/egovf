@@ -15,7 +15,7 @@
 import ComponenteReporteLibreVue from '@/components/Usuario/ComponenteReporteLibre.vue';
 
 // Declaramos los Servicios
-import SccService from '@scc/services/sccService';
+import SccService from '@/modules/egovf-scc/services/sccService';
 
 export default {
     name:'ReporteLibreView',

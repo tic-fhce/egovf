@@ -119,7 +119,7 @@ export default class SccService {
         gestion: reporte.gestion,
         mes: reporte.mes,
         di: reporte.di,
-        df: reporte.df,
+        df: reporte.df
       },
     });
   }
@@ -188,7 +188,7 @@ export default class SccService {
   // Funcion que permite actualizar los datos de la observacion de los usuarios
   updateObs(obs) {
     const obsDtoResponse = {
-      id: obs.id,
+      "id": obs.id,
       "cif": obs.cif,
       "uidobs": obs.uidobs,
       "fechainicio": obs.fechainicio,
@@ -208,6 +208,70 @@ export default class SccService {
       "tipoId":obs.tipoId
     };
     return axios.put(msccUrl + "obs/updateObs", obsDtoResponse);
+  }
+
+  getListaObs(rgestion) {
+    return axios.get(msccUrl + "obs/getListaObs",{
+      params:{
+        gestion:rgestion
+      }
+    });
+  }
+
+  addObsAll(obs) {
+    // Funcion que registra observaciones masibas
+    const obsDtoObj = {
+      "id": 0,
+      "cif": obs.cif,
+      "sexo": obs.sexo,
+      "uidobs": obs.uidobs,
+      "fechainicio": obs.fechainicio,
+      "fechafin": obs.fechafin,
+      "gestion": obs.fechainicio.substring(0, 4),
+      "mes": obs.fechainicio.substring(5, 7),
+      "di": obs.fechainicio.substring(8, 10),
+      "df": obs.fechafin.substring(8, 10),
+      "detalle": obs.detalle,
+      "imagen": obs.imagen,
+      "tipo": obs.tipo,
+      "hora": obs.hora,
+      "h": obs.hora.substring(0, 2),
+      "m": obs.hora.substring(3, 5),
+      "url": obs.url,
+      "estado": 1
+    };
+    return axios.post(msccUrl + "obs/addObsAll", obsDtoObj);
+  }
+
+  //Services para el MODELO AVISO
+  addAviso(aviso) {
+    const avisoDtoRequest = {
+      "titulo": aviso.titulo,
+      "detalle": aviso.detalle,
+      "icon": aviso.icon,
+      "estado": 1
+    };
+    return axios.post(msccUrl + "aviso/addAviso", avisoDtoRequest);
+  }
+
+  updateAviso(aviso) {
+    const avisoDtoResponse = {
+      "id": aviso.id,
+      "titulo": aviso.titulo,
+      "detalle": aviso.detalle,
+      "icon": aviso.icon,
+      "estado": aviso.estado
+    };
+    return axios.put(msccUrl + "aviso/updateAviso", avisoDtoResponse);
+  }
+  getRecord(record) {
+    return axios.get(msccUrl + "marcado/reporteTotal", {
+      params: {
+        gestion: record.gestion,
+        mes: record.mes,
+        tipo: record.tipo
+      },
+    });
   }
 
   //###############################################################################
@@ -248,51 +312,13 @@ export default class SccService {
   
   
   
-  addObsAll(obs) {
-    // Funcion que registra observaciones masibas
-    const obsaux = {
-      id: 0,
-      cif: obs.cif,
-      sexo: obs.sexo,
-      uidobs: obs.uidobs,
-      fechainicio: obs.fechainicio,
-      fechafin: obs.fechafin,
-      gestion: obs.fechainicio.substring(0, 4),
-      mes: obs.fechainicio.substring(5, 7),
-      di: obs.fechainicio.substring(8, 10),
-      df: obs.fechafin.substring(8, 10),
-      detalle: obs.detalle,
-      imagen: obs.imagen,
-      tipo: obs.tipo,
-      hora: obs.hora,
-      h: obs.hora.substring(0, 2),
-      m: obs.hora.substring(3, 5),
-      url: obs.url,
-      estado: 1,
-    };
-    return axios.post(msccUrl + "obs/addObsAll", obsaux);
-  }
+  
   getObs(cif, gestion, mes) {
     return axios.get(msccUrl + "obs/getObs", {
       params: {
         cif: cif,
         gestion: gestion,
         mes: mes,
-      },
-    });
-  }
-  
-  getListaObs() {
-    return axios.get(msccUrl + "obs/getListaObs");
-  }
-  
-  
-  getRecord(record) {
-    return axios.get(msccUrl + "marcado/reporteTotal", {
-      params: {
-        gestion: record.gestion,
-        mes: record.mes,
-        tipo: record.tipo,
       },
     });
   }
@@ -321,25 +347,5 @@ export default class SccService {
   updateEquipo(equipo) {
     return axios.put(msccUrl + "equipo/updateEquipo", equipo);
   }
-  //Services para el MODELO AVISO
-  addAviso(aviso) {
-    const auxAviso = {
-      _01titulo: aviso.titulo,
-      _02detalle: aviso.detalle,
-      _03icon: aviso.icon,
-      _04estado: 1,
-    };
-    return axios.post(msccUrl + "aviso/addAviso", auxAviso);
-  }
   
-  updateAviso(aviso) {
-    const auxAviso = {
-      id: aviso.id,
-      _01titulo: aviso.titulo,
-      _02detalle: aviso.detalle,
-      _03icon: aviso.icon,
-      _04estado: aviso.estado,
-    };
-    return axios.put(msccUrl + "aviso/updateAviso", auxAviso);
-  }
 }

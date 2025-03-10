@@ -4,11 +4,8 @@
             <CCard>
                 <CCardHeader class="headercolor">
                     <CRow>
-                        <CCol :lg="6">Ranking De Asistencias</CCol>
-                        <CCol :lg="4">
-                            {{ mes }} de {{ record.gestion }}
-                        </CCol>
-                        <CCol :lg="2">
+                        <CCol :lg="8" class="text-center">Ranking De Asistencias mes de {{ mes }} del {{ record.gestion }}</CCol>
+                        <CCol :lg="4" class="text-end">
                             <CButton color="success" class="font" @click="pdfRecord()" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar PDF</CButton>
                         </CCol>
                     </CRow>
@@ -40,7 +37,7 @@
                             <table class="table table-striped table-hover" id="printRecord">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>CIF</th><th>C.I.</th><th>Nombres y Apellidos</th><th>Min. R</th><th>Min. S.A.</th><th>Total P.</th>
+                                        <th>#</th><th>CIF</th><th>C.I.</th><th>Nombres y Apellidos</th><th>Min. R</th><th>Min. S.A.</th><th>Total dias de Descuento</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -54,6 +51,11 @@
                                         <td>{{ ciudadano.pena }}</td>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </CRow>
@@ -65,21 +67,19 @@
 
 <script>
 
-import PersonaService from '@/services/personaService';
-import BiometricoService from '@/services/biometricoService';
-import EgovfService from '@/services/egovf/egovfService';
+import SccService from '@/modules/egovf-scc/services/sccService';
+import EgovfService from '@/modules/egovf/services/egovfService';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 export default {
     name:'RecordView',
-    personaService:null,
-    biometricoService:null,
     components:{
 
     },
     data(){
         return {
+            sccService:null,
             listaPersona:[],
             listaCiudadanoEmpleado:[],
             listaR:null,
@@ -116,8 +116,7 @@ export default {
         }
     },
     created(){
-        this.personaService = new PersonaService();
-        this.biometricoService = new BiometricoService();
+        this.sccService = new SccService();
         this.egovfService = new EgovfService();
     },
     mounted(){
@@ -140,7 +139,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
 				this.usuario.sigla = this.$cookies.get('sigla');
-
+                this.usuario.foto = this.$cookies.get('foto');
                 this.egovfService.headersUsuario(this.usuario.token);
                 
             }
@@ -175,7 +174,7 @@ export default {
             //window.open(routerData.href,'_blank');
         },
         async getRecord(){
-            await  this.biometricoService.getRecord(this.record).then((response)=>{
+            await  this.sccService.getRecord(this.record).then((response)=>{
                 this.listaRecord = response.data;
             });
             var auxid=1;
@@ -199,16 +198,16 @@ export default {
                         report.retraso=cif.retraso;
                         report.antisipado=cif.antisipado;
                         report.pena= cif.pena;
-                        if(cif.pena==0){
+                        if(cif.retraso==0){
                             this.stadist.excelente=this.stadist.excelente+1;
                         }
-                        if( cif.pena>=1 && cif.pena<=25){
+                        if( cif.retraso>=1 && cif.retraso<=25){
                             this.stadist.regular=this.stadist.regular+1;
                         }
-                        if (cif.pena>=26 && cif.pena<=59){
+                        if (cif.retraso>=26 && cif.retraso<=59){
                             this.stadist.roja=this.stadist.roja+1;
                         }
-                        if(cif.pena>=60){
+                        if(cif.retraso>=60){
                             this.stadist.atencion=this.stadist.atencion+1;
                         }
                         auxid=auxid+1;

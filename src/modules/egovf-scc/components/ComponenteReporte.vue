@@ -93,7 +93,7 @@
                                         <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                                     </tr>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Eventos Sin Marcar</th><th><h2>{{totalsin}}</h2></th><th></th>
+                                        <th></th><th></th><th></th><th></th><th>Total Dias de Descuento</th><th><h2>{{totalsin}}</h2></th><th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -170,15 +170,21 @@ export default {
             let res = 0;
             let sin = 0;
             this.listaReporte.forEach(element => {
-                for (let i = 0; i < element.retraso.length; i++) {
-                    if(i == 0 || i == 2)
-                        sum +=parseInt(element.retraso[i],10);
-                    else
-                        res+=parseInt(element.retraso[i],10);
+                // Verificar si hay retraso o "Sin Marcar"
+                const tieneRetraso = element.retraso.some(valor => valor > 0);
+                const tieneSinMarcar = element.hora.includes("Sin Marcar");
+
+                if (tieneRetraso || tieneSinMarcar) {
+                    sin += 1;
                 }
-                for (let j = 0 ; j<element.hora.length;j++){
-                    if(element.hora[j]=="Sin Marcar") sin +=1; 
-                }
+                // Sumar retrasos según índice par o impar
+                element.retraso.forEach((valor, i) => {
+                    if (i % 2 === 0) {
+                        sum += parseInt(valor, 10);
+                    } else {
+                        res += parseInt(valor, 10);
+                    }
+                });
             });
             this.totalretraso = sum;
             this.totalanticipado = res;
@@ -246,11 +252,13 @@ export default {
             doc.text("C.I. : "+this.reporte.persona.ci,120,55);
             doc.text("Correo : "+this.reporte.persona.correo,120,60);
             doc.setFontSize(15);
-            doc.text("Retraso : "+this.totalretraso+" min.",120,70);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,77);
-            doc.text("Sin Marcar : "+this.totalsin,120,84);
+            
+            doc.text("Total Dias de Descuento : "+this.totalsin,120,70);
+            doc.setFontSize(10);
+            doc.text("Retraso  : "+this.totalretraso+" min.",120,78);
+            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,82);
             doc.setFontSize(6);
-            doc.text("Fecha de Imprecion : "+fecha,120,90);
+            doc.text("Fecha de Imprecion : "+fecha,120,86);
             doc.setFontSize(10);
             var finalY=95;
             

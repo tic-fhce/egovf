@@ -4,25 +4,19 @@
       <CCard>
         <CCardHeader class="headercolor">
           <CRow>
-            <CCol :lg="6"
-              ><label class="d-none d-md-flex me-auto">{{
-                titulo
-              }}</label></CCol
-            >
+            <CCol :lg="6"><label class="d-none d-md-flex me-auto">{{titulo}}</label>
+            </CCol>
             <CCol :lg="6" class="text-end">
               <CDropdown variant="btn-group">
-                <CDropdownToggle color="success" class="font" size="sm"
-                  ><CIcon
-                    icon="cil-menu"
-                    class="me-2"
-                  />Opciones</CDropdownToggle
-                >
+                <CDropdownToggle color="success" class="font" size="sm">
+                  <CIcon icon="cil-menu" class="me-2"/>Opciones
+                </CDropdownToggle>
                 <CDropdownMenu>
-                  <CDropdownItem
-                    ><CButton @click="clickModalObs(true)" size="sm"
-                      >Agregar Observaciones</CButton
-                    ></CDropdownItem
-                  >
+                  <CDropdownItem>
+                    <CButton @click="clickModalObs(true)" size="sm">
+                      Agregar Observaciones
+                    </CButton>
+                  </CDropdownItem>
                 </CDropdownMenu>
               </CDropdown>
             </CCol>
@@ -52,27 +46,15 @@
                   <td>{{ lsobs.detalle }}</td>
                   <td>
                     <CButtonGroup role="group">
-                      <CButton
-                        color="success"
-                        class="font"
-                        size="sm"
-                        @click="getObsDetalle(lsobs.id)"
-                        ><CIcon icon="cil-featured-playlist"></CIcon
-                      ></CButton>
-                      <CButton
-                        color="warning"
-                        class="font"
-                        size="sm"
-                        @click="setObs(lsobs.id)"
-                        ><CIcon icon="cil-pencil"></CIcon
-                      ></CButton>
-                      <CButton
-                        color="secondary"
-                        class="font"
-                        size="sm"
-                        @click="setImg(lsobs.id)"
-                        ><CIcon icon="cil-clipboard"></CIcon
-                      ></CButton>
+                      <CButton color="success" class="font" size="sm" @click="getObsDetalle(lsobs.id)">
+                        <CIcon icon="cil-featured-playlist"></CIcon>
+                      </CButton>
+                      <CButton color="warning" class="font" size="sm" @click="setObs(lsobs.id)">
+                        <CIcon icon="cil-pencil"></CIcon>
+                      </CButton>
+                      <CButton color="secondary" class="font" size="sm" @click="setImg(lsobs.id)">
+                        <CIcon icon="cil-clipboard"></CIcon>
+                      </CButton>
                     </CButtonGroup>
                   </td>
                 </tr>
@@ -91,7 +73,7 @@
   <CModal :visible="modalObs" @close="clickModalObs(false)">
     <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
       <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
-        <CModalTitle>
+        <CModalTitle class="text-center">
           <h5>Agregar Observaciones de Asistencia</h5>
         </CModalTitle>
       </CModalHeader>
@@ -101,12 +83,8 @@
           <label for="tipo" class="col-4 col-form-label">Tipo</label>
           <div class="col-8">
             <select v-model="obsall.cif" class="form-control" required="true">
-              <option
-                v-for="lte in listaTipoEmpleado"
-                :value="lte.id"
-                :key="lte.id"
-              >
-                {{ lte._01detalle }}
+              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+                {{ lte.detalle }}
               </option>
             </select>
           </div>
@@ -128,27 +106,15 @@
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">UID - OBS</label>
           <div class="col-8">
-            <input
-              type="text"
-              class="form-control"
-              v-model="obsall.uidobs"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="obsall.uidobs" required="true"/>
           </div>
         </div>
         <!--Input para el identificativo de observaciones-->
         <!--Input para la fecha de Inicio-->
         <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label"
-            >Fecha de Inicio</label
-          >
+          <label for="datos" class="col-4 col-form-label" >Fecha de Inicio</label>
           <div class="col-8">
-            <input
-              type="date"
-              class="form-control"
-              v-model="obsall.fechainicio"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="obsall.fechainicio" required="true"/>
           </div>
         </div>
         <!--Input para la fecha de Inicio-->
@@ -156,12 +122,7 @@
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
           <div class="col-8">
-            <input
-              type="date"
-              class="form-control"
-              v-model="obsall.fechafin"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="obsall.fechafin" required="true"/>
           </div>
         </div>
         <!--Input para la fecha Fin-->
@@ -169,11 +130,7 @@
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">Detalle</label>
           <div class="col-8">
-            <textarea
-              class="form-control"
-              v-model="obsall.detalle"
-              required="true"
-            ></textarea>
+            <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
           </div>
         </div>
         <!--Input para el detalle de Obserbacion-->
@@ -181,12 +138,7 @@
         <div class="mb-3 row">
           <label for="tipo" class="col-4 col-form-label">Tipo</label>
           <div class="col-8">
-            <select
-              class="form-control"
-              v-model="obsall.tipo"
-              required="true"
-              @change="getTipo()"
-            >
+            <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
               <option value="Entrada M.">Entrada Mañana</option>
               <option value="Salida M.">Salida Mañana</option>
               <option value="Entrada T.">Entrada Tarde</option>
@@ -213,21 +165,14 @@
         <div class="mb-3 row">
           <label for="archivo" class="col-4 col-form-label">Documento</label>
           <div class="col-8">
-            <input
-              type="file"
-              ref="obsfile"
-              class="form-control"
-              accept="image/png,image/jpeg"
-              @change="selectFile()"
-              required="true"
-            />
+            <input type="file" ref="obsfile" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true"/>
           </div>
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalObs(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-check-alt" class="me-2" /> Agregar Observaciones
         </button>
@@ -238,11 +183,7 @@
 
   <!-- Modal  Detalles de OBS-->
   <CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
-    <CModalHeader
-      class="headercolor"
-      dismiss
-      @close="clickModalDetalleObs(false)"
-    >
+    <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
       <CModalTitle>
         <h5>Detalles de la Observacion</h5>
       </CModalTitle>
@@ -254,20 +195,16 @@
       <CRow>
         <CCol :lg="12">
           <ul>
-            <li><strong>ID: </strong>{{ obsDetalle.id }}</li>
-            <li><strong>UID: </strong>{{ obsDetalle.uidobs }}</li>
-            <li><strong>Fecha Inicio: </strong>{{ obsDetalle.fechainicio }}</li>
-            <li><strong>Fecha Fin: </strong> {{ obsDetalle.fechafin }}</li>
-            <li><strong>Detalle: </strong>{{ obsDetalle.detalle }}</li>
-            <li><strong>Tipo de Obs. : </strong>{{ obsDetalle.tipo }}</li>
-            <li><strong>Hora: </strong>{{ obsDetalle.hora }}</li>
+            <li class="lista"><strong>ID: </strong>{{ obsDetalle.id }}</li>
+            <li class="lista"><strong>UID: </strong>{{ obsDetalle.uidobs }}</li>
+            <li class="lista"><strong>Fecha Inicio: </strong>{{ obsDetalle.fechainicio }}</li>
+            <li class="lista"><strong>Fecha Fin: </strong> {{ obsDetalle.fechafin }}</li>
+            <li class="lista"><strong>Detalle: </strong>{{ obsDetalle.detalle }}</li>
+            <li class="lista"><strong>Tipo de Obs. : </strong>{{ obsDetalle.tipo }}</li>
+            <li class="lista"><strong>Hora: </strong>{{ obsDetalle.hora }}</li>
           </ul>
-          <CAlert color="success" v-if="obsDetalle.estado === 1"
-            >Aprobado</CAlert
-          >
-          <CAlert color="warning" v-if="obsDetalle.estado === 0"
-            >En Espera</CAlert
-          >
+          <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
+          <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
         </CCol>
         <CCol>
           <img :src="obsDetalle.url" alt="" class="img-fluid" />
@@ -275,15 +212,12 @@
       </CRow>
     </CModalBody>
     <CModalFooter>
-      <CButton @click="clickModalDetalleObs(false)" color="danger" class="font"
-        ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-      >
-      <CButton
-        @click="updateObsEstado(obsDetalle.id, 1)"
-        color="success"
-        class="font"
-        ><CIcon icon="cil-check-alt" class="me-2" />Aprobar</CButton
-      >
+      <CButton @click="clickModalDetalleObs(false)" color="danger" class="font">
+        <CIcon icon="cil-x" class="me-2" />Cancelar
+      </CButton>
+      <CButton @click="updateObsEstado(obsDetalle.id, 1)" color="success" class="font">
+        <CIcon icon="cil-check-alt" class="me-2" />Aprobar
+      </CButton>
     </CModalFooter>
   </CModal>
   <!-- END Modal  Detalles de Obs-->
@@ -291,11 +225,7 @@
   <!-- Modal Editar Obserbasiones-->
   <CModal :visible="modalObsEditar" @close="clickModalObsEditar(false)">
     <form @submit.prevent="updateObsEmpleado()">
-      <CModalHeader
-        class="headercolor text-center"
-        dismiss
-        @close="clickModalObsEditar(false)"
-      >
+      <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
         <CModalTitle>
           <h5>Actualizar la Observacion de Asistencia</h5>
         </CModalTitle>
@@ -304,63 +234,35 @@
         <div class="mb-3 row">
           <label for="cif" class="col-4 col-form-label">CIF</label>
           <div class="col-8">
-            <input
-              type="text"
-              class="form-control"
-              v-model="uobs.cif"
-              required="true"
-              placeholder="CIF"
-            />
+            <input type="text" class="form-control" v-model="uobs.cif" required="true" placeholder="CIF"/>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">UID - OBS</label>
           <div class="col-8">
-            <input
-              type="text"
-              class="form-control"
-              v-model="uobs.uidobs"
-              required="true"
-              placeholder="Cite u Hoja de Ruta"
-            />
+            <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta"  />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label"
-            >Fecha de Inicio</label
-          >
+          <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
           <div class="col-8">
-            <input
-              type="date"
-              class="form-control"
-              v-model="uobs.fechainicio"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="uobs.fechainicio" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
           <div class="col-8">
-            <input
-              type="date"
-              class="form-control"
-              v-model="uobs.fechafin"
-              required="true"
-            />
+            <input type="date" class="form-control" v-model="uobs.fechafin" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">Detalle</label>
           <div class="col-8">
-            <textarea
-              class="form-control"
-              v-model="uobs.detalle"
-              required="true"
-            ></textarea>
+            <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
           </div>
         </div>
 
@@ -393,9 +295,9 @@
         </CCol>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalObsEditar(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalObsEditar(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-check-alt" class="me-2" /> Actualizar Observacion
         </button>
@@ -407,11 +309,7 @@
   <!-- Modal IMG Obserbasiones-->
   <CModal :visible="modalImgEditar" @close="clickModalImgEditar(false)">
     <form @submit.prevent="updateImgEmpleado()" enctype="multipart/form-data">
-      <CModalHeader
-        class="headercolor text-center"
-        dismiss
-        @close="clickModalImgEditar(false)"
-      >
+      <CModalHeader class="headercolor text-center" dismiss @close="clickModalImgEditar(false)">
         <CModalTitle>
           <h5>Actualizar Imagen de Observacion</h5>
         </CModalTitle>
@@ -420,14 +318,7 @@
         <div class="mb-3 row">
           <label for="imagen" class="col-4 col-form-label">Documento</label>
           <div class="col-8">
-            <input
-              type="file"
-              ref="obsfileimg"
-              class="form-control"
-              accept="image/png,image/jpeg"
-              @change="selectFileImg()"
-              required="true"
-            />
+            <input type="file" ref="obsfileimg" class="form-control" accept="image/png,image/jpeg" @change="selectFileImg()" required="true"/>
           </div>
         </div>
         <CCol>
@@ -435,9 +326,9 @@
         </CCol>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalImgEditar(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalImgEditar(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-check-alt" class="me-2" /> Actualizar Observacion
         </button>
@@ -448,10 +339,10 @@
 </template>
 
 <script>
-import EgovfService from "@/services/egovf/egovfService";
+import EgovfService from "@/modules/egovf/services/egovfService";
 import UploadService from "@/services/upload/uploadService";
 import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
-import SccService from "@scc/services/sccService";
+import SccService from "@/modules/egovf-scc/services/sccService";
 
 //Importamos Herramientas
 import DataTable from "datatables.net-vue3";
@@ -581,8 +472,7 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
-
-        this.egovfService.headersUsuario(this.usuario.token);
+        this.usuario.foto = this.$cookies.get("foto");
       }
     },
     async getListaTipoEmpleado() {
@@ -599,38 +489,23 @@ export default {
         //primero subimos el archivo
         await this.uploadService.addImagen(fromData).then((response) => {
           if (response.status == 200) {
-            this.obsall.url =
-              this.uploadService.getUrl() + response.data.nombre;
+            this.obsall.url = this.uploadService.getUrl() + response.data.nombre;
             this.obsall.imagen = response.data.nombre;
-            this.$swal
-              .fire({
-                title:
-                  "Desea agregar la Observacione de Asistencia a los Empleados?",
+            this.$swal.fire({
+                title:"Desea agregar la Observacione de Asistencia a los Empleados?",
                 showDenyButton: true,
                 icon: "info",
                 confirmButtonText: "Aceptar",
                 denyButtonText: "Cancelar",
-              })
-              .then((result) => {
+              }).then((result) => {
                 if (result.isConfirmed) {
                   this.sccService.addObsAll(this.obsall).then((response) => {
                     if (response.status == 200) {
-                      this.$swal
-                        .fire(
-                          "Las Observaciones fueron Agregados Corectamente ",
-                          "",
-                          "success"
-                        )
-                        .then((res) => {
+                      this.$swal.fire("Las Observaciones fueron Agregados Corectamente ","","success").then((res) => {
                           if (res) location.reload();
                         });
                     } else {
-                      this.$swal.fire(
-                        "Las Observaciones no fueron Guardados Error" +
-                          response.status,
-                        "",
-                        "error"
-                      );
+                      this.$swal.fire("Las Observaciones no fueron Guardados Error" +response.status,"","error");
                     }
                   });
                 } else if (result.isDenied) {
@@ -654,10 +529,10 @@ export default {
         lgestion.push(i);
       }
       this.listaGestion = lgestion;
-      this.getListaObs();
+      this.getListaObs(rgestion);
     },
-    async getListaObs() {
-      await this.sccService.getListaObs().then((response) => {
+    async getListaObs(rgestion) {
+      await this.sccService.getListaObs(rgestion).then((response) => {
         this.listaObs = response.data;
       });
       this.getListaCiudadanoEmpleado();
@@ -682,14 +557,14 @@ export default {
             tipo: "",
             detalle: "",
           };
-          if (empleado.cif == obs._01cif) {
+          if (empleado.cif == obs.cif) {
             obsCiudadano.id = obs.id;
-            obsCiudadano.cif = obs._01cif;
+            obsCiudadano.cif = obs.cif;
             obsCiudadano.nombre =
               empleado.nombre + " " + empleado.paterno + " " + empleado.materno;
-            obsCiudadano.uidobs = obs._02uidobs;
-            obsCiudadano.tipo = obs._11tipo;
-            obsCiudadano.detalle = obs._09detalle;
+            obsCiudadano.uidobs = obs.uidobs;
+            obsCiudadano.tipo = obs.tipo;
+            obsCiudadano.detalle = obs.detalle;
             this.listaObsCiudadanos.push(obsCiudadano);
             return false;
           }
@@ -703,16 +578,16 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.obsDetalle.id = obs.id;
-          this.obsDetalle.cif = obs._01cif;
-          this.obsDetalle.uidobs = obs._02uidobs;
-          this.obsDetalle.fechainicio = obs._03fechainicio;
-          this.obsDetalle.fechafin = obs._04fechafin;
-          this.obsDetalle.detalle = obs._09detalle;
-          this.obsDetalle.imagen = obs._10imagen;
-          this.obsDetalle.tipo = obs._11tipo;
-          this.obsDetalle.hora = obs._12hora;
-          this.obsDetalle.url = obs._15url;
-          this.obsDetalle.estado = obs._16estado;
+          this.obsDetalle.cif = obs.cif;
+          this.obsDetalle.uidobs = obs.uidobs;
+          this.obsDetalle.fechainicio = obs.fechainicio;
+          this.obsDetalle.fechafin = obs.fechafin;
+          this.obsDetalle.detalle = obs.detalle;
+          this.obsDetalle.imagen = obs.imagen;
+          this.obsDetalle.tipo = obs.tipo;
+          this.obsDetalle.hora = obs.hora;
+          this.obsDetalle.url = obs.url;
+          this.obsDetalle.estado = obs.estado;
         }
       });
       this.clickModalDetalleObs(true);
@@ -739,48 +614,40 @@ export default {
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
-          (uObs.id = obs.id),
-            (uObs.cif = obs._01cif),
-            (uObs.uidobs = obs._02uidobs),
-            (uObs.fechainicio = obs._03fechainicio),
-            (uObs.fechafin = obs._04fechafin),
-            (uObs.gestion = obs._05gestion),
-            (uObs.mes = obs._06mes),
-            (uObs.di = obs._07di),
-            (uObs.df = obs._08df),
-            (uObs.detalle = obs._09detalle),
-            (uObs.imagen = obs._10imagen),
-            (uObs.tipo = obs._11tipo),
-            (uObs.hora = obs._12hora),
-            (uObs.h = obs._13h),
-            (uObs.m = obs._14m),
-            (uObs.url = obs._15url),
-            (uObs.estado = estado);
+            uObs.id = obs.id,
+            uObs.cif = obs.cif,
+            uObs.uidobs = obs.uidobs,
+            uObs.fechainicio = obs.fechainicio,
+            uObs.fechafin = obs.fechafin,
+            uObs.gestion = obs.gestion,
+            uObs.mes = obs.mes,
+            uObs.di = obs.di,
+            uObs.df = obs.df,
+            uObs.detalle = obs.detalle,
+            uObs.imagen = obs.imagen,
+            uObs.tipo = obs.tipo,
+            uObs.hora = obs.hora,
+            uObs.h = obs.h,
+            uObs.m = obs.m,
+            uObs.url = obs.url,
+            uObs.estado = estado
         }
       });
-      await this.$swal
-        .fire({
+      await this.$swal.fire({
           title: "Desea Aprobar la Observacion ? ",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateObs(uObs).then((response) => {
               if (response.status == 200) {
-                this.$swal
-                  .fire("Observacion Actualizada Corectamente", "", "success")
-                  .then((res) => {
+                this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
                     if (res) location.reload();
                   });
               } else {
-                this.$swal.fire(
-                  "Los Datos no fueron Guardados Error",
-                  "" + response.status,
-                  "error"
-                );
+                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
               }
             });
           } else if (result.isDenied) {
@@ -790,33 +657,21 @@ export default {
     },
     async updateObsEmpleado() {
       //Funcion actualizar una Observacion del Usuario
-      this.$swal
-        .fire({
+      this.$swal.fire({
           title: "Deseas Actualizar la Observacion de Tu Asistencia ?",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateObsEmpleado(this.uobs).then((response) => {
               if (response.status == 200) {
-                this.$swal
-                  .fire(
-                    "La Observacion fue Actualizada Corectamente",
-                    "",
-                    "success"
-                  )
-                  .then((res) => {
+                this.$swal.fire("La Observacion fue Actualizada Corectamente","","success").then((res) => {
                     if (res) location.reload();
                   });
               } else {
-                this.$swal.fire(
-                  "La Observacion no pudo ser Registrada",
-                  "" + response.status,
-                  "error"
-                );
+                this.$swal.fire("La Observacion no pudo ser Registrada","" + response.status,"error");
               }
             });
           } else if (result.isDenied) {
@@ -833,36 +688,21 @@ export default {
           if (response.status == 200) {
             this.uobs.url = this.uploadService.getUrl() + response.data.nombre;
             this.uobs.imagen = response.data.nombre;
-            this.$swal
-              .fire({
-                title:
-                  "Desea agregar la Observacione de Asistencia a los Empleados?",
+            this.$swal.fire({
+                title:"Desea agregar la Observacione de Asistencia a los Empleados?",
                 showDenyButton: true,
                 icon: "info",
                 confirmButtonText: "Aceptar",
                 denyButtonText: "Cancelar",
-              })
-              .then((result) => {
+              }).then((result) => {
                 if (result.isConfirmed) {
-                  this.sccService
-                    .updateObsEmpleado(this.uobs)
-                    .then((response) => {
+                  this.sccService.updateObsEmpleado(this.uobs).then((response) => {
                       if (response.status == 200) {
-                        this.$swal
-                          .fire(
-                            "El Documento fue Actualizado Corectamente ",
-                            "",
-                            "success"
-                          )
-                          .then((res) => {
+                        this.$swal.fire("El Documento fue Actualizado Corectamente ","","success").then((res) => {
                             if (res) location.reload();
                           });
                       } else {
-                        this.$swal.fire(
-                          "El Documento no fue Guardad Error" + response.status,
-                          "",
-                          "error"
-                        );
+                        this.$swal.fire("El Documento no fue Guardad Error" + response.status,"","error");
                       }
                     });
                 } else if (result.isDenied) {
@@ -882,15 +722,15 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.uobs.id = id;
-          this.uobs.cif = obs._01cif;
-          this.uobs.uidobs = obs._02uidobs;
-          this.uobs.fechainicio = obs._03fechainicio;
-          this.uobs.fechafin = obs._04fechafin;
-          this.uobs.detalle = obs._09detalle;
-          this.uobs.imagen = obs._10imagen;
-          this.uobs.tipo = obs._11tipo;
-          this.uobs.hora = obs._12hora;
-          this.uobs.url = obs._15url;
+          this.uobs.cif = obs.cif;
+          this.uobs.uidobs = obs.uidobs;
+          this.uobs.fechainicio = obs.fechainicio;
+          this.uobs.fechafin = obs.fechafin;
+          this.uobs.detalle = obs.detalle;
+          this.uobs.imagen = obs.imagen;
+          this.uobs.tipo = obs.tipo;
+          this.uobs.hora = obs.hora;
+          this.uobs.url = obs.url;
         }
       });
       this.clickModalObsEditar(true);
@@ -900,15 +740,15 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.uobs.id = id;
-          this.uobs.cif = obs._01cif;
-          this.uobs.uidobs = obs._02uidobs;
-          this.uobs.fechainicio = obs._03fechainicio;
-          this.uobs.fechafin = obs._04fechafin;
-          this.uobs.detalle = obs._09detalle;
-          this.uobs.imagen = obs._10imagen;
-          this.uobs.tipo = obs._11tipo;
-          this.uobs.hora = obs._12hora;
-          this.uobs.url = obs._15url;
+          this.uobs.cif = obs.cif;
+          this.uobs.uidobs = obs.uidobs;
+          this.uobs.fechainicio = obs.fechainicio;
+          this.uobs.fechafin = obs.fechafin;
+          this.uobs.detalle = obs.detalle;
+          this.uobs.imagen = obs.imagen;
+          this.uobs.tipo = obs.tipo;
+          this.uobs.hora = obs.hora;
+          this.uobs.url = obs.url;
         }
       });
       this.clickModalImgEditar(true);

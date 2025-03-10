@@ -32,9 +32,10 @@
     </label>
     <button type="submit">Ingresar</button>
     <div class="options">
-      <button type="button" @click="() => { router.push('/register') }">Crear cuenta</button>
+      <label>Crear cuenta</label>
+      <!--<button type="button" @click="() => { router.push('/register') }">Crear cuenta</button>-->
       <!-- <button type="button">¿Olvidaste tu contraseña?</button> -->
-      <ModalDialog type="link" title="¿Olvidaste tu contraseña?" />
+      <!--<ModalDialog type="link" title="¿Olvidaste tu contraseña?" />-->
     </div>
   </form>
 </template>
@@ -46,7 +47,7 @@ import { nextTick, ref, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useCookies } from '../../utils/cookiesManager';
 import Swal from 'sweetalert2'
-import ModalDialog from '../ForgotPassword/ModalDialog.vue';
+//import ModalDialog from '../ForgotPassword/ModalDialog.vue';
 
 const userService = new UsuarioService()
 
@@ -97,6 +98,7 @@ const login = async (e) => {
       text: error?.text ?? 'El servidor no está respondiendo, comuniquese con el administrador.',
       // footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
     })
+    location.reload();
   }
 }
 

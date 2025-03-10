@@ -10,7 +10,7 @@ import ComponenteMEmpVue from '@/components/Usuario/ComponenteMEmpVue.vue';
 // End
 
 // Declaramos los Servicios
-import EgovfService from '@/services/egovf/egovfService';
+import EgovfService from '@/modules/egovf/services/egovfService';
 // End
 
 export default {

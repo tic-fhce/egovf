@@ -162,7 +162,7 @@
 
 <script>
 
-import EgovfService from '@/services/egovf/egovfService';
+import EgovfService from '@/modules/egovf/services/egovfService';
 import InventarioService from '@/services/inv/inventarioService';
 
 //Importamos Herramientas 

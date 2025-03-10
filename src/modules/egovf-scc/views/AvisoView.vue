@@ -6,13 +6,9 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton
-                @click="clickModalAviso(true)"
-                color="success"
-                class="font"
-                size="sm"
-                ><CIcon icon="cil-cloud-upload" class="me-2" />Agregar</CButton
-              >
+              <CButton @click="clickModalAviso(true)" color="success" class="font" size="sm">
+                <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
+              </CButton>
             </CCol>
           </CRow>
         </CCardHeader>
@@ -31,23 +27,18 @@
               <tbody>
                 <tr v-for="aviso in listaAvisos" :key="aviso.id">
                   <th scope="row">{{ aviso.id }}</th>
-                  <td>{{ aviso._01titulo }}</td>
-                  <td>{{ aviso._02detalle }}</td>
+                  <td>{{ aviso.titulo }}</td>
+                  <td>{{ aviso.detalle }}</td>
                   <td>
-                    {{ aviso._03icon }}<br />
-                    <CBadge v-if="aviso._04estado == 1" color="success"
-                      >Activo</CBadge
-                    >
+                    Icono : {{ aviso.icon }}<br />
+                    <CBadge v-if="aviso.estado == 1" color="success">Activo
+                    </CBadge>
                     <CBadge v-else color="warning">Inactivo</CBadge>
                   </td>
                   <td>
-                    <CButton
-                      class="font"
-                      color="success"
-                      @click="avisoSelect(aviso.id)"
-                      size="sm"
-                      ><CIcon icon="cil-pencil" class="me-2"
-                    /></CButton>
+                    <CButton class="font" color="success" @click="avisoSelect(aviso.id)" size="sm">
+                      <CIcon icon="cil-pencil" class="me-2"/>
+                    </CButton>
                   </td>
                 </tr>
               </tbody>
@@ -70,26 +61,14 @@
         <div class="mb-3 row">
           <label for="detalle" class="col-4">Titulo</label>
           <div class="col-8">
-            <input
-              type="text"
-              class="form-control"
-              v-model="aviso.titulo"
-              placeholder="Titulo del Aviso a colocar"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="aviso.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="lugar" class="col-4">Detalle</label>
           <div class="col-8">
-            <textarea
-              class="form-control"
-              cols="30"
-              rows="5"
-              v-model="aviso.detalle"
-              required="true"
-            ></textarea>
+            <textarea class="form-control" cols="30" rows="5" v-model="aviso.detalle" required="true"></textarea>
           </div>
         </div>
 
@@ -101,14 +80,15 @@
               <option value="error">Error</option>
               <option value="success">Completo</option>
               <option value="warning">Incompleto</option>
+              <option value="question">Pregunta</option>
             </select>
           </div>
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalAviso(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalAviso(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
         </button>
@@ -120,11 +100,7 @@
   <!-- Modal  Update Aviso-->
   <CModal :visible="modalAvisoUpdate" @close="clickModalAvisoUpdate(false)">
     <form @submit.prevent="updateAviso()">
-      <CModalHeader
-        class="headercolor"
-        dismiss
-        @close="clickModalAvisoUpdate(false)"
-      >
+      <CModalHeader class="headercolor" dismiss @close="clickModalAvisoUpdate(false)">
         <CModalTitle>
           <h5>Actualizar Aviso</h5>
         </CModalTitle>
@@ -133,41 +109,26 @@
         <div class="mb-3 row">
           <label for="detalle" class="col-4">Titulo</label>
           <div class="col-8">
-            <input
-              type="text"
-              class="form-control"
-              v-model="avisoUpdate.titulo"
-              placeholder="Titulo del Aviso a colocar"
-              required="true"
-            />
+            <input type="text" class="form-control" v-model="avisoUpdate.titulo" placeholder="Titulo del Aviso a colocar" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="lugar" class="col-4">Detalle</label>
           <div class="col-8">
-            <textarea
-              class="form-control"
-              cols="30"
-              rows="5"
-              v-model="avisoUpdate.detalle"
-              required="true"
-            ></textarea>
+            <textarea class="form-control" cols="30" rows="5" v-model="avisoUpdate.detalle" required="true"></textarea>
           </div>
         </div>
 
         <div class="mb-3 row">
           <label for="ip" class="col-4">Icono</label>
           <div class="col-8">
-            <select
-              class="form-control"
-              v-model="avisoUpdate.icon"
-              required="true"
-            >
+            <select class="form-control" v-model="avisoUpdate.icon" required="true">
               <option value="info">Informacion</option>
               <option value="error">Error</option>
               <option value="success">Completo</option>
               <option value="warning">Incompleto</option>
+              <option value="question">Pregunta</option>
             </select>
           </div>
         </div>
@@ -175,11 +136,7 @@
         <div class="mb-3 row">
           <label for="codigo" class="col-4">Estado</label>
           <div class="col-8">
-            <select
-              class="form-control"
-              v-model="avisoUpdate.estado"
-              required="true"
-            >
+            <select class="form-control" v-model="avisoUpdate.estado" required="true">
               <option value="1">Activo</option>
               <option value="0">Inactivo</option>
             </select>
@@ -187,12 +144,9 @@
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton
-          @click="clickModalAvisoUpdate(false)"
-          color="danger"
-          class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
+        <CButton @click="clickModalAvisoUpdate(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
         <button class="btn btn-success font">
           <CIcon icon="cil-cloud-upload" class="me-2" />Actualizar
         </button>
@@ -204,7 +158,7 @@
 
 <script>
 //Importamos Servicios
-import SccService from "@scc/services/sccService";
+import SccService from "@/modules/egovf-scc/services/sccService";
 
 //Importamos Herramientas
 import DataTable from "datatables.net-vue3";
@@ -275,6 +229,7 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
+        this.usuario.foto = this.$cookies.get("foto");
       }
     },
     async getAvisoAll() {
@@ -286,29 +241,21 @@ export default {
     },
     addAviso() {
       // funcion para el registro de un Aviso
-      this.$swal
-        .fire({
+      this.$swal.fire({
           title: "Desea Registrar El Aviso",
           icon: "info",
           showDenyButton: true,
           confirmButtonText: "Registrar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.sccService.addAviso(this.aviso).then((response) => {
-              if (response.status == 200) {
-                this.$swal
-                  .fire("Aviso Registrado Corectamente", "", "success")
-                  .then((result) => {
+              if (response.status == 201) {
+                this.$swal.fire("Aviso Registrado Corectamente", "", "success").then((result) => {
                     if (result) location.reload();
                   });
               } else {
-                this.$swal.fire(
-                  "Los Datos no fueron Guardados Error",
-                  "" + response.status,
-                  "error"
-                );
+                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
               }
             });
           }
@@ -316,29 +263,21 @@ export default {
     },
     updateAviso() {
       // funcion para actualizar un Aviso
-      this.$swal
-        .fire({
+      this.$swal.fire({
           title: "Desea Actualizar El Aviso",
           icon: "info",
           showDenyButton: true,
           confirmButtonText: "Actualizar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateAviso(this.avisoUpdate).then((response) => {
               if (response.status == 200) {
-                this.$swal
-                  .fire("Aviso Actualizado Corectamente", "", "success")
-                  .then((result) => {
+                this.$swal.fire("Aviso Actualizado Corectamente", "", "success").then((result) => {
                     if (result) location.reload();
                   });
               } else {
-                this.$swal.fire(
-                  "Los Datos no fueron Guardados Error",
-                  "" + response.status,
-                  "error"
-                );
+                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
               }
             });
           }
@@ -348,10 +287,10 @@ export default {
       this.listaAvisos.forEach((aviso) => {
         if (aviso.id == id) {
           this.avisoUpdate.id = aviso.id;
-          this.avisoUpdate.titulo = aviso._01titulo;
-          this.avisoUpdate.detalle = aviso._02detalle;
-          this.avisoUpdate.icon = aviso._03icon;
-          this.avisoUpdate.estado = aviso._04estado;
+          this.avisoUpdate.titulo = aviso.titulo;
+          this.avisoUpdate.detalle = aviso.detalle;
+          this.avisoUpdate.icon = aviso.icon;
+          this.avisoUpdate.estado = aviso.estado;
         }
       });
       this.clickModalAvisoUpdate(true);

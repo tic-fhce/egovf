@@ -156,29 +156,34 @@
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
-
-        <div class="mb-3 row">
-            <label for="gestiones" class="col-sm-6 col-form-label">Gestion</label>
-            <div class="col-sm-6">
-                <select v-model="record.gestion" class="form-control">
-                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                </select>
+        <form @submit.prevent="getRecord()">
+            <div class="mb-3 row">
+                <label for="gestiones" class="col-sm-6 col-form-label">Gestion</label>
+                <div class="col-sm-6">
+                    <select v-model="record.gestion" class="form-control">
+                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="datos" class="col-sm-6 col-form-label">Mes</label>
-            <div class="col-sm-6">
-                <select class="form-control" v-model="record.mes">
-                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                </select>
+            <div class="mb-3 row">
+                <label for="datos" class="col-sm-6 col-form-label">Mes</label>
+                <div class="col-sm-6">
+                    <select class="form-control" v-model="record.mes">
+                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                    </select>
+                </div>
             </div>
-        </div>
-
+            <hr>
+            <div class="mb-3 row text-center" >
+                <div class="col-sm-12 ">
+                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Record</button>
+                </div>
+            </div>
+        </form>
     </CModalBody>
     <CModalFooter>
         <CButton @click="clickModalRecord(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="getRecord()" color="success" class="font"><CIcon icon="cil-clipboard" class="me-2"/>Record</CButton>
     </CModalFooter>
 </CModal>
 <!-- END Modal  Record-->

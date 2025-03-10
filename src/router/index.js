@@ -127,12 +127,12 @@ const routes = [
         name: "ReporteView",
         component: () => import("@/modules/egovf-scc/views/ReporteView.vue"),
       },
-      {
+      /*{
         // MODULO SISTEMA CONTENEDOR CONTROL REPORTE DE ASISTENCIAS PARA EL USUARIO
         path: "/ureporte:uri",
         name: "UReporteView",
         component: () => import("@/views/Usuario/UReporteView.vue"),
-      },
+      },*/
       {
         // revisado Nuevo
         path: "/usuarioreporte:uri",
@@ -141,27 +141,41 @@ const routes = [
       },
       {
         // MODULO SISTEMA CONTENEDOR CONTROL
+        //revisado
         path: "/record:uri",
         name: "RecordView",
-        component: () => import("@scc/views/RecordView.vue"),
+        component: () => import("@/modules/egovf-scc/views/RecordView.vue"),
       },
       {
         // MODULO SISTEMA CONTENEDOR CONTROL ADMINISTRACION DE SCC
+        //Revisado
         path: "/obsModuloScc",
         name: "ObsView",
-        component: () => import("@scc/views/ObsView.vue"),
+        component: () => import("@/modules/egovf-scc/views/ObsView.vue"),
       },
       {
         // Avisos
         path: "/avisos",
         name: "AvisoView",
-        component: () => import("@scc/views/AvisoView.vue"),
+        component: () => import("@/modules/egovf-scc/views/AvisoView.vue"),
       },
       // MODULO SISTEMA DE INVENTARIO
       {
         path: "/moduloinv:cifCiudadano",
         name: "ModuloInvView",
         component: () => import("@/views/Inv/ModuloInvView.vue"),
+      },
+      {
+        //Revisado Nuevo
+        path: "/invmodulomenu",
+        name: "ModuloInvMenuView",
+        component: () => import("@/modules/egovf-inv/views/ModuloInvMenuView.vue"),
+      },
+      {
+        //Revisado Nuevo
+        path: "/cpu",
+        name: "CpuView",
+        component: () => import("@/modules/egovf-inv/views/CpuView.vue"),
       },
       {
         path: "/umoduloinv",
