@@ -47,7 +47,7 @@ export default class EmpleadoService {
     console.log(contratoDtoRequest);
     return axios.post(empleadoUrl + "contrato/addContrato", contratoDtoRequest);
   }
-  setContrato(contrato) {
+  updateContrato(contrato) {
     let numero = contrato.numerocontrato;
     const contratoDtoResponse = {
       "id": contrato.id,
@@ -61,7 +61,7 @@ export default class EmpleadoService {
       "detalle": contrato.detalle,
       "idTipoEmpleado":contrato.idTipoEmpleado
     };
-    return axios.put(empleadoUrl + "contrato/actualizarContrato", contratoDtoResponse);
+    return axios.put(empleadoUrl + "contrato/updateContrato", contratoDtoResponse);
   }
   getTipoEmpleado(id) {
     // Servicio quer debuelbe el Detalle del Empleado {Docente, Admisnitrativo, ect} de ModuloEmp tipoempleado

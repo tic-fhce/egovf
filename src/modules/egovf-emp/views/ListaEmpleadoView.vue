@@ -368,7 +368,7 @@ export default {
                             denyButtonText: 'Cancelar',
                             }).then((result) => {
                             if (result.isConfirmed) {
-                                this.biometricoService.addObsAll(this.obsall).then(response =>{
+                                this.sccService.addObsAll(this.obsall).then(response =>{
                                     if(response.status == 200){
                                         this.$swal.fire('Las Observaciones fueron Agregados Corectamente ','', 'success').then((res)=>{
                                             if(res)

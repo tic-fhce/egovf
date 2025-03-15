@@ -92,9 +92,6 @@
                                     <tr>
                                         <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                                     </tr>
-                                    <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Dias de Descuento</th><th><h2>{{totalsin}}</h2></th><th></th>
-                                    </tr>
                                 </tfoot>
                             </table>
                         </CCol>
@@ -253,10 +250,8 @@ export default {
             doc.text("Correo : "+this.reporte.persona.correo,120,60);
             doc.setFontSize(15);
             
-            doc.text("Total Dias de Descuento : "+this.totalsin,120,70);
-            doc.setFontSize(10);
-            doc.text("Retraso  : "+this.totalretraso+" min.",120,78);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,82);
+            doc.text("Retraso  : "+this.totalretraso+" min.",120,70);
+            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,80);
             doc.setFontSize(6);
             doc.text("Fecha de Imprecion : "+fecha,120,86);
             doc.setFontSize(10);

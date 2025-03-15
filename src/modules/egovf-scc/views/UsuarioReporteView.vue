@@ -3,7 +3,7 @@
         {{ reporte.cif }}
     </div>
     <CRow>
-        <CCol :lg="4"><br />
+        <CCol :lg="4" class="oculto"><br />
             <CCard>
                 <CCardHeader class="headercolor text-center">
                     Total Dias de Descuento
@@ -124,9 +124,6 @@
                                     </tr>
                                     <tr>
                                         <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
-                                    </tr>
-                                    <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Dias de Descuento</th><th><h2>{{totalsin}}</h2></th><th></th>
                                     </tr>
                                 </tfoot>
                             </table>

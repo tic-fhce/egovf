@@ -486,8 +486,8 @@ export default {
       contrato: {
         cif: 0,
         id: 0,
-        numerocontrato: "",
-        servicio: "",
+        numerocontrato: "AREA.DESC.CONT.N.",
+        servicio: "CONTRATO ADMINISTRATIVO PARA LA PRESTACION DE SERVICIOS CONSULTOR INDIVIDUAL DE LINEA",
         unidad: "",
         inicio: "",
         fin: "",
@@ -744,11 +744,11 @@ export default {
         })
         .then((result) => {
           if (result.isConfirmed) {
-            this.empleadoService.setContrato(this.setContrato).then((response) => {
+            this.empleadoService.updateContrato(this.setContrato).then((response) => {
                 if (response.status == 200) {
                   this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                       if (respon.status == 200) {
-                        this.unidadService.registrarPertenece(this.egovf, this.unidad).then((res) => {
+                        this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
                             if (res.status == 200) {
                               this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
                                   if (r) location.reload();
