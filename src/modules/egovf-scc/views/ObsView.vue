@@ -3,23 +3,8 @@
     <CCol :xs="12">
       <CCard>
         <CCardHeader class="headercolor">
-          <CRow>
-            <CCol :lg="6"><label class="d-none d-md-flex me-auto">{{titulo}}</label>
-            </CCol>
-            <CCol :lg="6" class="text-end">
-              <CDropdown variant="btn-group">
-                <CDropdownToggle color="success" class="font" size="sm">
-                  <CIcon icon="cil-menu" class="me-2"/>Opciones
-                </CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem>
-                    <CButton @click="clickModalObs(true)" size="sm">
-                      Agregar Observaciones
-                    </CButton>
-                  </CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
-            </CCol>
+          <CRow class="text-center">
+            <label class="d-none d-md-flex me-auto">{{titulo}}</label>
           </CRow>
         </CCardHeader>
         <CCardBody>
@@ -69,117 +54,6 @@
     </CCol>
   </CRow>
 
-  <!-- Modal  Obserbasiones-->
-  <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
-      <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
-        <CModalTitle class="text-center">
-          <h5>Agregar Observaciones de Asistencia</h5>
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <!--Input para Tipos de empleado-->
-        <div class="mb-3 row">
-          <label for="tipo" class="col-4 col-form-label">Tipo</label>
-          <div class="col-8">
-            <select v-model="obsall.cif" class="form-control" required="true">
-              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
-                {{ lte.detalle }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <!--Input para Tipos de empleado-->
-        <!--Input para el sexo de cada empleado-->
-        <div class="mb-3 row">
-          <label for="sexo" class="col-4 col-form-label">Caracteristica</label>
-          <div class="col-8">
-            <select class="form-control" v-model="obsall.sexo" required="true">
-              <option value="0">Todos</option>
-              <option value="1">Femenino</option>
-              <option value="2">Masculino</option>
-            </select>
-          </div>
-        </div>
-        <!--Input para el sexo de cada empleado-->
-        <!--Input para el identificativo de observaciones-->
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">UID - OBS</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="obsall.uidobs" required="true"/>
-          </div>
-        </div>
-        <!--Input para el identificativo de observaciones-->
-        <!--Input para la fecha de Inicio-->
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label" >Fecha de Inicio</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="obsall.fechainicio" required="true"/>
-          </div>
-        </div>
-        <!--Input para la fecha de Inicio-->
-        <!--Input para la fecha Fin-->
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="obsall.fechafin" required="true"/>
-          </div>
-        </div>
-        <!--Input para la fecha Fin-->
-        <!--Input para el detalle de Obserbacion-->
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Detalle</label>
-          <div class="col-8">
-            <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
-          </div>
-        </div>
-        <!--Input para el detalle de Obserbacion-->
-        <!--Input para el tipo de Observacion-->
-        <div class="mb-3 row">
-          <label for="tipo" class="col-4 col-form-label">Tipo</label>
-          <div class="col-8">
-            <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
-              <option value="Entrada M.">Entrada Mañana</option>
-              <option value="Salida M.">Salida Mañana</option>
-              <option value="Entrada T.">Entrada Tarde</option>
-              <option value="Salida T.">Salida Tarde</option>
-              <option value="continuo">Continuo</option>
-              <option value="horas">Horas de Servicio</option>
-              <option value="extraordinario">Horario Extraordinario</option>
-              <option value="comision">Comisión</option>
-              <option value="permiso">Permiso</option>
-              <option value="asueto">Asueto</option>
-            </select>
-          </div>
-        </div>
-        <!--Input para el tipo de Observacion-->
-        <!--Input para la hora-->
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Hora</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="obsall.hora" />
-          </div>
-        </div>
-        <!--Input para la hora-->
-        <!--Input para el Docuemtno-->
-        <div class="mb-3 row">
-          <label for="archivo" class="col-4 col-form-label">Documento</label>
-          <div class="col-8">
-            <input type="file" ref="obsfile" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true"/>
-          </div>
-        </div>
-      </CModalBody>
-      <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
-        </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-check-alt" class="me-2" /> Agregar Observaciones
-        </button>
-      </CModalFooter>
-    </form>
-  </CModal>
-  <!-- END Modal  Obserbasiones-->
 
   <!-- Modal  Detalles de OBS-->
   <CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
@@ -192,20 +66,45 @@
       <div class="mb-3 row">
         <h4 class="card-title">CIF : {{ obsDetalle.cif }}</h4>
       </div>
+      <hr>
+      <CRow class="mb-2">
+        <CCol><strong>ID:</strong></CCol>
+        <CCol>{{ obsDetalle.id }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+        <CCol><strong>UID:</strong></CCol>
+        <CCol>{{ obsDetalle.uidobs }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Fecha Inicio:</strong></CCol>
+          <CCol>{{ obsDetalle.fechainicio }}</CCol>
+          <CCol><strong>Fecha Fin:</strong></CCol>
+          <CCol>{{ obsDetalle.fechafin }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Detalle:</strong></CCol>
+          <CCol>{{ obsDetalle.detalle }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Tipo de Obs. :</strong></CCol>
+          <CCol>{{ obsDetalle.tipo }}</CCol>
+      </CRow>
+      <CRow class="mb-2">
+          <CCol><strong>Hora Entrada:</strong></CCol>
+          <CCol>{{ obsDetalle.horaEntrada }}</CCol>
+          <CCol><strong>Hora Salida:</strong></CCol>
+          <CCol>{{ obsDetalle.horaSalida }}</CCol>
+      </CRow>
       <CRow>
-        <CCol :lg="12">
-          <ul>
-            <li class="lista"><strong>ID: </strong>{{ obsDetalle.id }}</li>
-            <li class="lista"><strong>UID: </strong>{{ obsDetalle.uidobs }}</li>
-            <li class="lista"><strong>Fecha Inicio: </strong>{{ obsDetalle.fechainicio }}</li>
-            <li class="lista"><strong>Fecha Fin: </strong> {{ obsDetalle.fechafin }}</li>
-            <li class="lista"><strong>Detalle: </strong>{{ obsDetalle.detalle }}</li>
-            <li class="lista"><strong>Tipo de Obs. : </strong>{{ obsDetalle.tipo }}</li>
-            <li class="lista"><strong>Hora: </strong>{{ obsDetalle.hora }}</li>
-          </ul>
-          <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
-          <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
-        </CCol>
+        <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
+        <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
+      </CRow>
+
+      <CRow>  
         <CCol>
           <img :src="obsDetalle.url" alt="" class="img-fluid" />
         </CCol>
@@ -215,7 +114,7 @@
       <CButton @click="clickModalDetalleObs(false)" color="danger" class="font">
         <CIcon icon="cil-x" class="me-2" />Cancelar
       </CButton>
-      <CButton @click="updateObsEstado(obsDetalle.id, 1)" color="success" class="font">
+      <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font">
         <CIcon icon="cil-check-alt" class="me-2" />Aprobar
       </CButton>
     </CModalFooter>
@@ -356,7 +255,7 @@ export default {
   components: {},
   data() {
     return {
-      titulo: "Observaciones",
+      titulo: "Observaciones del Empleado",
       modalObs: false,
       modalDetalleObs: false,
       modalObsEditar: false,
@@ -370,6 +269,8 @@ export default {
       listaTipoEmpleado: [],
       listaCiudadanoEmpleado: [],
       listaObsCiudadanos: [],
+      tipo:0,
+      gestion:0,
       listaMes: [
         { m: "01", mes: "Enero" },
         { m: "02", mes: "Febrero" },
@@ -393,6 +294,7 @@ export default {
         pass: "",
         unidad: "",
         sigla: "",
+        foto:"",
       },
       obsall: {
         cif: null,
@@ -414,9 +316,10 @@ export default {
         detalle: "",
         imagen: "",
         tipo: "",
-        hora: "",
+        horaEntrada: "",
+        horaSalida: "",
         url: "",
-        estado: 0,
+        estado: 0
       },
       uobs: {
         id: 0,
@@ -475,51 +378,6 @@ export default {
         this.usuario.foto = this.$cookies.get("foto");
       }
     },
-    async getListaTipoEmpleado() {
-      // Funcion para listar El tipo de Empleado
-      await this.empleadoService.getListaTipoEmpleado().then((response) => {
-        this.listaTipoEmpleado = response.data;
-      });
-    },
-    async addObsAll() {
-      //Funcion para registrar una Observacion del Usuario
-      const fromData = new FormData();
-      fromData.append("archivo", this.archivo);
-      try {
-        //primero subimos el archivo
-        await this.uploadService.addImagen(fromData).then((response) => {
-          if (response.status == 200) {
-            this.obsall.url = this.uploadService.getUrl() + response.data.nombre;
-            this.obsall.imagen = response.data.nombre;
-            this.$swal.fire({
-                title:"Desea agregar la Observacione de Asistencia a los Empleados?",
-                showDenyButton: true,
-                icon: "info",
-                confirmButtonText: "Aceptar",
-                denyButtonText: "Cancelar",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.sccService.addObsAll(this.obsall).then((response) => {
-                    if (response.status == 200) {
-                      this.$swal.fire("Las Observaciones fueron Agregados Corectamente ","","success").then((res) => {
-                          if (res) location.reload();
-                        });
-                    } else {
-                      this.$swal.fire("Las Observaciones no fueron Guardados Error" +response.status,"","error");
-                    }
-                  });
-                } else if (result.isDenied) {
-                  this.$swal.fire("Datos Cancelados", "", "info");
-                }
-              });
-          } else {
-            this.$swal.fire("El archivo no pudo ser Guardado  ", "", "error");
-          }
-        });
-      } catch (err) {
-        this.$swal.fire("El archivo no pudo ser Guardado  " + err, "error");
-      }
-    },
     getGestion() {
       // funcion que crea una lista de gestiones desde el 2021
       var lgestion = [];
@@ -529,13 +387,19 @@ export default {
         lgestion.push(i);
       }
       this.listaGestion = lgestion;
-      this.getListaObs(rgestion);
+      this.getListaObsEmpleado(rgestion);
     },
-    async getListaObs(rgestion) {
-      await this.sccService.getListaObs(rgestion).then((response) => {
+    async getListaObsEmpleado(rgestion) {
+      await this.sccService.getListaObsEmpleado(rgestion).then((response) => {
         this.listaObs = response.data;
       });
       this.getListaCiudadanoEmpleado();
+    },
+    async getListaTipoEmpleado() {
+      // Funcion para listar El tipo de Empleado
+      await this.empleadoService.getListaTipoEmpleado().then((response) => {
+        this.listaTipoEmpleado = response.data;
+      });
     },
     async getListaCiudadanoEmpleado() {
       // Funcion que regresa una lista de Ciudadanos que son Empleados del ModuloEgovf
@@ -585,69 +449,56 @@ export default {
           this.obsDetalle.detalle = obs.detalle;
           this.obsDetalle.imagen = obs.imagen;
           this.obsDetalle.tipo = obs.tipo;
-          this.obsDetalle.hora = obs.hora;
+          this.obsDetalle.horaEntrada = obs.horaEntrada;
+          this.obsDetalle.horaSalida = obs.horaSalida;
           this.obsDetalle.url = obs.url;
           this.obsDetalle.estado = obs.estado;
         }
       });
       this.clickModalDetalleObs(true);
     },
-    async updateObsEstado(id, estado) {
+    async updateObsBio(id, estado) {
       var uObs = {
         id: 0,
         cif: 0,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        gestion: 0,
-        mes: 0,
-        di: 0,
-        df: 0,
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        hora: "",
-        h: 0,
-        m: 0,
-        url: "",
-        estado: 0,
+        idObs:0,
+        horaEntrada: "",
+        horaSalida: "",
+        hEntrada: 0,
+        hSalida: 0,
+        mEntrada: 0,
+        mSalida:0,
+        estado:0
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
-            uObs.id = obs.id,
-            uObs.cif = obs.cif,
-            uObs.uidobs = obs.uidobs,
-            uObs.fechainicio = obs.fechainicio,
-            uObs.fechafin = obs.fechafin,
-            uObs.gestion = obs.gestion,
-            uObs.mes = obs.mes,
-            uObs.di = obs.di,
-            uObs.df = obs.df,
-            uObs.detalle = obs.detalle,
-            uObs.imagen = obs.imagen,
-            uObs.tipo = obs.tipo,
-            uObs.hora = obs.hora,
-            uObs.h = obs.h,
-            uObs.m = obs.m,
-            uObs.url = obs.url,
-            uObs.estado = estado
+          uObs.id = obs.id,
+          uObs.cif = obs.cif,
+          uObs.idObs = obs.idObs,
+          uObs.horaEntrada = obs.horaEntrada,
+          uObs.hEntrada = obs.hEntrada,
+          uObs.mEntrada = obs.mEntrada,
+          uObs.horaSalida = obs.horaSalida,
+          uObs.hSalida = obs.hSalida,
+          uObs.mSalida = obs.mSalida,
+          uObs.estado = estado
         }
       });
       await this.$swal.fire({
-          title: "Desea Aprobar la Observacion ? ",
+          title:"Desea Aprobar la Observacion  ? ",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
-            this.sccService.updateObs(uObs).then((response) => {
+            this.sccService.updateObsBio(uObs).then((response) => {
               if (response.status == 200) {
                 this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
                     if (res) location.reload();
                   });
               } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
+                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
               }
             });
           } else if (result.isDenied) {
@@ -752,9 +603,6 @@ export default {
         }
       });
       this.clickModalImgEditar(true);
-    },
-    clickModalObs(cio) {
-      this.modalObs = cio;
     },
     clickModalDetalleObs(Obs) {
       this.modalDetalleObs = Obs;

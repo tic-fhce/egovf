@@ -40,7 +40,7 @@ export default class SccService {
       params: {
         cif: cif,
         gestion: gestion,
-        mes: mes,
+        mes: mes
       },
     });
   }
@@ -66,6 +66,41 @@ export default class SccService {
       "tipoId":0
     };
     return axios.post(msccUrl + "obs/addObs", obsDtoRequest);
+  }
+  updateObs(obs) {
+    // Funcion que permite actualizar los datos de la observacion del propio empleado
+    const obsDtoResponse = {
+      "id": obs.id,
+      "uidobs": obs.uidobs,
+      "fechainicio": obs.fechainicio,
+      "fechafin": obs.fechafin,
+      "gestion": obs.fechainicio.substring(0, 4),
+      "mes": obs.fechainicio.substring(5, 7),
+      "di": obs.fechainicio.substring(8, 10),
+      "df": obs.fechafin.substring(8, 10),
+      "detalle": obs.detalle,
+      "imagen": obs.imagen,
+      "tipo": obs.tipo,
+      "url": obs.url,
+      "tipoId":0
+    };
+    return axios.put(msccUrl + "obs/updateObs", obsDtoResponse);
+  }
+  updateObsBio(obs) {
+    // Funcion que permite actualizar los datos de la observacion del propio empleado
+    const obsBioDtoResponse = {
+      "id": obs.id,
+      "cif": obs.cif,
+      "idObs":obs.idObs,
+      "horaEntrada": obs.horaEntrada,
+      "horaSalida": obs.horaSalida,
+      "hEntrada": obs.hEntrada,
+      "hSalida": obs.hSalida,
+      "mEntrada": obs.mEntrada,
+      "mSalida":obs.mSalida,
+      "estado":obs.estado
+    };
+    return axios.put(msccUrl + "obsbio/updateObsBio", obsBioDtoResponse);
   }
   updateObsEmpleado(obs) {
     // Funcion que permite actualizar los datos de la observacion del propio empleado
@@ -164,8 +199,10 @@ export default class SccService {
   }
   // Funcion que permite registrar los datos de la observacion de los usuarios
   addObs(obs) {
-    const obsDtoRequest = {
+    const obsDtoObj = {
+      "id": 0,
       "cif": obs.cif,
+      "sexo": 0,
       "uidobs": obs.uidobs,
       "fechainicio": obs.fechainicio,
       "fechafin": obs.fechafin,
@@ -176,17 +213,20 @@ export default class SccService {
       "detalle": obs.detalle,
       "imagen": obs.imagen,
       "tipo": obs.tipo,
-      "hora": obs.hora,
-      "h": obs.hora.substring(0, 2),
-      "m": obs.hora.substring(3, 5),
+      "horaEntrada": obs.horaEntrada,
+      "hEntrada": obs.horaEntrada.substring(0, 2),
+      "mEntrada": obs.horaEntrada.substring(3, 5),
+      "horaSalida": obs.horaSalida,
+      "hSalida": obs.horaSalida.substring(0, 2),
+      "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "estado": 1,
-      "tipoId":0
+      "estado": 1
+      
     };
-    return axios.post(msccUrl + "obs/addObs", obsDtoRequest);
+    return axios.post(msccUrl + "obs/addObs", obsDtoObj);
   }
   // Funcion que permite actualizar los datos de la observacion de los usuarios
-  updateObs(obs) {
+  updateObs1(obs) {
     const obsDtoResponse = {
       "id": obs.id,
       "cif": obs.cif,
@@ -217,6 +257,13 @@ export default class SccService {
       }
     });
   }
+  getListaObsEmpleado(rgestion) {
+    return axios.get(msccUrl + "obs/getListaObsEmpleado",{
+      params:{
+        gestion:rgestion
+      }
+    });
+  }
 
   addObsAll(obs) {
     // Funcion que registra observaciones masibas
@@ -234,9 +281,12 @@ export default class SccService {
       "detalle": obs.detalle,
       "imagen": obs.imagen,
       "tipo": obs.tipo,
-      "hora": obs.hora,
-      "h": obs.hora.substring(0, 2),
-      "m": obs.hora.substring(3, 5),
+      "horaEntrada": obs.horaEntrada,
+      "hEntrada": obs.horaEntrada.substring(0, 2),
+      "mEntrada": obs.horaEntrada.substring(3, 5),
+      "horaSalida": obs.horaSalida,
+      "hSalida": obs.horaSalida.substring(0, 2),
+      "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
       "estado": 1
     };

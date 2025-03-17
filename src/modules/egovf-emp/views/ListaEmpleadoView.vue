@@ -53,14 +53,15 @@
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
-        <CModalTitle>
-            <h5>Agregar Observaciones de Asistencia</h5>
-        </CModalTitle>
-    </CModalHeader>
+    <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
+        <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
+            <CModalTitle>
+                <h5>Agregar Observaciones de Asistencia</h5>
+            </CModalTitle>
+        </CModalHeader>
 
-    <CModalBody>
-        <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
+        <CModalBody>
+        
             <div class="mb-3 row">
                 <label for="sexo" class="col-sm-4 col-form-label">Caracteristica</label>
                 <div class="col-sm-8">
@@ -103,12 +104,13 @@
             <div class="mb-3 row">
                 <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
                 <div class="col-sm-8">
-                    <select class="form-control" v-model="obsall.tipo" required="true">
+                    <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
                         <option value="Entrada T.">Entrada Tarde</option>
                         <option value="Salida T.">Salida Tarde</option>
                         <option value="continuo">Continuo</option>
+                        <option value="continuoingreso">Continuo e Ingreso</option>
                         <option value="horas">Horas de Servicio</option>
                         <option value="extraordinario">Horario Extraordinario</option>
                         <option value="comision">Comisión</option>
@@ -118,10 +120,17 @@
                 </div>
             </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Hora</label>
+            <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
+                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.hora">
+                    <input type="text" class="form-control" v-model="obsall.horaEntrada">
+                </div>
+            </div>
+
+            <div class="mb-3 row" v-if="mostrarHoraSalida()">
+                <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" v-model="obsall.horaSalida">
                 </div>
             </div>
 
@@ -131,32 +140,26 @@
                     <input type="file" ref="obsfile" class="form-control" @change="selectFile()" required="true">
                 </div>
             </div>
-            <hr> 
-
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
-                </div>
-            </div>
-
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  Obserbasiones-->
 
 
 <!-- Modal  Record-->
 <CModal :visible="modalRecord" @close="clickModalRecord(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalRecord(false)">
-        <CModalTitle>
-            <h5>Extraer Record de Asistencias</h5>
-        </CModalTitle>
-    </CModalHeader>
-    <CModalBody>
-        <form @submit.prevent="getRecord()">
+    <form @submit.prevent="getRecord()">
+        <CModalHeader class="headercolor" dismiss @close="clickModalRecord(false)">
+            <CModalTitle>
+                <h5>Extraer Record de Asistencias</h5>
+            </CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+        
             <div class="mb-3 row">
                 <label for="gestiones" class="col-sm-6 col-form-label">Gestion</label>
                 <div class="col-sm-6">
@@ -174,17 +177,12 @@
                     </select>
                 </div>
             </div>
-            <hr>
-            <div class="mb-3 row text-center" >
-                <div class="col-sm-12 ">
-                    <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Record</button>
-                </div>
-            </div>
-        </form>
-    </CModalBody>
-    <CModalFooter>
-        <CButton @click="clickModalRecord(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-    </CModalFooter>
+        </CModalBody>
+        <CModalFooter>
+            <CButton @click="clickModalRecord(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Record</button>
+        </CModalFooter>
+    </form>
 </CModal>
 <!-- END Modal  Record-->
 
@@ -244,13 +242,15 @@ export default {
             },
             obsall:{
                 cif:null,
-                uidobs:'',
                 sexo:'',
+                uidobs:'',
                 fechainicio:'',
                 fechafin:'',
                 detalle:'',
                 tipo:'Seleccionar Tipo',
-                hora:'08:30',
+                horaEntrada:'08:30',
+                horaSalida:'18:30',
+                imagen:'',
                 url:''
             },
             record:{
@@ -281,7 +281,6 @@ export default {
     methods:{
         selectFile(){// Funcion que permite cambiar los datos del archivo
             this.archivo = this.$refs.obsfile.files[0];
-            console.log(this.archivo);
         },
         tablaEmpleado(){
             this.$nextTick(()=>{
@@ -434,6 +433,32 @@ export default {
                     uri:this.record.gestion+'j'+this.record.mes+'m'+this.record.tipo
                 }
             });
+        },
+        getTipo(){
+            if(this.obsall.tipo == 'Entrada M.')
+                this.obsall.horaEntrada = '08:30';
+            if(this.obsall.tipo == 'Salida M.')
+                this.obsall.horaSalida = '12:30';
+            if(this.obsall.tipo == 'Entrada T.')
+                this.obsall.horaEntrada = '14:30';
+            if(this.obsall.tipo == 'Salida T.')
+                this.obsall.horaSalida = '18:30';
+            if(this.obsall.tipo == 'continuo')
+                this.obsall.horaSalida = '16:30';
+            if(this.obsall.tipo == 'continuoingreso'){
+                this.obsall.horaEntrada = '08:30';
+                this.obsall.horaSalida = '16:30';
+            }
+            if(this.obsall.tipo == 'asueto')
+                this.obsall.horaEntrada = '08:30';
+        },
+        mostrarHoraIngreso() {
+            const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+            return tiposPermitidos.includes(this.obsall.tipo);
+        },
+        mostrarHoraSalida() {
+            const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+            return tiposPermitidos.includes(this.obsall.tipo);
         }
     }
 }

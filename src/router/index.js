@@ -149,10 +149,23 @@ const routes = [
       {
         // MODULO SISTEMA CONTENEDOR CONTROL ADMINISTRACION DE SCC
         //Revisado
+        path: "/menuObs",
+        name: "MenuObsView",
+        component: () => import("@/modules/egovf-scc/views/MenuObsView.vue"),
+      },
+      {
+        //Revisado
+        path: "/listaObservaciones:gestion",
+        name: "ListaObservacionesView",
+        component: () => import("@/modules/egovf-scc/views/ListaObservacionesView.vue"),
+      },
+      {
+        //Revisado
         path: "/obsModuloScc",
         name: "ObsView",
         component: () => import("@/modules/egovf-scc/views/ObsView.vue"),
       },
+
       {
         // Avisos
         path: "/avisos",

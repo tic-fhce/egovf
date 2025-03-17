@@ -15,8 +15,10 @@
             <CCol :lg="3" v-for="moduloCif in listaModuloCifEmpleado" :key="moduloCif.id">
               <br />
               <CCard>
-                <CIcon customClassName="nav-icon" :icon="moduloCif.imagen"/> 
-                <CCardBody><p>{{moduloCif.descripcion}}</p></CCardBody>
+                <CCardHeader class="headercolor text-center">{{moduloCif.descripcion}}</CCardHeader>
+                <CCardBody class="text-center">
+                  <CIcon customClassName="nav-icon" :icon="moduloCif.imagen" class="menuicon"/> 
+                </CCardBody>
                 <CCardFooter class="text-center">
                   <CButton color="success" class="font" @click="getModulo(moduloCif.ruta)" >{{ moduloCif.nombre }}</CButton>
                 </CCardFooter>

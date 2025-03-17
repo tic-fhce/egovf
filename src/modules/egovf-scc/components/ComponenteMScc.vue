@@ -352,9 +352,9 @@
                             <td>{{ lsobs.uidobs }}</td>
                             <td>{{ lsobs.tipo }}</td>
                             <td>
-                              <CButton color="success" class="font" size="sm" v-if="lsobs.estado === 1" @click="updateObs(lsobs.id, 0)" >Aprobado
+                              <CButton color="success" class="font" size="sm" v-if="lsobs.estado === 1" @click="updateObsBio(lsobs.id, 0)" >Aprobado
                               </CButton>
-                              <CButton color="warning" class="font" size="sm" v-if="lsobs.estado === 0" @click="updateObs(lsobs.id, 1)">En Espera
+                              <CButton color="warning" class="font" size="sm" v-if="lsobs.estado === 0" @click="updateObsBio(lsobs.id, 1)">En Espera
                               </CButton>
                             </td>
                             <td>
@@ -392,20 +392,44 @@
     </CModalHeader>
     <CModalBody>
       <ComponenteNombres :datos="datos" />
+      <hr>
+      <CRow class="mb-2">
+        <CCol><strong>ID:</strong></CCol>
+        <CCol>{{ obsDetalle.id }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+        <CCol><strong>UID:</strong></CCol>
+        <CCol>{{ obsDetalle.uidobs }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Fecha Inicio:</strong></CCol>
+          <CCol>{{ obsDetalle.fechainicio }}</CCol>
+          <CCol><strong>Fecha Fin:</strong></CCol>
+          <CCol>{{ obsDetalle.fechafin }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Detalle:</strong></CCol>
+          <CCol>{{ obsDetalle.detalle }}</CCol>
+      </CRow>
+      <hr>
+      <CRow class="mb-2">
+          <CCol><strong>Tipo de Obs. :</strong></CCol>
+          <CCol>{{ obsDetalle.tipo }}</CCol>
+      </CRow>
+      <CRow class="mb-2">
+          <CCol><strong>Hora Entrada:</strong></CCol>
+          <CCol>{{ obsDetalle.horaEntrada }}</CCol>
+          <CCol><strong>Hora Salida:</strong></CCol>
+          <CCol>{{ obsDetalle.horaSalida }}</CCol>
+      </CRow>
       <CRow>
-        <CCol :lg="12">
-          <ul>
-            <li class="lista"><strong>ID: </strong>{{ obsDetalle.id }}</li>
-            <li class="lista"><strong>UID: </strong>{{ obsDetalle.uidobs }}</li>
-            <li class="lista"><strong>Fecha Inicio: </strong>{{ obsDetalle.fechainicio }}</li>
-            <li class="lista"><strong>Fecha Fin: </strong> {{ obsDetalle.fechafin }}</li>
-            <li class="lista"><strong>Detalle: </strong>{{ obsDetalle.detalle }}</li>
-            <li class="lista"><strong>Tipo de Obs. : </strong>{{ obsDetalle.tipo }}</li>
-            <li class="lista"><strong>Hora: </strong>{{ obsDetalle.hora }}</li>
-          </ul>
-          <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
-          <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
-        </CCol>
+        <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
+        <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
+      </CRow>
+      <CRow>
         <CCol>
           <img :src="obsDetalle.url" alt="" class="img-fluid" />
         </CCol>
@@ -600,6 +624,7 @@
               <option value="Entrada T.">Entrada Tarde</option>
               <option value="Salida T.">Salida Tarde</option>
               <option value="continuo">Continuo</option>
+              <option value="continuoingreso">Continuo e Ingreso</option>
               <option value="horas">Horas de Servicio</option>
               <option value="extraordinario">Horario Extraordinario</option>
               <option value="comision">Comisión</option>
@@ -609,10 +634,16 @@
           </div>
         </div>
 
-        <div class="mb-3 row" v-if="obs.tipo != 'asueto'">
-          <label for="datos" class="col-4 col-form-label">Hora</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="obs.hora">
+        <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
+          <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+          <div class="col-sm-8">
+              <input type="text" class="form-control" v-model="obs.horaEntrada">
+          </div>
+        </div>
+        <div class="mb-3 row" v-if="mostrarHoraSalida()">
+          <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+          <div class="col-sm-8">
+              <input type="text" class="form-control" v-model="obs.horaSalida">
           </div>
         </div>
 
@@ -925,20 +956,24 @@ export default {
         detalle: "",
         imagen: "",
         tipo: "Seleccionar Tipo",
-        hora: "08:30",
-        url: "",
+        horaEntrada: "08:30",
+        horaSalida:"16:30",
+        url: ""
       },
       obsDetalle: {
         id: 0,
+        cif:"",
         uidobs: "",
+        idobs:0,
         fechainicio: "",
         fechafin: "",
         detalle: "",
         imagen: "",
         tipo: "",
-        hora: "",
+        horaEntrada: "",
+        horaSalida: "",
         url: "",
-        estado: 0,
+        estado: 0
       },
       datos: {
         cif: 0,
@@ -1112,47 +1147,31 @@ export default {
         this.$swal.fire("El archivo no pudo ser Guardado  " + err, "", "error");
       }
     },
-    async updateObs(id, estado) {
+    async updateObsBio(id, estado) {
       var uObs = {
         id: 0,
         cif: 0,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        gestion: 0,
-        mes: 0,
-        di: 0,
-        df: 0,
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        hora: "",
-        h: 0,
-        m: 0,
-        url: "",
-        estado: 0,
-        tipoId:0
+        idObs:0,
+        horaEntrada: "",
+        horaSalida: "",
+        hEntrada: 0,
+        hSalida: 0,
+        mEntrada: 0,
+        mSalida:0,
+        estado:0
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
           uObs.id = obs.id,
           uObs.cif = obs.cif,
-          uObs.uidobs = obs.uidobs,
-          uObs.fechainicio = obs.fechainicio,
-          uObs.fechafin = obs.fechafin,
-          uObs.gestion = obs.gestion,
-          uObs.mes = obs.mes,
-          uObs.di = obs.di,
-          uObs.df = obs.df,
-          uObs.detalle = obs.detalle,
-          uObs.imagen = obs.imagen,
-          uObs.tipo = obs.tipo,
-          uObs.hora = obs.hora,
-          uObs.h = obs.h,
-          uObs.m = obs.m,
-          uObs.url = obs.url,
-          uObs.estado = estado,
-          uObs.tipoId = obs.tipoId
+          uObs.idObs = obs.idObs,
+          uObs.horaEntrada = obs.horaEntrada,
+          uObs.hEntrada = obs.hEntrada,
+          uObs.mEntrada = obs.mEntrada,
+          uObs.horaSalida = obs.horaSalida,
+          uObs.hSalida = obs.hSalida,
+          uObs.mSalida = obs.mSalida,
+          uObs.estado = estado
         }
       });
       await this.$swal.fire({
@@ -1163,7 +1182,7 @@ export default {
           denyButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
-            this.sccService.updateObs(uObs).then((response) => {
+            this.sccService.updateObsBio(uObs).then((response) => {
               if (response.status == 200) {
                 this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
                     if (res) location.reload();
@@ -1312,13 +1331,16 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.obsDetalle.id = obs.id;
+          this.obsDetalle.cif=obs.cif;
+          this.obsDetalle.idobs = obs.idobs;
           this.obsDetalle.uidobs = obs.uidobs;
           this.obsDetalle.fechainicio = obs.fechainicio;
           this.obsDetalle.fechafin = obs.fechafin;
           this.obsDetalle.detalle = obs.detalle;
           this.obsDetalle.imagen = obs.imagen;
           this.obsDetalle.tipo = obs.tipo;
-          this.obsDetalle.hora = obs.hora;
+          this.obsDetalle.horaEntrada = obs.horaEntrada;
+          this.obsDetalle.horaSalida = obs.horaSalida;
           this.obsDetalle.url = obs.url;
           this.obsDetalle.estado = obs.estado;
         }
@@ -1357,19 +1379,31 @@ export default {
       this.modalDias = dias;
     },
     getTipo(){
-        if(this.obs.tipo == 'Entrada M.')
-            this.obs.hora = '08:30';
-        if(this.obs.tipo == 'Salida M.')
-            this.obs.hora = '12:30';
-        if(this.obs.tipo == 'Entrada T.')
-            this.obs.hora = '14:30';
-        if(this.obs.tipo == 'Salida T.')
-            this.obs.hora = '18:30';
-        if(this.obs.tipo == 'continuo')
-            this.obs.hora = '16:30';
-        if(this.obs.tipo == 'asueto')
-            this.obs.hora = '08:30';
+        if(this.obsall.tipo == 'Entrada M.')
+            this.obsall.horaEntrada = '08:30';
+        if(this.obsall.tipo == 'Salida M.')
+            this.obsall.horaSalida = '12:30';
+        if(this.obsall.tipo == 'Entrada T.')
+            this.obsall.horaEntrada = '14:30';
+        if(this.obsall.tipo == 'Salida T.')
+            this.obsall.horaSalida = '18:30';
+        if(this.obsall.tipo == 'continuo')
+            this.obsall.horaSalida = '16:30';
+        if(this.obsall.tipo == 'continuoingreso'){
+            this.obsall.horaEntrada = '08:30';
+            this.obsall.horaSalida = '16:30';
+        }
+        if(this.obsall.tipo == 'asueto')
+            this.obsall.horaEntrada = '08:30';
     },
+    mostrarHoraIngreso() {
+        const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+        return tiposPermitidos.includes(this.obsall.tipo);
+    },
+    mostrarHoraSalida() {
+        const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+        return tiposPermitidos.includes(this.obsall.tipo);
+    }
   },
 };
 </script>

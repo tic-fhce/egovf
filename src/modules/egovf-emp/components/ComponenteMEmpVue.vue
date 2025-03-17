@@ -99,7 +99,10 @@
                   <CCol :lg="3" class="text-center" v-for="l in listaModuloCif" :key="l.id">
                     <br />
                     <CCard>
-                      <CIcon customClassName="nav-icon" :icon="l.imagen"/> 
+                      <CCardHeader class="headercolor text-center">{{l.nombre}}</CCardHeader>
+                      <CCardBody class="text-center">
+                        <CIcon customClassName="nav-icon" :icon="l.imagen" class="menuicon"/> 
+                      </CCardBody>
                       <CCardFooter class="text-center">
                         <CButton color="success" class="font" @click="getModulo(l.ruta)">{{ l.nombre }}</CButton>
                       </CCardFooter>
@@ -258,7 +261,7 @@
   <!-- End Modal  Modulo-->
 
   <!-- Modal  Contrato-->
-  <CModal :visible="modalContrato" @close="clickModalContrato(false)">
+  <CModal size="lg" :visible="modalContrato" @close="clickModalContrato(false)">
     <form @submit.prevent="addContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
         <CModalTitle>
@@ -269,22 +272,22 @@
         <ComponenteNombres :datos="datos" />
         <hr />
         <div class="mb-3 row">
-          <label for="numero" class="col-6 col-form-label">Numero de Contrato</label>
-          <div class="col-6">
+          <label for="numero" class="col-4 col-form-label">Numero de Contrato</label>
+          <div class="col-8">
             <input type="text" class="form-control" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
-          <div class="col-6">
-            <input type="text" class="form-control" v-model="contrato.servicio" placeholder="Servicios Prestados" required="true" />
+          <label for="servicio" class="col-4 col-form-label">Servicios prestados</label>
+          <div class="col-8">
+            <textarea class="form-control" v-model="contrato.servicio" required="true" rows="5"></textarea>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-6 col-form-label">Tipo de Empleado</label>
-          <div class="col-6">
+          <label for="servicio" class="col-4 col-form-label">Tipo de Empleado</label>
+          <div class="col-8">
             <select v-model="contrato.idTipoEmpleado" class="form-control" required="true">
               <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
                 {{ lte.detalle }}
@@ -294,8 +297,8 @@
         </div>
 
         <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Unidad </label>
-          <div class="col-6">
+          <label for="datos" class="col-4 col-form-label">Unidad </label>
+          <div class="col-8">
             <select v-model="contrato.unidad" class="form-control" required="true" >
               <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
                 {{ unidad.unidad }}
@@ -305,22 +308,22 @@
         </div>
 
         <div class="mb-3 row">
-          <label for="inicio" class="col-6 col-form-label">Fecha de Inicio</label>
-          <div class="col-6">
+          <label for="inicio" class="col-4 col-form-label">Fecha de Inicio</label>
+          <div class="col-8">
             <input type="date" class="form-control" v-model="contrato.inicio" placeholder="Inicio" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="fin" class="col-6 col-form-label" >Fecha de Conclucion </label>
-          <div class="col-6">
+          <label for="fin" class="col-4 col-form-label" >Fecha de Conclucion </label>
+          <div class="col-8">
             <input type="date" class="form-control" v-model="contrato.fin" placeholder="fin" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="detalle" class="col-6 col-form-label">Detalle</label>
-          <div class="col-6">
+          <label for="detalle" class="col-4 col-form-label">Detalle</label>
+          <div class="col-8">
             <input type="text" class="form-control" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true" />
           </div>
         </div>
@@ -337,7 +340,7 @@
   <!-- End Modal  Modulo-->
 
   <!-- Modal  Editar Contrato-->
-  <CModal :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
+  <CModal size="lg" :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
     <form @submit.prevent="updateContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
         <CModalTitle>
@@ -348,22 +351,22 @@
         <ComponenteNombres :datos="datos" />
         <hr />
         <div class="mb-3 row">
-          <label for="numero" class="col-6 col-form-label" >Numero de Contrato</label>
-          <div class="col-6">
+          <label for="numero" class="col-4 col-form-label" >Numero de Contrato</label>
+          <div class="col-8">
             <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-6 col-form-label">Servicios prestados</label>
-          <div class="col-6">
-            <input type="text" class="form-control" v-model="setContrato.servicio" placeholder="Servicios Prestados" required="true"/>
+          <label for="servicio" class="col-4 col-form-label">Servicios prestados</label>
+          <div class="col-8">
+            <textarea class="form-control" v-model="setContrato.servicio" required="true" rows="5"></textarea>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Unidad </label>
-          <div class="col-6">
+          <label for="datos" class="col-4 col-form-label">Unidad </label>
+          <div class="col-8">
             <select v-model="setContrato.unidad" class="form-control" required="true">
               <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
                 {{ unidad.unidad }}
@@ -373,29 +376,29 @@
         </div>
 
         <div class="mb-3 row">
-          <label for="inicio" class="col-6 col-form-label" >Fecha de Inicio</label>
-          <div class="col-6">
+          <label for="inicio" class="col-4 col-form-label" >Fecha de Inicio</label>
+          <div class="col-8">
             <input type="date" class="form-control" v-model="setContrato.inicio" placeholder="Inicio" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="fin" class="col-6 col-form-label">Fecha de Conclucion </label>
-          <div class="col-6">
+          <label for="fin" class="col-4 col-form-label">Fecha de Conclucion </label>
+          <div class="col-8">
             <input type="date" class="form-control" v-model="setContrato.fin" placeholder="fin" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="fin" class="col-6 col-form-label">Gestion </label>
-          <div class="col-6">
+          <label for="fin" class="col-4 col-form-label">Gestion </label>
+          <div class="col-8">
             <input type="text" class="form-control" v-model="setContrato.gestion" placeholder="fin" required="true"/>
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="detalle" class="col-6 col-form-label">Detalle</label>
-          <div class="col-6">
+          <label for="detalle" class="col-4 col-form-label">Detalle</label>
+          <div class="col-8">
             <input type="text" class="form-control" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true" />
           </div>
         </div>
@@ -749,7 +752,7 @@ export default {
                   this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                       if (respon.status == 200) {
                         this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
-                            if (res.status == 200) {
+                            if (res.status == 201) {
                               this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
                                   if (r) location.reload();
                                 });

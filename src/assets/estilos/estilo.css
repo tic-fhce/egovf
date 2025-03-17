@@ -78,3 +78,8 @@ body {
   font-variant-numeric: tabular-nums;
   align-self: flex-start;
 }
+
+.menuicon {
+  width: 100px;  /* Ajusta el tamaño según necesites */
+  height: 100px;
+}

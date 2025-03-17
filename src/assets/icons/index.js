@@ -100,6 +100,7 @@ import {
   cilRss,
   cilFolderOpen,
   cilLan,
+  cilFlipToBack,
   
 } from '@coreui/icons'
 
@@ -179,6 +180,7 @@ export const iconsSet = Object.assign(
     cilRss,
     cilFolderOpen,
     cilLan,
+    cilFlipToBack,
   },
   {
     cifUs,
