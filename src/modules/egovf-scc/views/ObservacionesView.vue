@@ -85,7 +85,8 @@
                     <li class="lista">Fecha Fin:  {{ obsDetalle.fechafin }}</li>
                     <li class="lista">Detalle:  {{ obsDetalle.detalle }}</li>
                     <li class="lista">Tipo de Obs. :  {{ obsDetalle.tipo }} </li>
-                    <li class="lista">Hora :  {{ obsDetalle.hora }}</li>    
+                    <li class="lista">Hora Entrada:  {{ obsDetalle.horaEntrada }}</li>
+                    <li class="lista">Hora Salida:  {{ obsDetalle.horaSalida }}</li>    
                 </ul>
                 <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
                 <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
@@ -146,14 +147,22 @@
                         <option value="Entrada T.">Entrada Tarde</option>
                         <option value="Salida T.">Salida Tarde</option>
                         <option value="continuo">Continuo</option>
+                        <option value="continuoingreso">Continuo e Ingreso</option>
                         <option value="asueto">Asueto</option>
                     </select>
                 </div>
             </div>
-            <div class="mb-3 row" v-if="obs.tipo != 'asueto'">
-                <label for="datos" class="col-4 col-form-label">Hora</label>
-                <div class="col-8">
-                    <input type="text" class="form-control" v-model="obs.hora">
+            <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
+                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" v-model="obs.horaEntrada">
+                </div>
+            </div>
+
+            <div class="mb-3 row" v-if="mostrarHoraSalida()">
+                <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" v-model="obs.horaSalida">
                 </div>
             </div>
             <div 
@@ -209,20 +218,28 @@
             <div class="mb-3 row">
                 <label for="tipo" class="col-4 col-form-label">Tipo</label>
                 <div class="col-8">
-                    <select class="form-control" v-model="uobs.tipo" required="true" @change="getuTipo()">
+                    <select class="form-control" v-model="uobs.tipo" required="true" @change="getUTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
                         <option value="Salida M.">Salida Mañana</option>
                         <option value="Entrada T.">Entrada Tarde</option>
                         <option value="Salida T.">Salida Tarde</option>
                         <option value="continuo">Continuo</option>
+                        <option value="continuoingreso">Continuo e Ingreso</option>
                         <option value="asueto">Asueto</option>
                     </select>
                 </div>
             </div>
-            <div class="mb-3 row" v-if="uobs.tipo != 'asueto'">
-                <label for="datos" class="col-4 col-form-label">Hora</label>
-                <div class="col-8">
-                    <input type="text" class="form-control" v-model="uobs.hora">
+            <div class="mb-3 row" v-if="mostrarUHoraIngreso()"  >
+                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" v-model="obs.horaEntrada">
+                </div>
+            </div>
+
+            <div class="mb-3 row" v-if="mostrarUHoraSalida()">
+                <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" v-model="obs.horaSalida">
                 </div>
             </div>
 
@@ -281,14 +298,26 @@ export default {
             listaObs:[],
             obsDetalle:{
                 id:0,
-                uidobs:'',
-                fechainicio:'',
-                fechafin:'',
-                detalle:'',
-                imagen:'',
-                tipo:'',
-                hora:'',
-                url:'',
+                idObs:"",
+                cif:0,
+                sexo:0,
+                uidobs:"",
+                fechainicio:"",
+                fechafin:"",
+                gestion:0,
+                mes:0,
+                di:0,
+                df:0,
+                detalle:"",
+                imagen:"",
+                tipo:"",
+                horaEntrada:0,
+                hEntrada:0,
+                mEntrada:0,
+                horaSalida:0,
+                hSalida:0,
+                mSalida:0,
+                url:"",
                 estado:0
             },
             datos:{
@@ -319,13 +348,14 @@ export default {
             modalObs:false,
             obs:{
                 cif:null,
-                uidobs:'',
+                uidobs:'FHCE-',
                 fechainicio:'',
                 fechafin:'',
                 detalle:'Referencia por la que pide su Observación',
                 imagen:'',
                 tipo:'Seleccionar Tipo',
-                hora:'08:30',
+                horaEntrada:'08:30',
+                horaSalida:'16:30',
                 url:''
             },
             uobs:{
@@ -337,7 +367,8 @@ export default {
                 detalle:'',
                 imagen:'',
                 tipo:'',
-                hora:'',
+                horaEntrada:'',
+                horaSalida:'',
                 url:''
             },
         }
@@ -368,6 +399,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get('foto');
             }
         },
         getGestion(){ // funcion que crea una lista de gestiones desde el 2021
@@ -383,6 +415,7 @@ export default {
             await this.sccService.getObsUsuario(this.usuario.cif,this.obsgestion,this.obsmes).then(response=>{
                 this.listaObs = response.data;
             });
+            console.log(this.listaObs);
             if(this.listaObs.length == 0){
                 this.$swal.fire('No se encontro ninguna Observacion', '', 'info');
             }
@@ -390,16 +423,28 @@ export default {
         getObsDetalle(id){// Funcion que Muestra el detalle de las Observaciones del Usuario
             this.listaObs.forEach(obs =>{
                 if(obs.id === id){
-                    this.obsDetalle.id = obs.id;
-                    this.obsDetalle.uidobs = obs.uidobs;
-                    this.obsDetalle.fechainicio = obs.fechainicio;
-                    this.obsDetalle.fechafin = obs.fechafin;
-                    this.obsDetalle.detalle = obs.detalle;
-                    this.obsDetalle.imagen = obs.imagen;
-                    this.obsDetalle.tipo = obs.tipo;
-                    this.obsDetalle.hora = obs.hora;
-                    this.obsDetalle.url = obs.url;
-                    this.obsDetalle.estado = obs.estado;
+                    this.obsDetalle.id = obs.id,
+                    this.obsDetalle.idObs= obs.idObs,
+                    this.obsDetalle.cif= obs.cif,
+                    this.obsDetalle.sexo= obs.sexo,
+                    this.obsDetalle.uidobs= obs.uidobs,
+                    this.obsDetalle.fechainicio= obs.fechainicio,
+                    this.obsDetalle.fechafin= obs.fechafin,
+                    this.obsDetalle.gestion= obs.gestion,
+                    this.obsDetalle.mes= obs.mes,
+                    this.obsDetalle.di= obs.di,
+                    this.obsDetalle.df= obs.df,
+                    this.obsDetalle.detalle= obs.detalle,
+                    this.obsDetalle.imagen= obs.imagen,
+                    this.obsDetalle.tipo= obs.tipo,
+                    this.obsDetalle.horaEntrada= obs.horaEntrada,
+                    this.obsDetalle.hEntrada= obs.hEntrada,
+                    this.obsDetalle.mEntrada= obs.mEntrada,
+                    this.obsDetalle.horaSalida= obs.horaSalida,
+                    this.obsDetalle.hSalida= obs.hSalida,
+                    this.obsDetalle.mSalida= obs.mSalida,
+                    this.obsDetalle.url= obs.url,
+                    this.obsDetalle.estado= obs.estado
                 }
             });
             this.clickModalDetalleObs(true);
@@ -427,18 +472,58 @@ export default {
         },
         getTipo(){
             if(this.obs.tipo == 'Entrada M.')
-                this.obs.hora = '08:30';
+                this.obs.horaEntrada = '08:30';
             if(this.obs.tipo == 'Salida M.')
-                this.obs.hora = '12:30';
+                this.obs.horaSalida = '12:30';
             if(this.obs.tipo == 'Entrada T.')
-                this.obs.hora = '14:30';
+                this.obs.horaEntrada = '14:30';
             if(this.obs.tipo == 'Salida T.')
-                this.obs.hora = '18:30';
+                this.obs.horaSalida = '18:30';
             if(this.obs.tipo == 'continuo')
-                this.obs.hora = '16:30';
+                this.obs.horaSalida = '16:30';
+            if(this.obs.tipo == 'continuoingreso'){
+                this.obs.horaEntrada = '08:30';
+                this.obs.horaSalida = '16:30';
+            }
             if(this.obs.tipo == 'asueto')
-                this.obs.hora = '08:30';
+                this.obs.horaEntrada = '08:30';
         },
+        mostrarHoraIngreso() {
+            const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+            return tiposPermitidos.includes(this.obs.tipo);
+        },
+        mostrarHoraSalida() {
+            const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+            return tiposPermitidos.includes(this.obs.tipo);
+        },
+
+        getUTipo(){
+            if(this.uobs.tipo == 'Entrada M.')
+                this.uobs.horaEntrada = '08:30';
+            if(this.uobs.tipo == 'Salida M.')
+                this.uobs.horaSalida = '12:30';
+            if(this.uobs.tipo == 'Entrada T.')
+                this.uobs.horaEntrada = '14:30';
+            if(this.uobs.tipo == 'Salida T.')
+                this.uobs.horaSalida = '18:30';
+            if(this.uobs.tipo == 'continuo')
+                this.uobs.horaSalida = '16:30';
+            if(this.uobs.tipo == 'continuoingreso'){
+                this.uobs.horaEntrada = '08:30';
+                this.uobs.horaSalida = '16:30';
+            }
+            if(this.uobs.tipo == 'asueto')
+                this.uobs.horaEntrada = '08:30';
+        },
+        mostrarUHoraIngreso() {
+            const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+            return tiposPermitidos.includes(this.uobs.tipo);
+        },
+        mostrarUHoraSalida() {
+            const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+            return tiposPermitidos.includes(this.uobs.tipo);
+        },
+
         async addObs(){ //Funcion para registrar una Observacion del Usuario
             const fromData = new FormData();
             fromData.append('archivo',this.archivo);
@@ -534,12 +619,13 @@ export default {
             this.listaObs.forEach(obs =>{
                 if(obs.id === id){
                     this.uobs.id = id;
+                    this.uobs.cif = obs.cif;
                     this.uobs.uidobs = obs.uidobs;
                     this.uobs.fechainicio = obs.fechainicio;
                     this.uobs.fechafin = obs.fechafin;
                     this.uobs.detalle = obs.detalle;
                     this.uobs.imagen = obs.imagen;
-                    this.uobs.tipo  = obs.tipo;
+                    this.uobs.tipo = obs.tipo;
                     this.uobs.hora = obs.hora;
                     this.uobs.url = obs.url;
                 }
@@ -549,28 +635,31 @@ export default {
         async deleteObs(id){ //Funcion eliminar una Observacion del Usuario
             var dObs={
                 id:0,
+                idObs:"",
                 cif:0,
-                uidobs:'',
-                fechainicio:'',
-                fechafin:'',
+                sexo:0,
+                uidobs:"",
+                fechainicio:"",
+                fechafin:"",
                 gestion:0,
                 mes:0,
                 di:0,
                 df:0,
-                detalle:'',
-                imagen:'',
-                tipo:'',
-                hora:'',
-                h:0,
-                m:0,
-                url:'',
-                estado:0,
-                tipoId:0
+                detalle:"",
+                imagen:"",
+                tipo:"",
+                horaEntrada:0,
+                hEntrada:0,
+                mEntrada:0,
+                horaSalida:0,
+                hSalida:0,
+                mSalida:0,
+                url:"",
+                estado:0
             };
             this.listaObs.forEach(obs => {
                 if(obs.id == id){
-                    dObs=obs,
-                    dObs.estado=2
+                    dObs=obs
                 }
             });
             await this.$swal.fire({

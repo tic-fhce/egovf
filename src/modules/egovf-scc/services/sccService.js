@@ -46,8 +46,10 @@ export default class SccService {
   }
   addObsEmpleado(obs) {
     // Funcion que permite registrar los datos de la observacion del propio empleado
-    const obsDtoRequest = {
+    const obsDtoObj = {
+      "id": 0,
       "cif": obs.cif,
+      "sexo": 0,
       "uidobs": obs.uidobs,
       "fechainicio": obs.fechainicio,
       "fechafin": obs.fechafin,
@@ -58,14 +60,16 @@ export default class SccService {
       "detalle": obs.detalle,
       "imagen": obs.imagen,
       "tipo": obs.tipo,
-      "hora": obs.hora,
-      "h": obs.hora.substring(0, 2),
-      "m": obs.hora.substring(3, 5),
+      "horaEntrada": obs.horaEntrada,
+      "hEntrada": obs.horaEntrada.substring(0, 2),
+      "mEntrada": obs.horaEntrada.substring(3, 5),
+      "horaSalida": obs.horaSalida,
+      "hSalida": obs.horaSalida.substring(0, 2),
+      "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "estado": 0,
-      "tipoId":0
+      "estado": 0
     };
-    return axios.post(msccUrl + "obs/addObs", obsDtoRequest);
+    return axios.post(msccUrl + "obs/addObs", obsDtoObj);
   }
   updateObs(obs) {
     // Funcion que permite actualizar los datos de la observacion del propio empleado
