@@ -165,6 +165,12 @@ const routes = [
         name: "ObsView",
         component: () => import("@/modules/egovf-scc/views/ObsView.vue"),
       },
+      {
+        //Revisado
+        path: "/obsEliminado",
+        name: "ListaObsEliminadosView",
+        component: () => import("@/modules/egovf-scc/views/ListaObsEliminadosView.vue"),
+      },
 
       {
         // Avisos

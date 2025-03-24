@@ -98,19 +98,21 @@ export default class SccService {
       "idObs":obs.idObs,
       "horaEntrada": obs.horaEntrada,
       "horaSalida": obs.horaSalida,
-      "hEntrada": obs.hEntrada,
-      "hSalida": obs.hSalida,
-      "mEntrada": obs.mEntrada,
-      "mSalida":obs.mSalida,
+      "hentrada": obs.hEntrada,
+      "hsalida": obs.hSalida,
+      "mentrada": obs.mEntrada,
+      "msalida":obs.mSalida,
       "estado":obs.estado
     };
     return axios.put(msccUrl + "obsbio/updateObsBio", obsBioDtoResponse);
   }
   updateObsEmpleado(obs) {
     // Funcion que permite actualizar los datos de la observacion del propio empleado
-    const obsDtoResponse = {
+    const obsDtoObj = {
       "id": obs.id,
+      "idObs":obs.idObs,
       "cif": obs.cif,
+      "sexo":obs.sexo,
       "uidobs": obs.uidobs,
       "fechainicio": obs.fechainicio,
       "fechafin": obs.fechafin,
@@ -121,14 +123,16 @@ export default class SccService {
       "detalle": obs.detalle,
       "imagen": obs.imagen,
       "tipo": obs.tipo,
-      "hora": obs.hora,
-      "h": obs.hora.substring(0, 2),
-      "m": obs.hora.substring(3, 5),
+      "horaEntrada": obs.horaEntrada,
+      "horaSalida": obs.horaSalida,
+      "hEntrada": obs.horaEntrada.substring(0, 2),
+      "mEntrada": obs.horaEntrada.substring(3, 5),
+      "hSalida": obs.horaSalida.substring(0, 2),
+      "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "estado": obs.estado,
-      "tipoId":0
+      "estado": obs.estado
     };
-    return axios.put(msccUrl + "obs/updateObs", obsDtoResponse);
+    return axios.put(msccUrl + "obs/updateObs", obsDtoObj);
   }
 
   getListaHorario(cif, gestion) {
@@ -205,6 +209,7 @@ export default class SccService {
   addObs(obs) {
     const obsDtoObj = {
       "id": 0,
+      "idObs":0,
       "cif": obs.cif,
       "sexo": 0,
       "uidobs": obs.uidobs,
@@ -225,7 +230,6 @@ export default class SccService {
       "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
       "estado": 1
-      
     };
     return axios.post(msccUrl + "obs/addObs", obsDtoObj);
   }
@@ -267,6 +271,9 @@ export default class SccService {
         gestion:rgestion
       }
     });
+  }
+  getListaObsEliminado() {
+    return axios.get(msccUrl + "obs/getListaObsEliminado");
   }
 
   addObsAll(obs) {
@@ -377,7 +384,6 @@ export default class SccService {
     });
   }
   estadoBiometrico(bio) {
-    console.log(bio);
     return axios.put(msccUrl + "biometrico/estadoBiometrico", bio);
   }
   updateTipo(cif, tipo) {

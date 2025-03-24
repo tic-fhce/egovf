@@ -37,7 +37,7 @@
                     <CIcon customClassName="nav-icon" icon="cil-flip-to-back" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getOpciones(direcciones[0])">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="obsEliminado()">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -65,7 +65,7 @@
         </CModalBody>
         <CModalFooter>
             <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Reporte</button>
+            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Lista de Observaciones</button>
         </CModalFooter>
     </form>
 </CModal>
@@ -134,6 +134,7 @@ export default {
         this.listaGestion = lgestion;
     },
     obsLista() {
+        this.clickModalObs(false);
       this.$router.push({
         name: "ListaObservacionesView",
         params: {
@@ -143,6 +144,9 @@ export default {
     },
     obsUsuario(){
         this.$router.push("/obsModuloScc");
+    },
+    obsEliminado(){
+        this.$router.push("/obsEliminado");
     }
   },
 };

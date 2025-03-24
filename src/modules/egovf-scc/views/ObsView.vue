@@ -168,12 +168,13 @@
         <div class="mb-3 row">
           <label for="tipo" class="col-4 col-form-label">Tipo</label>
           <div class="col-8">
-            <select class="form-control" v-model="uobs.tipo" required="true">
+            <select class="form-control" v-model="uobs.tipo" required="true" @change="getUTipo()">
               <option value="Entrada M.">Entrada Mañana</option>
               <option value="Salida M.">Salida Mañana</option>
               <option value="Entrada T.">Entrada Tarde</option>
               <option value="Salida T.">Salida Tarde</option>
               <option value="continuo">Continuo</option>
+              <option value="continuoingreso">Continuo e Ingreso</option>
               <option value="horas">Horas de Servicio</option>
               <option value="extraordinario">Horario Extraordinario</option>
               <option value="comision">Comisión</option>
@@ -183,11 +184,18 @@
           </div>
         </div>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Hora</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="uobs.hora" />
-          </div>
+        <div class="mb-3 row" v-if="mostrarUHoraIngreso()"  >
+            <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="uobs.horaEntrada">
+            </div>
+        </div>
+
+        <div class="mb-3 row" v-if="mostrarUHoraSalida()">
+            <label for="datos" class="col-sm-4 col-form-label">Hora Salida{{ uobs.horaEntrada }}</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" v-model="uobs.horaSalida">
+            </div>
         </div>
         <CCol>
           <img :src="uobs.url" alt="" class="img-fluid" />
@@ -309,6 +317,7 @@ export default {
       },
       obsDetalle: {
         id: 0,
+        idObs:0,
         cif: 0,
         uidobs: "",
         fechainicio: "",
@@ -322,16 +331,20 @@ export default {
         estado: 0
       },
       uobs: {
-        id: 0,
-        cif: null,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        hora: "",
-        url: "",
+        id:0,
+        idObs:0,
+        cif:null,
+        sexo:0,
+        uidobs:'',
+        fechainicio:'',
+        fechafin:'',
+        detalle:'',
+        imagen:'',
+        tipo:'',
+        horaEntrada:'',
+        horaSalida:'',
+        url:'',
+        estado:0
       },
     };
   },
@@ -420,6 +433,7 @@ export default {
             uidobs: "",
             tipo: "",
             detalle: "",
+            estado:0
           };
           if (empleado.cif == obs.cif) {
             obsCiudadano.id = obs.id;
@@ -429,6 +443,7 @@ export default {
             obsCiudadano.uidobs = obs.uidobs;
             obsCiudadano.tipo = obs.tipo;
             obsCiudadano.detalle = obs.detalle;
+            obsCiudadano.estado = obs.estado;
             this.listaObsCiudadanos.push(obsCiudadano);
             return false;
           }
@@ -442,6 +457,7 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.obsDetalle.id = obs.id;
+          this.obsDetalle.idObs=obs.idObs;
           this.obsDetalle.cif = obs.cif;
           this.obsDetalle.uidobs = obs.uidobs;
           this.obsDetalle.fechainicio = obs.fechainicio;
@@ -573,15 +589,19 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.uobs.id = id;
+          this.uobs.idObs = obs.idObs;
           this.uobs.cif = obs.cif;
+          this.uobs.sexo = obs.sexo;
           this.uobs.uidobs = obs.uidobs;
           this.uobs.fechainicio = obs.fechainicio;
           this.uobs.fechafin = obs.fechafin;
           this.uobs.detalle = obs.detalle;
           this.uobs.imagen = obs.imagen;
           this.uobs.tipo = obs.tipo;
-          this.uobs.hora = obs.hora;
+          this.uobs.horaEntrada = obs.horaEntrada;
+          this.uobs.horaSalida = obs.horaSalida;
           this.uobs.url = obs.url;
+          this.uobs.estado = obs.estado;
         }
       });
       this.clickModalObsEditar(true);
@@ -591,15 +611,19 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.uobs.id = id;
+          this.uobs.idObs = obs.idObs;
           this.uobs.cif = obs.cif;
+          this.uobs.sexo = obs.sexo;
           this.uobs.uidobs = obs.uidobs;
           this.uobs.fechainicio = obs.fechainicio;
           this.uobs.fechafin = obs.fechafin;
           this.uobs.detalle = obs.detalle;
           this.uobs.imagen = obs.imagen;
           this.uobs.tipo = obs.tipo;
-          this.uobs.hora = obs.hora;
+          this.uobs.horaEntrada = obs.horaEntrada;
+          this.uobs.horaSalida = obs.horaSalida;
           this.uobs.url = obs.url;
+          this.uobs.estado = obs.estado;
         }
       });
       this.clickModalImgEditar(true);
@@ -621,13 +645,33 @@ export default {
         },
       });
     },
-    getTipo() {
-      if (this.obsall.tipo == "Entrada M.") this.obsall.hora = "08:30";
-      if (this.obsall.tipo == "Salida M.") this.obsall.hora = "12:30";
-      if (this.obsall.tipo == "Entrada T.") this.obsall.hora = "14:30";
-      if (this.obsall.tipo == "Salida T.") this.obsall.hora = "18:30";
-      if (this.obsall.tipo == "continuo") this.obsall.hora = "16:30";
-      if (this.obsall.tipo == "asueto") this.obsall.hora = "08:30";
+    getUTipo(){
+        if(this.uobs.tipo == 'Entrada M.')
+            this.uobs.horaEntrada = '08:30';
+        if(this.uobs.tipo == 'Salida M.')
+            this.uobs.horaSalida = '12:30';
+        if(this.uobs.tipo == 'Entrada T.')
+            this.uobs.horaEntrada = '14:30';
+        if(this.uobs.tipo == 'Salida T.')
+            this.uobs.horaSalida = '18:30';
+        if(this.uobs.tipo == 'continuo'){
+            this.uobs.horaEntrada = '08:30';
+            this.uobs.horaSalida = '16:30';
+        }
+        if(this.uobs.tipo == 'continuoingreso'){
+            this.uobs.horaEntrada = '08:30';
+            this.uobs.horaSalida = '16:30';
+        }
+        if(this.uobs.tipo == 'asueto')
+            this.uobs.horaEntrada = '08:30';
+    },
+    mostrarUHoraIngreso() {
+        const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+        return tiposPermitidos.includes(this.uobs.tipo);
+    },
+    mostrarUHoraSalida() {
+        const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+        return tiposPermitidos.includes(this.uobs.tipo);
     },
   },
 };

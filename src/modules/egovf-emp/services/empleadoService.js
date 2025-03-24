@@ -44,7 +44,6 @@ export default class EmpleadoService {
       "detalle": contrato.detalle,
       "idTipoEmpleado": contrato.idTipoEmpleado
     };
-    console.log(contratoDtoRequest);
     return axios.post(empleadoUrl + "contrato/addContrato", contratoDtoRequest);
   }
   updateContrato(contrato) {

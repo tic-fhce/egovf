@@ -157,7 +157,6 @@ export default {
             await this.sccService.getReporteMes(this.reporte).then((result) => {
                 this.listaReporte=result.data;
                 this.sumaRetraso(); // Funcion que suma los retrasos
-                console.log(this.listaReporte);
             }).catch((err) => {
                 console.log(err);
             });

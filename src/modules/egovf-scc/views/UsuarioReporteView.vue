@@ -16,7 +16,7 @@
         <CCol :lg="4"><br />
             <CCard>
                 <CCardHeader class="headercolor text-center">
-                    Total Minutos
+                    Total Minutos de Retraso
                 </CCardHeader>
                 <CCardBody class="text-center">
                     <h2>{{totalretraso}}</h2>
@@ -26,7 +26,7 @@
         <CCol :lg="4"><br />
             <CCard>
                 <CCardHeader class="headercolor text-center">
-                    Total de Salidas
+                    Total minutos Anticipados
                 </CCardHeader>
                 <CCardBody class="text-center">
                     <h2>{{totalanticipado}}</h2>

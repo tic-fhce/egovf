@@ -666,6 +666,7 @@
   </CModal>
   <!-- END Modal  Obserbasiones-->
 
+  
   <!-- Modal Reporte Mensual-->
   <CModal :visible="modalMes" @close="clickModalMes(false)">
     <form @submit.prevent="getReporteMes()">
@@ -1075,7 +1076,6 @@ export default {
           this.biometrico.sexo = this.egovf.sexo;
         }
       });
-      console.log(this.biometrico);
     },
     addHorario() {
       //Funcion para registrar un Horario al Usuario
@@ -1149,6 +1149,7 @@ export default {
     },
     async updateObsBio(id, estado) {
       var uObs = {
+
         id: 0,
         cif: 0,
         idObs:0,
@@ -1166,11 +1167,11 @@ export default {
           uObs.cif = obs.cif,
           uObs.idObs = obs.idObs,
           uObs.horaEntrada = obs.horaEntrada,
-          uObs.hEntrada = obs.hEntrada,
-          uObs.mEntrada = obs.mEntrada,
+          uObs.hEntrada = obs.hentrada,
+          uObs.mEntrada = obs.mentrada,
           uObs.horaSalida = obs.horaSalida,
-          uObs.hSalida = obs.hSalida,
-          uObs.mSalida = obs.mSalida,
+          uObs.hSalida = obs.hsalida,
+          uObs.mSalida = obs.msalida,
           uObs.estado = estado
         }
       });
@@ -1379,30 +1380,30 @@ export default {
       this.modalDias = dias;
     },
     getTipo(){
-        if(this.obsall.tipo == 'Entrada M.')
-            this.obsall.horaEntrada = '08:30';
-        if(this.obsall.tipo == 'Salida M.')
-            this.obsall.horaSalida = '12:30';
-        if(this.obsall.tipo == 'Entrada T.')
-            this.obsall.horaEntrada = '14:30';
-        if(this.obsall.tipo == 'Salida T.')
-            this.obsall.horaSalida = '18:30';
-        if(this.obsall.tipo == 'continuo')
-            this.obsall.horaSalida = '16:30';
-        if(this.obsall.tipo == 'continuoingreso'){
-            this.obsall.horaEntrada = '08:30';
-            this.obsall.horaSalida = '16:30';
+        if(this.obs.tipo == 'Entrada M.')
+            this.obs.horaEntrada = '08:30';
+        if(this.obs.tipo == 'Salida M.')
+            this.obs.horaSalida = '12:30';
+        if(this.obs.tipo == 'Entrada T.')
+            this.obs.horaEntrada = '14:30';
+        if(this.obs.tipo == 'Salida T.')
+            this.obs.horaSalida = '18:30';
+        if(this.obs.tipo == 'continuo')
+            this.obs.horaSalida = '16:30';
+        if(this.obs.tipo == 'continuoingreso'){
+            this.obs.horaEntrada = '08:30';
+            this.obs.horaSalida = '16:30';
         }
-        if(this.obsall.tipo == 'asueto')
-            this.obsall.horaEntrada = '08:30';
+        if(this.obs.tipo == 'asueto')
+            this.obs.horaEntrada = '08:30';
     },
     mostrarHoraIngreso() {
         const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
-        return tiposPermitidos.includes(this.obsall.tipo);
+        return tiposPermitidos.includes(this.obs.tipo);
     },
     mostrarHoraSalida() {
         const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
-        return tiposPermitidos.includes(this.obsall.tipo);
+        return tiposPermitidos.includes(this.obs.tipo);
     }
   },
 };
