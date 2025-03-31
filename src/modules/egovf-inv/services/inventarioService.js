@@ -4,6 +4,31 @@ const inventarioUrl = API_URL_EGOVF_INV;
 
 export default class InventarioService {
   //Servicios para CPU
+  getTipo() {
+    return axios.get(inventarioUrl + "tipo/getTipo");
+  }
+  addTipo(tipo) {
+    const tipoDtoRequest = {
+      "sigla":tipo.sigla,
+      "nombre":tipo.nombre,
+      "icono":tipo.icono,
+      "detalle":tipo.detalle
+    };
+    return axios.post(inventarioUrl + "tipo/addTipo", tipoDtoRequest);
+  }
+
+  getEquipoTipo(id) {
+    return axios.get(inventarioUrl + "equipo/getEquipoTipo", {
+      params: {
+        id: id,
+      },
+    });
+  }
+  ////////////// funciones corregidas
+
+
+
+  //Servicios para CPU
   getCpuCif(cif) {
     return axios.get(inventarioUrl + "cpu/getCpuCif", {
       params: {
@@ -180,10 +205,7 @@ export default class InventarioService {
     };
     return axios.put(inventarioUrl + "ubicacion/updateUbicacion", ubicacionaux);
   }
-  //Servicios para el Servicio
-  getTipo() {
-    return axios.get(inventarioUrl + "tipo/getTipo");
-  }
+  
   getPerteneceCif(cif) {
     return axios.get(inventarioUrl + "pertenece/getPerteneceCif", {
       params: {

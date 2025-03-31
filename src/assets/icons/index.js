@@ -101,6 +101,10 @@ import {
   cilFolderOpen,
   cilLan,
   cilFlipToBack,
+  cilFingerprint,
+  cilLinkBroken,
+  cilHistory,
+  cilQrCode,
   
 } from '@coreui/icons'
 
@@ -181,6 +185,10 @@ export const iconsSet = Object.assign(
     cilFolderOpen,
     cilLan,
     cilFlipToBack,
+    cilFingerprint,
+    cilLinkBroken,
+    cilHistory,
+    cilQrCode,
   },
   {
     cifUs,

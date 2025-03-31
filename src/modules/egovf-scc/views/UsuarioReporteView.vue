@@ -3,36 +3,46 @@
         {{ reporte.cif }}
     </div>
     <CRow>
-        <CCol :lg="4" class="oculto"><br />
-            <CCard>
-                <CCardHeader class="headercolor text-center">
-                    Total Dias de Descuento
-                </CCardHeader>
-                <CCardBody class="text-center">
-                    <h2>{{totalsin}}</h2>
-                </CCardBody>
-            </CCard>
+
+        <CCol :sm="6" :lg="4">
+            <CWidgetStatsD
+                class="mb-4"
+                style="--cui-card-cap-bg: #3b5998"
+                :values="[
+                { title: 'Min. Retraso', value: this.totalretraso  },
+                { title: 'Min. Salida Ant.', value: this.totalanticipado },
+                ]"
+            >
+            <template #icon><CIcon icon="cil-history" height="52" class="my-4 text-white"/></template>
+            </CWidgetStatsD>
         </CCol>
-        <CCol :lg="4"><br />
-            <CCard>
-                <CCardHeader class="headercolor text-center">
-                    Total Minutos de Retraso
-                </CCardHeader>
-                <CCardBody class="text-center">
-                    <h2>{{totalretraso}}</h2>
-                </CCardBody>
-            </CCard>
+
+        <CCol :sm="6" :lg="4">
+            <CWidgetStatsD
+                class="mb-4"
+                color="warning"
+                :values="[
+                { title: 'Dias De Trabajo', value: this.totaldias  },
+                { title: 'Dias Trabajados', value: this.totaldias-this.totalsin },
+                ]"
+            >
+            <template #icon><CIcon icon="cil-link-broken" height="52" class="my-4 text-white"/></template>
+            </CWidgetStatsD>
         </CCol>
-        <CCol :lg="4"><br />
-            <CCard>
-                <CCardHeader class="headercolor text-center">
-                    Total minutos Anticipados
-                </CCardHeader>
-                <CCardBody class="text-center">
-                    <h2>{{totalanticipado}}</h2>
-                </CCardBody>
-            </CCard>
+
+        <CCol :sm="6" :lg="4">
+            <CWidgetStatsD
+                class="mb-4"
+                color="danger"
+                :values="[
+                { title: 'DSD', value: this.totalsin  },
+                { title: 'Continuos', value: this.totalcontinuo },
+                ]"
+            >
+            <template #icon><CIcon icon="cil-calendar" height="52" class="my-4 text-white"/></template>
+            </CWidgetStatsD>
         </CCol>
+
     </CRow>
     <br>
     <CRow>
@@ -223,6 +233,8 @@ export default {
         totalretraso:0,
         totalanticipado:0,
         totalsin:0,
+        totaldias:0,
+        totalcontinuo:0,
         mes:'',
         sms:'',
         size:300
@@ -304,14 +316,21 @@ export default {
             let sum = 0;
             let res = 0;
             let sin = 0;
-            
+            let dias = 0;
+            let continuo = 0;
+
             this.listaReporte.forEach(element => {
+                dias +=1;
                 // Verificar si hay retraso o "Sin Marcar"
                 const tieneRetraso = element.retraso.some(valor => valor > 0);
                 const tieneSinMarcar = element.hora.includes("Sin Marcar");
+                const tieneContinuo = element.hora.includes("continuo");
 
                 if (tieneRetraso || tieneSinMarcar) {
                     sin += 1;
+                }
+                if(tieneContinuo){
+                    continuo+=1;
                 }
                 // Sumar retrasos según índice par o impar
                 element.retraso.forEach((valor, i) => {
@@ -326,6 +345,8 @@ export default {
             this.totalretraso = sum;
             this.totalanticipado = res;
             this.totalsin = sin;
+            this.totaldias =dias;
+            this.totalcontinuo = continuo;
             const dir = '/libreReporte'+this.uri;
             this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo/#'+dir;
         },

@@ -73,13 +73,30 @@ const routes = [
         name: "ListaEmpleadoView",
         component: () => import("@/modules/egovf-emp/views/ListaEmpleadoView.vue"),
       },
-      // END MODULO EMPLEADO
-      // MODULO SISTEMA CONTENEDOR CONTROL
       {//revisado
         path: "/moduloscc:cifCiudadano",
         name: "ModuloSccView",
         component: () => import("@/modules/egovf-scc/views/ModuloSccView.vue"),
       },
+      // END MODULO EMPLEADO
+      // MODULO INVENTARIO
+      {
+        path: "/inventario",
+        name: "InvenarioView",
+        component: () => import("@/modules/egovf-inv/views/InventarioView.vue"),
+      },
+      {
+        path: "/tipoEquipos",
+        name: "EquiposView",
+        component: () => import("@/modules/egovf-inv/views/EquiposView.vue"),
+      },
+      {
+        //Revisado Nuevo
+        path: "/listaequipos:id",
+        name: "ListaEquiposView",
+        component: () => import("@/modules/egovf-inv/views/ListaEquiposView.vue"),
+      },
+      // END MODULO INVENTARIO
       {
         path: "/listaEquipo",
         name: "ListaEquipoView",
@@ -190,12 +207,7 @@ const routes = [
         name: "ModuloInvMenuView",
         component: () => import("@/modules/egovf-inv/views/ModuloInvMenuView.vue"),
       },
-      {
-        //Revisado Nuevo
-        path: "/cpu",
-        name: "CpuView",
-        component: () => import("@/modules/egovf-inv/views/CpuView.vue"),
-      },
+      
       {
         path: "/umoduloinv",
         name: "UModuloInvView",
