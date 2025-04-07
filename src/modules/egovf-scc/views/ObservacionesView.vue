@@ -35,14 +35,25 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>#</th><th>UidObs</th><th>Tipo</th><th>Estado</th><th>Opciones</th>
+                                <th>#</th><th>UidObs</th><th>Tipo</th><th>Detalle</th><th>Estado</th><th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="lsobs in listaObs" :key="lsobs.id">
                                 <td>{{ lsobs.id }}</td>
                                 <td>{{ lsobs.uidobs }}</td>
-                                <td>{{ lsobs.tipo }}</td>
+                                <td>
+                                    <div>{{ lsobs.tipo }}</div>
+                                    <div class="small text-medium-emphasis">
+                                        <span>{{ lsobs.horaEntrada }}</span> | {{ lsobs.horaSalida }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>{{ lsobs.detalle }}</div>
+                                    <div class="small text-medium-emphasis">
+                                        <span>{{ lsobs.fechainicio }}</span> | {{ lsobs.fechafin }}
+                                    </div>
+                                </td>
                                 <td>
                                     <CBadge color="success" v-if="lsobs.estado === 1">Aprobado</CBadge>
                                     <CBadge color="warning" v-if="lsobs.estado === 0">En Espera</CBadge>
@@ -115,31 +126,31 @@
             <ComponenteNombres :datos="datos" />
 
             <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
+                <label for="datos" class="col-4 col-form-label">UID - OBS :</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="obs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
+                    <input type="text" class="form-control" v-model="obs.uidobs" required="true" placeholder="Ej. FHCE - # de hoja de Ruta">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
+                <label for="datos" class="col-4 col-form-label">Fecha de Inicio :</label>
                 <div class="col-8">
                     <input type="date" class="form-control" v-model="obs.fechainicio" required="true">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
+                <label for="datos" class="col-4 col-form-label">Fecha Fin :</label>
                 <div class="col-8">
                     <input type="date" class="form-control" v-model="obs.fechafin" required="true">
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Detalle</label>
+                <label for="datos" class="col-4 col-form-label">Detalle :</label>
                 <div class="col-8">
                     <textarea class="form-control" v-model="obs.detalle" required="true"></textarea>
                 </div>
             </div>
             <div class="mb-3 row">
-                <label for="tipo" class="col-4 col-form-label">Tipo</label>
+                <label for="tipo" class="col-4 col-form-label">Tipo :</label>
                 <div class="col-8">
                     <select class="form-control" v-model="obs.tipo" required="true" @change="getTipo()">
                         <option value="Entrada M.">Entrada Mañana</option>
@@ -153,21 +164,21 @@
                 </div>
             </div>
             <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
-                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso :</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obs.horaEntrada">
                 </div>
             </div>
 
             <div class="mb-3 row" v-if="mostrarHoraSalida()">
-                <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+                <label for="datos" class="col-sm-4 col-form-label">Hora Salida :</label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" v-model="obs.horaSalida">
                 </div>
             </div>
             <div 
             class="mb-3 row">
-                <label for="archivo" class="col-4 col-form-label">Documento</label>
+                <label for="archivo" class="col-4 col-form-label">Documento :</label>
                 <div class="col-8">
                     <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
                 </div>
@@ -194,7 +205,7 @@
             <div class="mb-3 row">
                 <label for="datos" class="col-4 col-form-label">UID - OBS</label>
                 <div class="col-8">
-                    <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta">
+                    <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="FHCE - Numero Hoja de Ruta">
                 </div>
             </div>
             <div class="mb-3 row">
@@ -348,7 +359,7 @@ export default {
             modalObs:false,
             obs:{
                 cif:null,
-                uidobs:'FHCE-',
+                uidobs:'',
                 fechainicio:'',
                 fechafin:'',
                 detalle:'Referencia por la que pide su Observación',
@@ -419,7 +430,6 @@ export default {
             await this.sccService.getObsUsuario(this.usuario.cif,this.obsgestion,this.obsmes).then(response=>{
                 this.listaObs = response.data;
             });
-            console.log(this.listaObs);
             if(this.listaObs.length == 0){
                 this.$swal.fire('No se encontro ninguna Observacion', '', 'info');
             }

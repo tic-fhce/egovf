@@ -61,11 +61,11 @@ export default class SccService {
       "imagen": obs.imagen,
       "tipo": obs.tipo,
       "horaEntrada": obs.horaEntrada,
-      "hEntrada": obs.horaEntrada.substring(0, 2),
-      "mEntrada": obs.horaEntrada.substring(3, 5),
+      "hentrada": obs.horaEntrada.substring(0, 2),
+      "mentrada": obs.horaEntrada.substring(3, 5),
       "horaSalida": obs.horaSalida,
-      "hSalida": obs.horaSalida.substring(0, 2),
-      "mSalida": obs.horaSalida.substring(3, 5),
+      "hsalida": obs.horaSalida.substring(0, 2),
+      "msalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
       "estado": 0
     };
@@ -73,8 +73,11 @@ export default class SccService {
   }
   updateObs(obs) {
     // Funcion que permite actualizar los datos de la observacion del propio empleado
-    const obsDtoResponse = {
+    const obsDtoObj = {
       "id": obs.id,
+      "idObs":obs.id,
+      "cif": obs.cif,
+      "sexo": obs.sexo,
       "uidobs": obs.uidobs,
       "fechainicio": obs.fechainicio,
       "fechafin": obs.fechafin,
@@ -85,10 +88,16 @@ export default class SccService {
       "detalle": obs.detalle,
       "imagen": obs.imagen,
       "tipo": obs.tipo,
+      "horaEntrada": obs.horaEntrada,
+      "hentrada": obs.horaEntrada.substring(0, 2),
+      "mentrada": obs.horaEntrada.substring(3, 5),
+      "horaSalida": obs.horaSalida,
+      "hsalida": obs.horaSalida.substring(0, 2),
+      "msalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "tipoId":0
+      "estado": 0
     };
-    return axios.put(msccUrl + "obs/updateObs", obsDtoResponse);
+    return axios.put(msccUrl + "obs/updateObs", obsDtoObj);
   }
   updateObsBio(obs) {
     // Funcion que permite actualizar los datos de la observacion del propio empleado
@@ -98,10 +107,10 @@ export default class SccService {
       "idObs":obs.idObs,
       "horaEntrada": obs.horaEntrada,
       "horaSalida": obs.horaSalida,
-      "hentrada": obs.hEntrada,
-      "hsalida": obs.hSalida,
-      "mentrada": obs.mEntrada,
-      "msalida":obs.mSalida,
+      "hentrada": obs.hentrada,
+      "hsalida": obs.hsalida,
+      "mentrada": obs.mentrada,
+      "msalida":obs.msalida,
       "estado":obs.estado
     };
     return axios.put(msccUrl + "obsbio/updateObsBio", obsBioDtoResponse);
@@ -125,14 +134,14 @@ export default class SccService {
       "tipo": obs.tipo,
       "horaEntrada": obs.horaEntrada,
       "horaSalida": obs.horaSalida,
-      "hEntrada": obs.horaEntrada.substring(0, 2),
-      "mEntrada": obs.horaEntrada.substring(3, 5),
-      "hSalida": obs.horaSalida.substring(0, 2),
-      "mSalida": obs.horaSalida.substring(3, 5),
+      "hentrada": obs.horaEntrada.substring(0, 2),
+      "mentrada": obs.horaEntrada.substring(3, 5),
+      "hsalida": obs.horaSalida.substring(0, 2),
+      "msalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
       "estado": obs.estado
     };
-    return axios.put(msccUrl + "obs/updateObs", obsDtoObj);
+    return axios.put(msccUrl + "obs/updateObsEmpleado", obsDtoObj);
   }
 
   getListaHorario(cif, gestion) {

@@ -38,17 +38,27 @@
               <tbody>
                 <tr v-for="lobs in listaObs" :key="lobs.id">
                   <th scope="row">{{ lobs.id }}</th>
-                    
-                    <td>{{ lobs.uidobs }}</td>
-                    <td>
-                        {{ lobs.tipo }}<br>
-                        {{ lobs.fechainicio }}<br>
+                  <td>
+                    <div>{{ lobs.uidobs }}</div>
+                    <div class="small text-medium-emphasis">
+                        <span>{{ mes[lobs.mes-1] }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>{{ lobs.tipo }}</div>
+                    <div class="small text-medium-emphasis">
+                        <span>{{ lobs.horaEntrada }}</span> |
+                        {{ lobs.horaSalida }}
+                    </div>
+                  </td>
+                  <td>{{ lobs.detalle }}
+                    <div class="small text-medium-emphasis">
+                        <span>{{ lobs.fechainicio }}</span> |
                         {{ lobs.fechafin }}
-
-                    </td>
-                    <td>{{ lobs.detalle }}</td>
-                    <td><h2>{{ lobs.tipoId }}</h2></td>
-                    <td>
+                    </div>
+                  </td>
+                  <td><h2>{{ lobs.cif }}</h2></td>
+                  <td>
                       <CButtonGroup role="group">
                         <CButton color="success" class="font" size="sm" @click="getObsDetalle(lobs.id)">
                           <CIcon icon="cil-featured-playlist"></CIcon>
@@ -60,7 +70,7 @@
                           <CIcon icon="cil-clipboard"></CIcon>
                         </CButton>
                       </CButtonGroup>
-                    </td>
+                  </td>
                 </tr>
 
               </tbody>
@@ -197,34 +207,19 @@
   <!-- Modal  Detalles de OBS-->
   <CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
-      <CModalTitle>
+      <CModalTitle class="text-center">
         <h5>{{ obsDetalle.uidobs }}</h5>
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <CRow class="mb-2">
-          <CCol><strong>ID:</strong></CCol>
-          <CCol>{{ obsDetalle.id }}</CCol>
-          <CCol><strong>UID:</strong></CCol>
-          <CCol>{{ obsDetalle.uidobs }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Fecha Inicio:</strong></CCol>
-          <CCol>{{ obsDetalle.fechainicio }}</CCol>
-          <CCol><strong>Fecha Fin:</strong></CCol>
-          <CCol>{{ obsDetalle.fechafin }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Detalle:</strong></CCol>
-          <CCol>{{ obsDetalle.detalle }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Tipo de Obs. :</strong></CCol>
-          <CCol>{{ obsDetalle.tipo }}</CCol>
-      </CRow>
+      <CListGroup flush>
+        <CListGroupItem><strong>ID:</strong> {{ obsDetalle.id }}</CListGroupItem>
+        <CListGroupItem><strong>UID:</strong> {{ obsDetalle.uidobs }}</CListGroupItem>
+        <CListGroupItem><strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}</CListGroupItem>
+        <CListGroupItem><strong>Fechas:</strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}</CListGroupItem>
+        <CListGroupItem><strong>Horas:</strong> {{ obsDetalle.horaEntrada }} | {{ obsDetalle.horaSalida }}</CListGroupItem>
+      </CListGroup>
+
       <CRow>
         <CCol>
           <img :src="obsDetalle.url" alt="" class="img-fluid" />
@@ -248,6 +243,32 @@
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
+
+        <!--Input para Tipos de empleado-->
+        <div class="mb-3 row">
+          <label for="tipo" class="col-4 col-form-label">Tipo</label>
+          <div class="col-8">
+            <select v-model="uobs.cif" class="form-control" required="true">
+              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+                {{ lte.detalle }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!--Input para Tipos de empleado-->
+
+        <!--Input para el sexo de cada empleado-->
+        <div class="mb-3 row">
+          <label for="sexo" class="col-4 col-form-label">Caracteristica</label>
+          <div class="col-8">
+            <select class="form-control" v-model="uobs.sexo" required="true">
+              <option value="0">Todos</option>
+              <option value="1">Femenino</option>
+              <option value="2">Masculino</option>
+            </select>
+          </div>
+        </div>
+        <!--Input para el sexo de cada empleado-->
 
         <div class="mb-3 row">
           <label for="datos" class="col-4 col-form-label">UID - OBS</label>
@@ -280,7 +301,7 @@
         <div class="mb-3 row">
           <label for="tipo" class="col-4 col-form-label">Tipo</label>
           <div class="col-8">
-            <select class="form-control" v-model="uobs.tipo" required="true">
+            <select class="form-control" v-model="uobs.tipo" required="true" @change="getTipoSet()">
               <option value="Entrada M.">Entrada Mañana</option>
               <option value="Salida M.">Salida Mañana</option>
               <option value="Entrada T.">Entrada Tarde</option>
@@ -295,6 +316,23 @@
             </select>
           </div>
         </div>
+
+        <!--Input para la hora-->
+        <div class="mb-3 row" v-if="mostrarHoraIngresoSet()"  >
+          <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
+          <div class="col-sm-8">
+              <input type="text" class="form-control" v-model="uobs.horaEntrada">
+          </div>
+        </div>
+
+        <div class="mb-3 row" v-if="mostrarHoraSalidaSet()">
+          <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
+          <div class="col-sm-8">
+              <input type="text" class="form-control" v-model="uobs.horaSalida">
+          </div>
+        </div>
+        <!--Input para la hora-->
+
         <CCol>
           <img :src="uobs.url" alt="" class="img-fluid" />
         </CCol>
@@ -373,6 +411,7 @@ export default {
       listaTipoEmpleado: [],
       gestion:0,
       archivo: "",
+      mes:["Enenro","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
       usuario: {
         token: "",
         cif: "",
@@ -396,24 +435,50 @@ export default {
           url:''
       },
       obsDetalle: {
-        id: 0,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        url: ""
+        id:0,
+        cif:0,
+        sexo:0,
+        uidobs:"",
+        fechainicio:"",
+        fechafin:"",
+        gestion:0,
+        mes:0,
+        di:0,
+        df:0,
+        detalle:"",
+        imagen:"",
+        tipo:"",
+        horaEntrada:"",
+        hentrada:"",
+        mentrada:"",
+        horaSalida:"",
+        hsalida:"",
+        msalida:"",
+        url:"",
+        estado:0
       },
       uobs: {
-        id: 0,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        url: "",
+        id:0,
+        cif:0,
+        sexo:0,
+        uidobs:"",
+        fechainicio:"",
+        fechafin:"",
+        gestion:0,
+        mes:0,
+        di:0,
+        df:0,
+        detalle:"",
+        imagen:"",
+        tipo:"",
+        horaEntrada:"",
+        hentrada:"",
+        mentrada:"",
+        horaSalida:"",
+        hsalida:"",
+        msalida:"",
+        url:"",
+        estado:0
       },
     };
   },
@@ -533,14 +598,27 @@ export default {
       // Funcion que Muestra el detalle de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.obsDetalle.id = obs.id;
-          this.obsDetalle.uidobs = obs.uidobs;
-          this.obsDetalle.fechainicio = obs.fechainicio;
-          this.obsDetalle.fechafin = obs.fechafin;
-          this.obsDetalle.detalle = obs.detalle;
-          this.obsDetalle.imagen = obs.imagen;
-          this.obsDetalle.tipo = obs.tipo;
-          this.obsDetalle.url = obs.url;
+          this.obsDetalle.id = obs.id,
+          this.obsDetalle.cif= obs.cif,
+          this.obsDetalle.sexo= obs.sexo,
+          this.obsDetalle.uidobs= obs.uidobs,
+          this.obsDetalle.fechainicio= obs.fechainicio,
+          this.obsDetalle.fechafin= obs.fechafin,
+          this.obsDetalle.gestion= obs.gestion,
+          this.obsDetalle.mes= obs.mes,
+          this.obsDetalle.di= obs.di,
+          this.obsDetalle.df= obs.df,
+          this.obsDetalle.detalle= obs.detalle,
+          this.obsDetalle.imagen= obs.imagen,
+          this.obsDetalle.tipo= obs.tipo,
+          this.obsDetalle.horaEntrada= obs.horaEntrada,
+          this.obsDetalle.hentrada= obs.hentrada,
+          this.obsDetalle.mentrada= obs.mentrada,
+          this.obsDetalle.horaSalida= obs.horaSalida,
+          this.obsDetalle.hsalida= obs.hsalida,
+          this.obsDetalle.msalida= obs.msalida,
+          this.obsDetalle.url= obs.url,
+          this.obsDetalle.estado= obs.estado
         }
       });
       this.clickModalDetalleObs(true);
@@ -674,16 +752,27 @@ export default {
       // Funcion que carga los datos de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.uobs.id = id;
-          this.uobs.cif = obs.cif;
-          this.uobs.uidobs = obs.uidobs;
-          this.uobs.fechainicio = obs.fechainicio;
-          this.uobs.fechafin = obs.fechafin;
-          this.uobs.detalle = obs.detalle;
-          this.uobs.imagen = obs.imagen;
-          this.uobs.tipo = obs.tipo;
-          this.uobs.hora = obs.hora;
-          this.uobs.url = obs.url;
+          this.uobs.id = obs.id,
+          this.uobs.cif= obs.cif,
+          this.uobs.sexo= obs.sexo,
+          this.uobs.uidobs= obs.uidobs,
+          this.uobs.fechainicio= obs.fechainicio,
+          this.uobs.fechafin= obs.fechafin,
+          this.uobs.gestion= obs.gestion,
+          this.uobs.mes= obs.mes,
+          this.uobs.di= obs.di,
+          this.uobs.df= obs.df,
+          this.uobs.detalle= obs.detalle,
+          this.uobs.imagen= obs.imagen,
+          this.uobs.tipo= obs.tipo,
+          this.uobs.horaEntrada= obs.horaEntrada,
+          this.uobs.hentrada= obs.hentrada,
+          this.uobs.mentrada= obs.mentrada,
+          this.uobs.horaSalida= obs.horaSalida,
+          this.uobs.hsalida= obs.hsalida,
+          this.uobs.msalida= obs.msalida,
+          this.uobs.url= obs.url,
+          this.uobs.estado= obs.estado
         }
       });
       this.clickModalObsEditar(true);
@@ -734,6 +823,24 @@ export default {
           if(this.obsall.tipo == 'asueto')
               this.obsall.horaEntrada = '08:30';
       },
+      getTipoSet(){
+          if(this.uobs.tipo == 'Entrada M.')
+              this.uobs.horaEntrada = '08:30';
+          if(this.uobs.tipo == 'Salida M.')
+              this.uobs.horaSalida = '12:30';
+          if(this.uobs.tipo == 'Entrada T.')
+              this.uobs.horaEntrada = '14:30';
+          if(this.uobs.tipo == 'Salida T.')
+              this.uobs.horaSalida = '18:30';
+          if(this.uobs.tipo == 'continuo')
+              this.uobs.horaSalida = '16:30';
+          if(this.uobs.tipo == 'continuoingreso'){
+              this.uobs.horaEntrada = '08:30';
+              this.uobs.horaSalida = '16:30';
+          }
+          if(this.uobs.tipo == 'asueto')
+              this.uobs.horaEntrada = '08:30';
+      },
       mostrarHoraIngreso() {
           const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
           return tiposPermitidos.includes(this.obsall.tipo);
@@ -741,6 +848,15 @@ export default {
       mostrarHoraSalida() {
           const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
           return tiposPermitidos.includes(this.obsall.tipo);
+      },
+
+      mostrarHoraIngresoSet() {
+          const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
+          return tiposPermitidos.includes(this.uobs.tipo);
+      },
+      mostrarHoraSalidaSet() {
+          const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
+          return tiposPermitidos.includes(this.uobs.tipo);
       }
   },
 };

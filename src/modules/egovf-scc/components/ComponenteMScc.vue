@@ -392,43 +392,23 @@
     </CModalHeader>
     <CModalBody>
       <ComponenteNombres :datos="datos" />
-      <hr>
-      <CRow class="mb-2">
-        <CCol><strong>ID:</strong></CCol>
-        <CCol>{{ obsDetalle.id }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-        <CCol><strong>UID:</strong></CCol>
-        <CCol>{{ obsDetalle.uidobs }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Fecha Inicio:</strong></CCol>
-          <CCol>{{ obsDetalle.fechainicio }}</CCol>
-          <CCol><strong>Fecha Fin:</strong></CCol>
-          <CCol>{{ obsDetalle.fechafin }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Detalle:</strong></CCol>
-          <CCol>{{ obsDetalle.detalle }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Tipo de Obs. :</strong></CCol>
-          <CCol>{{ obsDetalle.tipo }}</CCol>
-      </CRow>
-      <CRow class="mb-2">
-          <CCol><strong>Hora Entrada:</strong></CCol>
-          <CCol>{{ obsDetalle.horaEntrada }}</CCol>
-          <CCol><strong>Hora Salida:</strong></CCol>
-          <CCol>{{ obsDetalle.horaSalida }}</CCol>
-      </CRow>
       <CRow>
         <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
         <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
       </CRow>
+      <CListGroup flush>
+        <CListGroupItem><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</CListGroupItem>
+        <CListGroupItem><strong>UID:</strong> {{ obsDetalle.uidobs }}</CListGroupItem>
+        <CListGroupItem><strong>Detalle:</strong> {{ obsDetalle.detalle }}</CListGroupItem>
+        <CListGroupItem><strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}
+          <div class="small text-medium-emphasis">
+            <span>{{ obsDetalle.horaEntrada }}</span> | {{ obsDetalle.horaSalida }}
+          </div>    
+        </CListGroupItem>
+        <CListGroupItem><strong>Fechas:</strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}</CListGroupItem>
+        <CListGroupItem></CListGroupItem>
+      </CListGroup>
+      
       <CRow>
         <CCol>
           <img :src="obsDetalle.url" alt="" class="img-fluid" />
@@ -437,8 +417,11 @@
     </CModalBody>
     <CModalFooter>
       <CButton @click="clickModalDetalleObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-      <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="success" class="font" >
+      <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" >
         <CIcon icon="cil-cloud-download" class="me-2" />Descargar Documento
+      </CButton>
+      <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" >
+        <CIcon icon="cil-check-alt" class="me-2" />Aporbar
       </CButton>
     </CModalFooter>
   </CModal>
@@ -965,7 +948,7 @@ export default {
         id: 0,
         cif:"",
         uidobs: "",
-        idobs:0,
+        idObs:0,
         fechainicio: "",
         fechafin: "",
         detalle: "",
@@ -1155,10 +1138,10 @@ export default {
         idObs:0,
         horaEntrada: "",
         horaSalida: "",
-        hEntrada: 0,
-        hSalida: 0,
-        mEntrada: 0,
-        mSalida:0,
+        hentrada: 0,
+        hsalida: 0,
+        mentrada: 0,
+        msalida:0,
         estado:0
       };
       this.listaObs.forEach((obs) => {
@@ -1167,11 +1150,11 @@ export default {
           uObs.cif = obs.cif,
           uObs.idObs = obs.idObs,
           uObs.horaEntrada = obs.horaEntrada,
-          uObs.hEntrada = obs.hentrada,
-          uObs.mEntrada = obs.mentrada,
+          uObs.hentrada = obs.hentrada,
+          uObs.mentrada = obs.mentrada,
           uObs.horaSalida = obs.horaSalida,
-          uObs.hSalida = obs.hsalida,
-          uObs.mSalida = obs.msalida,
+          uObs.hsalida = obs.hsalida,
+          uObs.msalida = obs.msalida,
           uObs.estado = estado
         }
       });
@@ -1333,7 +1316,7 @@ export default {
         if (obs.id === id) {
           this.obsDetalle.id = obs.id;
           this.obsDetalle.cif=obs.cif;
-          this.obsDetalle.idobs = obs.idobs;
+          this.obsDetalle.idObs = obs.idObs;
           this.obsDetalle.uidobs = obs.uidobs;
           this.obsDetalle.fechainicio = obs.fechainicio;
           this.obsDetalle.fechafin = obs.fechafin;

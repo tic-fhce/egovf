@@ -14,7 +14,6 @@
                 <tr>
                   <th>ID</th>
                   <th>CIF</th>
-                  <th>Empleado</th>
                   <th>UidObs</th>
                   <th>Tipo</th>
                   <th>Detalle</th>
@@ -24,11 +23,25 @@
               <tbody>
                 <tr v-for="lsobs in listaObsCiudadanos" :key="lsobs.id">
                   <th scope="row">{{ lsobs.id }}</th>
-                  <td>{{ lsobs.cif }}</td>
-                  <td>{{ lsobs.nombre }}</td>
+                  <td>
+                    <div>{{ lsobs.cif }}</div>
+                    <div class="small text-medium-emphasis">
+                        <span>{{ lsobs.nombre }}</span>
+                    </div>
+                  </td>
                   <td>{{ lsobs.uidobs }}</td>
-                  <td>{{ lsobs.tipo }}</td>
-                  <td>{{ lsobs.detalle }}</td>
+                  <td>
+                    <div>{{ lsobs.tipo }}</div>
+                    <div class="small text-medium-emphasis">
+                        <span>{{ lsobs.horas }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>{{ lsobs.detalle }}</div>
+                    <div class="small text-medium-emphasis">
+                        <span>{{ lsobs.fechas }}</span>
+                    </div>
+                  </td>
                   <td>
                     <CButtonGroup role="group">
                       <CButton color="success" class="font" size="sm" @click="getObsDetalle(lsobs.id)">
@@ -63,42 +76,15 @@
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <div class="mb-3 row">
-        <h4 class="card-title">CIF : {{ obsDetalle.cif }}</h4>
-      </div>
-      <hr>
-      <CRow class="mb-2">
-        <CCol><strong>ID:</strong></CCol>
-        <CCol>{{ obsDetalle.id }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-        <CCol><strong>UID:</strong></CCol>
-        <CCol>{{ obsDetalle.uidobs }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Fecha Inicio:</strong></CCol>
-          <CCol>{{ obsDetalle.fechainicio }}</CCol>
-          <CCol><strong>Fecha Fin:</strong></CCol>
-          <CCol>{{ obsDetalle.fechafin }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Detalle:</strong></CCol>
-          <CCol>{{ obsDetalle.detalle }}</CCol>
-      </CRow>
-      <hr>
-      <CRow class="mb-2">
-          <CCol><strong>Tipo de Obs. :</strong></CCol>
-          <CCol>{{ obsDetalle.tipo }}</CCol>
-      </CRow>
-      <CRow class="mb-2">
-          <CCol><strong>Hora Entrada:</strong></CCol>
-          <CCol>{{ obsDetalle.horaEntrada }}</CCol>
-          <CCol><strong>Hora Salida:</strong></CCol>
-          <CCol>{{ obsDetalle.horaSalida }}</CCol>
-      </CRow>
+      <CListGroup flush>
+        <CListGroupItem><strong>CIF:</strong> {{ obsDetalle.cif }}</CListGroupItem>
+        <CListGroupItem><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</CListGroupItem>
+        <CListGroupItem><strong>UID:</strong> {{ obsDetalle.uidobs }}</CListGroupItem>
+        <CListGroupItem><strong>Detalle:</strong> {{ obsDetalle.detalle }}</CListGroupItem>
+        <CListGroupItem><strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}</CListGroupItem>
+        <CListGroupItem><strong>Fechas:</strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}</CListGroupItem>
+        <CListGroupItem><strong>Horas:</strong> {{ obsDetalle.horaEntrada }} | {{ obsDetalle.horaSalida }}</CListGroupItem>
+      </CListGroup>
       <CRow>
         <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
         <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
@@ -192,7 +178,7 @@
         </div>
 
         <div class="mb-3 row" v-if="mostrarUHoraSalida()">
-            <label for="datos" class="col-sm-4 col-form-label">Hora Salida{{ uobs.horaEntrada }}</label>
+            <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
             <div class="col-sm-8">
                 <input type="text" class="form-control" v-model="uobs.horaSalida">
             </div>
@@ -318,32 +304,49 @@ export default {
       obsDetalle: {
         id: 0,
         idObs:0,
-        cif: 0,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        horaEntrada: "",
-        horaSalida: "",
-        url: "",
-        estado: 0
+        cif:0,
+        sexo:0,
+        uidobs:"",
+        fechainicio:"",
+        fechafin:"",
+        gestion:0,
+        mes:0,
+        di:0,
+        df:0,
+        detalle:"",
+        imagen:"",
+        tipo:"",
+        horaEntrada:"",
+        hentrada:"",
+        mentrada:"",
+        horaSalida:"",
+        hsalida:"",
+        msalida:"",
+        url:"",
+        estado:0
       },
       uobs: {
-        id:0,
+        id: 0,
         idObs:0,
-        cif:null,
+        cif:0,
         sexo:0,
-        uidobs:'',
-        fechainicio:'',
-        fechafin:'',
-        detalle:'',
-        imagen:'',
-        tipo:'',
-        horaEntrada:'',
-        horaSalida:'',
-        url:'',
+        uidobs:"",
+        fechainicio:"",
+        fechafin:"",
+        gestion:0,
+        mes:0,
+        di:0,
+        df:0,
+        detalle:"",
+        imagen:"",
+        tipo:"",
+        horaEntrada:"",
+        hentrada:"",
+        mentrada:"",
+        horaSalida:"",
+        hsalida:"",
+        msalida:"",
+        url:"",
         estado:0
       },
     };
@@ -428,22 +431,27 @@ export default {
         this.listaObs.forEach((obs) => {
           var obsCiudadano = {
             id: 0,
+            idObs:0,
             cif: 0,
             nombre: "",
             uidobs: "",
             tipo: "",
             detalle: "",
-            estado:0
+            fechas:"",
+            horas:"",
+
           };
           if (empleado.cif == obs.cif) {
             obsCiudadano.id = obs.id;
+            obsCiudadano.idObs = obs.idObs;
             obsCiudadano.cif = obs.cif;
             obsCiudadano.nombre =
               empleado.nombre + " " + empleado.paterno + " " + empleado.materno;
             obsCiudadano.uidobs = obs.uidobs;
             obsCiudadano.tipo = obs.tipo;
             obsCiudadano.detalle = obs.detalle;
-            obsCiudadano.estado = obs.estado;
+            obsCiudadano.fechas = obs.fechainicio+" | "+obs.fechafin;
+            obsCiudadano.horas = obs.horaEntrada+" | "+obs.horaSalida;
             this.listaObsCiudadanos.push(obsCiudadano);
             return false;
           }
@@ -456,19 +464,28 @@ export default {
       // Funcion que Muestra el detalle de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.obsDetalle.id = obs.id;
+          this.obsDetalle.id=obs.id;
           this.obsDetalle.idObs=obs.idObs;
-          this.obsDetalle.cif = obs.cif;
-          this.obsDetalle.uidobs = obs.uidobs;
-          this.obsDetalle.fechainicio = obs.fechainicio;
-          this.obsDetalle.fechafin = obs.fechafin;
-          this.obsDetalle.detalle = obs.detalle;
-          this.obsDetalle.imagen = obs.imagen;
-          this.obsDetalle.tipo = obs.tipo;
-          this.obsDetalle.horaEntrada = obs.horaEntrada;
-          this.obsDetalle.horaSalida = obs.horaSalida;
-          this.obsDetalle.url = obs.url;
-          this.obsDetalle.estado = obs.estado;
+          this.obsDetalle.cif=obs.cif;
+          this.obsDetalle.sexo=obs.sexo;
+          this.obsDetalle.uidobs=obs.uidobs;
+          this.obsDetalle.fechainicio=obs.fechainicio;
+          this.obsDetalle.fechafin=obs.fechafin;
+          this.obsDetalle.gestion=obs.gestion;
+          this.obsDetalle.mes=obs.mes;
+          this.obsDetalle.di=obs.di;
+          this.obsDetalle.df=obs.df;
+          this.obsDetalle.detalle=obs.detalle;
+          this.obsDetalle.imagen=obs.imagen;
+          this.obsDetalle.tipo=obs.tipo;
+          this.obsDetalle.horaEntrada=obs.horaEntrada;
+          this.obsDetalle.hentrada=obs.hentrada;
+          this.obsDetalle.mentrada=obs.mentrada;
+          this.obsDetalle.horaSalida=obs.horaSalida;
+          this.obsDetalle.hsalida=obs.hsalida;
+          this.obsDetalle.msalida=obs.msalida;
+          this.obsDetalle.url=obs.url;
+          this.obsDetalle.estado=obs.estado;
         }
       });
       this.clickModalDetalleObs(true);
@@ -480,10 +497,10 @@ export default {
         idObs:0,
         horaEntrada: "",
         horaSalida: "",
-        hEntrada: 0,
-        hSalida: 0,
-        mEntrada: 0,
-        mSalida:0,
+        hentrada: 0,
+        hsalida: 0,
+        mentrada: 0,
+        msalida:0,
         estado:0
       };
       this.listaObs.forEach((obs) => {
@@ -492,11 +509,11 @@ export default {
           uObs.cif = obs.cif,
           uObs.idObs = obs.idObs,
           uObs.horaEntrada = obs.horaEntrada,
-          uObs.hEntrada = obs.hEntrada,
-          uObs.mEntrada = obs.mEntrada,
+          uObs.hentrada = obs.hentrada,
+          uObs.mentrada = obs.mentrada,
           uObs.horaSalida = obs.horaSalida,
-          uObs.hSalida = obs.hSalida,
-          uObs.mSalida = obs.mSalida,
+          uObs.hsalida = obs.hsalida,
+          uObs.msalida = obs.msalida,
           uObs.estado = estado
         }
       });
@@ -588,20 +605,28 @@ export default {
       // Funcion que carga los datos de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.uobs.id = id;
-          this.uobs.idObs = obs.idObs;
-          this.uobs.cif = obs.cif;
-          this.uobs.sexo = obs.sexo;
-          this.uobs.uidobs = obs.uidobs;
-          this.uobs.fechainicio = obs.fechainicio;
-          this.uobs.fechafin = obs.fechafin;
-          this.uobs.detalle = obs.detalle;
-          this.uobs.imagen = obs.imagen;
-          this.uobs.tipo = obs.tipo;
-          this.uobs.horaEntrada = obs.horaEntrada;
-          this.uobs.horaSalida = obs.horaSalida;
-          this.uobs.url = obs.url;
-          this.uobs.estado = obs.estado;
+          this.uobs.id=obs.id;
+          this.uobs.idObs=obs.idObs;
+          this.uobs.cif=obs.cif;
+          this.uobs.sexo=obs.sexo;
+          this.uobs.uidobs=obs.uidobs;
+          this.uobs.fechainicio=obs.fechainicio;
+          this.uobs.fechafin=obs.fechafin;
+          this.uobs.gestion=obs.gestion;
+          this.uobs.mes=obs.mes;
+          this.uobs.di=obs.di;
+          this.uobs.df=obs.df;
+          this.uobs.detalle=obs.detalle;
+          this.uobs.imagen=obs.imagen;
+          this.uobs.tipo=obs.tipo;
+          this.uobs.horaEntrada=obs.horaEntrada;
+          this.uobs.hentrada=obs.hentrada;
+          this.uobs.mentrada=obs.mentrada;
+          this.uobs.horaSalida=obs.horaSalida;
+          this.uobs.hsalida=obs.hsalida;
+          this.uobs.msalida=obs.msalida;
+          this.uobs.url=obs.url;
+          this.uobs.estado=obs.estado;
         }
       });
       this.clickModalObsEditar(true);

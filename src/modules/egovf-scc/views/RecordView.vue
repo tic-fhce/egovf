@@ -37,7 +37,7 @@
                             <table class="table table-striped table-hover" id="printRecord">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>CIF</th><th>C.I.</th><th>Nombres y Apellidos</th><th>Min. R</th><th>Min. S.A.</th><th>Total dias de Descuento</th>
+                                        <th>#</th><th>CIF</th><th>C.I.</th><th>Nombres y Apellidos</th><th>Minutos de Retraso</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -45,15 +45,18 @@
                                         <td>{{ciudadano.id}}</td>
                                         <td><CButton color="success" class="font" @click="getReporteMes(ciudadano.cif)">{{ciudadano.cif}}</CButton></td>
                                         <td>{{ ciudadano.ci }}</td>
-                                        <td>{{ ciudadano.nombre }}</td>
-                                        <td>{{ ciudadano.retraso }}</td>
-                                        <td>{{ ciudadano.antisipado }}</td>
-                                        <td>{{ ciudadano.pena }}</td>
+                                        <td>
+                                            <div>{{ ciudadano.nombre }}<br></div>
+                                            <div class="small text-medium-emphasis">
+                                                <span>Unidad</span> | {{ ciudadano.unidad }} -> [ {{ ciudadano.retraso }} | {{ ciudadano.antisipado }} | {{ ciudadano.pena }} ]
+                                            </div>
+                                        </td>
+                                        <td>{{ ciudadano.retraso }} min.</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+                                        <th></th><th></th><th></th><th></th><th></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -186,6 +189,7 @@ export default {
                         cif:0,
                         ci:'',
                         nombre:'',
+                        unidad:'',
                         retraso:0,
                         antisipado:0,
                         pena:0
@@ -195,6 +199,7 @@ export default {
                         report.cif=ciudadano.cif;
                         report.ci=ciudadano.ci;
                         report.nombre=ciudadano.nombre+' '+ciudadano.paterno+' '+ciudadano.materno;
+                        report.unidad=ciudadano.sigla;
                         report.retraso=cif.retraso;
                         report.antisipado=cif.antisipado;
                         report.pena= cif.pena;
