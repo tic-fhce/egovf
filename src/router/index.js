@@ -96,6 +96,7 @@ const routes = [
         name: "ListaEquiposView",
         component: () => import("@/modules/egovf-inv/views/ListaEquiposView.vue"),
       },
+
       // END MODULO INVENTARIO
       {
         path: "/listaEquipo",
