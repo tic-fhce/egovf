@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import EscritorioLayout from "@/layouts/EscritorioLayout";
 import FrontLayout from "@/layouts/FrontLayout";
+import { craliRoutes } from "@/modules/egovf-crali/router";
 const routes = [
   {
     path: "/",
@@ -241,6 +242,8 @@ const routes = [
       },
     ],
   },
+  //
+  craliRoutes
 ];
 
 const router = createRouter({
