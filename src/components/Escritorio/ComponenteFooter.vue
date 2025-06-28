@@ -1,7 +1,7 @@
 <template>
   <CFooter>
     <div>
-      <a href="#" target="_blank">eGOVF</a>
+      <RouterLink to="/crali" target="_blank">eGOVF</RouterLink>
       <span class="ms-1"
         >&copy; {{ new Date().getFullYear() }} FHCE.</span
       >
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'ComponenteFooter',
 }

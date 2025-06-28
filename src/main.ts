@@ -3,7 +3,6 @@ import Fhce from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-import jsPDF from 'jspdf'
 import '@/assets/estilos/estilo.css'
 
 import CoreuiVue from '@coreui/vue'
