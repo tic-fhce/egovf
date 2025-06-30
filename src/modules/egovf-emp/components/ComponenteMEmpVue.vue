@@ -2,74 +2,51 @@
   <CRow>
     <CCol :lg="12">
       <CCard>
-        <CCardHeader class="headercolor">
-          <CRow>
-            <CCol :lg="6">
-              <label class="d-none d-md-flex me-auto">Modulos Del Empleado</label>
-            </CCol>
-            <CCol :lg="6" class="text-end">
-              <CDropdown variant="btn-group">
-                <CDropdownToggle color="success" class="font" size="sm">
-                  <CIcon icon="cil-menu" class="me-2" />Opciones</CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem>
-                    <CButton @click="clickModalModulo(true)" size="sm">Agregar Modulo</CButton>
-                    </CDropdownItem>
-                  <CDropdownDivider />
-                  <CDropdownItem>
-                    <CButton @click="clickModalContrato(true)" size="sm">Agregar Contrato</CButton>
-                    </CDropdownItem>
-                </CDropdownMenu>
-              </CDropdown>
-            </CCol>
-          </CRow>
+        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+            <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+          </div>
+          <CDropdown variant="btn-group">
+            <CDropdownToggle color="dark" class="font border-0 shadow-sm" size="sm">
+              <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones</CDropdownToggle>
+            <CDropdownMenu>
+              <CDropdownItem>
+                <CButton @click="clickModalModulo(true)" size="sm"><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Modulo</CButton>
+                </CDropdownItem>
+              <CDropdownDivider />
+              <CDropdownItem>
+                <CButton @click="clickModalContrato(true)" size="sm"><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Contrato</CButton>
+                </CDropdownItem>
+            </CDropdownMenu>
+          </CDropdown>
         </CCardHeader>
 
         <CCardBody>
-          <CCol :xs="12" class="table-responsive">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>Tipo : {{ empleado.empleado }}</td>
-                  <td>Ingreso : {{ empleado.fecha }}</td>
-                  <td>Salida : {{ empleado.salida }}</td>
-                  <td>
-                    Estado :
-                    <CButton
-                      v-if="empleado.estado === 1"
-                      color="success"
-                      class="font"
-                      size="sm"
-                      @click="updateEstado(0)"
-                      >Activo</CButton
-                    >
-                    <CButton
-                      v-else
-                      color="danger"
-                      class="font"
-                      size="sm"
-                      @click="updateEstado(1)"
-                      >Inactivo</CButton
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <CCol :xs="12">
+              <CWidgetStatsB class="mb-3" :progress="{ color: esFechaPasada(empleado.salida),value:this.total}">
+                <template #text>
+                  <CAlert :color="esFechaPasada(empleado.salida)" class="py-1 my-0 d-inline-block">
+                      Fecha de Culminacion : {{ empleado.salida }}
+                  </CAlert>
+                  {{ this.total }} %
+                  <CButton v-if="this.total===100" color="danger" class="font" size="sm" @click="updateEstado()" >Eliminar Empleado</CButton>
+                </template>
+                <template #title>Inicio del Contrato : {{ empleado.fecha }}</template>
+                <template #value>{{ empleado.empleado }}</template>
+              </CWidgetStatsB>
+              
           </CCol>
 
           <!-- Tarjetas de Empleado-->
           <CCol :xs="12">
             <CNav variant="tabs" class="nav nav-tabs">
-              <CNavItem
-                ><CNavLink :active="tab == 1" @click="clicktab(1)"
-                  ><CButton size="sm"
-                    ><CIcon icon="cil-command"></CIcon
-                    ><label class="d-none d-md-flex me-auto"
-                      >Modulos</label
-                    ></CButton
-                  ></CNavLink
-                ></CNavItem
-              >
+              <CNavItem><CNavLink :active="tab == 1" @click="clicktab(1)">
+                <CButton size="sm"><CIcon icon="cil-command"></CIcon>
+                  <label class="d-none d-md-flex me-auto">Modulos</label>
+                </CButton>
+              </CNavLink>
+            </CNavItem>
               <CNavItem
                 ><CNavLink :active="tab == 2" @click="clicktab(2)"
                   ><CButton size="sm"
@@ -131,7 +108,7 @@
                       <tr v-for="contrato in contratos" :key="contrato.id">
                         <td>{{ contrato.id }}</td>
                         <td>
-                          {{ contrato.numeroContrato }}<br />
+                          {{ contrato.numero_contrato }}<br />
                           {{ contrato.unidad }}
                         </td>
                         <td>{{ contrato.servicio }}</td>
@@ -231,7 +208,7 @@
         @close="clickModalModulo(false)"
       >
         <CModalTitle>
-          <h5>Agregar Modulos</h5>
+          <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Modulos</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -265,7 +242,7 @@
     <form @submit.prevent="addContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
         <CModalTitle>
-          <h5>Agregar Contrato</h5>
+          <h6><CIcon icon="cil-clipboard" class="me-2" size="lg"/> Agregar Contrato</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -279,7 +256,7 @@
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Servicios prestados</label>
+          <label for="servicio" class="col-4 col-form-label">Servicios Prestados</label>
           <div class="col-8">
             <textarea class="form-control" v-model="contrato.servicio" required="true" rows="5"></textarea>
           </div>
@@ -424,8 +401,8 @@ import UsuarioService from "@/modules/egovf/services/usuarioService";
 import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
 import UnidadService from "@/modules/egovf-uni/services/unidadService";
 import MenuService from "@/modules/egovf/services/menuService";
-import SccService from "@scc/services/sccService";
-import ModuloService from "@/services/moduloService";
+import SccService from "@/modules/egovf-scc/services/sccService";
+import ModuloService from "@/modules/egovf/services/moduloService";
 import { CDropdown } from "@coreui/vue";
 
 // End
@@ -439,6 +416,7 @@ export default {
   },
   data() {
     return {
+      titulo:'Modulos Del Empleado',
       modalModulo: false,
       modalContrato: false,
       modalEditarContrato: false,
@@ -455,6 +433,7 @@ export default {
       id_modulo: 0,
       id_tipoEmpleado: 0,
       contratos: [],
+      total:0,
       menu: {
         id: 0,
         titulo: "",
@@ -490,7 +469,7 @@ export default {
         cif: 0,
         id: 0,
         numerocontrato: "AREA.DESC.CONT.N.",
-        servicio: "CONTRATO ADMINISTRATIVO PARA LA PRESTACION DE SERVICIOS CONSULTOR INDIVIDUAL DE LINEA",
+        servicio: "CONTRATO ADMINISTRATIVO PARA LA PRESTACIÓN DE SERVICIOS CONSULTOR INDIVIDUAL DE LINEA",
         unidad: "",
         inicio: "",
         fin: "",
@@ -545,6 +524,7 @@ export default {
     };
   },
   beforeCreate() {
+    this.total=0;
     if (this.$cookies.get("cif") == null) {
       this.$router.push("/");
     }
@@ -556,11 +536,13 @@ export default {
     this.menuService = new MenuService();
     this.sccService = new SccService();
     this.moduloService = new ModuloService();
+    this.total=0;
   },
   mounted() {
     this.getDatos();
     this.getListaTipoEmpleado();
     this.getUnidades();
+    this.total=0;
   },
   updated() {
     this.egovf = this.emp;
@@ -585,7 +567,7 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
-
+        this.usuario.foto = this.$cookies.get("foto");
         this.menuService.headersUsuario(this.usuario.token);
       }
     },
@@ -601,6 +583,7 @@ export default {
       await this.empleadoService.getEmpleado(this.egovf.cif).then((response) => {
           this.empleado = response.data;
           this.contratos = this.empleado.contratos;
+          this.calcularDiasRestantes(this.empleado.fecha,this.empleado.salida);
         });
       this.getMenuModulo();
     },
@@ -614,58 +597,46 @@ export default {
     async getListarEmpleadoModulo() {
       await this.empleadoService.getListarEmpleadoModulo(this.egovf.cif).then((response) => {
           this.listaModulo = response.data;
-          console.log(this.listaModulo);
         });
     },
     // Funcion que lista los Modulos del Empleado
     async getListarEmpleadoModuloCif() {
       await this.empleadoService.getListarEmpleadoModuloCif(this.egovf.cif).then((response) => {
           this.listaModuloCif = response.data;
-          console.log(this.listaModuloCif);
         });
     },
     async addEmpleadoModulo() {
       // Funcion para registrar al Empleado en un Modulo
       var idmenu = 0;
+
       this.empleado_modulo.cif = this.egovf.cif;
       this.empleado_modulo.id_modulo = this.id_modulo;
 
       this.listaModulo.forEach((modulo) => {
         if (modulo.id == this.id_modulo) {
-          idmenu = modulo._04idmenu;
+          idmenu = modulo.idmenu;
         }
       });
-      await this.$swal
-        .fire({
+      await this.$swal.fire({
           title: "Desea Agregar el Modulo al Empleado ?",
           showDenyButton: true,
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
-            this.empleadoService
-              .addEmpleadoModulo(this.empleado_modulo)
-              .then((response) => {
-                if (response.status == 200) {
-                  this.menuService
-                    .addMenuUsuario(this.empleado_modulo.cif, idmenu)
-                    .then();
-                  this.$swal
-                    .fire(
-                      "El Modulo fue Agregado al Empleado Corectamente",
-                      "",
-                      "success"
-                    )
-                    .then((res) => {
-                      if (res) location.reload();
-                    });
+            this.empleadoService.addEmpleadoModulo(this.empleado_modulo).then((response) => {
+                if (response.status == 201) {
+                  this.menuService.addMenuUsuario(this.empleado_modulo.cif, idmenu).then((res)=>{
+                    if(res.status == 201){
+                      this.$swal.fire("El Modulo fue Agregado al Empleado Corectamente","","success").then((r)=>{
+                        if (r) location.reload();
+                      });
+                    }else{
+                      this.$swal.fire("Los Datos  del Menu Usuario no fueron Guardados Error" + res.status,"","error");
+                    }
+                  });
                 } else {
-                  this.$swal.fire(
-                    "Los Datos no fueron Guardados Error" + response.status,
-                    "",
-                    "error"
-                  );
+                  this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
                 }
               });
           } else if (result.isDenied) {
@@ -829,45 +800,25 @@ export default {
           }
         });
     },
-    async updateEstado(estado) {
+    async updateEstado() {
       this.moduloService.headersUsuario(this.usuario.token);
-      var sm = "";
-      if (estado == 1) {
-        sm = "Desea Activar al Empleado ?";
-      } else {
-        sm = "Desea Inactivar al Empleado ?";
-      }
-      await this.$swal
-        .fire({
-          title: sm,
+      await this.$swal.fire({
+          title: "Desea eliminar al Empleado ?",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
-            this.empleadoService
-              .updateEstado(this.empleado, estado)
-              .then((result) => {
+            this.empleadoService.updateEmpleadoEliminar(this.empleado).then((result) => {
                 if (result.status == 200) {
-                  this.sccService
-                    .updateBiometricoTipo(this.empleado, estado)
-                    .then();
-                  this.moduloService
-                    .updateModuloUsuario(this.empleado.cif, 1, estado)
-                    .then(); // 1 xq em id del modulo EMP es 1
-                  this.$swal
-                    .fire("El Ciudadano fue removido con exito", "", "success")
-                    .then((r) => {
-                      if (r) location.reload();
+                  this.sccService.updateBiometricoEliminar(this.empleado).then();
+                  this.moduloService.updateEliminarModuloEmpleado(this.empleado,this.usuario.cif).then(); // 1 xq em id del modulo EMP es 1
+                  this.$swal.fire("El Empleado fue removido con exito", "", "success").then((r) => {
+                      if (r) this.$router.push('/listadeciudadanos');
                     });
                 } else {
-                  this.$swal.fire(
-                    "Los Datos no fueron Guardados Error" + result.status,
-                    "",
-                    "error"
-                  );
+                  this.$swal.fire("Los Datos no fueron Guardados Error" + result.status,"","error");
                 }
               });
           } else {
@@ -915,6 +866,34 @@ export default {
     clicktab(tab) {
       this.tab = tab;
     },
+    esFechaPasada(fechaSalida) {
+      if (!fechaSalida) return 'warning';
+      
+      const fechaTermino = new Date(fechaSalida);
+      const hoy = new Date();
+      
+      // Normalizar fechas (ignorar horas)
+      fechaTermino.setHours(0, 0, 0, 0);
+      hoy.setHours(0, 0, 0, 0);
+      
+      return fechaTermino < hoy ? 'danger' : 'success';
+    },
+    calcularDiasRestantes(fi,fs) {
+      const fechaInicio = new Date(fi);
+      const fechaSalida = new Date(fs);
+      const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
+      const fechaActual = new Date();
+      if (!fechaSalida) this.total = 0;
+      
+      if (fechaActual >= fechaSalida) {
+        this.total =100;
+      }
+      else{
+        const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
+        const progreso = (diasPasados / diasTotales) * 100;
+        this.total = parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
+      }
+    }
   },
 };
 </script>

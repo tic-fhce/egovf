@@ -79,33 +79,36 @@ export default class EmpleadoService {
     });
   }
 
-  ////////////////////////////////
   getListaModulo() {
     return axios.get(empleadoUrl + "modulo/listar");
   }
-  
-  
+
   addEmpleadoModulo(modulo) {
-    const moduloaux = {
-      _01cif: modulo.cif,
-      _02id_modulo: modulo.id_modulo,
-      _03estado: 1,
+    const empleadoModuloDtoRequest = {
+      "cif": modulo.cif,
+      "id_modulo": modulo.id_modulo,
+      "estado": 1
     };
-    return axios.post(empleadoUrl + "empmodulo/addEmpleadoModulo", moduloaux);
+    return axios.post(empleadoUrl + "empmodulo/addEmpleadoModulo", empleadoModuloDtoRequest);
   }
   
-  updateEstado(empleado, estado) {
-    const fecha = new Date();
-    const empleadoaux = {
-      id: empleado.id,
-      _01cif: empleado.cif,
-      _02tipo_empleado_id: empleado.tipoempleado_id,
-      _03fecha: empleado.fecha,
-      _04estado: estado,
-      _05salida: fecha.toLocaleDateString("en-CA"),
+  updateEmpleadoEliminar(empleado) {
+    const empleadoDtoResponse = {
+      "id": empleado.id,
+      "cif": empleado.cif,
+      "tipo_empleado_id": 0,
+      "fecha": empleado.fecha,
+      "estado": 0,
+      "salida": empleado.salida
     };
-    return axios.put(empleadoUrl + "empleado/updateEmpleado", empleadoaux);
+    return axios.put(empleadoUrl + "empleado/updateEmpleado", empleadoDtoResponse);
   }
+  
+  ////////////////////////////////
+  
+  
+  
+
   
   getListaEmpleadoTipo(tipo) {
     return axios.get(empleadoUrl + "empleado/listarTipo", {

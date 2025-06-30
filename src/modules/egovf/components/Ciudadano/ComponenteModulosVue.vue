@@ -2,13 +2,12 @@
   <CRow>
     <CCol :lg="12">
       <CCard>
-        <CCardHeader class="headercolor">
-          <CRow>
-            <CCol :lg="6">Modulos Del Ciudadano</CCol>
-            <CCol :lg="6" class="text-end">
-              <CButton @click="clickModalModulo(true)" color="success" class="font" size="sm"><CIcon icon="cil-cloud-upload" class="me-2" />Agregar</CButton>
-            </CCol>
-          </CRow>
+        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+              <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+              <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+          </div>
+          <CButton @click="clickModalModulo(true)" color="dark" class="font" size="sm"><CIcon icon="cil-cloud-upload" class="me-2" />Agregar</CButton>
         </CCardHeader>
         <CCardBody>
           <CRow>
@@ -35,7 +34,7 @@
     <form @submit.prevent="addModulo()">
       <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
         <CModalTitle>
-          <h5>Agregar Modulos</h5>
+          <h6><CIcon icon="cil-cloud-upload" class="me-2" />Agregar Modulos</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -52,7 +51,7 @@
         </div>
         <hr />
         <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Modulo</label>
+          <label for="datos" class="col-6 col-form-label">Modulo : </label>
           <div class="col-6">
             <select v-model="id_modulo" class="form-control" required="true">
               <option v-for="modulo in listaModulo" :value="modulo.id" :key="modulo.id">
@@ -80,6 +79,7 @@ export default {
   props: ["cif", "egovf"],
   data() {
     return {
+      titulo:"Modulos del Ciudadano",
       modalModulo: false,
       moduloService: null,
       listaModulo: [],
@@ -98,6 +98,7 @@ export default {
       modulo: {
         cif: 0,
         idmodulo: 0,
+        quien:0
       },
     };
   },
@@ -111,11 +112,12 @@ export default {
   },
   mounted() {
     this.getDatos();
-    this.getModulos();
+    
   },
   updated() {
     if (this.cif > 0 && this.getPB) {
       this.getModuloCifEmpleado();
+      this.getModulos();
       this.getPB = false;
     }
   },
@@ -129,13 +131,13 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
-
+        this.usuario.foto = this.$cookies.get("foto");
         this.moduloService.headersUsuario(this.usuario.token);
       }
     },
     async getModulos() {
       // correcto funcionando
-      await this.moduloService.getModulos().then((response) => {
+      await this.moduloService.getModulos(this.cif).then((response) => {
         this.listaModulo = response.data;
       });
     },
@@ -143,12 +145,12 @@ export default {
       // correcto funcionando
       await this.moduloService.getModuloCifEmpleado(this.cif).then((response) => {
         this.listaModuloCifEmpleado = response.data;
-        console.log(this.listaModuloCifEmpleado);
       });
     },
     async addModulo() {
       this.modulo.cif = this.cif;
       this.modulo.idmodulo = this.id_modulo;
+      this.modulo.quien=this.usuario.cif;
       await this.$swal
         .fire({
           title: "Desea Agregar el Modulo al Ciudadano ?",
@@ -160,7 +162,7 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.moduloService.addModulo(this.modulo).then((response) => {
-              if (response.status == 200) {
+              if (response.status == 201) {
                 this.$swal.fire("El Modulo fue Agregado al Ciudadano Corectamente","","success").then((res) => {
                     if (res) location.reload();
                   });

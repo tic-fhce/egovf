@@ -21,6 +21,18 @@ export default class MenuService {
       },
     });
   }
+  addMenuUsuario(cif, idmenu) {
+    const menuUsuarioDtoRequest = {
+      "cif": cif,
+      "idmenu": idmenu,
+      "estado": 1
+    };
+    return axios.post(menuUrl + "menu/addMenuUsuario", menuUsuarioDtoRequest);
+  }
+  /////////////////////////////////////////////////////////
+
+
+
   updateMenuUsuario(id, cif, idmenu, estado) {
     const menu = {
       id: id,
@@ -30,12 +42,5 @@ export default class MenuService {
     };
     return axios.put(menuUrl + "updateMenuUsuario", menu);
   }
-  addMenuUsuario(cif, idmenu) {
-    const menuUsuario = {
-      _01cif: cif,
-      _02idmenu: idmenu,
-      _03estado: 1,
-    };
-    return axios.post(menuUrl + "addMenuUsuario", menuUsuario);
-  }
+  
 }

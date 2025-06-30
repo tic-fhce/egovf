@@ -1,22 +1,32 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item">
+                <router-link to="/tipoempleado" class="breadcrumb-link">Tipo Empleado</router-link>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
         <CCol :xs="12">
             <CCard>
-                <CCardHeader class="headercolor">
-                    <CRow>
-                        <CCol :lg="6"><label class="d-none d-md-flex me-auto">{{ titulo }}</label></CCol>
-                        <CCol :lg="6" class="text-end">
-                            <CDropdown variant="btn-group">
-                                <CDropdownToggle  color="success" class="font" size="sm"><CIcon icon="cil-menu" class="me-2"/>Opciones</CDropdownToggle>
-                                <CDropdownMenu>
-                                    <CDropdownItem><CButton @click="clickModalObs(true)" size="sm">Agregar Observaciones</CButton></CDropdownItem>
-                                    <CDropdownDivider/>
-                                    <CDropdownItem><CButton @click="clickModalRecord(true)" size="sm">Extraer Record</CButton></CDropdownItem>
-                                </CDropdownMenu>
-                            </CDropdown>
-                        </CCol>
-                    </CRow>
+                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                        <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                    </div>
+                    <CDropdown variant="btn-group">
+                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" size="lg" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                            <CDropdownDivider/>
+                            <CDropdownItem><CButton @click="clickModalRecord(true)" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2" /> Extraer Record</CButton></CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
                 </CCardHeader>
+
                 <CCardBody>
                     <div class="table-responsive">
                         <table id="ciudadanoTabla" class="table table-striped table-hover">
@@ -29,7 +39,12 @@
                                 <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
                                     <th scope="row">{{ciudadano.idPersona}}</th>
                                     <td><CAvatar :src="ciudadano.foto" size="md"/></td>
-                                    <td>{{ciudadano.cif}}</td>
+                                    <td>
+                                        {{ciudadano.cif}}
+                                        <CProgress>
+                                            <CProgressBar :key="ciudadano.idPersona" :color="ciudadano.color" :value="ciudadano.total">{{ ciudadano.total }} %</CProgressBar>
+                                        </CProgress>
+                                    </td>
                                     <td>
                                         {{ciudadano.nombre}} {{ciudadano.paterno}} {{ciudadano.materno}}<br>
                                         {{ciudadano.ci}}<br>
@@ -40,7 +55,7 @@
                                         <label class="fontabla">{{ ciudadano.unidad }}</label>
                                     </td>
                                     <td>
-                                        <CButton color="success" class="font" @click="moduloScc(ciudadano.cif)" size="sm"><CIcon icon="cil-clipboard" class="me-2"/>MSCC</CButton>
+                                        <CButton v-if="ciudadano.modulo.toLowerCase() === 'modulo scc'" color="success" class="font" @click="moduloScc(ciudadano.cif)" size="sm"><CIcon icon="cil-clipboard" class="me-2"/>MSCC</CButton>
                                     </td>
                                 </tr>
                             </tbody>
@@ -56,7 +71,7 @@
     <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
         <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
             <CModalTitle>
-                <h5>Agregar Observaciones de Asistencia</h5>
+                <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/> Agregar Observaciones de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
 
@@ -155,7 +170,7 @@
     <form @submit.prevent="getRecord()">
         <CModalHeader class="headercolor" dismiss @close="clickModalRecord(false)">
             <CModalTitle>
-                <h5>Extraer Record de Asistencias</h5>
+                <h6><CIcon icon="cil-cloud-download" size="lg" class="me-2" /> Extraer Record de Asistencias</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -296,6 +311,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get("foto");
 
                 this.egovfService.headersUsuario(this.usuario.token);
             }
@@ -327,7 +343,10 @@ export default {
                         celular:'',
                         sigla:'',
                         unidad:'',
-                        foto:''
+                        foto:'',
+                        modulo:'',
+                        total:0,
+                        color:''
                     };
                     if(empleado.cif == ciudadano.cif){
                         ce.idPersona = ciudadano.idPersona;
@@ -341,6 +360,9 @@ export default {
                         ce.sigla = ciudadano.sigla;
                         ce.unidad = ciudadano.unidad;
                         ce.foto = ciudadano.foto;
+                        ce.modulo = empleado.empleado;
+                        ce.color = this.esFechaPasada(empleado.salida);
+                        ce.total = this.calcularDiasRestantes(empleado.fecha,empleado.salida);
                         this.listaCiudadanos.push(ce);
                         return false;
                     }
@@ -403,8 +425,8 @@ export default {
             }
             this.listaGestion = lgestion;
         },
-        // Funcion El tipo de Empleado {adminsitrativo, docente, etc.}
         async getTipoEmpleado() {
+            // Funcion El tipo de Empleado {adminsitrativo, docente, etc.}
             await this.empleadoService.getTipoEmpleado(this.id_empleado).then((response) => {
                 this.tipoEmpleadoObj = response.data;
             });
@@ -459,6 +481,31 @@ export default {
         mostrarHoraSalida() {
             const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
             return tiposPermitidos.includes(this.obsall.tipo);
+        },
+        esFechaPasada(fechaSalida) {
+        if (!fechaSalida) return 'warning';
+        
+            const fechaTermino = new Date(fechaSalida);
+            const hoy = new Date();
+            
+            // Normalizar fechas (ignorar horas)
+            fechaTermino.setHours(0, 0, 0, 0);
+            hoy.setHours(0, 0, 0, 0);
+            
+            return fechaTermino < hoy ? 'danger' : 'success';
+        },
+        calcularDiasRestantes(fi,fs) {
+            const fechaInicio = new Date(fi);
+            const fechaSalida = new Date(fs);
+            const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
+            const fechaActual = new Date();
+            if (!fechaSalida) return 0;
+            
+            if (fechaActual >= fechaSalida) return 100;
+
+            const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
+            const progreso = (diasPasados / diasTotales) * 100;
+            return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
         }
     }
 }

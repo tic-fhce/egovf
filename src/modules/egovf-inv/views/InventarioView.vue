@@ -1,7 +1,14 @@
 <template>
+    <nav aria-label="breadcrumb">
+  <ol class="breadcrumb custom-breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">
+      Inventario >
+    </li>
+  </ol>
+</nav>
     <CRow>
         <CCol :lg="3">
-            <br />
+            <br/>
             <CCard>
                 <CCardHeader class="headercolor text-center">Tipo de Equipos</CCardHeader>
                 <CCardBody class="text-center">
@@ -13,15 +20,16 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.id">
+        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.idTipo">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">{{tipo.sigla}}</CCardHeader>
                 <CCardBody class="text-center">
                     <CIcon customClassName="nav-icon" :icon="tipo.icono" class="menuicon"/> 
+                    
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getLista(tipo.id)">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getLista(tipo.idTipo)">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>

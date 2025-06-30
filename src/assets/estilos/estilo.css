@@ -83,3 +83,26 @@ body {
   width: 100px;  /* Ajusta el tamaño según necesites */
   height: 100px;
 }
+
+.custom-breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb-link {
+    text-decoration: none;
+    color: #00222f; /* blanco suave */
+    font-weight: 500;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--color-primary); /* verde suave */
+    text-shadow: 0 0 10px rgb(32, 255, 3); /* brillo sutil */
+    /* text-shadow: 0 0 10px rgba(7, 26, 59, 0.941); brillo sutil */
+  }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: #bbb;
+  }

@@ -105,6 +105,12 @@ import {
   cilLinkBroken,
   cilHistory,
   cilQrCode,
+  cilMedicalCross,
+  cilDoor,
+  cilScreenDesktop,
+  cilRouter,
+  cilCouch,
+  cilEducation,
   
 } from '@coreui/icons'
 
@@ -189,6 +195,12 @@ export const iconsSet = Object.assign(
     cilLinkBroken,
     cilHistory,
     cilQrCode,
+    cilMedicalCross,
+    cilDoor,
+    cilScreenDesktop,
+    cilRouter,
+    cilCouch,
+    cilEducation,
   },
   {
     cifUs,

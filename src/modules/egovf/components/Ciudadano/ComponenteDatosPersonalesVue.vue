@@ -1,11 +1,14 @@
 <template>
     <CRow>
         <CCol :lg="12">
-            <CCard>
-                <CCardHeader class="headercolor">
-                    Perfil del Ciudadano : {{egovf.cif}}
-                </CCardHeader>
-                <CCardBody>
+            <CAccordion>
+              <CAccordionItem :item-key="1">
+                <CAccordionHeader class="accordion">
+                    <CIcon icon="cil-user" size="lg" class="me-2 text-light" />
+                    <label class="mb-0 fs-6 text-white">Perfil del Ciudadano : {{egovf.cif}}</label>
+                </CAccordionHeader>
+
+                <CAccordionBody>
                     <CNav variant="tabs">
                         <CNavItem><CNavLink :active="tab == 1" @click="clicktab(1)" ><CButton size="sm"><CIcon icon="cil-menu"></CIcon><label class="d-none d-md-flex me-auto">Datos Personales</label></CButton></CNavLink></CNavItem>
                         <CNavItem><CNavLink :active="tab == 2" @click="clicktab(2)" ><CButton size="sm"><CIcon icon="cil-user"></CIcon><label class="d-none d-md-flex me-auto">Usuario</label></CButton></CNavLink></CNavItem>
@@ -31,7 +34,7 @@
                                     <br>
                                     <ul>
                                         <li class="lista">ID app : {{egovf.idPersona}}</li>
-                                        <li class="lista">Celular : <a :href=what+egovf.celular target="_blank">{{egovf.celular}}</a></li>
+                                        <li class="lista">Celular : <a :href=what+egovf.celular target="_blank"> {{egovf.celular}}</a></li>
                                         <li class="lista">Fecha N : {{egovf.fecha}}</li>
                                         <li class="lista" v-if="egovf.sexo == 1">Sexo : Femenino</li>
                                         <li class="lista" v-if="egovf.sexo == 2">Sexo : Masculino</li>
@@ -92,8 +95,9 @@
                         </CTabPane>
                         <!-- End Actualizar Datos-->
                     </CTabContent>
-                </CCardBody>
-            </CCard>
+                </CAccordionBody>
+              </CAccordionItem>
+            </CAccordion>
         </CCol>
     </CRow>
 
@@ -283,6 +287,7 @@ export default {
             this.usuario.pass = this.$cookies.get('pass');
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
+            this.usuario.foto = this.$cookies.get("foto");
             this.what + this.egovf.celular;
         },
         updatePersona() {
@@ -458,3 +463,14 @@ export default {
     }
 }
 </script>
+<style scoped>
+.accordion{
+    --cui-accordion-btn-color: white;
+    --cui-accordion-btn-bg: var(--color-primary);
+    --cui-accordion-btn-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round'><path d='m2 5 6 6 6-6'/></svg>");
+    --cui-accordion-active-bg: var(--color-primary);
+    --cui-accordion-active-color: white;
+    --cui-accordion-btn-color-active: white;
+    --cui-accordion-btn-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round'><path d='m2 5 6 6 6-6'/></svg>");
+}
+</style>

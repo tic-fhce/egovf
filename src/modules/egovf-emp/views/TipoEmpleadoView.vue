@@ -1,15 +1,24 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} >
+            </li>
+        </ol>
+    </nav>
 
     <CRow>
-        <CCol :lg="3" class="text-center " v-for="l in listaTipo" :key="l.id">
-            <br>
+
+        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.id">
+            <br />
             <CCard>
-                <CCardImage orientation="top" :src=l.imagen></CCardImage>
-                <CCardBody>
-                    {{ l.detalle }}
+                <CCardHeader class="headercolor text-center">{{tipo.corto}}</CCardHeader>
+                <CCardBody class="text-center">
+                    <CIcon customClassName="nav-icon" :icon="tipo.imagen" class="menuicon"/> 
+                    <h6>{{tipo.detalle}}</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getEmpleado(l.id)">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getEmpleado(tipo.id)">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol> 

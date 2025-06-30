@@ -1,14 +1,31 @@
 <template>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb custom-breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ titulo }} >
+      </li>
+    </ol>
+  </nav>
     <CRow>
         <CCol :xs="12">
             <CCard>
-                <CCardHeader class="headercolor">
-                    <CRow>
-                        <CCol :lg="6">{{ titulo }}</CCol>
-                        <CCol :lg="6" class="text-end">
-                            <CButton @click="clickModalCiudadano(true)" color="success" class="font" size="sm"><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
-                        </CCol>
-                    </CRow>
+                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                    <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                  </div>
+                  <CDropdown variant="btn-group">
+                    <CDropdownToggle color="dark" class="font border-0" size="sm">
+                      <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
+                    </CDropdownToggle>
+                    <CDropdownMenu>
+                      <CDropdownItem>
+                        <CButton @click="clickModalCiudadano(true)" size="sm">
+                          <CIcon icon="cil-cloud-upload" size="lg" class="me-2" /> Agregar
+                        </CButton>
+                      </CDropdownItem>
+                    </CDropdownMenu>
+                  </CDropdown>
                 </CCardHeader>
                 <CCardBody>
                     <div class="table-responsive">
@@ -244,6 +261,7 @@ export default {
             this.usuario.pass=this.$cookies.get('pass');
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
+            this.usuario.foto = this.$cookies.get("foto");
 
             this.egovfService.headersUsuario(this.usuario.token);
             this.personaService.headersUsuario(this.usuario.token);

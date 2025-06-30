@@ -197,36 +197,10 @@ const routes = [
       },
       // MODULO SISTEMA DE INVENTARIO
       {
-        path: "/moduloinv:cifCiudadano",
-        name: "ModuloInvView",
-        component: () => import("@/views/Inv/ModuloInvView.vue"),
-      },
-      {
         //Revisado Nuevo
         path: "/invmodulomenu",
         name: "ModuloInvMenuView",
         component: () => import("@/modules/egovf-inv/views/ModuloInvMenuView.vue"),
-      },
-      
-      {
-        path: "/umoduloinv",
-        name: "UModuloInvView",
-        component: () => import("@/views/Usuario/UModuloInvView.vue"),
-      },
-      {
-        path: "/inventario",
-        name: "InventarioInvView",
-        component: () => import("@/views/Inv/InventarioInvView.vue"),
-      },
-      {
-        path: "/atespera",
-        name: "AtEsperaInvView",
-        component: () => import("@/views/Inv/AtEsperaInvView.vue"),
-      },
-      {
-        path: "/listaInventario:idtipo",
-        name: "ListaInventarioView",
-        component: () => import("@/views/Inv/ListaInventarioView.vue"),
       },
       //MODULO SRA
       {

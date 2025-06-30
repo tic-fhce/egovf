@@ -1,4 +1,14 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+        <li class="breadcrumb-item">
+            <router-link to="/listadeciudadanos" class="breadcrumb-link">Lista de Ciudadanos</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} : {{ cifCiudadano }} >
+        </li>
+        </ol>
+    </nav>
     <!-- Componente de Datos de la Persona -->
     <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf"/>
         
@@ -26,7 +36,7 @@ export default {
     },
     data(){
         return {
-            titulo:'Modulos del Ciudadano',
+            titulo:'Perfil del Ciudadano',
             egovfService:null,
             cifCiudadano:'',
             usuario:{
@@ -85,6 +95,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get("foto");
             }
         },
         async getEgovf(){//Funcion que debuelve los datos del ciudadano 

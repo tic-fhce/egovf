@@ -8,19 +8,19 @@ export default class InventarioService {
     return axios.get(inventarioUrl + "tipo/getTipo");
   }
   addTipo(tipo) {
-    const tipoDtoRequest = {
+    const tipoRequestDTO = {
       "sigla":tipo.sigla,
       "nombre":tipo.nombre,
       "icono":tipo.icono,
       "detalle":tipo.detalle
     };
-    return axios.post(inventarioUrl + "tipo/addTipo", tipoDtoRequest);
+    return axios.post(inventarioUrl + "tipo/addTipo", tipoRequestDTO);
   }
 
   getEquipoTipo(id) {
-    return axios.get(inventarioUrl + "equipo/getEquipoTipo", {
+    return axios.get(inventarioUrl + "equipo/getEquipotipo", {
       params: {
-        id: id,
+        idTipo: id,
       },
     });
   }
