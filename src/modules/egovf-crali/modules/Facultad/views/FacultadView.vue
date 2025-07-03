@@ -137,7 +137,7 @@ const eliminarFacultad = async(id_facultad: number) => {
     confirmButton:
       'bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 transition mr-5',
     cancelButton:
-      'bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition'
+      'bg-gray-700 text-black px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition'
   },
     buttonsStyling: false
   })
@@ -154,9 +154,11 @@ const eliminarFacultad = async(id_facultad: number) => {
 }
 const guardarFacultad = async () => {
   if (esEdicion.value) {
-    await updatedFacultad(facultadForm.value)
+    await updatedFacultad(facultadForm.value);
+    showToast('success', 'Facultad actualizada correctamente')
   } else {
     await createFacultad(facultadForm.value);
+    showToast('success', 'Facultad agregada correctamente')
   }
   await cargarFacultades();
   abrirModal(false)
