@@ -25,5 +25,10 @@ export const craliRoutes = {
       name: 'facultad',
       component: () => import('../modules/Facultad/views/FacultadView.vue')
     },
+    {
+      path: '/unidad',
+      name: 'unidad',
+      component: () => import('../modules/Unidad/view/UnidadView.vue')
+    },
   ]
 };
