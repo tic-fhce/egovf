@@ -96,7 +96,30 @@ export default {
 
           ]
         },
-        
+        {
+          "id": 3,
+          "titulo": "UNIDAD",
+          "descripcion": "Módulo de unidad",
+          "icono": "cil-clipboard",
+          "importancia": 1,
+          "menuDtoObj": [
+            {
+              "id": 1,
+              "titulo": "Unidad",
+              "ruta": "/unidad",
+              "icono": "icon",
+              "idModulo": 1
+            },
+            {
+              "id": 2,
+              "titulo": "Facultad",
+              "ruta": "/facultad",
+              "icono": "icon",
+              "idModulo": 1
+            },
+
+          ]
+        },
       ],
       moduloService: null,
       usuario: {

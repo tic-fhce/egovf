@@ -19,6 +19,11 @@ export const craliRoutes = {
       path: '/prestamos',
       name: 'prestamos',
       component: () => import('../modules/users/UserPrestamos.vue')
-    }
+    },
+    {
+      path: '/facultad',
+      name: 'facultad',
+      component: () => import('../modules/Facultad/views/FacultadView.vue')
+    },
   ]
 };

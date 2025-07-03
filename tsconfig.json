@@ -18,8 +18,10 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
-      ]
+        "src/*",
+      ],
+      "@env": ["src/env.js"],
+      "@sbf/*": ["src/modules/egovf-crali/*"]
     },
     "lib": [
       "esnext",
