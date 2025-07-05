@@ -14,7 +14,7 @@
         </CCardHeader>
         <CCardBody>
           <div class="table-responsive">
-            <table id="unidadesTabla" class="table table-striped table-hover">
+            <table v-if="tablaCargada" id="unidadesTabla" class="table table-striped table-hover">
               <thead>
                 <tr>
                   <th>Nro.</th>
@@ -127,6 +127,7 @@ const facultades = ref<Facultad[]>([])
 const modalVisible = ref(false)
 const esEdicion = ref(false)
 const btnEdit = ref('Agregar')
+const tablaCargada = ref(false)
 
 const unidadForm = ref<Unidad>({
   id_unidad: 0,
@@ -141,10 +142,13 @@ onMounted(async () => {
 
 async function cargarDatos() {
   try {
+    destruirDataTable()
+    tablaCargada.value = false
     facultades.value = await getFacultades()
     unidades.value = await getUnidades()
     await nextTick() // Espera al DOM
-    destruirDataTable()
+    tablaCargada.value = true
+    await nextTick() // Espera al DOM
     inicializarDataTable()
   } catch (error) {
     console.error('Error al cargar datos:', error)
@@ -207,7 +211,7 @@ const eliminarUnidad = async (id_unidad: number) => {
     unidades.value = unidades.value.filter(u => u.id_unidad !== id_unidad)
     showToast('success', 'Unidad eliminada correctamente')
     await cargarDatos();
-    location.reload()
+    // location.reload()
   } catch (error) {
     showToast('error', 'Error al eliminar la unidad')
   }
@@ -223,7 +227,7 @@ const guardarUnidad = async () => {
   }
   abrirModal(false)
   await cargarDatos()
-  location.reload()
+  // location.reload()
 
 }
 

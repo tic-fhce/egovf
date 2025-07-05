@@ -14,7 +14,7 @@
         </CCardHeader>
         <CCardBody>
           <div class="table-responsive">
-            <table id="facultadesTabla" class="table table-striped table-hover">
+            <table v-if="tablaCargada" id="facultadesTabla" class="table table-striped table-hover">
               <thead>
                 <tr>
                   <!-- <th>ID</th> -->
@@ -77,14 +77,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, nextTick  } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import {
   Facultad, getFacultades, createFacultad,
   updatedFacultad, deleteFacultad
 } from '../services/facultadService'
 import Swal from 'sweetalert2'
 
-// DataTables y jQuery
 import $ from 'jquery'
 import 'datatables.net'
 
@@ -94,22 +93,25 @@ const facultades = ref<Facultad[]>([])
 const modalVisible = ref(false)
 const esEdicion = ref(false)
 const btnEdit = ref('Agregar')
+const tablaCargada = ref(false)
 
 const facultadForm = ref<Facultad>({
   id_facultad: 0,
   nombre: '',
 })
 
-// Cargar datos al montar el componente
 onMounted(async () => {
   await cargarFacultades()
 })
 
 async function cargarFacultades() {
   try {
-    facultades.value = await getFacultades()
-    await nextTick() // Espera al DOM
     destruirDataTable()
+    tablaCargada.value = false
+    facultades.value = await getFacultades()
+    await nextTick()
+    tablaCargada.value = true
+    await nextTick()
     inicializarDataTable()
   } catch (error) {
     console.error('Error al obtener facultades:', error)
@@ -117,12 +119,12 @@ async function cargarFacultades() {
 }
 
 const inicializarDataTable = () => {
-  $('#facultadesTabla').DataTable({
-    destroy: true,
-  })
+  const tableEl = document.getElementById('facultadesTabla')
+  if (!tableEl) return
+  $('#facultadesTabla').DataTable({ destroy: true })
 }
 
-const destruirDataTable =() => {
+const destruirDataTable = () => {
   const table = $('#facultadesTabla').DataTable()
   if (table) {
     table.destroy()
@@ -145,8 +147,8 @@ function editarFacultad(facultad: Facultad) {
   abrirModal(true)
 }
 
-const eliminarFacultad = async(id_facultad: number) => {
-   const confirm = await Swal.fire({
+const eliminarFacultad = async (id_facultad: number) => {
+  const confirm = await Swal.fire({
     title: '¿Estás seguro?',
     text: 'Esta acción no se puede deshacer.',
     icon: 'warning',
@@ -154,11 +156,9 @@ const eliminarFacultad = async(id_facultad: number) => {
     confirmButtonText: 'Sí, eliminar',
     cancelButtonText: 'Cancelar',
     customClass: {
-    confirmButton:
-      'bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 transition mr-5',
-    cancelButton:
-      'bg-gray-700 text-black px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition'
-  },
+      confirmButton: 'bg-red-600 text-white px-4 py-2 rounded-md mr-3',
+      cancelButton: 'bg-gray-500 text-white px-4 py-2 rounded-md'
+    },
     buttonsStyling: false
   })
 
@@ -168,23 +168,26 @@ const eliminarFacultad = async(id_facultad: number) => {
     await deleteFacultad(id_facultad)
     facultades.value = facultades.value.filter(f => f.id_facultad !== id_facultad)
     showToast('success', 'Facultad eliminada correctamente')
-    await cargarFacultades();
-    location.reload()
+    await cargarFacultades()
   } catch (error) {
     showToast('error', 'Error al eliminar la facultad')
   }
 }
+
 const guardarFacultad = async () => {
-  if (esEdicion.value) {
-    await updatedFacultad(facultadForm.value);
-    showToast('success', 'Facultad actualizada correctamente')
-  } else {
-    await createFacultad(facultadForm.value);
-    showToast('success', 'Facultad agregada correctamente')
+  try {
+    if (esEdicion.value) {
+      await updatedFacultad(facultadForm.value)
+      showToast('success', 'Facultad actualizada correctamente')
+    } else {
+      await createFacultad(facultadForm.value)
+      showToast('success', 'Facultad agregada correctamente')
+    }
+    abrirModal(false)
+    await cargarFacultades()
+  } catch (error) {
+    showToast('error', 'Error al guardar la facultad')
   }
-  abrirModal(false)
-  await cargarFacultades();
-  location.reload()
 }
 
 const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
@@ -197,7 +200,6 @@ const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: stri
     position: 'top-end',
   })
 }
-
 </script>
 
 <style scoped>
