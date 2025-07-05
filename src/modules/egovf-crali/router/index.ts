@@ -11,10 +11,14 @@ export const craliRoutes = {
     //   component: () => import('@/modules/admin/views/DashboardView.vue')
     // },
     {
-      path: '/libros',
-      name: 'libros',
-      component: () => import('../modules/libros/LibrosView.vue')
+      path: '/biblioteca',
+      name: 'biblioteca',
+      component: () => import('../modules/Biblioteca/views/BibliotecaView.vue')
     },
+    //   path: '/libros',
+    //   name: 'libros',
+    //   component: () => import('../modules/libros/LibrosView.vue')
+    // },
     {
       path: '/prestamos',
       name: 'prestamos',

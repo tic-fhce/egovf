@@ -44,8 +44,8 @@ export default {
           "menuDtoObj": [
             {
               "id": 1,
-              "titulo": "Dashboard",
-              "ruta": "/dashboard",
+              "titulo": "Biblioteca",
+              "ruta": "/biblioteca",
               "icono": "icon",
               "idModulo": 1
             },
