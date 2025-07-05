@@ -108,13 +108,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import {
   Unidad, getUnidades, createUnidad,
   updatedUnidad, deleteUnidad
 } from '../service/unidadService'
 import { Facultad, getFacultades } from '../../Facultad/services/facultadService'
 import Swal from 'sweetalert2'
+
+// DataTables y jQuery
+import $ from 'jquery'
+import 'datatables.net'
 
 const titulo = 'Gestión de Unidades'
 
@@ -139,11 +143,25 @@ async function cargarDatos() {
   try {
     facultades.value = await getFacultades()
     unidades.value = await getUnidades()
+    await nextTick() // Espera al DOM
+    destruirDataTable()
+    inicializarDataTable()
   } catch (error) {
     console.error('Error al cargar datos:', error)
   }
 }
+const inicializarDataTable = () => {
+  $('#unidadesTabla').DataTable({
+    destroy: true,
+  })
+}
 
+const destruirDataTable =() => {
+  const table = $('#unidadesTabla').DataTable()
+  if (table) {
+    table.destroy()
+  }
+}
 function abrirModal(estado: boolean) {
   modalVisible.value = estado
   if (!estado) {
@@ -188,6 +206,8 @@ const eliminarUnidad = async (id_unidad: number) => {
     await deleteUnidad(id_unidad)
     unidades.value = unidades.value.filter(u => u.id_unidad !== id_unidad)
     showToast('success', 'Unidad eliminada correctamente')
+    await cargarDatos();
+    location.reload()
   } catch (error) {
     showToast('error', 'Error al eliminar la unidad')
   }
@@ -201,8 +221,10 @@ const guardarUnidad = async () => {
     await createUnidad(unidadForm.value)
     showToast('success', 'Unidad agregada correctamente')
   }
-  await cargarDatos()
   abrirModal(false)
+  await cargarDatos()
+  location.reload()
+
 }
 
 const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {

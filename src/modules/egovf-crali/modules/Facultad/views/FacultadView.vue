@@ -77,12 +77,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick  } from 'vue'
 import {
   Facultad, getFacultades, createFacultad,
   updatedFacultad, deleteFacultad
 } from '../services/facultadService'
 import Swal from 'sweetalert2'
+
+// DataTables y jQuery
+import $ from 'jquery'
+import 'datatables.net'
 
 const titulo = 'Gestión de Facultades'
 
@@ -104,8 +108,24 @@ onMounted(async () => {
 async function cargarFacultades() {
   try {
     facultades.value = await getFacultades()
+    await nextTick() // Espera al DOM
+    destruirDataTable()
+    inicializarDataTable()
   } catch (error) {
     console.error('Error al obtener facultades:', error)
+  }
+}
+
+const inicializarDataTable = () => {
+  $('#facultadesTabla').DataTable({
+    destroy: true,
+  })
+}
+
+const destruirDataTable =() => {
+  const table = $('#facultadesTabla').DataTable()
+  if (table) {
+    table.destroy()
   }
 }
 
@@ -148,6 +168,8 @@ const eliminarFacultad = async(id_facultad: number) => {
     await deleteFacultad(id_facultad)
     facultades.value = facultades.value.filter(f => f.id_facultad !== id_facultad)
     showToast('success', 'Facultad eliminada correctamente')
+    await cargarFacultades();
+    location.reload()
   } catch (error) {
     showToast('error', 'Error al eliminar la facultad')
   }
@@ -160,8 +182,9 @@ const guardarFacultad = async () => {
     await createFacultad(facultadForm.value);
     showToast('success', 'Facultad agregada correctamente')
   }
-  await cargarFacultades();
   abrirModal(false)
+  await cargarFacultades();
+  location.reload()
 }
 
 const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
