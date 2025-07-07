@@ -344,6 +344,16 @@ export default class SccService {
     });
   }
 
+  updateTipo(cif, tipo) {
+    //Servicio para cambiar el tipo de Empleado
+    return axios.put(msccUrl + "biometrico/updateTipo",null, {
+      params: {
+        cif: cif,
+        tipo: tipo
+      }
+    });
+  }
+
   //###############################################################################
   
   getListarBiometrico() {
@@ -375,10 +385,6 @@ export default class SccService {
     return axios.put(msccUrl + "biometrico/updateBiometrico", biometricoDtoResponse);
   }
   
-  
-  
-  
-  
   getObs(cif, gestion, mes) {
     return axios.get(msccUrl + "obs/getObs", {
       params: {
@@ -391,15 +397,7 @@ export default class SccService {
   estadoBiometrico(bio) {
     return axios.put(msccUrl + "biometrico/estadoBiometrico", bio);
   }
-  updateTipo(cif, tipo) {
-    //Servicio para cambiar el tipo de Empleado
-    return axios.put(msccUrl + "biometrico/updateTipo", {
-      params: {
-        cif: cif,
-        tipo: tipo,
-      },
-    });
-  }
+  
   
   
   // Services para el  MODELO EQUIPO

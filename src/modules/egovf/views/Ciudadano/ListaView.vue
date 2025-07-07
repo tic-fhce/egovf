@@ -38,7 +38,9 @@
                             <tbody>
                                 <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
                                     <th scope="row">{{ciudadano.idPersona}}</th>
-                                    <td><CAvatar :src="ciudadano.foto" size="md"/></td>
+                                    <td>
+                                      <CImage :src="ciudadano.foto" width="70" height="70"/>
+                                    </td>
                                     <td>{{ciudadano.cif}}</td>
                                     <td>
                                       {{ciudadano.nombre}} {{ciudadano.paterno}} {{ciudadano.materno}}<br>
@@ -208,7 +210,8 @@ export default {
             celular:'',
             pass:'',
             unidad:'',
-            sigla:''
+            sigla:'',
+            foto:''
           },
           persona:{
             cif:0,
@@ -365,4 +368,5 @@ export default {
 </script>
 <style scoped>
 @import 'datatables.net-dt';
+
 </style>

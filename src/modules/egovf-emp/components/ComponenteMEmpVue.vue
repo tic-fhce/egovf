@@ -33,9 +33,8 @@
                   <CButton v-if="this.total===100" color="danger" class="font" size="sm" @click="updateEstado()" >Eliminar Empleado</CButton>
                 </template>
                 <template #title>Inicio del Contrato : {{ empleado.fecha }}</template>
-                <template #value>{{ empleado.empleado }}</template>
-              </CWidgetStatsB>
-              
+                <template #value>{{ empleado.empleado }} </template>
+              </CWidgetStatsB>            
           </CCol>
 
           <!-- Tarjetas de Empleado-->
@@ -202,11 +201,7 @@
   <!-- Modal  Modulo-->
   <CModal :visible="modalModulo" @close="clickModalModulo(false)">
     <form @submit.prevent="addEmpleadoModulo()">
-      <CModalHeader
-        class="headercolor"
-        dismiss
-        @close="clickModalModulo(false)"
-      >
+      <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Modulos</h6>
         </CModalTitle>
@@ -259,6 +254,13 @@
           <label for="servicio" class="col-4 col-form-label">Servicios Prestados</label>
           <div class="col-8">
             <textarea class="form-control" v-model="contrato.servicio" required="true" rows="5"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="servicio" class="col-4 col-form-label">Cargo</label>
+          <div class="col-8">
+            <input type="text" class="form-control" v-model="contrato.cargo" placeholder="Cargo del Empleado" required="true" >
           </div>
         </div>
 
@@ -321,23 +323,41 @@
     <form @submit.prevent="updateContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
         <CModalTitle>
-          <h5>Editar Contrato</h5>
+          <h6><CIcon icon="cil-pencil" class="me-2" />Editar Contrato</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <ComponenteNombres :datos="datos" />
         <hr />
         <div class="mb-3 row">
-          <label for="numero" class="col-4 col-form-label" >Numero de Contrato</label>
+          <label for="numero" class="col-4 col-form-label">Numero de Contrato</label>
           <div class="col-8">
             <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true" />
           </div>
         </div>
 
         <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Servicios prestados</label>
+          <label for="servicio" class="col-4 col-form-label">Servicios Prestados</label>
           <div class="col-8">
             <textarea class="form-control" v-model="setContrato.servicio" required="true" rows="5"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="servicio" class="col-4 col-form-label">Cargo</label>
+          <div class="col-8">
+            <input type="text" class="form-control" v-model="setContrato.cargo" placeholder="Cargo del Empleado" required="true" >
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+          <label for="servicio" class="col-4 col-form-label">Tipo de Empleado</label>
+          <div class="col-8">
+            <select v-model="setContrato.idTipoEmpleado" class="form-control" required="true">
+              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+                {{ lte.detalle }}
+              </option>
+            </select>
           </div>
         </div>
 
@@ -382,10 +402,9 @@
       </CModalBody>
       <CModalFooter>
         <CButton @click="clickModalEditarContrato(false)" color="danger" class="font" >
-          <CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-check-alt" class="me-2" />Actualizar Contrato
-        </button>
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
+        <button class="btn btn-success font"><CIcon icon="cil-check-alt" class="me-2" />Actualizar Contrato</button>
       </CModalFooter>
     </form>
   </CModal>
@@ -475,7 +494,8 @@ export default {
         fin: "",
         gestion: 0,
         detalle: "",
-        idTipoEmpleado:0
+        idTipoEmpleado:0,
+        cargo:""
       },
       setContrato: {
         id: 0,
@@ -488,7 +508,8 @@ export default {
         fin: "",
         gestion: 0,
         detalle: "",
-        idTipoEmpleado:0
+        idTipoEmpleado:0,
+        cargo:""
       },
       unidad: {
         id: 0,
@@ -708,29 +729,28 @@ export default {
           return false;
         }
       });
-      await this.$swal
-        .fire({
+      await this.$swal.fire({
           title: "Desea Actualizar el Contrato del Empleado ?",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
-            this.empleadoService.updateContrato(this.setContrato).then((response) => {
+            this.empleadoService.updateContrato(this.setContrato,this.egovf.foto).then((response) => {
                 if (response.status == 200) {
                   this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                       if (respon.status == 200) {
                         this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
-                            if (res.status == 201) {
-                              this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
-                                  if (r) location.reload();
-                                });
-                            } else {
-                              this.$swal.fire("Los Datos de Unidad no fueron Guardados Error" + response.status,"", "error");
-                            }
-                          });
+                          this.sccService.updateTipo(this.egovf.cif, this.setContrato.idTipoEmpleado).then();
+                          if (res.status == 201) {
+                            this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
+                              if (r) location.reload();
+                            });
+                          } else {
+                            this.$swal.fire("Los Datos de Unidad no fueron Guardados Error" + response.status,"", "error");
+                          }
+                        });
                       } else {
                         this.$swal.fire("Los Datos del Usuario No fueron Actualizados" + response.status,"","error");
                       }
@@ -813,10 +833,11 @@ export default {
             this.empleadoService.updateEmpleadoEliminar(this.empleado).then((result) => {
                 if (result.status == 200) {
                   this.sccService.updateBiometricoEliminar(this.empleado).then();
-                  this.moduloService.updateEliminarModuloEmpleado(this.empleado,this.usuario.cif).then(); // 1 xq em id del modulo EMP es 1
+                  this.moduloService.updateEliminarModuloEmpleado(this.empleado.cif,this.usuario.cif).then(); // 1 xq em id del modulo EMP es 1
+                  
                   this.$swal.fire("El Empleado fue removido con exito", "", "success").then((r) => {
-                      if (r) this.$router.push('/listadeciudadanos');
-                    });
+                      if (r) location.reload();
+                  });
                 } else {
                   this.$swal.fire("Los Datos no fueron Guardados Error" + result.status,"","error");
                 }
@@ -846,7 +867,6 @@ export default {
       this.modalEditarContrato = modal;
     },
     getContrato(id) {
-      console.log(this.contratos);
       this.contratos.forEach((con) => {
         if (con.id === id) {
           this.setContrato.id = con.id;
@@ -859,6 +879,8 @@ export default {
           this.setContrato.fin = con.fin;
           this.setContrato.gestion = con.gestion;
           this.setContrato.detalle = con.detalle;
+          this.setContrato.idTipoEmpleado=con.idTipoEmpleado;
+          this.setContrato.cargo=con.cargo;
         }
       });
       this.clickModalEditarContrato(true);

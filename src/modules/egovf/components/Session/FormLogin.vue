@@ -97,8 +97,9 @@ const login = async (e) => {
       title: error?.title ?? 'Servidor no encontrado',
       text: error?.text ?? 'El servidor no está respondiendo, comuniquese con el administrador.',
       // footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
-    })
-    location.reload();
+    }).then((r)=>{
+      if(r) location.reload(); 
+    });
   }
 }
 

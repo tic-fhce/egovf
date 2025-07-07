@@ -158,8 +158,7 @@ export default {
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.moduloService.addModulo(this.modulo).then((response) => {
               if (response.status == 201) {

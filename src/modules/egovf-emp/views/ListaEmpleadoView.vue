@@ -55,7 +55,10 @@
                                         <label class="fontabla">{{ ciudadano.unidad }}</label>
                                     </td>
                                     <td>
-                                        <CButton v-if="ciudadano.modulo.toLowerCase() === 'modulo scc'" color="success" class="font" @click="moduloScc(ciudadano.cif)" size="sm"><CIcon icon="cil-clipboard" class="me-2"/>MSCC</CButton>
+                                        <CButtonGroup role="group">
+                                            <CButton v-if="ciudadano.modulo.toLowerCase() === 'modulo scc'" color="success" class="font" @click="moduloScc(ciudadano.cif)" size="sm"><CIcon icon="cil-clipboard"/></CButton>
+                                            <CButton v-if="ciudadano.total === 100" color="danger" class="font" @click="moduloEmp(ciudadano.cif)" size="sm"><CIcon icon="cil-trash"/></CButton>
+                                        </CButtonGroup>
                                     </td>
                                 </tr>
                             </tbody>
@@ -441,6 +444,14 @@ export default {
         moduloScc(cif){
             this.$router.push({
                 name: "ModuloSccView",
+                params:{
+                    cifCiudadano:cif
+                }
+            });
+        },
+        moduloEmp(cif){
+            this.$router.push({
+                name: "ModuloEmpView",
                 params:{
                     cifCiudadano:cif
                 }

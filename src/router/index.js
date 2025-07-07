@@ -51,6 +51,11 @@ const routes = [
         component: () => import("@/modules/egovf/views/Ciudadano/ListaView.vue"),
       },
       {
+        path: "/ciudadanos",
+        name: "ListaCiudadanoView",
+        component: () => import("@/modules/egovf/views/Ciudadano/ListaCiudadanoView.vue"),
+      },
+      {
         path: "/perfilCiudadano:cifCiudadano",
         name: "PerfilCiudadanoView",
         component: () => import("@/modules/egovf/views/Ciudadano/PerfilCiudadanoView.vue"),

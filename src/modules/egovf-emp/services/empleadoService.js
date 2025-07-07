@@ -42,11 +42,12 @@ export default class EmpleadoService {
       "fin":contrato.fin,
       "gestion": fecha.getFullYear(),
       "detalle": contrato.detalle,
-      "idTipoEmpleado": contrato.idTipoEmpleado
+      "idTipoEmpleado": contrato.idTipoEmpleado,
+      "cargo":contrato.cargo
     };
     return axios.post(empleadoUrl + "contrato/addContrato", contratoDtoRequest);
   }
-  updateContrato(contrato) {
+  updateContrato(contrato,foto) {
     let numero = contrato.numerocontrato;
     const contratoDtoResponse = {
       "id": contrato.id,
@@ -58,7 +59,9 @@ export default class EmpleadoService {
       "fin": contrato.fin,
       "gestion": contrato.gestion,
       "detalle": contrato.detalle,
-      "idTipoEmpleado":contrato.idTipoEmpleado
+      "idTipoEmpleado":contrato.idTipoEmpleado,
+      "foto":foto,
+      "cargo":contrato.cargo
     };
     return axios.put(empleadoUrl + "contrato/updateContrato", contratoDtoResponse);
   }
@@ -77,6 +80,10 @@ export default class EmpleadoService {
         tipo: tipo,
       },
     });
+  }
+  getEmpleados() {
+    // Funcion que regresa una lista de empleados de acuerdo a su tipo
+    return axios.get(empleadoUrl + "empleado/getEmpleados");
   }
 
   getListaModulo() {
@@ -97,9 +104,9 @@ export default class EmpleadoService {
       "id": empleado.id,
       "cif": empleado.cif,
       "tipo_empleado_id": 0,
-      "fecha": empleado.fecha,
+      "fecha": '',
       "estado": 0,
-      "salida": empleado.salida
+      "salida": ''
     };
     return axios.put(empleadoUrl + "empleado/updateEmpleado", empleadoDtoResponse);
   }

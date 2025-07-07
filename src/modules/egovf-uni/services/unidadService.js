@@ -7,6 +7,19 @@ export default class UnidadService {
   getUnidades() {
     return axios.get(unidadUrl + "unidad/getUnidades");
   }
+
+  addPertenece(usuario, unidad) {
+    //Servicio para registrar la pertenencia del usuario con la unidad
+    var today = new Date();
+    const perteneceDtoRequest = {
+      "id_unidad": unidad.id,
+      "cif": usuario.cif,
+      "fecha": today.toLocaleDateString("en-US"),
+      "estado": true,
+      "gestion":today.getFullYear()
+    };
+    return axios.post(unidadUrl + "pertenece/addPertenece", perteneceDtoRequest);
+  }
   
   registrarUnidad(unidad) {
     const auxUnidad = {
@@ -22,16 +35,5 @@ export default class UnidadService {
     };
     return axios.post(unidadUrl + "unidad/agregar", auxUnidad);
   }
-  addPertenece(usuario, unidad) {
-    //Servicio para registrar la pertenencia del usuario con la unidad
-    var today = new Date();
-    const perteneceDtoRequest = {
-      "id_unidad": unidad.id,
-      "cif": usuario.cif,
-      "fecha": today.toLocaleDateString("en-US"),
-      "estado": true,
-      "gestion":today.getFullYear()
-    };
-    return axios.post(unidadUrl + "pertenece/addPertenece", perteneceDtoRequest);
-  }
+  
 }
