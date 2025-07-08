@@ -27,6 +27,11 @@ const routes = [
         name: "ReporteLibreView",
         component: () => import("@/views/Usuario/ReporteLibreView.vue"),
       },
+      {
+        path: "/perfilpublico:cif",
+        name: "PerfilPublicoView",
+        component: () => import('@/modules/egovf/views/PerfilPublicoView.vue')
+      },
     ],
   },
   {
