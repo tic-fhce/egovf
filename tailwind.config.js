@@ -9,6 +9,7 @@ module.exports = {
     'text-white',
     'px-4',
     'py-2',
+    'mr-2',
     'rounded-md',
     'focus:outline-none',
     'focus:ring-2',

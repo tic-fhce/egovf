@@ -156,8 +156,8 @@ const eliminarFacultad = async (id_facultad: number) => {
     confirmButtonText: 'Sí, eliminar',
     cancelButtonText: 'Cancelar',
     customClass: {
-      confirmButton: 'bg-red-600 text-white px-4 py-2 rounded-md mr-3',
-      cancelButton: 'bg-gray-500 text-white px-4 py-2 rounded-md'
+      confirmButton: 'bg-red-600 text-white px-4 py-2 rounded-md mr-2',
+      cancelButton: 'bg-gray-200 text-black px-4 py-2 rounded-md'
     },
     buttonsStyling: false
   })
