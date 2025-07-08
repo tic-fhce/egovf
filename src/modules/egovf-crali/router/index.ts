@@ -1,3 +1,5 @@
+import { RouteLocationNormalizedLoaded } from 'vue-router';
+
 export const craliRoutes = {
   path: '/crali',
   name: 'crali',
@@ -19,6 +21,17 @@ export const craliRoutes = {
       path: '/libros',
       name: 'libros',
       component: () => import('../modules/Biblioteca/views/LibroView.vue')
+    },
+    {
+      path: '/libro/detalles/:idLibro',
+      name: 'DetallesLibro',
+      // props: true,
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        idLibro: Number(route.params.idLibro),
+        idBiblioteca: Number(route.params.idBiblioteca),
+      }),
+      
+      component: () => import('../modules/Biblioteca/views/DetailsLibro.vue'),
     },
     {
       path: '/prestamos',

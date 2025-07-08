@@ -24,6 +24,24 @@ export const getLibros = async (): Promise<Libro[]> => {
   }
 };
 
+// export const getLibroById = async (idLibro: number, idBiblioteca: number): Promise<Libro | null> => {
+export const getLibroById = async (idLibro: number) => {
+  try {
+    // Primero obtenemos todos los libros de la biblioteca con el ID
+    // const { data } = await SBFApi.get<Libro[]>(`/libro/buscar/biblioteca?id=${idBiblioteca}`);
+    const libros = await getLibros();
+
+    // Luego, buscamos el libro que coincida con el idLibro
+    const libroEncontrado = libros.find(libro => libro.id_libro === idLibro);
+
+    // Si no se encuentra, regresamos null
+    return libroEncontrado ?? null;
+  } catch (error) {
+    console.error('Error al obtener el libro:', error);
+    return null;
+  }
+};
+
 // Crear nuevo libro
 export const createLibro = async (libro: Partial<Libro>): Promise<Libro> => {
   try {

@@ -37,6 +37,9 @@
                   <td>{{ libro.ejemplares }}</td>
                   <td>{{ getNombreBiblioteca(libro.id_biblioteca) }}</td>
                   <td>
+                    <CButton class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
+                      <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
+                    </CButton>
                     <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
                       <CIcon icon="cil-pencil" class="me-1" />Editar
                     </CButton>
@@ -102,6 +105,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   Libro, getLibros, createLibro,
   updateLibro, deleteLibro
@@ -111,6 +115,8 @@ import Swal from 'sweetalert2'
 
 import $ from 'jquery'
 import 'datatables.net'
+
+const router = useRouter()
 
 const titulo = 'Gestión de Libros'
 
@@ -202,6 +208,29 @@ function abrirModal(estado: boolean) {
     esEdicion.value = false
     btnEdit.value = 'Agregar'
   }
+}
+
+const verDetalles = (libro: Libro) => {
+  console.log('Libro:', libro)
+
+  router.push({
+    name: 'DetallesLibro',
+    // params: { idLibro: libro.id_libro, idBiblioteca: libro.id_biblioteca },
+    params: { idLibro: libro.id_libro},
+
+  })
+  // // Aquí puedes abrir otro modal, redireccionar, o mostrar más info
+  // Swal.fire({
+  //   title: `Detalles de: ${libro.titulo}`,
+  //   html: `
+  //     <p><strong>Autor:</strong> ${libro.autor}</p>
+  //     <p><strong>Año:</strong> ${libro.anio}</p>
+  //     <p><strong>Idioma:</strong> ${libro.idioma}</p>
+  //     <p><strong>Ejemplares:</strong> ${libro.ejemplares}</p>
+  //     <p><strong>Signatura:</strong> ${libro.signatura_topografica}</p>
+  //   `,
+  //   icon: 'info'
+  // })
 }
 
 function editarLibro(libro: Libro) {
