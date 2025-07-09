@@ -15,7 +15,7 @@
 
         <CDropdown>
           <CDropdownToggle placement="bottom-end" class="py-0" :caret="false" >
-            <CAvatar :src="foto" size="md"/>
+            <CAvatar :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+foto" size="md"/>
           </CDropdownToggle>
           <CDropdownMenu class="pt-0">
             <CDropdownItem></CDropdownItem>

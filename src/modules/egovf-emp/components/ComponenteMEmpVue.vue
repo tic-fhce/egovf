@@ -316,7 +316,7 @@
       </CModalFooter>
     </form>
   </CModal>
-  <!-- End Modal  Modulo-->
+  <!-- End Modal  Contrato-->
 
   <!-- Modal  Editar Contrato-->
   <CModal size="lg" :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
@@ -603,8 +603,11 @@ export default {
       //Funcion para listar Los Datos del empleado como tambien sus contratos
       await this.empleadoService.getEmpleado(this.egovf.cif).then((response) => {
           this.empleado = response.data;
-          this.contratos = this.empleado.contratos;
-          this.calcularDiasRestantes(this.empleado.fecha,this.empleado.salida);
+          if(this.empleado.id>0){
+            this.contratos = this.empleado.contratos;
+            this.calcularDiasRestantes(this.empleado.fecha,this.empleado.salida);
+          }
+          
         });
       this.getMenuModulo();
     },
@@ -681,15 +684,13 @@ export default {
       this.contrato.cif = this.egovf.cif;
       this.egovf.idPersona = this.contrato.idtipo;
 
-      await this.$swal
-        .fire({
+      await this.$swal.fire({
           title: "Desea Agregar Contrato al Empleado ?",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
           denyButtonText: "Cancelar",
-        })
-        .then((result) => {
+        }).then((result) => {
           if (result.isConfirmed) {
             this.empleadoService.addContrato(this.contrato).then((response) => {
               if (response.status == 201) {

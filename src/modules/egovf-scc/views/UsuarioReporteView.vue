@@ -2,8 +2,17 @@
     <div class="oculto">
         {{ reporte.cif }}
     </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item">
+                <router-link to="/menumoduloscc" class="breadcrumb-link">Modulo M-SCC</router-link>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
-
         <CCol :sm="6" :lg="4">
             <CWidgetStatsD
                 class="mb-4"
@@ -42,19 +51,28 @@
             <template #icon><CIcon icon="cil-calendar" height="52" class="my-4 text-white"/></template>
             </CWidgetStatsD>
         </CCol>
-
     </CRow>
     <br>
     <CRow>
         <CCol :lg="12">
             <CCard>
-                <CCardHeader class="headercolor">
-                    <CRow>
-                        <CCol :lg="8" class="text-center">Reporte de Asistencia  mes de {{mes}} de {{reporte.gestion}}</CCol>
-                        <CCol :lg="4" class="text-center">
-                            <CButton @click="mensage()" color="success" class="font" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar PDF</CButton>
-                        </CCol>
-                    </CRow>
+                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                        <label class="mb-0 fs-5 text-white">{{this.titulo}}  mes de {{mes}} de {{reporte.gestion}}</label>
+                    </div>
+                    <CDropdown variant="btn-group">
+                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem>
+                                <CButton @click="mensage()" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2"/>Descargar PDF</CButton>
+                            </CDropdownItem>
+                            <CDropdownDivider/>
+                            <CDropdownItem>
+                                <CButton @click="mensage()" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2"/>Descargar FM-T</CButton>
+                            </CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
                 </CCardHeader>
                 <CCardBody>
                     <!-- Tabla Lista de Biometricos-->

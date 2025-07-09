@@ -26,7 +26,7 @@
                         <tbody>
                             <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
                                 <td>
-                                  <CImage :src="ciudadano.foto" width="70" height="70"/>
+                                  <CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+ciudadano.foto" width="70" height="70"/>
                                 </td>
                                 <td>{{ciudadano.cif}}</td>
                                 <td>
@@ -55,7 +55,7 @@
     <CModalBody>
       <CRow>
         <CCol :lg="4">
-          <img :src="this.ciudadano.foto" class="img-fluid rounded-start" width="200" height="200">                           
+          <img :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+this.ciudadano.foto" class="img-fluid rounded-start" width="200" height="200">                           
         </CCol>
         <CCol :lg="8">
           <br>
@@ -171,7 +171,7 @@ export default {
     },
     mounted(){
       this.getDatos(); // Llamamos los datos del Usuario
-      this.getListarCiudadano(); // Funcion que debuelve una lista de ciudadanos 
+      this.getListaCiudadanoPublico(); // Funcion que debuelve una lista de ciudadanos 
     },
     methods:{
       tabla(){
@@ -192,8 +192,8 @@ export default {
             this.egovfService.headersUsuario(this.usuario.token);
         }
       },
-      async getListarCiudadano(){ // Funcion que crea una lista de Ciudadanos 
-        await this.egovfService.getListaCiudadano().then(response => {
+      async getListaCiudadanoPublico(){ // Funcion que crea una lista de Ciudadanos 
+        await this.egovfService.getListaCiudadanoPublico().then(response => {
           const ciudadanosOrdenados = response.data.sort((a, b) => 
             a.paterno.localeCompare(b.paterno)
           );

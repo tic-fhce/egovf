@@ -9,7 +9,7 @@
                 <CCardBody>
                     <CRow>
                         <CCol :lg="4">
-                           <img :src="egovf.foto" class="img-fluid rounded-start" alt="...">
+                           <img :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+egovf.foto" class="img-fluid rounded-start" alt="...">
                            <div class="d-grid gap-2">
                                 <CButton color="dark" @click="clickModalFoto(true)"><CIcon icon="cil-camera"></CIcon> Actualizar</CButton>
                            </div>

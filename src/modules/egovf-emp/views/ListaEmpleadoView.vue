@@ -38,7 +38,7 @@
                             <tbody>
                                 <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
                                     <th scope="row">{{ciudadano.idPersona}}</th>
-                                    <td><CAvatar :src="ciudadano.foto" size="md"/></td>
+                                    <td><CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+ ciudadano.foto"  width="70" height="70"/></td>
                                     <td>
                                         {{ciudadano.cif}}
                                         <CProgress>

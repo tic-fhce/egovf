@@ -20,7 +20,7 @@
                             <CRow>
                                 <CCol :lg="2">
                                     <br>
-                                    <img :src="egovf.foto" class="img-fluid rounded-start" alt="...">
+                                    <img :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/800/'+egovf.foto" class="img-fluid rounded-start" alt="...">
                                 </CCol>
                                 <CCol :lg="5">
                                     <br>
@@ -49,7 +49,7 @@
                             <CRow>
                                 <CCol :lg="2">
                                     <br>
-                                    <img :src="egovf.foto" class="img-fluid rounded-start" alt="...">
+                                    <img :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/800/'+egovf.foto" class="img-fluid rounded-start" alt="...">
                                 </CCol>
                                 <CCol :lg="5">
                                     <br>
@@ -77,7 +77,7 @@
                             <CRow>
                                 <CCol :lg="2">
                                     <br>
-                                    <img :src="egovf.foto" class="img-fluid rounded-start" alt="...">
+                                    <img :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/800/'+egovf.foto" class="img-fluid rounded-start" alt="...">
                                     <div class="d-grid gap-2">
                                         <CButton color="dark" @click="clickModalFoto(true)"><CIcon icon="cil-camera"></CIcon> </CButton>
                                     </div>

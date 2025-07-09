@@ -1,5 +1,12 @@
 <template>
     <CRow>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb custom-breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+                </li>
+            </ol>
+        </nav>
         <!--Card para observaciones-->
         <CCol :lg="3">
         <br />
@@ -173,7 +180,7 @@ export default {
     },
     data(){
         return {
-            titulo:'Modulos MSCC',
+            titulo:'Modulo M-SCC',
             sccService:null,
             egovfService:null,
             empleadoService:null,

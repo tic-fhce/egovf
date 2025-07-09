@@ -1,15 +1,28 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item">
+                <router-link to="/menumoduloscc" class="breadcrumb-link">Modulo M-SCC</router-link>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
         <CCol :lg="12">
-            <br>
             <CCard>
-                <CCardHeader class="headercolor">
-                    <CRow>
-                        <CCol :lg="6">Observaciones</CCol>
-                        <CCol :lg="6" class="text-end">
-                            <CButton color="success" class="font" size="sm" @click="clickModalObs(true)"><CIcon icon="cil-cloud-upload" class="me-2" />Agregar Observaciones</CButton>
-                        </CCol>
-                    </CRow>
+                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                        <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                    </div>
+                    <CDropdown variant="btn-group">
+                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" size="lg" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
                 </CCardHeader>
                 <CCardBody>
                     <CRow>
@@ -82,7 +95,7 @@
 <CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
         <CModalTitle>
-            <h5>Detalles de la Observacion</h5>
+            <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Detalles de la Observacion</h6>
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
@@ -119,7 +132,7 @@
     <form @submit.prevent="addObs()" enctype="multipart/form-data">
         <CModalHeader class="headercolor text-center" dismiss @close="clickModalObs(false)">
             <CModalTitle>
-                <h5>Registrar una Observacion de Asistencia</h5>
+                <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Registrar una Observacion de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -196,7 +209,7 @@
     <form @submit.prevent="updateObs()" enctype="multipart/form-data">
         <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
             <CModalTitle>
-                <h5>Actualizar la Observacion de Asistencia</h5>
+                <h6><CIcon icon="cil-pencil" size="lg" class="me-2"/>Actualizar la Observacion de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -287,6 +300,7 @@ export default {
     },
     data(){
         return {
+            titulo:'Observaciones',
             archivo:'',
             sccService:null,
             egovfService :null,

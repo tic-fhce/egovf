@@ -1,4 +1,14 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item">
+                <router-link to="/menumoduloscc" class="breadcrumb-link">Modulo M-SCC</router-link>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
         <CCol :lg="12" >
             <br>
@@ -156,6 +166,7 @@ export default {
     name:'HorariosView',
     data(){
         return {
+            titulo:'Horarios',
             sccService:null,
             egovfService:null,
             listaHorarios:[],

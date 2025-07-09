@@ -1,4 +1,14 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item">
+                <router-link to="/menumoduloscc" class="breadcrumb-link">Modulo M-SCC</router-link>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
         <CCol :lg="4" v-for="perfil in listaPerfil" :key="perfil.id">
             <br>
@@ -54,6 +64,7 @@ export default {
     name:'BiometricosView',
     data(){
         return {
+            titulo:'Biometricos Aprobados',
             listaPerfil:[],
             sccService:null,
             usuario:{

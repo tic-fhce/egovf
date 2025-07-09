@@ -6,59 +6,59 @@
       </li>
     </ol>
   </nav>
-    <CRow>
-        <CCol :xs="12">
-            <CCard>
-                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-                  <div class="d-flex align-items-center">
-                    <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                    <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
-                  </div>
-                  <CDropdown variant="btn-group">
-                    <CDropdownToggle color="dark" class="font border-0" size="sm">
-                      <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
-                    </CDropdownToggle>
-                    <CDropdownMenu>
-                      <CDropdownItem>
-                        <CButton @click="clickModalCiudadano(true)" size="sm">
-                          <CIcon icon="cil-cloud-upload" size="lg" class="me-2" /> Agregar
-                        </CButton>
-                      </CDropdownItem>
-                    </CDropdownMenu>
-                  </CDropdown>
-                </CCardHeader>
-                <CCardBody>
-                    <div class="table-responsive">
-                        <table id="personaTabla" class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th><th>Foto</th><th>CIF</th><th>Datos</th><th>Contacto</th><th>Unidad</th><th>Operaciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
-                                    <th scope="row">{{ciudadano.idPersona}}</th>
-                                    <td>
-                                      <CImage :src="ciudadano.foto" width="70" height="70"/>
-                                    </td>
-                                    <td>{{ciudadano.cif}}</td>
-                                    <td>
-                                      {{ciudadano.nombre}} {{ciudadano.paterno}} {{ciudadano.materno}}<br>
-                                      {{ciudadano.ci}}<br>
-                                      <label class="fontabla">{{ciudadano.correo}}</label>
-                                    </td>
-                                    <td>
-                                       {{ciudadano.celular}}</td>
-                                    <td>{{ ciudadano.sigla }}</td>
-                                    <td><CButton class="font" color="success" @click="perfil(ciudadano.cif)" size="sm"><CIcon icon="cil-user" class="me-2"/>Perfil</CButton></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </CCardBody>
-            </CCard>
-        </CCol>
-    </CRow>
+  <CRow>
+    <CCol :xs="12">
+      <CCard>
+        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+            <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+          </div>
+            <CDropdown variant="btn-group">
+              <CDropdownToggle color="dark" class="font border-0" size="sm">
+                <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
+              </CDropdownToggle>
+              <CDropdownMenu>
+                <CDropdownItem>
+                  <CButton @click="clickModalCiudadano(true)" size="sm">
+                    <CIcon icon="cil-cloud-upload" size="lg" class="me-2" /> Agregar
+                  </CButton>
+                </CDropdownItem>
+              </CDropdownMenu>
+            </CDropdown>
+        </CCardHeader>
+        <CCardBody>
+          <div class="table-responsive">
+            <table id="personaTabla" class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Foto</th><th>CIF</th><th>Datos</th><th>Contacto</th><th>Unidad</th><th>Operaciones</th>
+                </tr>
+              </thead>
+                <tbody>
+                  <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
+                    <th scope="row">{{ciudadano.idPersona}}</th>
+                    <td>
+                      <CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+ ciudadano.foto"  width="70" height="70"/>
+                    </td>
+                    <td>{{ciudadano.cif}}</td>
+                    <td>
+                      {{ciudadano.nombre}} {{ciudadano.paterno}} {{ciudadano.materno}}<br>
+                      {{ciudadano.ci}}<br>
+                      <label class="fontabla">{{ciudadano.correo}}</label>
+                    </td>
+                    <td>
+                      {{ciudadano.celular}}</td>
+                    <td>{{ ciudadano.sigla }}</td>
+                    <td><CButton class="font" color="success" @click="perfil(ciudadano.cif)" size="sm"><CIcon icon="cil-user" class="me-2"/>Perfil</CButton></td>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
+        </CCardBody>
+      </CCard>
+    </CCol>
+  </CRow>
 
 <!-- Modal  Ciudadano-->
 <CModal :visible="modalCiudadano" @close="clickModalCiudadano(false)">
@@ -294,8 +294,6 @@ export default {
           denyButtonText: 'Cancelar'}).then((result) => {
             if (result.isConfirmed) {
               this.personaService.addPersona(this.persona).then(response =>{
-                console.log(response);
-                
                 if(response.status==201){
                   this.$swal.fire('Datos Guardados Corectamente', '', 'success').then((result) => {
                     if(result)

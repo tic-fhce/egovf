@@ -151,8 +151,7 @@ export default {
       this.modulo.cif = this.cif;
       this.modulo.idmodulo = this.id_modulo;
       this.modulo.quien=this.usuario.cif;
-      await this.$swal
-        .fire({
+      await this.$swal.fire({
           title: "Desea Agregar el Modulo al Ciudadano ?",
           showDenyButton: true,
           icon: "info",
