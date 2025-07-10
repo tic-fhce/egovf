@@ -28,7 +28,6 @@ export const craliRoutes = {
       // props: true,
       props: (route: RouteLocationNormalizedLoaded) => ({
         idLibro: Number(route.params.idLibro),
-        idBiblioteca: Number(route.params.idBiblioteca),
       }),
       
       component: () => import('../modules/Biblioteca/views/DetailsLibro.vue'),

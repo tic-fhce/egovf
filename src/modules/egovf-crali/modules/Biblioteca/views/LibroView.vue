@@ -211,7 +211,7 @@ function abrirModal(estado: boolean) {
 }
 
 const verDetalles = (libro: Libro) => {
-  console.log('Libro:', libro)
+  // console.log('Libro:', libro)
 
   router.push({
     name: 'DetallesLibro',

@@ -1,6 +1,6 @@
 <template>
-  <section class="py-10 bg-gray-100">
-    <div class="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <section class="py-5 bg-gray-100">
+    <div class="mx-auto max-w-6xl px-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <EjemplarCard v-for="(ejem) in Ejemplars" :key="ejem.codigo" :ejemplar="ejem" />
     </div>
   </section>
