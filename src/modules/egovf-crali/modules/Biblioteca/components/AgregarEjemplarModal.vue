@@ -52,6 +52,7 @@ import Swal from 'sweetalert2'
 import { type Ejemplar, createEjemplar, updateEjemplar } from '../services/ejemplarService'
 
 const previewPortada = ref<string>('')
+const nameFileImg = ref<string>('')
 const isBase64 = ref<boolean>(false)
 const isEdit = ref<boolean>(false)
 
@@ -73,7 +74,7 @@ const form = ref<Partial<Ejemplar>>({
 
 watch(() => props.visible, (newVal) => {
   if (newVal) {
-    console.log(props)
+    // console.log(props)
     if (props.ejemplarEditar) {
       // Si hay un ejemplar pasado como prop, significa que estamos editando
       isEdit.value = true
@@ -107,13 +108,13 @@ const handleFileChange = (e: Event) => {
     return
   }
   const reader = new FileReader()
-
   reader.onload = (event) => {
     const result = event.target?.result
     if (typeof result === 'string') {
       previewPortada.value = result
       form.value.portada = result
       isBase64.value = true
+      nameFileImg.value = file.name
     }
   }
 
@@ -127,6 +128,7 @@ const handleFileChange = (e: Event) => {
 
 const cerrar = () => {
   isBase64.value = false
+  nameFileImg.value = ''
   emit('close')
 }
 
@@ -137,8 +139,13 @@ const guardar = async () => {
   }
 
   try {
+    form.value.portada = (isBase64.value) ? `ruta/portadas/${nameFileImg.value}`: form.value.portada
+    // console.log(form.value.portada)
+    
     if (isEdit.value) {
       // Si es edición, actualizamos el ejemplar
+      // console.log(previewPortada.value)
+      // console.log(form.value)
       await updateEjemplar(form.value)
       Swal.fire('Éxito', 'Ejemplar actualizado correctamente.', 'success')
     } else {
