@@ -26,12 +26,12 @@
 
             <div class="mt-10 flex flex-col items-center md:flex-row">
               <CButton @click="abrirModal"
-                class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-800 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+                class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Agregar Ejemplar</CButton>
 
               <CButton @click="editarLibro"
-                class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-800 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Editar</CButton>
+                class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+                Volver</CButton>
 
             </div>
           </div>
@@ -56,7 +56,7 @@
         <p class="text-gray-500">No se encontraron ejemplares.</p>
       </div>
 
-      <EjemplarList v-else :Ejemplars="ejemplares" />
+      <EjemplarList v-else :Ejemplars="ejemplares" :id-libro="props.idLibro" :portada-libro="portada" @ejemplar-creado="ejemplarCreado"/>
     </div>
 
      <!-- Modal: Agregar Ejemplar -->
@@ -117,9 +117,11 @@ const cargarDatos = async () => {
 }
 
 const editarLibro = () => {
-  if (libro.value) {
-    router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
-  }
+  // if (libro.value) {
+  //   router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
+  // }
+  router.go(-1)
+  // router.push('/libros')
 }
 
 onMounted(cargarDatos);

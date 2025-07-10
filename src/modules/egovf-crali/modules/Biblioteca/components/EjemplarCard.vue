@@ -3,7 +3,8 @@
 
     <a href="#">
       <div class="relative overflow-hidden rounded-xl">
-        <img v-if="ejemplar.portada" :src="`/${ejemplar.portada}`" alt="Portada" class="h-64 w-full object-cover" />
+        <img v-if="ejemplar.portada" :src="getImageSrc(ejemplar.portada)" alt="Portada" class="h-64 w-full object-cover"
+          @error="handleImageError" />
         <div v-else class="w-full h-40 flex items-center justify-center bg-gray-200 rounded-md text-gray-500">
           Sin portada
         </div>
@@ -14,16 +15,12 @@
         <p> <span :class="estadoClass">{{ ejemplar.estado }}</span></p>
         <p>{{ ejemplar.direccion }}</p>
         <!-- <p><span class="font-semibold">ID Libro:</span> {{ ejemplar.id_libro }}</p> -->
-        <div class="mt-3 flex items-end justify-between">
-          <div
-            class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="h-4 w-4">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-            </svg> -->
+        <!-- <div class="mt-3 flex items-end justify-between"> -->
+          <div class="mt-10 flex flex-col items-center md:flex-row">
 
-             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
+          <div @click="emitEdit"
+            class="inline-flex w-full items-center  rounded-lg bg-orange-500 px-4 py-1.5 text-white duration-100 hover:bg-orange-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
               stroke="currentColor" class="h-4 w-4">
               <!-- <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g> -->
@@ -38,6 +35,29 @@
             </svg>
             <button class="text-sm">Modificar</button>
           </div>
+
+          <div @click="eliminarEjemplar(ejemplar.codigo)"
+            class="inline-flex w-full items-center  rounded-lg  bg-red-500 px-1 py-1.5 text-white duration-100  hover:bg-red-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
+              stroke="currentColor" class="h-4 w-4">
+              <g id="SVGRepo_bgCarrier" stroke-width="1.5"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M10 11V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+                <path d="M14 11V17" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+                <path d="M4 7H20" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+                <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="#ffffff"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#ffffff"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+            <button class="text-sm">Eliminar</button>
+          </div>
+
         </div>
       </div>
     </a>
@@ -46,10 +66,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Ejemplar } from '../services/ejemplarService'
+import { computed, ref } from 'vue'
+import { deleteEjemplar, type Ejemplar } from '../services/ejemplarService'
+import Swal from 'sweetalert2'
 
 const props = defineProps<{ ejemplar: Ejemplar }>()
+const emit = defineEmits(['edit','ejemplarEliminado'])
+const defaultImage = '/ruta/portadas/bookCover.png'
+const imageFailed = ref(false)
+
+const getImageSrc = (portada: string) => {
+  if (!portada || imageFailed.value) {
+    return defaultImage
+  }
+  const hasExtension = /\.(jpg|jpeg|png|gif|webp)$/i.test(portada)
+  if (!hasExtension) {
+    return defaultImage
+  }
+  return `/${portada}`
+}
+
+// Handle image load error
+const handleImageError = () => {
+  imageFailed.value = true
+}
 
 const estadoClass = computed(() => {
   switch (props.ejemplar.estado.toLowerCase()) {
@@ -61,4 +101,48 @@ const estadoClass = computed(() => {
       return 'text-red-600'
   }
 })
+
+const eliminarEjemplar = async (codigo: number) => {
+  const confirm = await Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+    customClass: {
+      confirmButton: 'bg-red-600 text-white px-4 py-2 rounded-md mr-2',
+      cancelButton: 'bg-gray-200 text-black px-4 py-2 rounded-md'
+    },
+    buttonsStyling: false
+  })
+  if (!confirm.isConfirmed) return
+
+  try {
+    await deleteEjemplar(codigo);
+    // libros.value = libros.value.filter(l => l.id_libro !== id_libro)
+    showToast('success', 'Ejemplar eliminado correctamente')
+    emit('ejemplarEliminado')
+    // await cargarDatos()
+  } catch {
+    showToast('error', 'Error al eliminar el Ejemplar')
+  }
+}
+
+const emitEdit = () => {
+  // console.log(props.ejemplar)
+  emit('edit', props.ejemplar)
+}
+
+
+const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
+  Swal.fire({
+    icon,
+    title: message,
+    toast: true,
+    position: 'top-end',
+    timer: 2000,
+    showConfirmButton: false,
+  })
+}
 </script>

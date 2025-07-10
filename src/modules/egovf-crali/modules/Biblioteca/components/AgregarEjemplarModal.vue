@@ -3,7 +3,7 @@
     <form @submit.prevent="guardar">
       <CModalHeader class="headercolor" dismiss @close="cerrar">
         <CModalTitle>
-          <h4>Agregar Ejemplar</h4>
+          <h4>{{ isEdit ? 'Editar Ejemplar' : 'Agregar Ejemplar' }}</h4>
         </CModalTitle>
       </CModalHeader>
 
@@ -40,7 +40,7 @@
 
       <CModalFooter>
         <CButton color="danger" @click="cerrar">Cancelar</CButton>
-        <CButton color="success" type="submit">Guardar</CButton>
+        <CButton color="success" type="submit">{{ isEdit ? 'Actualizar' : 'Guardar' }}</CButton>
       </CModalFooter>
     </form>
   </CModal>
@@ -49,16 +49,17 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import Swal from 'sweetalert2'
-import { type Ejemplar, createEjemplar } from '../services/ejemplarService'
+import { type Ejemplar, createEjemplar, updateEjemplar } from '../services/ejemplarService'
 
 const previewPortada = ref<string>('')
 const isBase64 = ref<boolean>(false)
+const isEdit = ref<boolean>(false)
 
 const props = defineProps<{
   visible: boolean
   idLibro: number
   portadaLibro?: string
-
+  ejemplarEditar?: Ejemplar 
 }>()
 
 const emit = defineEmits(['close', 'ejemplarCreado'])
@@ -72,16 +73,28 @@ const form = ref<Partial<Ejemplar>>({
 
 watch(() => props.visible, (newVal) => {
   if (newVal) {
-    form.value = {
-      estado: '',
-      direccion: '',
-      portada: props.portadaLibro || '',
-      id_libro: props.idLibro,
+    console.log(props)
+    if (props.ejemplarEditar) {
+      // Si hay un ejemplar pasado como prop, significa que estamos editando
+      isEdit.value = true
+      form.value = {
+        ...props.ejemplarEditar, // Cargar los datos del ejemplar
+        id_libro: props.idLibro, // Asegurar que el id del libro sea el correcto
+      }
+      previewPortada.value = props.ejemplarEditar.portada || ''
+    } else {
+      // Si no hay ejemplar, estamos creando uno nuevo
+      isEdit.value = false
+      form.value = {
+        estado: '',
+        direccion: '',
+        portada: props.portadaLibro || '',
+        id_libro: props.idLibro,
+      }
+      previewPortada.value = props.portadaLibro || ''
     }
-    previewPortada.value = props.portadaLibro || ''
   }
 })
-
 // Maneja la imagen seleccionada
 const handleFileChange = (e: Event) => {
   const input = e.target as HTMLInputElement
@@ -124,9 +137,16 @@ const guardar = async () => {
   }
 
   try {
-    console.log(form.value)
-    await createEjemplar(form.value)
-    Swal.fire('Éxito', 'Ejemplar agregado correctamente.', 'success')
+    if (isEdit.value) {
+      // Si es edición, actualizamos el ejemplar
+      await updateEjemplar(form.value)
+      Swal.fire('Éxito', 'Ejemplar actualizado correctamente.', 'success')
+    } else {
+      // Si es creación, agregamos el ejemplar
+      await createEjemplar(form.value)
+      Swal.fire('Éxito', 'Ejemplar agregado correctamente.', 'success')
+    }
+
     emit('ejemplarCreado')
     cerrar()
   } catch (error) {
