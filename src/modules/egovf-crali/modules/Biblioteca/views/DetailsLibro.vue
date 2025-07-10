@@ -1,7 +1,6 @@
 <template>
 
-  <h2 
-  class="mb-1 max-w-lg text-2xl font-light leading-snug tracking-tight text-g1 sm:text-2xl sm:leading-snug">
+  <h2 class="mb-1 max-w-lg text-2xl font-light leading-snug tracking-tight text-g1 sm:text-2xl sm:leading-snug">
     Detalles del Libro
   </h2>
 
@@ -9,7 +8,7 @@
     <h2 class="text-lg font-semibold">Cargando información del libro...</h2>
     <p>Espere por favor</p>
   </div>
-  
+
   <div v-else class="bg-white relative   flex items-center  justify-center overflow-hidden  ">
     <div
       class="relative mx-auto h-full px-4  pb-20   md:pb-10 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8">
@@ -26,12 +25,13 @@
               accusantium doloremque it.</p>
 
             <div class="mt-10 flex flex-col items-center md:flex-row">
-              <a href="/"
+              <CButton @click="abrirModal"
                 class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-800 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Agregar Ejemplar</a>
-              <a href="/"
+                Agregar Ejemplar</CButton>
+
+              <CButton @click="editarLibro"
                 class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-800 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Editar</a>
+                Editar</CButton>
 
             </div>
           </div>
@@ -47,23 +47,6 @@
 
   </div>
 
-  <div >
-    <!-- <h1 class="text-center text-2xl font-bold text-gray-800">Detalles del Libro</h1> -->
-
-    <!-- <div v-if="!libro" class="text-center h-[200px] mt-10">
-      <h2 class="text-lg font-semibold">Cargando información del libro...</h2>
-      <p>Espere por favor</p>
-    </div> -->
-
-    <!-- <div v-else class="max-w-4xl mx-auto mt-8 px-4">
-      <h2 class="text-xl font-bold mb-4 text-blue-700">{{ libro.titulo }}</h2>
-      <p><strong>Autor:</strong> {{ libro.autor }}</p>
-      <p><strong>Año:</strong> {{ libro.anio }}</p>
-      <p><strong>Idioma:</strong> {{ libro.idioma }}</p>
-      <p><strong>Signatura Topográfica:</strong> {{ libro.signatura_topografica }}</p>
-      <p><strong>Ejemplares:</strong> {{ libro.ejemplares }}</p>
-      <p><strong>ID Biblioteca:</strong> {{ libro.id_biblioteca }}</p>
-    </div> -->
 
     <!-- Lista de Ejemplares -->
     <div class="mt-2">
@@ -75,16 +58,28 @@
 
       <EjemplarList v-else :Ejemplars="ejemplares" />
     </div>
-  </div>
+
+     <!-- Modal: Agregar Ejemplar -->
+    <AgregarEjemplarModal
+      :visible="modalVisible"
+      :idLibro="props.idLibro"
+      :portadaLibro="portada"
+      @close="cerrarModal"
+      @ejemplarCreado="ejemplarCreado"
+    />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
 import EjemplarList from '../components/EjemplarList.vue'
-import { getEjemplaresByLibroId } from '../services/ejemplarService'
-import { getLibroById } from '../services/libroService'
-import type { Libro } from '../services/libroService'
-import type { Ejemplar } from '../services/ejemplarService'
+import AgregarEjemplarModal from '../components/AgregarEjemplarModal.vue'
+
+import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
+import { type Libro, getLibroById } from '../services/libroService'
+import Swal from 'sweetalert2'
+import { CButton } from '@coreui/vue'
 
 interface Props {
   idLibro: number
@@ -92,22 +87,43 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-// console.log({props})
+const router = useRouter()
+
 const libro = ref<Libro | null>(null)
 const ejemplares = ref<Ejemplar[]>([])
 const portada = ref('');
-onMounted(async () => {
+
+// Modal control
+const modalVisible = ref(false)
+const abrirModal = () => (modalVisible.value = true)
+const cerrarModal = () => (modalVisible.value = false)
+// Recargar datos después de agregar
+const ejemplarCreado = async () => {
+  await cargarDatos()
+}
+
+// Cargar libro y ejemplares
+const cargarDatos = async () => {
   try {
-    // libro.value = await getLibroById(props.idLibro, props.idBiblioteca)
     libro.value = await getLibroById(props.idLibro)
     if (libro.value?.id_libro) {
       ejemplares.value = await getEjemplaresByLibroId(libro.value.id_libro)
-      portada.value = ejemplares.value[0].portada;
+      portada.value = ejemplares.value.find(e => e.portada)?.portada || 'default-portada.jpg'
     }
   } catch (error) {
-    console.error('Error al cargar libro o ejemplares:', error)
+    console.error('Error al cargar datos:', error)
+    Swal.fire('Error', 'No se pudo cargar la información del libro.', 'error')
   }
-})
+}
+
+const editarLibro = () => {
+  if (libro.value) {
+    router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
+  }
+}
+
+onMounted(cargarDatos);
+
 </script>
 
 <style scoped>
