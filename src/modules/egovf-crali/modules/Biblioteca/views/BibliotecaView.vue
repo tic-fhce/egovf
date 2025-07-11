@@ -22,6 +22,7 @@
                   <th>Dirección</th>
                   <th>Horario</th>
                   <th>Facultad</th>
+                  <th>Nro. Libros</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -32,7 +33,11 @@
                   <td>{{ biblio.direccion }}</td>
                   <td>{{ biblio.horario_atencion }}</td>
                   <td>{{ getNombreFacultad(biblio.id_facultad) }}</td>
+                  <td>{{ numerosLibros[biblio.id_biblioteca] || 0 }}</td>
                   <td>
+                    <CButton v-if="numerosLibros[biblio.id_biblioteca]" class="font me-1" color="info" size="sm" @click="verLibros(biblio)">
+                      <CIcon icon="cil-magnifying-glass" class="me-1" />Ver Libros
+                    </CButton>
                     <CButton class="font me-1" color="warning" size="sm" @click="editarBiblioteca(biblio)">
                       <CIcon icon="cil-pencil" class="me-1" />Editar
                     </CButton>
@@ -100,10 +105,13 @@ import Swal from 'sweetalert2'
 
 import $ from 'jquery'
 import 'datatables.net'
-
+import { getLibrosByIdBiblioteca } from '../services/libroService'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const titulo = 'Gestión de Bibliotecas'
 
 const bibliotecas = ref<Biblioteca[]>([])
+const numerosLibros = ref<Record<number, number>>({}) 
 const facultades = ref<Facultad[]>([])
 const modalVisible = ref(false)
 const esEdicion = ref(false)
@@ -141,6 +149,10 @@ async function cargarDatos() {
     destruirDataTable()
     tablaCargada.value = false 
     bibliotecas.value = await getBibliotecas()
+    for (const biblio of bibliotecas.value) {
+      numerosLibros.value[biblio.id_biblioteca] = await getNroLibros(biblio.id_biblioteca)
+    }
+
     facultades.value = await getFacultades()
     await nextTick()
 
@@ -150,6 +162,11 @@ async function cargarDatos() {
   } catch (error) {
     console.error('Error al obtener bibliotecas:', error)
   }
+}
+
+const getNroLibros = async(id: number) =>{
+  const data = await getLibrosByIdBiblioteca(id);
+  return data.length;
 }
 
 const getNombreFacultad = (id: number) => {
@@ -183,6 +200,13 @@ function abrirModal(estado: boolean) {
     esEdicion.value = false
     btnEdit.value = 'Agregar'
   }
+}
+
+const verLibros = (biblioteca: Biblioteca) => {
+  router.push({
+    name: 'DetallesBiblioteca',
+    params: { idBiblioteca: biblioteca.id_biblioteca},
+  })
 }
 
 function editarBiblioteca(biblio: Biblioteca) {

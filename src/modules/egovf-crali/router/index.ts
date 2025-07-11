@@ -17,6 +17,14 @@ export const craliRoutes = {
       name: 'biblioteca',
       component: () => import('../modules/Biblioteca/views/BibliotecaView.vue')
     },
+    {
+      path: '/biblioteca/detalles/:idBiblioteca',
+      name: 'DetallesBiblioteca',
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        idBiblioteca: Number(route.params.idBiblioteca),
+      }),
+      component: () => import('../modules/Biblioteca/views/DetailsBiblioteca.vue'),
+    },
     { 
       path: '/libros',
       name: 'libros',

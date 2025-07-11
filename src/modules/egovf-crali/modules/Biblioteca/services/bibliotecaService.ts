@@ -21,6 +21,19 @@ export const getBibliotecas = async () => {
   }
 };
 
+export const getBibliotecaById = async (idBiblioteca: number) => {
+  try {
+    const bibliotecas = await getBibliotecas();
+
+    const bibliotecaoEncontrado = bibliotecas.find(biblioteca => biblioteca.id_biblioteca === idBiblioteca);
+
+    return bibliotecaoEncontrado ?? null;
+  } catch (error) {
+    console.error('Error al obtener la biblioteca:', error);
+    return null;
+  }
+};
+
 // Crear nueva biblioteca
 export const createBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
   try {

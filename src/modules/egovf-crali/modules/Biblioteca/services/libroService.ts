@@ -42,6 +42,17 @@ export const getLibroById = async (idLibro: number) => {
   }
 };
 
+export const getLibrosByIdBiblioteca = async (id_biblioteca: number): Promise<Libro[]> => {
+  try {
+    const { data } = await SBFApi.get<Libro[]>(`/libro/buscar/biblioteca?id=${id_biblioteca}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error getLibrosByIdBiblioteca');
+  }
+};
+
+
 // Crear nuevo libro
 export const createLibro = async (libro: Partial<Libro>): Promise<Libro> => {
   try {
