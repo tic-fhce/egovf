@@ -73,12 +73,12 @@
 
       <div class="mb-4">
         <label class="form-label">Subir Nueva Portada</label>
-        <input type="file" accept="image/*" class="form-control" @change="onFileChanged" />
+        <input type="file" accept="image/*" class="form-control" @change="onFileChanged" ref="imageInput"/>
       </div>
 
       <div class="mb-4">
         <label class="form-label">Contenido (PDF)</label>
-        <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" />
+        <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" ref="pdfInput" />
         <p v-if="previewPdf" class="text-sm mt-1 text-gray-500">Archivo seleccionado: {{ previewPdf }}</p>
       </div>
 
@@ -100,7 +100,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-import { type Libro, getLibroById, updateLibro, createLibro } from '../services/libroService'
+import { type Libro, getLibroById, updateLibro, createLibroFile } from '../services/libroService'
 import { type Biblioteca, getBibliotecas } from '../services/bibliotecaService'
 import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 
@@ -122,14 +122,16 @@ const previewPortada = ref<string>('')
 const previewPdf = ref<string>('')
 const bibliotecas = ref<Biblioteca[]>([])
 const ejemplares = ref<Ejemplar[]>([])
+const imageInput = ref<HTMLInputElement | null>(null)
+const pdfInput = ref<HTMLInputElement | null>(null)
 
 const form = ref<Partial<Libro>>({
-  titulo: '',
-  autor: '',
-  anio: 0,
-  idioma: '',
-  signatura_topografica: '',
-  ejemplares: 0,
+  titulo: 'asd',
+  autor: 'asd',
+  anio: 2025,
+  idioma: 'Ingles',
+  signatura_topografica: 'asd123',
+  ejemplares: 5,
   contenido_pdf: '',
   id_usuario: 0, 
   id_biblioteca: 0 
@@ -174,6 +176,7 @@ const handlePdfChange = (event: Event) => {
     return
   }
   pdfFile.value = file
+  
   form.value.contenido_pdf = `ruta/pdfs/${file.name}`
   previewPdf.value = file.name
 }
@@ -225,8 +228,9 @@ const guardar = async () => {
       console.log('file img', imageFile)
       console.log('file pdf', pdfFile)
       // await createLibro(form.value as Libro)
-      // Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
-      form.value = {} 
+      await createLibroFile(form.value as Libro, imageFile.value as File, pdfFile.value as File)
+      Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
+      router.push('/libros')
     }
   } catch (err) {
     console.error(err)
