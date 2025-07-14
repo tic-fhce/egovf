@@ -20,7 +20,7 @@
                     <CDropdown variant="btn-group">
                         <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
                         <CDropdownMenu>
-                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" size="lg" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
                         </CDropdownMenu>
                     </CDropdown>
                 </CCardHeader>
@@ -92,30 +92,32 @@
     </CRow>
 
 <!-- Modal  Detalles de OBS-->
-<CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
+<CModal size="lg" :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
         <CModalTitle>
             <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Detalles de la Observacion</h6>
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
-        <ComponenteNombres :datos="datos" />
         <CRow>
-            <CCol :lg="12">
-                <ul>
-                    <li class="lista">ID :  {{ obsDetalle.id }}</li>
-                    <li class="lista">UID : {{ obsDetalle.uidobs }}</li>
-                    <li class="lista">Fecha Inicio :  {{ obsDetalle.fechainicio }}</li>
-                    <li class="lista">Fecha Fin:  {{ obsDetalle.fechafin }}</li>
-                    <li class="lista">Detalle:  {{ obsDetalle.detalle }}</li>
-                    <li class="lista">Tipo de Obs. :  {{ obsDetalle.tipo }} </li>
-                    <li class="lista" v-if="obsDetalle.horaEntrada">Hora Entrada:  {{ obsDetalle.horaEntrada }}</li>
-                    <li class="lista" v-if="obsDetalle.horaSalida">Hora Salida:  {{ obsDetalle.horaSalida }}</li>    
-                </ul>
-                <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
-                <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
+            <CCol :lg="6">
+                <ComponenteNombres :datos="datos" />
+                <br>
+                <CAlert :color="this.color">{{this.estado}}</CAlert>
+                <CWidgetStatsB class="mb-3" :progress="{ color:this.color, value: 100}">
+                    <template #text>
+                    {{ obsDetalle.detalle }}<br>
+                    <strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}<br> 
+                    <strong>Fechas: </strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}<br>
+                    <strong>Horas: </strong> 
+                    <span class="small text-medium-emphasis">{{ obsDetalle.horaEntrada }}</span> | 
+                    <span class="small text-medium-emphasis">{{ obsDetalle.horaSalida }}</span> 
+                    </template>
+                    <template #title><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</template>
+                    <template #value>UID: {{ obsDetalle.uidobs }}</template>
+                </CWidgetStatsB>
             </CCol>
-            <CCol>
+            <CCol :lg="6">
                 <img :src="obsDetalle.url" alt="" class="img-fluid">
             </CCol>
         </CRow>
@@ -137,6 +139,7 @@
         </CModalHeader>
         <CModalBody>
             <ComponenteNombres :datos="datos" />
+            <hr>
 
             <div class="mb-3 row">
                 <label for="datos" class="col-4 col-form-label">UID - OBS :</label>
@@ -214,7 +217,7 @@
         </CModalHeader>
         <CModalBody>
             <ComponenteNombres :datos="datos" />
-
+            <hr>
             <div class="mb-3 row">
                 <label for="datos" class="col-4 col-form-label">UID - OBS</label>
                 <div class="col-8">
@@ -308,6 +311,8 @@ export default {
             modalDetalleObs:false,
             modalObsEditar:false,
             listaGestion:[],
+            color:'',
+            estado:'',
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
             usuario:{
                 token:'',
@@ -451,28 +456,38 @@ export default {
         getObsDetalle(id){// Funcion que Muestra el detalle de las Observaciones del Usuario
             this.listaObs.forEach(obs =>{
                 if(obs.id === id){
-                    this.obsDetalle.id = obs.id,
-                    this.obsDetalle.idObs= obs.idObs,
-                    this.obsDetalle.cif= obs.cif,
-                    this.obsDetalle.sexo= obs.sexo,
-                    this.obsDetalle.uidobs= obs.uidobs,
-                    this.obsDetalle.fechainicio= obs.fechainicio,
-                    this.obsDetalle.fechafin= obs.fechafin,
-                    this.obsDetalle.gestion= obs.gestion,
-                    this.obsDetalle.mes= obs.mes,
-                    this.obsDetalle.di= obs.di,
-                    this.obsDetalle.df= obs.df,
-                    this.obsDetalle.detalle= obs.detalle,
-                    this.obsDetalle.imagen= obs.imagen,
-                    this.obsDetalle.tipo= obs.tipo,
-                    this.obsDetalle.horaEntrada= obs.horaEntrada,
-                    this.obsDetalle.hEntrada= obs.hEntrada,
-                    this.obsDetalle.mEntrada= obs.mEntrada,
-                    this.obsDetalle.horaSalida= obs.horaSalida,
-                    this.obsDetalle.hSalida= obs.hSalida,
-                    this.obsDetalle.mSalida= obs.mSalida,
-                    this.obsDetalle.url= obs.url,
-                    this.obsDetalle.estado= obs.estado
+                    this.obsDetalle.id = obs.id;
+                    this.obsDetalle.idObs= obs.idObs;
+                    this.obsDetalle.cif= obs.cif;
+                    this.obsDetalle.sexo= obs.sexo;
+                    this.obsDetalle.uidobs= obs.uidobs;
+                    this.obsDetalle.fechainicio= obs.fechainicio;
+                    this.obsDetalle.fechafin= obs.fechafin;
+                    this.obsDetalle.gestion= obs.gestion;
+                    this.obsDetalle.mes= obs.mes;
+                    this.obsDetalle.di= obs.di;
+                    this.obsDetalle.df= obs.df;
+                    this.obsDetalle.detalle= obs.detalle;
+                    this.obsDetalle.imagen= obs.imagen;
+                    this.obsDetalle.tipo= obs.tipo;
+                    this.obsDetalle.horaEntrada= obs.horaEntrada;
+                    this.obsDetalle.hEntrada= obs.hEntrada;
+                    this.obsDetalle.mEntrada= obs.mEntrada;
+                    this.obsDetalle.horaSalida= obs.horaSalida;
+                    this.obsDetalle.hSalida= obs.hSalida;
+                    this.obsDetalle.mSalida= obs.mSalida;
+                    this.obsDetalle.url= obs.url;
+                    this.obsDetalle.estado= obs.estado;
+
+                    if(this.obsDetalle.estado==1){
+                        this.color='success';
+                        this.estado='Aprobado';
+                    }
+                    else{
+                        this.color='warning';
+                        this.estado='En Espera';
+                    }
+                    return true;
                 }
             });
             this.clickModalDetalleObs(true);

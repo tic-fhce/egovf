@@ -5,13 +5,19 @@
     <CRow>
         <CCol :lg="12">
             <CCard>
-                <CCardHeader class="headercolor">
-                    <CRow>
-                        <CCol :lg="8" class="text-center">Reporte de Asistencia del mes de {{mes}} de {{reporte.gestion}}</CCol>
-                        <CCol :lg="4" class="text-end">
-                            <CButton @click="pdf()" color="success" class="font" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar PDF</CButton>
-                        </CCol>
-                    </CRow>
+                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                        <label class="mb-0 fs-6 text-white">Reporte de Asistencia del mes de {{mes}} de {{reporte.gestion}}</label>
+                    </div>
+                    <CDropdown variant="btn-group">
+                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem>
+                                <CButton @click="pdf()" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Reporte</CButton>
+                            </CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
                 </CCardHeader>
                 <CCardBody>
                     <!-- Tabla Lista de Biometricos-->
@@ -49,7 +55,7 @@
                     <!-- Tabla Marcados -->
                     <CRow>
                         <CCol :lg="12" class="table-responsive">
-                            <table class="table table-striped table-hover" id="printMarcado">
+                            <table class="table table-striped table-hover" id="printMarcado" >
                                 <thead>
                                     <tr>
                                         <th>#</th><th>Detalle</th><th>Lugar</th><th>Turno</th><th>Hora M.</th><th>Min. R.</th><th>Obs.</th>
@@ -57,15 +63,15 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="value in listaReporte" :key="value.id">
-                                        <td>{{value.id}}</td>
-                                        <td>{{value.dia}} {{value.day}}<br><CBadge color="dark">{{value.fecha}}</CBadge><br></td>
-                                        <td>
+                                        <td >{{value.id}}</td>
+                                        <td >{{value.dia}} {{value.day}}<br><CBadge color="dark">{{value.fecha}}</CBadge><br></td>
+                                        <td >
                                             <CBadge color="success">{{value.lugar[0]}}</CBadge><br><CBadge color="success">{{value.lugar[1]}}</CBadge><br><CBadge color="success">{{value.lugar[2]}}</CBadge><br><CBadge color="success">{{value.lugar[3]}}</CBadge>
                                         </td>
-                                        <td>
+                                        <td >
                                             <CBadge color="success">{{value.turno[0]}}</CBadge><br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
                                         </td>
-                                        <td>
+                                        <td >
                                             <span v-if="value.hora[0]=='Sin Marcar'" class="badge bg-danger">{{value.hora[0]}}</span>
                                             <span v-else>{{value.hora[0]}}</span><br>
                                             <span v-if="value.hora[1]=='Sin Marcar'" class="badge bg-danger">{{value.hora[1]}}</span>
@@ -77,20 +83,34 @@
                                         </td>
 
                                         <td>
-                                            {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
+                                            <CBadge :color="value.retraso[0] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[0] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[1] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[1] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[2] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[2] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[3] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[3] }}
+                                            </CBadge>
                                         </td>
                                         
                                         <td>
-                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id"><CBadge color="warning">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
+                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id">
+                                                <CBadge color="info">{{ listobs.uidobs }} | {{ listobs.tipo }}</CBadge><br>
+                                                
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
                                     </tr>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -186,7 +206,7 @@ export default {
             this.totalanticipado = res;
             this.totalsin = sin;
             const dir = '/libreReporte'+this.uri;
-            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo/#'+dir;
+            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo/'+dir;
         },
         getMes(){// Funcion para colocar el Mes en formato Literal
             if(this.reporte.mes==1){this.mes='Enero';}
@@ -236,7 +256,7 @@ export default {
             
             doc.setFontSize(10);
 
-            img.src = this.reporte.persona.foto;
+            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+this.reporte.persona.foto;
             doc.addImage(img,'JPEG', 20,47,30,30);
 
             doc.text("CIF : "+this.reporte.cif,52,50);
@@ -321,4 +341,5 @@ export default {
 .oculto{
     display: none;
 }
+
 </style>

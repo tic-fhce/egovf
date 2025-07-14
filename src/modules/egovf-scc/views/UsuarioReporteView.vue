@@ -138,20 +138,31 @@
                                         </td>
 
                                         <td>
-                                            {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
+                                            <CBadge :color="value.retraso[0] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[0] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[1] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[1] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[2] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[2] }}
+                                            </CBadge><br>
+                                            <CBadge :color="value.retraso[3] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                                {{ value.retraso[3] }}
+                                            </CBadge>
                                         </td>
                                         
                                         <td>
-                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id"><CBadge color="warning">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
+                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id"><CBadge color="info">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
                                     </tr>
                                     <tr>
-                                        <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                                     </tr>
                                 </tfoot>
                             </table>

@@ -92,6 +92,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get('foto');
             }
         },
         async getEgovf(){

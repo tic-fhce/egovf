@@ -1,15 +1,16 @@
 <template>
-    <div class="mb-3 row">
-        <h4 class="card-title">CIF : {{datos.cif}}</h4>
-    </div>
-    <div class="mb-3 row">
-        <label for="nombre" class="col-4">Nombre : </label>
-        <label for="nombre" class="col-8">{{datos.nombre}}</label>
-    </div>
-    <div class="mb-3 row">
-        <label for="apellido" class="col-4">Apellidos : </label>
-        <label for="nombre" class="col-8">{{datos.apellido}}</label>
-    </div>
+    <CRow>
+        <CCol :xs="12">
+            <CWidgetStatsF color="dark" :padding="false" 
+                :title="datos.nombre+' '+datos.apellido" 
+                :value="'CIF : ' + datos.cif"
+            >
+                <template #icon>
+                    <CIcon icon="cil-user" size="xl" />
+                </template>
+            </CWidgetStatsF>
+        </CCol>
+    </CRow>
 </template>
 <script>
 export default {

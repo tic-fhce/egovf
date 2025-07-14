@@ -112,6 +112,8 @@ import {
   cilCouch,
   cilEducation,
   cilGroup,
+  cilDescription,
+  cilAvTimer,
   
 } from '@coreui/icons'
 
@@ -203,6 +205,8 @@ export const iconsSet = Object.assign(
     cilCouch,
     cilEducation,
     cilGroup,
+    cilDescription,
+    cilAvTimer,
   },
   {
     cifUs,

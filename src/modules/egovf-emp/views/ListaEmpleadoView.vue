@@ -79,85 +79,67 @@
         </CModalHeader>
 
         <CModalBody>
-        
-            <div class="mb-3 row">
-                <label for="sexo" class="col-sm-4 col-form-label">Caracteristica</label>
-                <div class="col-sm-8">
-                <select class="form-control" v-model="obsall.sexo" required="true">
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Caracteristica </CInputGroupText>
+                <CFormSelect v-model="obsall.sexo" required="true">
                     <option value="0">Todos</option>
                     <option value="1">Femenino</option>
                     <option value="2">Masculino</option>
-                </select>
-                </div>
-            </div>
+                </CFormSelect>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">UID - OBS</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.uidobs" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">UID - OBS </CInputGroupText>
+                <CFormInput type="text" v-model="obsall.uidobs" required="true"/>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="obsall.fechainicio" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Fecha de Inicio </CInputGroupText>
+                <CFormInput type="date" v-model="obsall.fechainicio" required="true"/>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Fecha Fin</label>
-                <div class="col-sm-8">
-                    <input type="date" class="form-control" v-model="obsall.fechafin" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Fecha Fin </CInputGroupText>
+                <CFormInput type="date" v-model="obsall.fechafin" required="true"/>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-4 col-form-label">Detalle</label>
-                <div class="col-sm-8">
-                    <textarea class="form-control" v-model="obsall.detalle" required="true"></textarea>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Detalle</CInputGroupText>
+                <CFormTextarea  v-model="obsall.detalle" required="true"> </CFormTextarea>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="tipo" class="col-sm-4 col-form-label">Tipo</label>
-                <div class="col-sm-8">
-                    <select class="form-control" v-model="obsall.tipo" required="true" @change="getTipo()">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="continuoingreso">Continuo e Ingreso</option>
-                        <option value="horas">Horas de Servicio</option>
-                        <option value="extraordinario">Horario Extraordinario</option>
-                        <option value="comision">Comisión</option>
-                        <option value="permiso">Permiso</option>
-                        <option value="asueto">Asueto</option>
-                    </select>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+            <CInputGroupText as="label">Tipo</CInputGroupText>
+                <CFormSelect  v-model="obsall.tipo" required="true" @change="getTipo()"> 
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="continuoingreso">Continuo e Ingreso</option>
+                    <option value="horas">Horas de Servicio</option>
+                    <option value="extraordinario">Horario Extraordinario</option>
+                    <option value="comision">Comisión</option>
+                    <option value="permiso">Permiso</option>
+                    <option value="asueto">Asueto</option>
+                </CFormSelect>
+            </CInputGroup>
 
-            <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
-                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.horaEntrada">
-                </div>
-            </div>
+            <CInputGroup class="mb-3" v-if="mostrarHoraIngreso()">
+                <CInputGroupText  as="label">Hora Ingreso</CInputGroupText>
+                <CFormInput type="text"  v-model="obsall.horaEntrada" required="true"/>
+            </CInputGroup>
 
-            <div class="mb-3 row" v-if="mostrarHoraSalida()">
-                <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obsall.horaSalida">
-                </div>
-            </div>
+            <CInputGroup class="mb-3" v-if="mostrarHoraSalida()">
+                <CInputGroupText as="label">Hora Salida</CInputGroupText>
+                <CFormInput type="text"  v-model="obsall.horaSalida" required="true"/>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="archivo" class="col-sm-4 col-form-label">Documento</label>
-                <div class="col-sm-8">
-                    <input type="file" ref="obsfile" class="form-control" @change="selectFile()" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Documento</CInputGroupText>
+                <CFormInput type="file" ref="file"  accept="image/png,image/jpeg" @change="selectFile()" required="true"/>
+            </CInputGroup>
+
         </CModalBody>
         <CModalFooter>
             <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
@@ -177,24 +159,21 @@
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
-        
-            <div class="mb-3 row">
-                <label for="gestiones" class="col-sm-6 col-form-label">Gestion</label>
-                <div class="col-sm-6">
-                    <select v-model="record.gestion" class="form-control">
-                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-sm-6 col-form-label">Mes</label>
-                <div class="col-sm-6">
-                    <select class="form-control" v-model="record.mes">
-                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                    </select>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Gestion </CInputGroupText>
+                <CFormSelect v-model="record.gestion" required="true">
+                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Mes </CInputGroupText>
+                <CFormSelect v-model="record.mes" required="true">
+                    <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
+                </CFormSelect>
+            </CInputGroup>
+
         </CModalBody>
         <CModalFooter>
             <CButton @click="clickModalRecord(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>

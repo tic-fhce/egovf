@@ -83,28 +83,27 @@
     <form @submit.prevent="getReporteMes()">
         <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
             <CModalTitle>
-                <h5>Reporte Mensual</h5>
+                <h6><CIcon icon="cil-description" size="lg" class="me-2" /> Reporte Mensual</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Gestion </CInputGroupText>
+                <CFormSelect v-model="reporteMes.gestion" required="true">
+                    <option v-for="y in listaGestion" :key="y" :value="y">
+                    {{ y }}
+                    </option>
+                </CFormSelect>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
-                <div class="col-6">
-                    <select v-model="reporteMes.gestion" class="form-control" required="true">
-                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                    </select>
-                </div>
-            </div>
-            <br>
-            <div class="mb-3 row">
-                <label for="mes" class="col-6 col-form-label">Mes :</label>
-                <div class="col-6">
-                    <select v-model="reporteMes.mes" class="form-control" required="true">
-                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                    </select>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Mes </CInputGroupText>
+                <CFormSelect v-model="reporteMes.mes" required="true">
+                    <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
+                    {{ mes.mes }}
+                    </option>
+                </CFormSelect>
+            </CInputGroup>
             
         </CModalBody>
         <CModalFooter>
@@ -120,45 +119,41 @@
     <form @submit.prevent="getReporteMes()">
         <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
             <CModalTitle>
-                <h5>Reporte Mensual Segmentado</h5>
+                <h6><CIcon icon="cil-description" size="lg" class="me-2" /> Reporte Mensual Segmentado</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <div class="mb-3 row">
-                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
-                <div class="col-6">
-                    <select v-model="reporteMes.gestion" class="form-control" required="true">
-                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                    </select>
-                </div>
-            </div>
-            <br>
-            <div class="mb-3 row">
-                <label for="mes" class="col-6 col-form-label">Mes :</label>
-                <div class="col-6">
-                    <select v-model="reporteMes.mes" class="form-control" required="true">
-                        <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                    </select>
-                </div>
-            </div>
-            <br>
-            <div class="mb-3 row">
-                <label for="inicio" class="col-6 col-form-label">Inicio :</label>
-                <div class="col-6">
-                    <select  class="form-control" v-model="reporteMes.di" required="true">
-                        <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
-                    </select>
-                </div>
-            </div>
-            <br>
-            <div class="mb-3 row">
-                <label for="fin" class="col-6 col-form-label">Fin :</label>
-                <div class="col-6">
-                    <select  class="form-control" v-model="reporteMes.df" required="true">
-                        <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
-                    </select>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Gestion </CInputGroupText>
+                <CFormSelect v-model="reporteMes.gestion" required="true">
+                    <option v-for="y in listaGestion" :key="y" :value="y">
+                    {{ y }}
+                    </option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Mes </CInputGroupText>
+                <CFormSelect v-model="reporteMes.mes" required="true">
+                    <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
+                    {{ mes.mes }}
+                    </option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Inicio </CInputGroupText>
+                <CFormSelect v-model="reporteMes.di" required="true">
+                    <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Fin </CInputGroupText>
+                <CFormSelect v-model="reporteMes.df" required="true">
+                    <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
+                </CFormSelect>
+            </CInputGroup>
 
         </CModalBody>
         <CModalFooter>
@@ -212,7 +207,7 @@ export default {
             direcciones:["/observaciones","/biometricos","/horarios"],
             reporteMes:{
                 cif:'',
-                gestion:0,
+                gestion:2021,
                 mes:1,
                 di:0,
                 df:0,
@@ -300,14 +295,20 @@ export default {
         clickModalMes(rmes){
             if(this.usuario.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
                 this.getFotoPerfil();
-            else
+            else{
+                this.reporteMes.di=0;
                 this.modalMes = rmes;
+            }
+                
         },
         clickModalDias(dias){
             if(this.usuario.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
                 this.getFotoPerfil();
-            else
+            else{
+                this.reporteMes.di=1;
                 this.modalDias = dias;
+            }
+                
         },
         getFotoPerfil(){ //Funcion que verifica su foto de perfil
             this.$swal.fire({
