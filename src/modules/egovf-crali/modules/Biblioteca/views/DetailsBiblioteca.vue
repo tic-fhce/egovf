@@ -52,30 +52,28 @@
         <p class="text-gray-500">No se encontraron Libros.</p>
       </div>
 
-      <LibroList v-else :Libros="libros" :id-biblioteca="props.idBiblioteca"  @ejemplar-creado="ejemplarCreado"/>
+      <LibroList v-else :Libros="libros" :id-biblioteca="props.idBiblioteca"  @libro-creado="libroCreado"/>
     </div>
 
-     <!-- Modal: Agregar Ejemplar -->
-    <!-- <AgregarEjemplarModal
+     <!-- Modal: Agregar Libro -->
+     <AddUpdateLibro
       :visible="modalVisible"
-      :idLibro="props.idLibro"
-      :portadaLibro="portada"
+      :id_biblioteca="props.idBiblioteca"
       @close="cerrarModal"
-      @ejemplarCreado="ejemplarCreado"
-    /> -->
+      @libroCreado="libroCreado"
+    />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-// import AgregarEjemplarModal from '../components/AgregarEjemplarModal.vue'
-
 import Swal from 'sweetalert2'
 import { CButton } from '@coreui/vue'
 import { type Biblioteca, getBibliotecaById } from '../services/bibliotecaService'
 import { getLibrosByIdBiblioteca, type Libro } from '../services/libroService'
 import LibroList from '../components/LibroList.vue'
+import AddUpdateLibro from '../components/AddUpdateLibro.vue'
 
 interface Props {
   idBiblioteca: number
@@ -86,14 +84,13 @@ const router = useRouter()
 
 const biblioteca = ref<Biblioteca | null>(null)
 const libros = ref<Libro[]>([])
-// const portada = ref('');
 
 // Modal control
 const modalVisible = ref(false)
 const abrirModal = () => (modalVisible.value = true)
 const cerrarModal = () => (modalVisible.value = false)
 // Recargar datos después de agregar
-const ejemplarCreado = async () => {
+const libroCreado = async () => {
   await cargarDatos()
 }
 
@@ -103,7 +100,6 @@ const cargarDatos = async () => {
     biblioteca.value = await getBibliotecaById(props.idBiblioteca)
     if (biblioteca.value?.id_biblioteca) {
       libros.value = await getLibrosByIdBiblioteca(biblioteca.value.id_biblioteca)
-      // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'default-portada.jpg'
     }
   } catch (error) {
     console.error('Error al cargar datos:', error)

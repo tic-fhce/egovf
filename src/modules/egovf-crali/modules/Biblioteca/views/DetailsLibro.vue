@@ -1,6 +1,6 @@
 <template>
 
-  <h2 class="mb-1 max-w-lg text-2xl font-light leading-snug tracking-tight text-g1 sm:text-2xl sm:leading-snug">
+  <h2 class="mb-1 max-w-lg text-2xl font-semibold leading-snug tracking-tight text-g1 sm:text-2xl sm:leading-snug">
     Detalles del Libro
   </h2>
 
@@ -108,7 +108,7 @@ const cargarDatos = async () => {
     libro.value = await getLibroById(props.idLibro)
     if (libro.value?.id_libro) {
       ejemplares.value = await getEjemplaresByLibroId(libro.value.id_libro)
-      portada.value = ejemplares.value.find(e => e.portada)?.portada || 'default-portada.jpg'
+      portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
     }
   } catch (error) {
     console.error('Error al cargar datos:', error)

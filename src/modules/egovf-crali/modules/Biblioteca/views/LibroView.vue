@@ -1,301 +1,254 @@
 <template>
-  <CRow>
-    <CCol :xs="12">
-      <CCard>
-        <CCardHeader class="headercolor">
-          <CRow>
-            <CCol :lg="6">{{ titulo }}</CCol>
-            <CCol :lg="6" class="text-end">
-              <CButton @click="abrirModal(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-book" class="me-2" />Agregar Libro
-              </CButton>
-            </CCol>
-          </CRow>
-        </CCardHeader>
-        <CCardBody>
-          <div class="table-responsive">
-            <table v-if="tablaCargada" id="librosTabla" class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Nro.</th>
-                  <th>Título</th>
-                  <th>Autor</th>
-                  <th>Año</th>
-                  <th>Idioma</th>
-                  <th>Ejemplares</th>
-                  <th>Biblioteca</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(libro, index) in libros" :key="libro.id_libro">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ libro.titulo }}</td>
-                  <td>{{ libro.autor }}</td>
-                  <td>{{ libro.anio }}</td>
-                  <td>{{ libro.idioma }}</td>
-                  <td>{{ libro.ejemplares }}</td>
-                  <td>{{ getNombreBiblioteca(libro.id_biblioteca) }}</td>
-                  <td>
-                    <CButton class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
-                      <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
-                    </CButton>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
-                      <CIcon icon="cil-pencil" class="me-1" />Editar
-                    </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
-                      <CIcon icon="cil-trash" class="me-1" />Eliminar
-                    </CButton>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CCardBody>
-      </CCard>
-    </CCol>
-  </CRow>
+  <div class="bg-white px-5 py-2 rounded">
+    <h1 class="text-3xl">
+      {{ isEditMode ? 'Editar Libro:' : 'Crear Libro:' }}
+      <small v-if="isEditMode" class="text-blue-500">{{ libro?.titulo || '...' }}</small>
+    </h1>
+    <hr class="my-4" />
+  </div>
 
-  <!-- Modal Libro -->
-  <CModal :visible="modalVisible" @close="abrirModal(false)">
-    <form @submit.prevent="guardarLibro">
-      <CModalHeader class="headercolor" dismiss @close="abrirModal(false)">
-        <CModalTitle>
-          <h4><CIcon icon="cil-book" size="xl" /> {{ esEdicion ? 'Editar' : 'Agregar' }} Libro</h4>
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <div class="mb-3 row" v-for="(label, field) in camposFormulario" :key="field">
-          <label class="col-4 col-form-label">{{ label }}</label>
-          <div class="col-8">
-            <input
-              v-if="field !== 'id_biblioteca' && field !== 'contenido_pdf'"
-              :type="field === 'anio' || field === 'ejemplares' ? 'number' : 'text'"
-              class="form-control"
-              v-model="libroForm[field]"
-              :required="field !== 'contenido_pdf'"
-            />
-            <textarea
-              v-else-if="field === 'contenido_pdf'"
-              class="form-control"
-              v-model="libroForm.contenido_pdf"
-              rows="3"
-              placeholder="Contenido PDF (URL o base64)"
-            ></textarea>
-            <select v-else class="form-control" v-model="libroForm.id_biblioteca" required>
-              <option disabled value="">Seleccione una biblioteca</option>
-              <option v-for="biblio in bibliotecas" :key="biblio.id_biblioteca" :value="biblio.id_biblioteca">
-                {{ biblio.nombre }}
-              </option>
-            </select>
-          </div>
+  <form @submit.prevent="guardar" class="grid grid-cols-1 sm:grid-cols-2 bg-white px-5 gap-5">
+    <!-- Columna izquierda -->
+    <div class="first-col">
+      <div class="mb-3">
+        <label class="form-label">Título</label>
+        <input v-model="form.titulo" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Autor</label>
+        <input v-model="form.autor" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Año</label>
+        <input type="number" v-model.number="form.anio" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Idioma</label>
+        <select v-model="form.idioma" class="form-control" required>
+          <option value="">Seleccione</option>
+          <option value="Español">Español</option>
+          <option value="Inglés">Inglés</option>
+          <option value="Francés">Francés</option>
+          <option value="Alemán">Alemán</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Signatura Topográfica</label>
+        <input v-model="form.signatura_topografica" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Número de Ejemplares</label>
+        <input type="number" v-model.number="form.ejemplares" class="form-control" required min="0"/>
+      </div>
+
+      <div v-if="!isEditMode" class="mb-4">
+        <label class="form-label">Biblioteca</label>
+        <select v-model="form.id_biblioteca" class="form-control" required>
+          <option value="">Seleccione una biblioteca</option>
+          <option v-for="biblioteca in bibliotecas" :key="biblioteca.id_biblioteca" :value="biblioteca.id_biblioteca">
+            {{ biblioteca.nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="first-col">
+      <div class="mb-4">
+        <label class="form-label">Portada Actual</label>
+        <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-br-none rounded-tl-none">
+          <!-- <img :src="`/${portada}`" alt="Portada" class="object-cover rounded" /> -->
+             <!-- Previsualización de la imagen (base64) -->
+          <img v-if="isBase64" :src="previewPortada" alt="Portada" class="object-cover rounded" />
+          <!-- Imagen cargada en el servidor -->
+          <img v-if="!isBase64" :src="`/${portada}`" alt="Portada" class="object-cover rounded" />
         </div>
-      </CModalBody>
-      <CModalFooter>
-        <CButton @click="abrirModal(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
-        </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-book" class="me-2" />{{ btnEdit }}
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Subir Nueva Portada</label>
+        <input type="file" accept="image/*" class="form-control" @change="onFileChanged" />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Contenido (PDF)</label>
+        <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" />
+        <p v-if="previewPdf" class="text-sm mt-1 text-gray-500">Archivo seleccionado: {{ previewPdf }}</p>
+      </div>
+
+      <div class="my-4 text-right">
+        <button type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          {{ isEditMode ? 'Guardar Cambios' : 'Crear Libro' }}
         </button>
-      </CModalFooter>
-    </form>
-  </CModal>
+        <button @click="volver"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          Volver
+        </button>
+      </div>
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import {
-  Libro, getLibros, createLibro,
-  updateLibro, deleteLibro
-} from '../services/libroService'
-import { Biblioteca, getBibliotecas } from '../../Biblioteca/services/bibliotecaService'
 import Swal from 'sweetalert2'
+import { type Libro, getLibroById, updateLibro, createLibro } from '../services/libroService'
+import { type Biblioteca, getBibliotecas } from '../services/bibliotecaService'
+import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 
-import $ from 'jquery'
-import 'datatables.net'
-
+interface Props {
+  idLibro?: number
+}
+const props = defineProps<Props>()
 const router = useRouter()
 
-const titulo = 'Gestión de Libros'
+const isEditMode = computed(() => !!props.idLibro)
 
-const libros = ref<Libro[]>([])
+const libro = ref<Libro | null>(null)
+const portada = ref('')
+const imageFile = ref<File>();
+const pdfFile = ref<File>();
+const nameFileImg = ref<string>('')
+const isBase64 = ref<boolean>(false)
+const previewPortada = ref<string>('')
+const previewPdf = ref<string>('')
 const bibliotecas = ref<Biblioteca[]>([])
-const modalVisible = ref(false)
-const esEdicion = ref(false)
-const btnEdit = ref('Agregar')
-const tablaCargada = ref(false)
+const ejemplares = ref<Ejemplar[]>([])
 
-type LibroFormFields = {
-  [key: string]: string | number
-}
-
-const libroForm = ref<LibroFormFields>({
-  id_libro: 0,
+const form = ref<Partial<Libro>>({
   titulo: '',
   autor: '',
-  anio: new Date().getFullYear(),
+  anio: 0,
   idioma: '',
   signatura_topografica: '',
-  ejemplares: 1,
+  ejemplares: 0,
   contenido_pdf: '',
-  id_usuario: 0, // Aquí puedes setear según tu lógica de usuario
-  id_biblioteca: 0,
+  id_usuario: 0, 
+  id_biblioteca: 0 
 })
-
-const camposFormulario: Record<string, string> = {
-  titulo: 'Título',
-  autor: 'Autor',
-  anio: 'Año',
-  idioma: 'Idioma',
-  signatura_topografica: 'Signatura Topográfica',
-  ejemplares: 'Ejemplares',
-  contenido_pdf: 'Contenido PDF',
-  id_biblioteca: 'Biblioteca'
-}
 
 onMounted(async () => {
-  await cargarDatos()
+  if (isEditMode.value && props.idLibro) {
+    try {
+      const data = await getLibroById(props.idLibro)
+      libro.value = data
+      if (data) {
+        form.value = { ...data }
+        previewPdf.value = data.contenido_pdf || ''
+      }
+      ejemplares.value = await getEjemplaresByLibroId(props.idLibro)
+      // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
+      const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === 'Disponible');
+      // const cantidadDisponibles = disponibles.length;
+      portada.value = disponibles[0]?.portada || 'ruta/portadas/bookCover.png';
+
+    } catch (err) {
+      console.error(err)
+      Swal.fire('Error', 'No se pudo cargar la información del libro.', 'error')
+    }
+  } else {
+    try {
+      const data = await getBibliotecas()
+      bibliotecas.value = data
+      portada.value = 'ruta/portadas/bookCover.png';
+    } catch (err) {
+      console.error(err)
+      Swal.fire('Error', 'No se pudieron cargar las bibliotecas.', 'error')
+    }
+  }
 })
 
-async function cargarDatos() {
-  try {
-    destruirDataTable()
-    tablaCargada.value = false
-    libros.value = await getLibros()
-    bibliotecas.value = await getBibliotecas()
-    await nextTick()
-    tablaCargada.value = true
-    await nextTick()
-    inicializarDataTable()
-  } catch (error) {
-    console.error('Error al obtener libros:', error)
+const handlePdfChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file || !file.type.includes('pdf')) {
+    Swal.fire('Archivo inválido', 'Solo se permiten archivos PDF.', 'warning')
+    return
   }
+  pdfFile.value = file
+  form.value.contenido_pdf = `ruta/pdfs/${file.name}`
+  previewPdf.value = file.name
 }
 
-const getNombreBiblioteca = (id: number) => {
-  const biblio = bibliotecas.value.find(b => b.id_biblioteca === id)
-  return biblio ? biblio.nombre : 'N/D'
-}
+const onFileChanged = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const imgFile = input.files?.[0]
+  if (!imgFile || !imgFile.type.startsWith('image/')) {
+    Swal.fire('Archivo inválido', 'Solo se permiten imágenes.', 'warning')
+    return
+  }
+  imageFile.value = imgFile 
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    const result = event.target?.result
+    if (typeof result === 'string') {
+      previewPortada.value = result
+      isBase64.value = true
 
-const inicializarDataTable = () => {
-  const tableEl = document.getElementById('librosTabla')
-  if (!tableEl) return
-  $('#librosTabla').DataTable({ destroy: true })
-}
-
-const destruirDataTable = () => {
-  const table = $('#librosTabla').DataTable()
-  if (table) table.destroy()
-}
-
-function abrirModal(estado: boolean) {
-  modalVisible.value = estado
-  if (!estado) {
-    libroForm.value = {
-      id_libro: 0,
-      titulo: '',
-      autor: '',
-      anio: new Date().getFullYear(),
-      idioma: '',
-      signatura_topografica: '',
-      ejemplares: 1,
-      contenido_pdf: '',
-      id_usuario: 0,
-      id_biblioteca: 0
+      nameFileImg.value = imgFile.name
     }
-    esEdicion.value = false
-    btnEdit.value = 'Agregar'
   }
-}
-
-const verDetalles = (libro: Libro) => {
-  // console.log('Libro:', libro)
-
-  router.push({
-    name: 'DetallesLibro',
-    // params: { idLibro: libro.id_libro, idBiblioteca: libro.id_biblioteca },
-    params: { idLibro: libro.id_libro},
-
-  })
-  // // Aquí puedes abrir otro modal, redireccionar, o mostrar más info
-  // Swal.fire({
-  //   title: `Detalles de: ${libro.titulo}`,
-  //   html: `
-  //     <p><strong>Autor:</strong> ${libro.autor}</p>
-  //     <p><strong>Año:</strong> ${libro.anio}</p>
-  //     <p><strong>Idioma:</strong> ${libro.idioma}</p>
-  //     <p><strong>Ejemplares:</strong> ${libro.ejemplares}</p>
-  //     <p><strong>Signatura:</strong> ${libro.signatura_topografica}</p>
-  //   `,
-  //   icon: 'info'
-  // })
-}
-
-function editarLibro(libro: Libro) {
-  libroForm.value = { ...libro }
-  esEdicion.value = true
-  btnEdit.value = 'Actualizar'
-  abrirModal(true)
-}
-
-const eliminarLibro = async (id_libro: number) => {
-  const confirm = await Swal.fire({
-    title: '¿Estás seguro?',
-    text: 'Esta acción no se puede deshacer.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, eliminar',
-    cancelButtonText: 'Cancelar',
-    customClass: {
-      confirmButton: 'bg-red-600 text-white px-4 py-2 rounded-md mr-2',
-      cancelButton: 'bg-gray-200 text-black px-4 py-2 rounded-md'
-    },
-    buttonsStyling: false
-  })
-  if (!confirm.isConfirmed) return
-
-  try {
-    await deleteLibro(id_libro)
-    libros.value = libros.value.filter(l => l.id_libro !== id_libro)
-    showToast('success', 'Libro eliminado correctamente')
-    await cargarDatos()
-  } catch {
-    showToast('error', 'Error al eliminar el libro')
+  reader.onerror = (error) => {
+    console.error('Error leyendo imagen:', error)
+    Swal.fire('Error', 'No se pudo cargar la imagen.', 'error')
   }
+  reader.readAsDataURL(imgFile)
 }
 
-const guardarLibro = async () => {
+const guardar = async () => {
   try {
-    if (esEdicion.value) {
-      await updateLibro(libroForm.value)
-      showToast('success', 'Libro actualizado correctamente')
+    isBase64.value = false
+
+    if (!form.value.titulo || !form.value.autor || !form.value.anio || !form.value.idioma) {
+      Swal.fire('Campos incompletos', 'Llene todos los campos requeridos.', 'warning')
+      return
+    }
+
+    if (isEditMode.value && props.idLibro) {
+      console.log(form.value)
+      console.log('portada', portada.value)
+      console.log('file img', imageFile)
+      console.log('file pdf', pdfFile)
+      // await updateLibro(form.value as Libro)
+      // Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
     } else {
-      await createLibro(libroForm.value)
-      showToast('success', 'Libro agregado correctamente')
+      console.log(form.value)
+      console.log('portada', portada.value)
+      console.log('file img', imageFile)
+      console.log('file pdf', pdfFile)
+      // await createLibro(form.value as Libro)
+      // Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
+      form.value = {} 
     }
-    abrirModal(false)
-    await cargarDatos()
-  } catch (error) {
-    console.error(error)
-    showToast('error', 'Error al guardar el libro')
+  } catch (err) {
+    console.error(err)
+    Swal.fire('Error', 'No se pudo guardar el libro.', 'error')
   }
 }
 
-const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
-  Swal.fire({
-    icon,
-    title: message,
-    toast: true,
-    position: 'top-end',
-    timer: 2000,
-    showConfirmButton: false,
-  })
+const volver = () => {
+   router.go(-1)
 }
+
 </script>
 
 <style scoped>
 @import 'datatables.net-dt';
 @import '../../../styles/tailwind.css';
+
+.form-label {
+  @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.form-control {
+  @apply shadow appearance-none border rounded w-full px-3 text-gray-700 leading-tight focus:outline-none;
+}
 </style>

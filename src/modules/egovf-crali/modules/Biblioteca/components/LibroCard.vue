@@ -1,10 +1,10 @@
 <template>
   <article class="bg-white p-3 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl">
 
-    <a href="#">
+    <a href="#" >
       <div class="relative overflow-hidden rounded-xl">
         <img v-if="portada && !imageFailed" :src="getImageSrc(portada)" alt="Portada" class="h-64 w-full object-cover"
-          @error="handleImageError" />
+          />
         <div v-else class="w-full h-40 flex items-center justify-center bg-gray-200 rounded-md text-gray-500">
           Sin portada
         </div>
@@ -21,7 +21,7 @@
         </p>
           <div class="mt-10 flex flex-col items-center md:flex-row">
 
-          <div @click="emitEdit"
+          <div @click="verLibro(libro.id_libro)"
             class="inline-flex w-full items-center  rounded-lg bg-orange-500 px-4 py-1.5 text-white duration-100 hover:bg-orange-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
               stroke="currentColor" class="h-4 w-4">
@@ -34,11 +34,11 @@
                   fill="#ffffff"></path>
               </g>
             </svg>
-            <button class="text-sm">Modificar</button>
+            <button class="text-sm">ver</button>
           </div>
 
-          <div @click="verLibro(libro.id_libro)"
-            class="inline-flex w-full items-center  rounded-lg  bg-green-500 px-1 py-1.5 text-white duration-100  hover:bg-green-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+          <div @click="emitEdit"
+            class="inline-flex w-full items-center  rounded-lg  bg-red-500 px-1 py-1.5 text-white duration-100  hover:bg-red-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
               stroke="currentColor" class="h-4 w-4">
               <g id="SVGRepo_bgCarrier" stroke-width="1.5"></g>
@@ -56,7 +56,7 @@
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
               </g>
             </svg>
-            <button class="text-sm">Ver</button>
+            <button class="text-sm">Modificar</button>
           </div>
 
         </div>
@@ -68,16 +68,16 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { deleteEjemplar, type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
-import Swal from 'sweetalert2'
+import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
+// import Swal from 'sweetalert2'
 import { type Libro } from '../services/libroService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
 const props = defineProps<{ libro: Libro }>()
-// const emit = defineEmits(['edit','ejemplarEliminado'])
-const defaultImage = '/ruta/portadas/bookCover.png'
+const emit = defineEmits(['edit','libroEliminado'])
+const defaultImage = 'ruta/portadas/bookCover.png'
 const imageFailed = ref(false)
 const portada = ref<string>('')
 const disponible = ref<number>(0)
@@ -94,6 +94,9 @@ async function cargarDatos() {
       ejemplar.value = ejemplares[0] 
       portada.value = ejemplares[0].portada 
       disponible.value = ejemplares.filter(ejemplar => ejemplar.estado === 'Disponible').length
+      ejemplar.value.estado = (disponible.value > 0) ? 'Disponible' : 'No Disponible'
+    }else{
+      portada.value = defaultImage
     }
   } catch (error) {
     console.error('Error al obtener ejemplares:', error)
@@ -112,9 +115,9 @@ const getImageSrc = (portada: string) => {
 }
 
 // Handle image load error
-const handleImageError = () => {
-  imageFailed.value = true
-}
+// const handleImageError = () => {
+//   imageFailed.value = true
+// }
 
 const estadoClass = computed(() => {
   if (!ejemplar.value) return 'text-gray-600'
@@ -124,7 +127,7 @@ const estadoClass = computed(() => {
     case 'prestado':
       return 'text-red-600 font-semibold'
     default:
-      return 'text-gray-600'
+      return 'text-red-600 font-semibold'
   }
 })
 
@@ -138,18 +141,18 @@ const verLibro = async (codigo: number) => {
 
 const emitEdit = () => {
   // console.log(props.ejemplar)
-  // emit('edit', props.ejemplar)
+  emit('edit', props.libro)
 }
 
 
-const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
-  Swal.fire({
-    icon,
-    title: message,
-    toast: true,
-    position: 'top-end',
-    timer: 2000,
-    showConfirmButton: false,
-  })
-}
+// const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
+//   Swal.fire({
+//     icon,
+//     title: message,
+//     toast: true,
+//     position: 'top-end',
+//     timer: 2000,
+//     showConfirmButton: false,
+//   })
+// }
 </script>
