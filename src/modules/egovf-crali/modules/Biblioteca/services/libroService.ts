@@ -67,11 +67,7 @@ export const createLibro = async (libro: Partial<Libro>): Promise<Libro> => {
 // Crear nuevo libro
 export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdfFile: File, ) => {
   try {
-    console.log('create file')
-    console.log({libro})
-    console.log(imageFile)
-    console.log(pdfFile)
-     // Upload image file if provided
+    // Upload image file if provided
     let portadaUrl = '';
     if (imageFile) {
       portadaUrl = await uploadFile(imageFile);
@@ -138,7 +134,7 @@ const uploadFile = async (file: File): Promise<string> => {
     formData.append('file', file);
     
     await new Promise(resolve => setTimeout(resolve, 1000));
-    return `/uploads/${file.name}`;
+    return `ruta/portadas/${file.name}`;
   } catch (error) {
     throw new Error(`Error uploading file ${file.name}`);
   }

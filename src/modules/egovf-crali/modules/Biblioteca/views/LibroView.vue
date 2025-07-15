@@ -7,7 +7,7 @@
     <hr class="my-4" />
   </div>
 
-  <form @submit.prevent="guardar" class="grid grid-cols-1 sm:grid-cols-2 bg-white px-5 gap-5">
+  <form @submit.prevent="" class="grid grid-cols-1 sm:grid-cols-2 bg-white px-5 gap-5">
     <!-- Columna izquierda -->
     <div class="first-col">
       <div class="mb-3">
@@ -47,7 +47,7 @@
         <input type="number" v-model.number="form.ejemplares" class="form-control" required min="0"/>
       </div>
 
-      <div v-if="!isEditMode" class="mb-4">
+      <div  class="mb-4">
         <label class="form-label">Biblioteca</label>
         <select v-model="form.id_biblioteca" class="form-control" required>
           <option value="">Seleccione una biblioteca</option>
@@ -83,11 +83,11 @@
       </div>
 
       <div class="my-4 text-right">
-        <button type="submit"
+        <button  @click="guardar"
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           {{ isEditMode ? 'Guardar Cambios' : 'Crear Libro' }}
         </button>
-        <button @click="volver"
+        <button @click="volver" type="submit"
           class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
           Volver
         </button>
@@ -109,29 +109,28 @@ interface Props {
 }
 const props = defineProps<Props>()
 const router = useRouter()
-
+const idBiblioteca = window.history.state?.idBiblioteca;
 const isEditMode = computed(() => !!props.idLibro)
-
 const libro = ref<Libro | null>(null)
-const portada = ref('')
-const imageFile = ref<File>();
-const pdfFile = ref<File>();
-const nameFileImg = ref<string>('')
-const isBase64 = ref<boolean>(false)
-const previewPortada = ref<string>('')
-const previewPdf = ref<string>('')
 const bibliotecas = ref<Biblioteca[]>([])
 const ejemplares = ref<Ejemplar[]>([])
 const imageInput = ref<HTMLInputElement | null>(null)
 const pdfInput = ref<HTMLInputElement | null>(null)
+const imageFile = ref<File>();
+const pdfFile = ref<File>();
+const portada = ref('')
+const nameFileImg = ref<string>('')
+const isBase64 = ref<boolean>(false)
+const previewPortada = ref<string>('')
+const previewPdf = ref<string>('')
 
 const form = ref<Partial<Libro>>({
-  titulo: 'asd',
-  autor: 'asd',
-  anio: 2025,
-  idioma: 'Ingles',
-  signatura_topografica: 'asd123',
-  ejemplares: 5,
+  titulo: '',
+  autor: '',
+  anio: undefined,
+  idioma: '',
+  signatura_topografica: '',
+  ejemplares: undefined,
   contenido_pdf: '',
   id_usuario: 0, 
   id_biblioteca: 0 
@@ -151,7 +150,8 @@ onMounted(async () => {
       const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === 'Disponible');
       // const cantidadDisponibles = disponibles.length;
       portada.value = disponibles[0]?.portada || 'ruta/portadas/bookCover.png';
-
+      const dataB = await getBibliotecas()
+      bibliotecas.value = dataB
     } catch (err) {
       console.error(err)
       Swal.fire('Error', 'No se pudo cargar la información del libro.', 'error')
@@ -160,6 +160,8 @@ onMounted(async () => {
     try {
       const data = await getBibliotecas()
       bibliotecas.value = data
+      if(idBiblioteca)
+        form.value.id_biblioteca = idBiblioteca
       portada.value = 'ruta/portadas/bookCover.png';
     } catch (err) {
       console.error(err)
@@ -216,22 +218,15 @@ const guardar = async () => {
     }
 
     if (isEditMode.value && props.idLibro) {
-      console.log(form.value)
-      console.log('portada', portada.value)
-      console.log('file img', imageFile)
-      console.log('file pdf', pdfFile)
-      // await updateLibro(form.value as Libro)
-      // Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
+      await updateLibro(form.value as Libro)
+      Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
     } else {
-      console.log(form.value)
-      console.log('portada', portada.value)
-      console.log('file img', imageFile)
-      console.log('file pdf', pdfFile)
       // await createLibro(form.value as Libro)
       await createLibroFile(form.value as Libro, imageFile.value as File, pdfFile.value as File)
       Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
-      router.push('/libros')
     }
+    // router.push('/libros')
+    router.go(-1)
   } catch (err) {
     console.error(err)
     Swal.fire('Error', 'No se pudo guardar el libro.', 'error')
@@ -245,7 +240,6 @@ const volver = () => {
 </script>
 
 <style scoped>
-@import 'datatables.net-dt';
 @import '../../../styles/tailwind.css';
 
 .form-label {

@@ -21,7 +21,7 @@
               accusantium doloremque it.</p>
 
             <div class="mt-10 flex flex-col items-center md:flex-row">
-              <CButton @click="abrirModal"
+              <CButton @click="crearLibro"
                 class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Agregar Libro</CButton>
 
@@ -56,12 +56,12 @@
     </div>
 
      <!-- Modal: Agregar Libro -->
-     <AddUpdateLibro
+     <!-- <AddUpdateLibro
       :visible="modalVisible"
       :id_biblioteca="props.idBiblioteca"
       @close="cerrarModal"
       @libroCreado="libroCreado"
-    />
+    /> -->
 </template>
 
 <script lang="ts" setup>
@@ -73,7 +73,7 @@ import { CButton } from '@coreui/vue'
 import { type Biblioteca, getBibliotecaById } from '../services/bibliotecaService'
 import { getLibrosByIdBiblioteca, type Libro } from '../services/libroService'
 import LibroList from '../components/LibroList.vue'
-import AddUpdateLibro from '../components/AddUpdateLibro.vue'
+// import AddUpdateLibro from '../components/AddUpdateLibro.vue'
 
 interface Props {
   idBiblioteca: number
@@ -86,9 +86,9 @@ const biblioteca = ref<Biblioteca | null>(null)
 const libros = ref<Libro[]>([])
 
 // Modal control
-const modalVisible = ref(false)
-const abrirModal = () => (modalVisible.value = true)
-const cerrarModal = () => (modalVisible.value = false)
+// const modalVisible = ref(false)
+// const abrirModal = () => (modalVisible.value = true)
+// const cerrarModal = () => (modalVisible.value = false)
 // Recargar datos después de agregar
 const libroCreado = async () => {
   await cargarDatos()
@@ -106,7 +106,19 @@ const cargarDatos = async () => {
     Swal.fire('Error', 'No se pudo cargar la información de la Biblioteca.', 'error')
   }
 }
-
+const crearLibro = () => {
+  router.push({
+    name: 'libro',
+    params: { idLibro: 0},
+    state: { idBiblioteca: props.idBiblioteca } 
+  })
+}
+// const editarLibro = (libro: Libro) => {
+//    router.push({
+//     name: 'libro',
+//     params: { idLibro: libro.id_libro},
+//   })
+// }
 const editarLibro = () => {
   // if (libro.value) {
   //   router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
