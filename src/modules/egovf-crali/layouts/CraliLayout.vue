@@ -56,20 +56,6 @@ export default {
               "icono": "icon",
               // "idModulo": 1
             },
-            {
-              "id": 3,
-              "titulo": "Préstamos",
-              "ruta": "/prestamos",
-              "icono": "icon",
-              "idModulo": 1
-            },
-            {
-              "id": 4,
-              "titulo": "Historial",
-              "ruta": "/historial",
-              "icono": "cil-settings",
-              "idModulo": 1
-            }
           ]
         },
         {
@@ -117,6 +103,30 @@ export default {
               "icono": "icon",
               "idModulo": 1
             },
+
+          ]
+        },
+        {
+          "id": 4,
+          "titulo": "Prestamos",
+          "descripcion": "Módulo de historial",
+          "icono": "cil-clipboard",
+          "importancia": 1,
+          "menuDtoObj": [
+            {
+              "id": 1,
+              "titulo": "Prestamos",
+              "ruta": "/prestamos",
+              "icono": "icon",
+              "idModulo": 1
+            },
+            // {
+            //   "id": 2,
+            //   "titulo": "Historial",
+            //   "ruta": "/historial",
+            //   "icono": "cil-settings",
+            //   "idModulo": 1
+            // },
 
           ]
         },
