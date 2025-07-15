@@ -1,6 +1,7 @@
 <template>
     <nav aria-label="breadcrumb">
   <ol class="breadcrumb custom-breadcrumb">
+    
     <li class="breadcrumb-item active" aria-current="page">
       Inventario >
     </li>
@@ -12,7 +13,7 @@
             <CCard>
                 <CCardHeader class="headercolor text-center">Tipo de Equipos</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-qr-code" class="menuicon"/> 
+                    <CIcon customClassName="nav-icon" icon="cil-list" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
                     <CButton color="success" class="font" @click="getTipo()">Ingresar</CButton>
@@ -20,7 +21,7 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.idTipo">
+        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.id">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">{{tipo.sigla}}</CCardHeader>
@@ -29,13 +30,17 @@
                     
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getLista(tipo.idTipo)">Ingresar</CButton>
+                    <CButton color="primary" class="font" @click="getLista(tipo.idTipo)">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
 
 
     </CRow>
+    <br>
+   <CRow>
+       <CButton color="dark" class="font" @click="()=> this.$router.push('/atenciones')">Ver Atenciones</CButton> 
+   </CRow> 
 </template>
 <script>
 
@@ -109,5 +114,18 @@ export default {
 .menuicon {
     width: 100px;  /* Ajusta el tamaño según necesites */
     height: 100px;
+}
+.font{
+    background-color: #00222f;
+    border-color: #00222f;
+    color: white;
+
+}
+
+.font:hover{
+    background-color: white;
+    border-color: #00222f;
+    color: #00222f;
+    
 }
 </style>

@@ -106,6 +106,95 @@ const routes = [
         name: "ListaEquiposView",
         component: () => import("@/modules/egovf-inv/views/ListaEquiposView.vue"),
       },
+      {
+        //Nuevo
+        path: "/detallesEquipo/:id",
+        name: "DetallesEquipoView",
+        component: () => import("@/modules/egovf-inv/views/DetallesEquipoView.vue"),
+      },{
+        //Nuevotambien
+        path: "/agregarequipo/:id",
+        name: "AgregarEquipoView",
+        component: () => import("@/modules/egovf-inv/views/AgregarEquipoView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/atenciones",
+        name: "AtencionesView",
+        component: () => import("@/modules/egovf-inv/views/AtencionesView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/nuevaAsignacion/:id",
+        name: "AsignacionEquipoView",
+        component: () => import("@/modules/egovf-inv/views/AsignacionEquipoView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/historialAsignaciones/:id",
+        name: "HistorialAsignacionesView",
+        component: () => import("@/modules/egovf-inv/views/HistorialAsignacionesView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/nuevaUbicacion/:id",
+        name: "UbicacionEquipoView",
+        component: () => import("@/modules/egovf-inv/views/UbicacionEquipoView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/historialUbicaciones/:id",
+        name: "HistorialUbicacionesView",
+        component: () => import("@/modules/egovf-inv/views/HistorialUbicacionesView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/nuevaRed/:id",
+        name: "RedEquipoView",
+        component: () => import("@/modules/egovf-inv/views/RedEquipoView.vue"),
+      },
+      {
+        path: "/historialRedes/:id",
+        name: "HistorialRedesView",
+        component: () => import("@/modules/egovf-inv/views/HistorialRedesView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/historialUbicaciones/:id",
+        name: "HistorialUbicacionesView",
+        component: () => import("@/modules/egovf-inv/views/HistorialUbicacionesView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/historialSoftware/:id",
+        name: "HistorialSoftwareView",
+        component: () => import("@/modules/egovf-inv/views/HistorialSoftwareView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/nuevoSoftware/:id",
+        name: "SoftwareEquipoView",
+        component: () => import("@/modules/egovf-inv/views/SoftwareEquipoView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/atenderSolicitud/:idEquipo/:idSolicitud",
+        name: "AtenderSolicitudView",
+        component: () => import("@/modules/egovf-inv/views/AtenderSolicitudView.vue"),
+      },
+      {
+        //Nuevo
+        path: "/atenderSolicitudtodas/:idEquipo/:idSolicitud",
+        name: "AtenderSolicitudViewTodas",
+        component: () => import("@/modules/egovf-inv/views/AtenderSolicitudViewTodas.vue"),
+      },
+      {
+        // Nuevo
+        path: "/nuevaSolicitud/:idEquipo",
+        name: "SolicitudEquipoView",
+        component: () => import("@/modules/egovf-inv/views/SolicitudEquipoView.vue"),
+      },
+
       // END MODULO INVENTARIO
       {
         path: "/listaEquipo",

@@ -5,13 +5,20 @@
           <router-link to="/inventario" class="breadcrumb-link">Inventario</router-link>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-          {{ titulo }}
+      
+      <router-link to="/tipoEquipos" class="breadcrumb-link">Tipos de Equipos</router-link>
+    </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ titulo }} >
         </li>
       </ol>
     </nav>
   
-    <h1>{{ titulo }}</h1>
+ <div class="d-flex justify-content-between align-items-start mb-3"> 
+   <h1>{{ titulo }}</h1>
+ <CButton class="boton-agregar" @click="openform(idEquipo)">Agregar Equipo</CButton>
   
+ </div>   
     <CRow>
       <CCol :lg="12">
         <CCard>
@@ -24,19 +31,19 @@
                     <th>ID</th>
                     <th>Código</th>
                     <th>Mac - Serie</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
                     <th>Detalle</th>
-                    <th>Opciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="equipo in listaEquipo" :key="equipo.id">
-                    <td>{{ equipo.id }}</td>
+                  <tr v-for="equipo in listaEquipo" :key="equipo.id" @click="getLista(equipo.idEquipo)">
+                    <td>{{ equipo.idEquipo }}</td>
                     <td>{{ equipo.codigo }}</td>
-                    <td>{{ equipo.macserie }}</td>
+                    <td>{{ equipo.macSerie }}</td>
+                    <td>{{ equipo.marca }}</td>
+                    <td>{{ equipo.modelo }}</td>
                     <td>{{ equipo.detalle }}</td>
-                    <td>
-                      <!-- Botones u opciones aquí -->
-                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -76,7 +83,7 @@
     },
     computed: {
       titulo() {
-        const tipo = this.listaTipo.find(t => t.id == this.idEquipo);
+        const tipo = this.listaTipo.find(t => t.idTipo == this.idEquipo);
         return tipo ? tipo.sigla : 'Título por Defecto';
       }
     },
@@ -85,7 +92,7 @@
       this.getDatos();
       await this.getInventario();
       await this.getEquipoTipo();
-      //this.tablaTipo();
+      this.tablaTipo();
     },
     created() {
       this.inventarioService = new InventarioService();
@@ -96,6 +103,14 @@
       }
     },
     methods: {
+      openform(id) {
+        this.$router.push({
+          name: "AgregarEquipoView",
+          params: {
+            id: id
+          }
+        });
+      },
       tablaTipo() {
         this.$nextTick(() => {
           $('#tipoTabla').DataTable({
@@ -129,6 +144,14 @@
         await this.inventarioService.getTipo().then(response => {
           this.listaTipo = response.data;
         });
+      },
+      getLista(id) {
+        this.$router.push({
+          name: "DetallesEquipoView",
+          params: {
+            id: id
+          }
+        });
       }
     }
   };
@@ -140,6 +163,8 @@
   ::v-deep .dataTable thead th {
     background-color: #00222f !important;
     color: white !important;
+  }
+  ::v-deep .dataTable tbody {cursor: pointer;
   }
   
   .custom-breadcrumb {
@@ -162,6 +187,22 @@
   
   .breadcrumb-item + .breadcrumb-item::before {
     color: #bbb;
+  }
+  .boton-agregar
+  {
+    background-color: #00222f;
+    color: white;
+    border: solid 1px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-color: #00222f;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .boton-agregar:hover {
+    background-color: white;
+    color: #00222f;
+    border-color: #00222f;
   }
   </style>
   

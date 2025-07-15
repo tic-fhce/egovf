@@ -1,28 +1,29 @@
 import axios from "axios";
 import { API_URL_EGOVF_INV } from "@/env";
 const inventarioUrl = API_URL_EGOVF_INV;
+import { API_URL_EGOVF_USER } from "@/env";
+const personaUrl = API_URL_EGOVF_USER;
 
 export default class InventarioService {
+  headersUsuario(token) {
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+  }
   //Servicios para CPU
   getTipo() {
     return axios.get(inventarioUrl + "tipo/getTipo");
   }
   addTipo(tipo) {
-    const tipoRequestDTO = {
+    const tipoDtoRequest = {
       "sigla":tipo.sigla,
       "nombre":tipo.nombre,
       "icono":tipo.icono,
       "detalle":tipo.detalle
     };
-    return axios.post(inventarioUrl + "tipo/addTipo", tipoRequestDTO);
+    return axios.post(inventarioUrl + "tipo/addTipo", tipoDtoRequest);
   }
 
   getEquipoTipo(id) {
-    return axios.get(inventarioUrl + "equipo/getEquipotipo", {
-      params: {
-        idTipo: id,
-      },
-    });
+    return axios.get(inventarioUrl + "equipo/porTipo", { params: { idTipo: id } });
   }
   ////////////// funciones corregidas
 
@@ -186,8 +187,9 @@ export default class InventarioService {
       _03latitud: ubicacion.latitud,
       _04longitud: ubicacion.longitud,
     };
-    return axios.post(inventarioUrl + "ubicacion/addUbicacion", ubicacionaux);
+    return axios.post(inventarioUrl + "ubicacion/add", ubicacionaux);
   }
+  // OBSERVAR
   getUbicacionCif(cif) {
     return axios.get(inventarioUrl + "ubicacion/getUbicacionCif", {
       params: {
@@ -203,11 +205,12 @@ export default class InventarioService {
       _03latitud: ubicacion.latitud,
       _04longitud: ubicacion.longitud,
     };
-    return axios.put(inventarioUrl + "ubicacion/updateUbicacion", ubicacionaux);
+    return axios.put(inventarioUrl + "ubicacion/update", ubicacionaux);
   }
   
+
   getPerteneceCif(cif) {
-    return axios.get(inventarioUrl + "pertenece/getPerteneceCif", {
+    return axios.get(inventarioUrl + "pertenece/porCif", {
       params: {
         cif: cif,
       },
@@ -287,5 +290,237 @@ export default class InventarioService {
         id: idtipo,
       },
     });
+  }
+  // Nuevos servicios
+  getPertenecePorEquipo(idEquipo) {
+    return axios.get(inventarioUrl + "pertenece/porEquipo", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+
+  getEquipoById(idEquipo) {
+    return axios.get(inventarioUrl + "equipo/getEquipo/"+idEquipo);
+  }
+
+  getPersona(cif) {
+      return axios.get(personaUrl + "persona/getPersona", {
+        params: {
+          cif: cif,
+        },
+      });
+  }
+  getAtencionesPorEquipoYCif(cif, idEquipo) {
+    return axios.get(inventarioUrl + "solicitud/porEquipo" , {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+
+  getUbicacionesPorEquipo(idEquipo) {
+    return axios.get(inventarioUrl + "ubicacion/activa", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  getRedPorEquipo(idEquipo) {
+    return axios.get(inventarioUrl + "red/porEquipo", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  getSoftwarePorEquipo(idEquipo) {
+    return axios.get(inventarioUrl + "software/porEquipo", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  añadirequipo(equipo) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'equipo/add', equipo, config);
+  }
+  añadiratencion(atencion) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'solicitud/add', atencion, config);
+  }
+  añadirPertenece(pertenece) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'pertenece/add', pertenece, config);
+  }
+  editarPertenece(pertenece, id) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: {
+        id: id
+      }
+    };
+    return axios.put(inventarioUrl + 'pertenece/update', pertenece, config);
+  }
+  añadirSoftware(software) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'software/add', software, config);
+  }
+  añadirRed(red) {
+    
+    return axios.post(inventarioUrl + 'red/add', red);
+  }
+  añadirUbicacion(ubicacion) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'ubicacion/add', ubicacion, config);
+  } 
+
+  editarEquipo(equipo,id) {
+
+    return axios.put(inventarioUrl + 'equipo/update', { params: { id:id }, data: equipo });
+  }
+
+  getSolicitudes() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.get(inventarioUrl + "solicitud/todas", config);
+  }
+  getSolicitudesAtendidas() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.get(inventarioUrl + "solicitud/lista-atendidas", config);
+  }
+  getSolicitudesEnEspera() {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.get(inventarioUrl + "solicitud/lista-espera", config);
+  } 
+  desactivarUbicacion(idUbi) {
+    const id = parseInt(idUbi);
+    return axios.put(
+      inventarioUrl + "ubicacion/cambiarEstado",
+      {},
+      {
+        params: {
+          id: id,
+          estado: 0
+        }
+      }
+    );
+  }
+  activarUbicacion(idUbi) {
+    const id = parseInt(idUbi);
+    return axios.put(
+      inventarioUrl + "ubicacion/cambiarEstado",
+      {},
+      {
+        params: {
+          id: id,
+          estado: 1
+        }
+      }
+    );
+  }
+  gethistorialUbicaciones(idEquipo) {
+    return axios.get(inventarioUrl + "ubicacion/historial", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  getRedActiva(idEquipo) {
+    return axios.get(inventarioUrl + "red/activa", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  desactivarRed(idRed) {
+    const id = parseInt(idRed);
+    return axios.put(
+      inventarioUrl + "red/cambiarEstado",
+      {},
+      {
+        params: {
+          id: id,
+          estado: 0
+        }
+      }
+    );
+  }
+  activarRed(idRed) {
+    const id = parseInt(idRed);
+    return axios.put(
+      inventarioUrl + "red/cambiarEstado",
+      {},
+      {
+        params: {
+          id: id,
+          estado: 1
+        }
+      }
+    );
+  }
+  getHistorialRedes(idEquipo) {
+    return axios.get(inventarioUrl + "red/historial", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+
+
+  getSolicitudporEquipo(idEquipo) {
+    return axios.get(inventarioUrl + "solicitud/porEquipo", {
+      params: {
+        idEquipo: idEquipo
+      }
+    });
+  }
+  añadirAtencion1(atencion) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'atencion/addAtencion', atencion, config);
+  }
+  añadirSolicitud(solicitud) {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    return axios.post(inventarioUrl + 'solicitud/add', solicitud, config);
   }
 }
