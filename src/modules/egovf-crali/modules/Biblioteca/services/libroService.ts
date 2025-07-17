@@ -1,5 +1,5 @@
 import { SBFApi } from '@sbf/api/SBFApi';
-import { createEjemplar } from './ejemplarService';
+import { createEjemplar, uploadFileImage } from './ejemplarService';
 
 export interface Libro {
   id_libro: number;
@@ -70,17 +70,17 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
     // Upload image file if provided
     let portadaUrl = '';
     if (imageFile) {
-      portadaUrl = await uploadFile(imageFile);
+      portadaUrl = await uploadFileImage(imageFile);
     }
 
     // Upload PDF file if provided
-    let pdfUrl = '';
+    let pdfUrl = "";
     if (pdfFile) {
       pdfUrl = await uploadFile(pdfFile);
     }
     const libroData: Partial<Libro> = {
       ...libro,
-      contenido_pdf: pdfUrl || libro.contenido_pdf || ''
+      contenido_pdf: pdfUrl || libro.contenido_pdf || '',
     };
     const { data: createdLibro } = await SBFApi.post<Libro>('/libro/add', libroData);
     if (createdLibro.ejemplares && createdLibro.ejemplares > 0) {
@@ -127,14 +127,12 @@ export const deleteLibro = async (id_libro: number): Promise<void> => {
   }
 };
 
-// Simulated endpoint for uploading files
-const uploadFile = async (file: File): Promise<string> => {
+const uploadFile = async (file: File)=> {
   try {
     const formData = new FormData();
     formData.append('file', file);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return `ruta/portadas/${file.name}`;
+    const { data } = await SBFApi.post('/libro/upload', formData);
+    return data;
   } catch (error) {
     throw new Error(`Error uploading file ${file.name}`);
   }

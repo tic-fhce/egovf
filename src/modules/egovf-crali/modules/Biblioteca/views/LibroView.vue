@@ -179,7 +179,7 @@ const handlePdfChange = (event: Event) => {
   }
   pdfFile.value = file
   
-  form.value.contenido_pdf = `ruta/pdfs/${file.name}`
+  // form.value.contenido_pdf = `ruta/pdfs/${file.name}`
   previewPdf.value = file.name
 }
 

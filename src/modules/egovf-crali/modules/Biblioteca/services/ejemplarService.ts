@@ -55,3 +55,14 @@ export const deleteEjemplar = async (codigo: number): Promise<void> => {
     throw new Error('Error deleting ejemplar');
   }
 };
+
+export const uploadFileImage = async (file: File)=> {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await SBFApi.post('/ejemplar/upload-portada', formData);
+    return data;
+  } catch (error) {
+    throw new Error(`Error uploading file ${file.name}`);
+  }
+};
