@@ -1,4 +1,4 @@
-import { PrestamoApi } from './PrestamoApi';
+import { SBFApi } from '@sbf/api/SBFApi';
 
 export interface Prestamo {
   id_prestamo: number;
@@ -9,7 +9,7 @@ export interface Prestamo {
 
 export const getPrestamos = async (): Promise<Prestamo[]> => {
   try {
-    const { data } = await PrestamoApi.get<Prestamo[]>('/prestamo/all');
+    const { data } = await SBFApi.get<Prestamo[]>('/prestamo/all');
     return data;
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ export const getPrestamoById = async (idPrestamo: number): Promise<Prestamo | nu
 
 export const createPrestamo = async (prestamo: Partial<Prestamo>): Promise<Prestamo> => {
   try {
-    const { data } = await PrestamoApi.post<Prestamo>('/prestamo/add', prestamo);
+    const { data } = await SBFApi.post<Prestamo>('/prestamo/add', prestamo);
     return data;
   } catch (error) {
     console.error(error);
@@ -40,7 +40,7 @@ export const createPrestamo = async (prestamo: Partial<Prestamo>): Promise<Prest
 
 export const updatePrestamo = async (prestamo: Partial<Prestamo>): Promise<Prestamo> => {
   try {
-    const { data } = await PrestamoApi.put<Prestamo>('/prestamo/update', prestamo);
+    const { data } = await SBFApi.put<Prestamo>('/prestamo/update', prestamo);
     return data;
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ export const updatePrestamo = async (prestamo: Partial<Prestamo>): Promise<Prest
 
 export const deletePrestamo = async (id_prestamo: number): Promise<void> => {
   try {
-    await PrestamoApi.delete('/prestamo/delete', {
+    await SBFApi.delete('/prestamo/delete', {
       data: { id_prestamo }
     });
   } catch (error) {
