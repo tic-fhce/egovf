@@ -33,7 +33,7 @@
           <!-- Previsualización de la imagen (base64) -->
           <img v-if="isBase64" :src="previewPortada" class="max-h-40 mx-auto rounded border" alt="Vista previa" />
           <!-- Imagen cargada en el servidor -->
-          <img v-if="!isBase64" :src="`/${form.portada}`" class="max-h-40 mx-auto rounded border" alt="Portada" />
+          <img v-if="!isBase64" :src="`${form.portada}`" class="max-h-40 mx-auto rounded border" alt="Portada" />
           
         </div>
       </CModalBody>

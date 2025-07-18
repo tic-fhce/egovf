@@ -1,4 +1,5 @@
 import { SBFApi } from '@sbf/api/SBFApi';
+import { API_URL_EGOVF_SBF_FL } from '@env'
 
 export interface Ejemplar {
   codigo: number;
@@ -11,7 +12,11 @@ export interface Ejemplar {
 export const getEjemplares = async (): Promise<Ejemplar[]> => {
   try {
     const { data } = await SBFApi.get<Ejemplar[]>('/ejemplar/listar');
-    return data;
+    // return data;
+    return data.map(ejemplar => ({
+      ...ejemplar,
+      portada: getProductImageAction(ejemplar.portada)
+    }));
   } catch (error) {
     console.error(error);
     throw new Error('Error getting ejemplares');
@@ -20,7 +25,11 @@ export const getEjemplares = async (): Promise<Ejemplar[]> => {
 export const getEjemplaresByLibroId = async (idLibro: number): Promise<Ejemplar[]> => {
   try {
     const { data } = await SBFApi.get<Ejemplar[]>(`/ejemplar/buscar/libro?idLibro=${idLibro}`);
-    return data;
+    return data.map(ejemplar => ({
+      ...ejemplar,
+      portada: getProductImageAction(ejemplar.portada)
+    }));
+    // return data;
   } catch (error) {
     console.error(error);
     throw new Error('Error getting ejemplaresLibro');
@@ -66,3 +75,15 @@ export const uploadFileImage = async (file: File)=> {
     throw new Error(`Error uploading file ${file.name}`);
   }
 };
+
+export const getProductImageAction = (imageName: string): string => {
+  // return imageName.includes('http')
+  //   ? imageName
+  //   : `${API_URL_EGOVF_SBF_FL}${imageName}`
+
+      const fullUrl = imageName.startsWith('http')
+    ? imageName
+    : `${API_URL_EGOVF_SBF_FL}${imageName.startsWith('/') ? '' : '/'}${imageName}`
+
+    return fullUrl;
+}

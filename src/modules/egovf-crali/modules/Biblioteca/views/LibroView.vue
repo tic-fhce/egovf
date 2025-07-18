@@ -67,7 +67,7 @@
              <!-- Previsualización de la imagen (base64) -->
           <img v-if="isBase64" :src="previewPortada" alt="Portada" class="object-cover rounded" />
           <!-- Imagen cargada en el servidor -->
-          <img v-if="!isBase64" :src="`/${portada}`" alt="Portada" class="object-cover rounded" />
+          <img v-if="!isBase64" :src="`${portada}`" alt="Portada" class="object-cover rounded" />
         </div>
       </div>
 
@@ -149,7 +149,7 @@ onMounted(async () => {
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
       const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === 'Disponible');
       // const cantidadDisponibles = disponibles.length;
-      portada.value = disponibles[0]?.portada || 'ruta/portadas/bookCover.png';
+      portada.value = disponibles[0]?.portada || '/ruta/portadas/bookCover.png';
       const dataB = await getBibliotecas()
       bibliotecas.value = dataB
     } catch (err) {

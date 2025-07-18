@@ -39,7 +39,7 @@
         </div>
         <div class="relative hidden lg:ml-2  lg:block lg:w-1/2">
           <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-[6rem] rounded-br-none rounded-tl-none">
-            <img :src="`/${portada}`">
+            <img :src="`${portada}`">
           </div>
         </div>
       </div>
@@ -108,7 +108,7 @@ const cargarDatos = async () => {
     libro.value = await getLibroById(props.idLibro)
     if (libro.value?.id_libro) {
       ejemplares.value = await getEjemplaresByLibroId(libro.value.id_libro)
-      portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
+      portada.value = ejemplares.value.find(e => e.portada)?.portada || '/ruta/portadas/bookCover.png'
     }
   } catch (error) {
     console.error('Error al cargar datos:', error)

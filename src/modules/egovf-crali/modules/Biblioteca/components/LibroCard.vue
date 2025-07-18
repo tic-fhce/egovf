@@ -77,7 +77,7 @@ const router = useRouter()
 
 const props = defineProps<{ libro: Libro }>()
 const emit = defineEmits(['edit','libroEliminado'])
-const defaultImage = 'ruta/portadas/bookCover.png'
+const defaultImage = '/ruta/portadas/bookCover.png'
 const imageFailed = ref(false)
 const portada = ref<string>('')
 const disponible = ref<number>(0)
@@ -111,7 +111,7 @@ const getImageSrc = (portada: string) => {
   if (!hasExtension) {
     return defaultImage
   }
-  return `/${portada}`
+  return `${portada}`
 }
 
 // Handle image load error

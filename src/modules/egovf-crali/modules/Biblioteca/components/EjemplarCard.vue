@@ -83,7 +83,7 @@ const getImageSrc = (portada: string) => {
   if (!hasExtension) {
     return defaultImage
   }
-  return `/${portada}`
+  return portada;
 }
 
 // Handle image load error
