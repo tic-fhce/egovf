@@ -40,6 +40,9 @@
                     <CButton class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
                       <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
                     </CButton>
+                    <CButton v-if="libro?.contenido_pdf" class="font me-1" color="primary" size="sm" @click="verPdf(libro)">
+                      <CIcon icon="cil-file" class="me-1" />Ver PDF
+                    </CButton>
                     <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
                       <CIcon icon="cil-pencil" class="me-1" />Editar
                     </CButton>
@@ -69,6 +72,7 @@ import Swal from 'sweetalert2'
 
 import $ from 'jquery'
 import 'datatables.net'
+import { API_URL_EGOVF_SBF_FL } from '@/env'
 
 const router = useRouter()
 
@@ -173,6 +177,17 @@ const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: stri
     showConfirmButton: false,
   })
 }
+const verPdf = (libro: Libro) => {
+  if (libro?.contenido_pdf) {
+    const fullUrl = libro?.contenido_pdf.startsWith('http')
+    ? libro?.contenido_pdf
+    : `${API_URL_EGOVF_SBF_FL}${libro?.contenido_pdf.startsWith('/') ? '' : '/'}${libro.contenido_pdf}`
+    window.open(fullUrl, '_blank')
+  } else {
+    Swal.fire('Sin PDF', 'Este libro no tiene un PDF disponible.', 'info')
+  }
+}
+
 </script>
 
 <style scoped>

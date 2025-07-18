@@ -32,7 +32,11 @@
               <CButton @click="editarLibro"
                 class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Volver</CButton>
-
+              <CButton v-if="libro?.contenido_pdf"
+                @click="verPdf"
+                class="inline-flex h-12 w-full items-center justify-center rounded bg-blue-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+                Ver PDF
+              </CButton>
             </div>
           </div>
 
@@ -72,6 +76,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { API_URL_EGOVF_SBF_FL } from '@env'
 
 import EjemplarList from '../components/EjemplarList.vue'
 import AgregarEjemplarModal from '../components/AgregarEjemplarModal.vue'
@@ -123,7 +128,16 @@ const editarLibro = () => {
   router.go(-1)
   // router.push('/libros')
 }
-
+const verPdf = () => {
+  if (libro.value?.contenido_pdf) {
+    const fullUrl = libro.value?.contenido_pdf.startsWith('http')
+    ? libro.value?.contenido_pdf
+    : `${API_URL_EGOVF_SBF_FL}${libro.value?.contenido_pdf.startsWith('/') ? '' : '/'}${libro.value?.contenido_pdf}`
+    window.open(fullUrl, '_blank')
+  } else {
+    Swal.fire('Sin PDF', 'Este libro no tiene un PDF disponible.', 'info')
+  }
+}
 onMounted(cargarDatos);
 
 </script>
