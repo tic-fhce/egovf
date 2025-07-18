@@ -40,7 +40,7 @@
                     <CButton class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
                       <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
                     </CButton>
-                    <CButton v-if="libro?.contenido_pdf" class="font me-1" color="primary" size="sm" @click="verPdf(libro)">
+                    <CButton v-if="libro?.contenido_pdf" class="font me-1" color="success" size="sm" @click="verPdf(libro)">
                       <CIcon icon="cil-file" class="me-1" />Ver PDF
                     </CButton>
                     <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
