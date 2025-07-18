@@ -218,10 +218,7 @@ const guardar = async () => {
     }
 
     if (isEditMode.value && props.idLibro) {
-      console.log(form.value)
-      console.log(imageFile.value)
-      console.log(pdfFile.value)
-      // await updateLibro(form.value as Libro,)
+      await updateLibro(form.value, pdfFile.value as File)
       Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
     } else {
       // await createLibro(form.value as Libro)
@@ -229,7 +226,7 @@ const guardar = async () => {
       Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
     }
     // router.push('/libros')
-    // router.go(-1)
+    router.go(-1)
   } catch (err) {
     console.error(err)
     Swal.fire('Error', 'No se pudo guardar el libro.', 'error')

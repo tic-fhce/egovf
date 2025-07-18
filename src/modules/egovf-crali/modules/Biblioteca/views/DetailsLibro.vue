@@ -108,7 +108,7 @@ const cargarDatos = async () => {
     libro.value = await getLibroById(props.idLibro)
     if (libro.value?.id_libro) {
       ejemplares.value = await getEjemplaresByLibroId(libro.value.id_libro)
-      portada.value = ejemplares.value.find(e => e.portada)?.portada || '/ruta/portadas/bookCover.png'
+      portada.value = ejemplares.value.find(e => e.portada)?.portada || '/uploads/portadas/bookCover.png'
     }
   } catch (error) {
     console.error('Error al cargar datos:', error)

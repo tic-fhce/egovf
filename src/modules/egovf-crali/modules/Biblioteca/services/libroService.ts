@@ -88,7 +88,7 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
         createEjemplar({
           codigo: Date.now() + index, // Generate unique code
           estado: 'Disponible',
-          portada: portadaUrl,
+          portada: portadaUrl || '/uploads/portadas/bookCover.png',
           direccion: 'S/D',
           id_libro: createdLibro.id_libro
         })
@@ -107,9 +107,17 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
 };
 
 // Editar libro existente
-export const updateLibro = async (libro: Partial<Libro>): Promise<Libro> => {
+export const updateLibro = async (libro: Partial<Libro>, pdfFile?: File,): Promise<Libro> => {
   try {
-    const { data } = await SBFApi.put<Libro>('/libro/edit', libro);
+    let pdfUrl = "";
+    if (pdfFile) {
+      pdfUrl = await uploadFile(pdfFile);
+    }
+    const libroData: Partial<Libro> = {
+      ...libro,
+      contenido_pdf: pdfUrl || libro.contenido_pdf || '',
+    };
+    const { data } = await SBFApi.put<Libro>('/libro/edit', libroData);
     return data;
   } catch (error) {
     console.error(error);
