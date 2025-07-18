@@ -55,6 +55,7 @@ const previewPortada = ref<string>('')
 const nameFileImg = ref<string>('')
 const isBase64 = ref<boolean>(false)
 const isEdit = ref<boolean>(false)
+const imageFile = ref<File>();
 
 const props = defineProps<{
   visible: boolean
@@ -82,7 +83,7 @@ watch(() => props.visible, (newVal) => {
         ...props.ejemplarEditar, // Cargar los datos del ejemplar
         id_libro: props.idLibro, // Asegurar que el id del libro sea el correcto
       }
-      previewPortada.value = props.ejemplarEditar.portada || ''
+      previewPortada.value = props.ejemplarEditar.portada || '/uploads/portadas/bookCover.png'
     } else {
       // Si no hay ejemplar, estamos creando uno nuevo
       isEdit.value = false
@@ -92,7 +93,7 @@ watch(() => props.visible, (newVal) => {
         portada: props.portadaLibro || '',
         id_libro: props.idLibro,
       }
-      previewPortada.value = props.portadaLibro || ''
+      previewPortada.value = props.portadaLibro || '/uploads/portadas/bookCover.png'
     }
   }
 })
@@ -107,6 +108,7 @@ const handleFileChange = (e: Event) => {
     Swal.fire('Archivo inválido', 'Solo se permiten imágenes.', 'warning')
     return
   }
+  imageFile.value = file 
   const reader = new FileReader()
   reader.onload = (event) => {
     const result = event.target?.result
@@ -139,18 +141,14 @@ const guardar = async () => {
   }
 
   try {
-    form.value.portada = (isBase64.value) ? `ruta/portadas/${nameFileImg.value}`: form.value.portada
-    // console.log(form.value.portada)
-    
+    form.value.portada = (isBase64.value) ? `/uploads/portadas/${nameFileImg.value}`: form.value.portada
     if (isEdit.value) {
       // Si es edición, actualizamos el ejemplar
-      // console.log(previewPortada.value)
-      // console.log(form.value)
-      await updateEjemplar(form.value)
+      await updateEjemplar(form.value, imageFile.value as File)
       Swal.fire('Éxito', 'Ejemplar actualizado correctamente.', 'success')
     } else {
       // Si es creación, agregamos el ejemplar
-      await createEjemplar(form.value)
+      await createEjemplar(form.value, imageFile.value as File)
       Swal.fire('Éxito', 'Ejemplar agregado correctamente.', 'success')
     }
 

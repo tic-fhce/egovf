@@ -162,7 +162,7 @@ onMounted(async () => {
       bibliotecas.value = data
       if(idBiblioteca)
         form.value.id_biblioteca = idBiblioteca
-      portada.value = 'ruta/portadas/bookCover.png';
+      portada.value = '/ruta/portadas/bookCover.png';
     } catch (err) {
       console.error(err)
       Swal.fire('Error', 'No se pudieron cargar las bibliotecas.', 'error')
@@ -218,7 +218,10 @@ const guardar = async () => {
     }
 
     if (isEditMode.value && props.idLibro) {
-      await updateLibro(form.value as Libro)
+      console.log(form.value)
+      console.log(imageFile.value)
+      console.log(pdfFile.value)
+      // await updateLibro(form.value as Libro,)
       Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
     } else {
       // await createLibro(form.value as Libro)
@@ -226,7 +229,7 @@ const guardar = async () => {
       Swal.fire('Éxito', 'Libro creado correctamente.', 'success')
     }
     // router.push('/libros')
-    router.go(-1)
+    // router.go(-1)
   } catch (err) {
     console.error(err)
     Swal.fire('Error', 'No se pudo guardar el libro.', 'error')

@@ -36,9 +36,26 @@ export const getEjemplaresByLibroId = async (idLibro: number): Promise<Ejemplar[
   }
 };
 
-export const createEjemplar = async (ejemplar: Partial<Ejemplar>): Promise<Ejemplar> => {
+// export const createEjemplar = async (ejemplar: Partial<Ejemplar>): Promise<Ejemplar> => {
+//   try {
+//     const { data } = await SBFApi.post<Ejemplar>('/ejemplar/add', ejemplar);
+//     return data;
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('Error creating ejemplar');
+//   }
+// };
+export const createEjemplar = async (ejemplar: Partial<Ejemplar>, imageFile?:File): Promise<Ejemplar> => {
   try {
-    const { data } = await SBFApi.post<Ejemplar>('/ejemplar/add', ejemplar);
+    let portadaUrl = '';
+    if (imageFile) {
+      portadaUrl = await uploadFileImage(imageFile);
+    }
+    const ejemplarData: Partial<Ejemplar> = {
+      ...ejemplar,
+      portada: portadaUrl || ejemplar.portada || '',
+    };
+    const { data } = await SBFApi.post<Ejemplar>('/ejemplar/add', ejemplarData);
     return data;
   } catch (error) {
     console.error(error);
@@ -46,9 +63,17 @@ export const createEjemplar = async (ejemplar: Partial<Ejemplar>): Promise<Ejemp
   }
 };
 
-export const updateEjemplar = async (ejemplar: Partial<Ejemplar>): Promise<Ejemplar> => {
+export const updateEjemplar = async (ejemplar: Partial<Ejemplar>, imageFile?:File): Promise<Ejemplar> => {
   try {
-    const { data } = await SBFApi.put<Ejemplar>('/ejemplar/edit', ejemplar);
+    let portadaUrl = '';
+    if (imageFile) {
+      portadaUrl = await uploadFileImage(imageFile);
+    }
+    const ejemplarData: Partial<Ejemplar> = {
+      ...ejemplar,
+      portada: portadaUrl || ejemplar.portada || '',
+    };
+    const { data } = await SBFApi.put<Ejemplar>('/ejemplar/edit', ejemplarData);
     return data;
   } catch (error) {
     console.error(error);
