@@ -100,8 +100,15 @@ export default {
     perfil(){
       this.$router.push('/perfil');      
     },
-    limpiarCookies() {
-      ['token', 'cif', 'correo', 'celular', 'pass'].forEach(cookie => this.$cookies.remove(cookie));
+    limpiarCookies() { // eliminamos todas las cookies
+      // ['token', 'cif', 'correo', 'celular', 'pass'].forEach(cookie => this.$cookies.remove(cookie));
+      const cookies = document.cookie.split(';');
+      
+      cookies.forEach((cookie) => {
+        const cookieName = cookie.split('=')[0].trim();
+        // Establecemos la fecha de expiración en el pasado para eliminar la cookie
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+      });
     }
   }
 
