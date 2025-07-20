@@ -1,4 +1,6 @@
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import isAdminGuard from '../guards/is-admin.guard';
+import isSuperAdminGuard from '../guards/is-superAdmin.guard';
 
 export const craliRoutes = {
   path: '/crali',
@@ -15,7 +17,8 @@ export const craliRoutes = {
     {
       path: '/biblioteca',
       name: 'biblioteca',
-      component: () => import('../modules/Biblioteca/views/BibliotecaView.vue')
+      component: () => import('../modules/Biblioteca/views/BibliotecaView.vue'),
+      beforeEnter: [ isSuperAdminGuard, isAdminGuard],
     },
     {
       path: '/biblioteca/detalles/:idBiblioteca',
@@ -31,7 +34,7 @@ export const craliRoutes = {
       component: () => import('../modules/Biblioteca/views/LibrosView.vue')
     },
     { 
-      path: '/libros/:idLibro',
+      path: '/libros/:idLibro', // add or updated libro
       name: 'libro',
        props: (route: RouteLocationNormalizedLoaded) => ({
         idLibro: Number(route.params.idLibro),
@@ -56,12 +59,14 @@ export const craliRoutes = {
     {
       path: '/facultad',
       name: 'facultad',
-      component: () => import('../modules/Facultad/views/FacultadView.vue')
+      component: () => import('../modules/Facultad/views/FacultadView.vue'),
+      beforeEnter: [ isSuperAdminGuard],
     },
     {
       path: '/unidad',
       name: 'unidad',
-      component: () => import('../modules/Unidad/view/UnidadView.vue')
+      component: () => import('../modules/Unidad/view/UnidadView.vue'),
+      beforeEnter: [ isSuperAdminGuard],
     },
   ]
 };

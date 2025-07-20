@@ -1,4 +1,4 @@
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 import { Rol } from '../modules/users/services/userService';
 
 // interface UserData {
@@ -31,7 +31,25 @@ export function useCookies() {
     }
   }
 
+  const getCookie = (name: string): string | null => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return decodeURIComponent(parts.pop()?.split(';').shift() ?? '');
+    return null;
+  }
+  const isSuperAdmin = computed(() => {
+    const rol = getCookie('rol');
+    return rol ? rol.includes(Rol.superAdmin) : false; 
+  });
+  const isAdmin = computed(() => {
+    const rol = getCookie('rol');
+    return rol ? rol.includes(Rol.admin) : false; // Verifica que rol no sea null
+  });
+
   return {
-    setUserRolCookies
+    setUserRolCookies,
+    getCookie,
+    isSuperAdmin,
+    isAdmin,
   }
 }

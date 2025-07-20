@@ -54,7 +54,7 @@ interface Modulo {
 
 
 const moduloService = new ModuloService()
-const { setUserRolCookies } = useCookies()
+const { setUserRolCookies, getCookie } = useCookies()
 const usuario = ref<Usuario>({
   token: '',
   cif: 0,
@@ -112,13 +112,6 @@ const modulo = ref<Modulo[]>([
     ]
   }
 ])
-// Función para obtener el valor de una cookie por su nombre
-const getCookie = (name: string): string | null => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return decodeURIComponent(parts.pop()?.split(';').shift() ?? '');
-  return null;
-}
 
 onMounted(async () => {
   try {
