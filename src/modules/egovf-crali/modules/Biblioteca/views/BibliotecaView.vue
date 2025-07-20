@@ -6,7 +6,7 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="abrirModal(true)" color="success" class="font" size="sm">
+              <CButton v-if="isAdmin" @click="abrirModal(true)" color="success" class="font" size="sm">
                 <CIcon icon="cil-library" class="me-2" />Agregar Biblioteca
               </CButton>
             </CCol>
@@ -22,7 +22,7 @@
                   <th>Dirección</th>
                   <th>Horario</th>
                   <th>Facultad</th>
-                  <th>Nro. Libros</th>
+                  <th v-if="isAdmin">Nro. Libros</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -33,17 +33,19 @@
                   <td>{{ biblio.direccion }}</td>
                   <td>{{ biblio.horario_atencion }}</td>
                   <td>{{ getNombreFacultad(biblio.id_facultad) }}</td>
-                  <td>{{ numerosLibros[biblio.id_biblioteca] || 0 }}</td>
+                  <td v-if="isAdmin">{{ numerosLibros[biblio.id_biblioteca] || 0 }}</td>
                   <td>
                     <CButton v-if="numerosLibros[biblio.id_biblioteca]" class="font me-1" color="info" size="sm" @click="verLibros(biblio)">
                       <CIcon icon="cil-magnifying-glass" class="me-1" />Ver Libros
                     </CButton>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarBiblioteca(biblio)">
-                      <CIcon icon="cil-pencil" class="me-1" />Editar
-                    </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
-                      <CIcon icon="cil-trash" class="me-1" />Eliminar
-                    </CButton>
+                    <template v-if="isAdmin">
+                      <CButton class="font me-1" color="warning" size="sm" @click="editarBiblioteca(biblio)">
+                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      </CButton>
+                      <CButton class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
+                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      </CButton>
+                    </template>
                   </td>
                 </tr>
               </tbody>
@@ -108,6 +110,9 @@ import 'datatables.net'
 import { getLibrosByIdBiblioteca } from '../services/libroService'
 import { useRouter } from 'vue-router'
 const router = useRouter()
+import { useCookies } from '../../../utils/cookiesManager';
+const { isAdmin } = useCookies()
+
 const titulo = 'Gestión de Bibliotecas'
 
 const bibliotecas = ref<Biblioteca[]>([])

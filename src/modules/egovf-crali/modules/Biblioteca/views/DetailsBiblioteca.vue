@@ -21,7 +21,7 @@
               accusantium doloremque it.</p>
 
             <div class="mt-10 flex flex-col items-center md:flex-row">
-              <CButton @click="crearLibro"
+              <CButton @click="crearLibro" v-if="isAdmin"
                 class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Agregar Libro</CButton>
 
@@ -73,6 +73,8 @@ import { CButton } from '@coreui/vue'
 import { type Biblioteca, getBibliotecaById } from '../services/bibliotecaService'
 import { getLibrosByIdBiblioteca, type Libro } from '../services/libroService'
 import LibroList from '../components/LibroList.vue'
+import { useCookies } from '../../../utils/cookiesManager';
+const { isAdmin } = useCookies()
 // import AddUpdateLibro from '../components/AddUpdateLibro.vue'
 
 interface Props {

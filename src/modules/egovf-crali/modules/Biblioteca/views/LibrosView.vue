@@ -6,7 +6,7 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="crearLibro" color="success" class="font" size="sm">
+              <CButton v-if="isAdmin" @click="crearLibro" color="success" class="font" size="sm">
                 <CIcon icon="cil-book" class="me-2" />Agregar Libro
               </CButton>
             </CCol>
@@ -43,12 +43,14 @@
                     <CButton v-if="libro?.contenido_pdf" class="font me-1" color="success" size="sm" @click="verPdf(libro)">
                       <CIcon icon="cil-file" class="me-1" />Ver PDF
                     </CButton>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
-                      <CIcon icon="cil-pencil" class="me-1" />Editar
-                    </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
-                      <CIcon icon="cil-trash" class="me-1" />Eliminar
-                    </CButton>
+                    <template v-if="isAdmin">
+                      <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
+                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      </CButton>
+                      <CButton class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
+                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      </CButton>
+                    </template>
                   </td>
                 </tr>
               </tbody>
@@ -75,7 +77,8 @@ import 'datatables.net'
 import { API_URL_EGOVF_SBF_FL } from '@/env'
 
 const router = useRouter()
-
+import { useCookies } from '../../../utils/cookiesManager';
+const { isAdmin } = useCookies()
 const titulo = 'Gestión de Libros'
 
 const libros = ref<Libro[]>([])

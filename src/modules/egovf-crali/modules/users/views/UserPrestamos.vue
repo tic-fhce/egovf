@@ -6,7 +6,7 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="crearPrestamo" color="success" class="font" size="sm">
+              <CButton v-if="isAdmin" @click="crearPrestamo" color="success" class="font" size="sm">
                 <CIcon icon="cil-book" class="me-2" />Agregar Préstamo
               </CButton>
             </CCol>
@@ -47,12 +47,14 @@
                     <CButton class="font me-1" color="info" size="sm" @click="verDetalles(prestamo)">
                       <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
                     </CButton>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarPrestamo(prestamo)">
-                      <CIcon icon="cil-pencil" class="me-1" />Editar
-                    </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarPrestamo(prestamo.id_prestamo)">
-                      <CIcon icon="cil-trash" class="me-1" />Eliminar
-                    </CButton>
+                    <template v-if="isAdmin">
+                      <CButton class="font me-1" color="warning" size="sm" @click="editarPrestamo(prestamo)">
+                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      </CButton>
+                      <CButton class="font" color="danger" size="sm" @click="eliminarPrestamo(prestamo.id_prestamo)">
+                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      </CButton>
+                    </template>
                   </td>
                 </tr>
               </tbody>
@@ -91,6 +93,9 @@ import { getPrestamos, deletePrestamo } from '../services/prestamoService';
 import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 
 const router = useRouter();
+import { useCookies } from '../../../utils/cookiesManager';
+const { isAdmin } = useCookies()
+
 const titulo = 'Gestión de Préstamos';
 
 const prestamos = ref<Prestamo[]>([]);

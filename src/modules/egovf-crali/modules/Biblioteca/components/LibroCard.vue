@@ -37,7 +37,7 @@
             <button class="text-sm">ver</button>
           </div>
 
-          <div @click="emitEdit"
+          <div @click="emitEdit" v-if="isAdmin"
             class="inline-flex w-full items-center  rounded-lg  bg-red-500 px-1 py-1.5 text-white duration-100  hover:bg-red-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
               stroke="currentColor" class="h-4 w-4">
@@ -74,6 +74,8 @@ import { type Libro } from '../services/libroService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
+import { useCookies } from '../../../utils/cookiesManager';
+const { isAdmin } = useCookies()
 
 const props = defineProps<{ libro: Libro }>()
 const emit = defineEmits(['edit','libroEliminado'])
