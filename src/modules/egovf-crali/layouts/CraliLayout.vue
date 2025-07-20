@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ComponenteSidebar :modulo="modulo" />
+    <ComponenteSidebar :modulo="filteredModules" />
     <div class="wrapper d-flex flex-column min-vh-100 bg-light">
       <ComponenteHeader :cif="usuario.cif" :foto="usuario.foto" />
       <div class="body flex-grow-1 px-3">
@@ -22,8 +22,8 @@ import { CContainer } from '@coreui/vue'
 import ComponenteFooter from '@/components/Escritorio/ComponenteFooter.vue'
 import ComponenteHeader from '@/components/Escritorio/ComponenteHeader.vue'
 import ComponenteSidebar from '@/components/Escritorio/ComponenteSidebar.vue'
-import { onMounted, ref } from 'vue'
-import { getUserRol } from '../modules/users/services/userService'
+import { computed, onMounted, ref } from 'vue'
+import { getUserRol, Rol } from '../modules/users/services/userService'
 import { useCookies } from '../utils/cookiesManager';
 
 interface Usuario {
@@ -66,6 +66,7 @@ const usuario = ref<Usuario>({
   foto: ''
 })
 
+const userRol = ref<string>('')
 
 const modulo = ref<Modulo[]>([
   {
@@ -112,6 +113,17 @@ const modulo = ref<Modulo[]>([
     ]
   }
 ])
+const filteredModules = computed(() => {
+  console.log(userRol.value)
+  if (userRol.value.includes(Rol.superAdmin)) {
+    return modulo.value
+  } else if (userRol.value === Rol.admin) {
+    return modulo.value.filter(m => ['Biblioteca', 'Usuarios', 'Prestamos'].includes(m.titulo))
+  } else if (userRol.value === Rol.lector) {
+    return modulo.value.filter(m => ['Biblioteca', 'Prestamos'].includes(m.titulo))
+  }
+  return []
+})
 
 onMounted(async () => {
   try {
@@ -135,7 +147,7 @@ onMounted(async () => {
     }
 
     const rol = await getUserRol(usuario.value.cif);
-
+    userRol.value = rol
     setUserRolCookies(rol);
   } catch (error) {
     console.error("Error al inicializar el usuario:", error);

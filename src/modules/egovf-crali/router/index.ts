@@ -18,7 +18,7 @@ export const craliRoutes = {
       path: '/biblioteca',
       name: 'biblioteca',
       component: () => import('../modules/Biblioteca/views/BibliotecaView.vue'),
-      beforeEnter: [ isSuperAdminGuard, isAdminGuard],
+      // beforeEnter: [ isSuperAdminGuard, isAdminGuard],
     },
     {
       path: '/biblioteca/detalles/:idBiblioteca',
@@ -39,7 +39,8 @@ export const craliRoutes = {
        props: (route: RouteLocationNormalizedLoaded) => ({
         idLibro: Number(route.params.idLibro),
       }),
-      component: () => import('../modules/Biblioteca/views/LibroView.vue')
+      component: () => import('../modules/Biblioteca/views/LibroView.vue'),
+      beforeEnter: [ isAdminGuard],
     },
     {
       path: '/libro/detalles/:idLibro',
