@@ -17,20 +17,9 @@ export const getPrestamos = async (): Promise<Prestamo[]> => {
   }
 };
 
-export const getPrestamoById = async (idPrestamo: number): Promise<Prestamo | null> => {
-  try {
-    const prestamos = await getPrestamos();
-    const prestamo = prestamos.find(p => p.id_prestamo === idPrestamo);
-    return prestamo ?? null;
-  } catch (error) {
-    console.error('Error al obtener el préstamo:', error);
-    return null;
-  }
-};
-
 export const createPrestamo = async (prestamo: Partial<Prestamo>): Promise<Prestamo> => {
   try {
-    const { data } = await SBFApi.post<Prestamo>('/prestamo/add', prestamo);
+    const { data } = await SBFApi.post<Prestamo>('/prestamo/save', prestamo);
     return data;
   } catch (error) {
     console.error(error);
