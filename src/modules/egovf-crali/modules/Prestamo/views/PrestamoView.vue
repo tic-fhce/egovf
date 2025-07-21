@@ -136,24 +136,33 @@
       </div>
 
       <!-- Fechas de préstamo y devolución -->
-      <div class="mb-3">
-        <label class="form-label">Fecha de Préstamo</label>
-        <input
-          v-model="form.fecha_pres"
-          type="date"
-          class="form-control transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Fecha de Devolución</label>
-        <input
-          v-model="form.fecha_dev"
-          type="date"
-          class="form-control transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
-          required
-        />
-      </div>
+     <div class="mb-6">
+      <!-- Fecha de Préstamo -->
+      <label for="fecha_pres" class="block text-sm font-medium text-gray-700">Fecha de Préstamo</label>
+      <input
+        id="fecha_pres"
+        v-model="form.fecha_pres"
+        type="date"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        required
+        :max="form.fecha_dev ? form.fecha_dev : undefined" 
+      />
+      <p v-if="form.fecha_pres && form.fecha_pres > form.fecha_dev" class="text-red-500 text-xs mt-1">La fecha de préstamo no puede ser posterior a la de devolución.</p>
+    </div>
+
+    <div class="mb-6">
+      <!-- Fecha de Devolución -->
+      <label for="fecha_dev" class="block text-sm font-medium text-gray-700">Fecha de Devolución</label>
+      <input
+        id="fecha_dev"
+        v-model="form.fecha_dev"
+        type="date"
+        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        required
+        :min="form.fecha_pres ? form.fecha_pres : undefined" 
+      />
+      <p v-if="form.fecha_dev && form.fecha_dev < form.fecha_pres" class="text-red-500 text-xs mt-1">La fecha de devolución no puede ser anterior a la de préstamo.</p>
+    </div>
 
       <!-- Botones -->
       <div class="my-4 text-right">
@@ -179,11 +188,11 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
-import { type Libro, getLibroById, getLibros } from '../../Biblioteca/services/libroService';
+import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 import { type Ejemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
 import { type Lector, getLectors } from '../../users/services/lectorService';
-import { type Prestamo, createPrestamo } from '../services/prestamoService';
-import { type EstaEn } from '../services/estaEnService';
+import { type Prestamo, createPrestamo, getPrestamoById, updatePrestamo } from '../services/prestamoService';
+import { getEstaEnByPrestamo, type EstaEn } from '../services/estaEnService';
 
 interface Props {
   idPrestamo?: number;
@@ -191,7 +200,6 @@ interface Props {
 const props = defineProps<Props>();
 const router = useRouter();
 const isEditMode = computed(() => !!props.idPrestamo);
-
 const lectorSearch = ref<string>('');
 const libroSearch = ref<string>('');
 const lectores = ref<Lector[]>([]);
@@ -223,12 +231,19 @@ onMounted(async () => {
     libros.value = await getLibros()
     filteredLibros.value = libros.value
     if (isEditMode.value && props.idPrestamo) {
-      // const prestamo = await getPrestamoById(props.idPrestamo);
-      // form.value = prestamo;
+
+      const [prestamo, estaEn] = await Promise.all([
+        getPrestamoById(props.idPrestamo),
+        getEstaEnByPrestamo(props.idPrestamo)
+      ]);
+
+      form.value = prestamo!;
+      formEsta.value = estaEn;
       // Cargar lector y libro asociados
-      // selectedLector.value = lectores.value.find(l => l.id_lector === prestamo.id_lector) || null;
-      // selectedLibro.value = await getLibroById(prestamo.id_libro);
-      // ejemplaresDisponibles.value = await getEjemplaresByLibroId(prestamo.id_libro);
+      selectedLector.value = lectores.value.find(l => l.id_lector === prestamo?.id_lector) || null;
+      selectedLibro.value = libros.value.find(l => l.id_libro === estaEn.idLibro) || null;
+      ejemplaresDisponibles.value = await getEjemplaresByLibroId(estaEn.idLibro);
+      // todo -- seleccionamos el ejemplar que estaba seleccionado
       // selectedEjemplar.value = ejemplaresDisponibles.value.find(e => e.codigo === prestamo.id_ejemplar) || null;
     }
   } catch (err) {
@@ -301,7 +316,8 @@ const guardar = async () => {
     }
 
     if (isEditMode.value && props.idPrestamo) {
-      // await updatePrestamo(form.value);
+      // todo -- si se cambia de ejemplar enviar el anterior ejemplar para cambiar de estado a disponible, y el otro ejemplar para prestado
+      await updatePrestamo(form.value, formEsta.value);
       Swal.fire('Éxito', 'Préstamo actualizado correctamente.', 'success');
     } else {
       // console.log(form.value)

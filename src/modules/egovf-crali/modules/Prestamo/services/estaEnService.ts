@@ -17,12 +17,12 @@ export const getEstaEn = async (): Promise<EstaEn[]> => {
   }
 };
 
-export const getEstaEnByPrestamo = async (id_prestamo: number): Promise<EstaEn[]> => {
+export const getEstaEnByPrestamo = async (id_prestamo: number): Promise<EstaEn> => {
   try {
     const { data } = await SBFApi.get<EstaEn[]>(`/esta_en/buscar/prestamo`, {
       params: { id_prestamo }
     });
-    return data;
+    return data[0];
   } catch (error) {
     console.error(error);
     throw new Error('Error al buscar relaciones esta_en por id_prestamo');

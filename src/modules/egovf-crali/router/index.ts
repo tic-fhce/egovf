@@ -68,7 +68,10 @@ export const craliRoutes = {
     {
       path: '/prestamo/detalles/:idPrestamo',
       name: 'DetallesPrestamo',
-      // component: PrestamoDetalles,
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        idPrestamo: Number(route.params.idPrestamo),
+      }),
+      // component: () => import('../modules/Prestamo/views/PrestamoView.vue')
     },
     {
       path: '/facultad',
