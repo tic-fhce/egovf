@@ -1,4 +1,6 @@
 import { SBFApi } from '@sbf/api/SBFApi';
+import { createEstaEn, EstaEn } from './estaEnService';
+import { Ejemplar, updateEjemplar } from '../../Biblioteca/services/ejemplarService';
 
 export interface Prestamo {
   id_prestamo: number;
@@ -17,10 +19,36 @@ export const getPrestamos = async (): Promise<Prestamo[]> => {
   }
 };
 
-export const createPrestamo = async (prestamo: Partial<Prestamo>): Promise<Prestamo> => {
+export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partial<EstaEn>, ejemplar: Partial<Ejemplar>) => {
   try {
-    const { data } = await SBFApi.post<Prestamo>('/prestamo/save', prestamo);
-    return data;
+    console.log({prestamo})
+    console.log({estaEn})
+    console.log({ejemplar})
+    delete prestamo.id_prestamo
+    const { data: savedPrestamo } = await SBFApi.post<Prestamo>('/prestamo/save', prestamo);
+
+    const estaEnData: EstaEn = {
+      ...estaEn,
+      idPrestamo: savedPrestamo.id_prestamo,
+      idLibro: estaEn.idLibro || 0, // Ensure idLibro is provided
+    };
+    const savedEstaEn = await createEstaEn(estaEnData);
+    
+    // id 6 /uploads/portadas/esta1.jpg
+
+    const ejemplarUpdate: Partial<Ejemplar> = {
+      ...ejemplar,
+      estado: 'Prestado'
+    };
+    console.log({ejemplarUpdate})
+    const updatedEjemplar = await updateEjemplar(ejemplarUpdate);
+    return {
+      prestamo: savedPrestamo,
+      estaEn: savedEstaEn,
+      ejemplar: updatedEjemplar
+    };
+
+
   } catch (error) {
     console.error(error);
     throw new Error('Error al crear el préstamo');

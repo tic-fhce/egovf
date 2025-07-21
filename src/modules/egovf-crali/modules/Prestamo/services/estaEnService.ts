@@ -44,7 +44,7 @@ export const getEstaEnByLibro = async (id_libro: number): Promise<EstaEn[]> => {
 // Crear un nuevo registro esta_en
 export const createEstaEn = async (relacion: EstaEn): Promise<EstaEn> => {
   try {
-    const { data } = await SBFApi.post<EstaEn>('/estaen/save', relacion);
+    const { data } = await SBFApi.post<EstaEn>('/esta_en/add', relacion);
     return data;
   } catch (error) {
     console.error(error);

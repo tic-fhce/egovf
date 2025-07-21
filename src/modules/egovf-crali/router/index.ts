@@ -55,7 +55,20 @@ export const craliRoutes = {
     {
       path: '/prestamos',
       name: 'prestamos',
-      component: () => import('../modules/users/views/UserPrestamos.vue')
+      component: () => import('../modules/Prestamo/views/PrestamosView.vue')
+    },
+    {
+      path: '/prestamo/:idPrestamo',
+      name: 'prestamo',
+      props: (route: RouteLocationNormalizedLoaded) => ({
+        idPrestamo: Number(route.params.idPrestamo),
+      }),
+      component: () => import('../modules/Prestamo/views/PrestamoView.vue')
+    },
+    {
+      path: '/prestamo/detalles/:idPrestamo',
+      name: 'DetallesPrestamo',
+      // component: PrestamoDetalles,
     },
     {
       path: '/facultad',

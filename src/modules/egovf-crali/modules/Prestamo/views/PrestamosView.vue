@@ -219,14 +219,3 @@ const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: stri
 @import 'datatables.net-dt';
 @import '../../../styles/tailwind.css';
 </style>
-<!-- 
-{
-  path: '/prestamo/:idPrestamo',
-  name: 'prestamo',
-  component: PrestamoForm,
-},
-{
-  path: '/prestamo/detalles/:idPrestamo',
-  name: 'DetallesPrestamo',
-  component: PrestamoDetalles,
-}, -->

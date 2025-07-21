@@ -1,0 +1,333 @@
+<template>
+  <div class="bg-white px-5 py-2 rounded">
+    <h1 class="text-3xl">
+      {{ isEditMode ? 'Editar Préstamo' : 'Crear Préstamo' }}
+    </h1>
+    <hr class="my-4" />
+  </div>
+
+  <form @submit.prevent="guardar" class="grid grid-cols-1 sm:grid-cols-2 bg-white px-5 gap-5">
+    <!-- Columna izquierda -->
+    <div class="first-col">
+      <!-- Buscador de lectores -->
+      <div class="mb-3">
+        <label class="form-label">Buscar Lector (CI, RU o Nombre)</label>
+        <input
+          v-model="lectorSearch"
+          @input="searchLectors"
+          class="form-control"
+          placeholder="Ingrese CI, RU o nombre"
+        />
+      </div>
+
+      <!-- Lista de lectores encontrados -->
+      <div v-if="filteredLectors.length" class="mb-3">
+        <label class="form-label">Lectores Encontrados</label>
+        <select
+          v-model="form.id_lector"
+          @change="selectLector"
+          class="form-control"
+          required
+        >
+          <option value="">Seleccione un lector</option>
+          <option
+            v-for="lector in filteredLectors"
+            :key="lector.id_lector"
+            :value="lector.id_lector"
+          >
+            {{ lector.nombre }} {{ lector.apellido_pat }} {{ lector.apellido_mat }} (CI: {{ lector.ci }})
+          </option>
+        </select>
+      </div>
+
+      <!-- Datos del lector seleccionado -->
+      <div v-if="selectedLector" class="mb-3">
+        <h3 class="text-lg font-bold">Datos del Lector</h3>
+        <p><strong>Nombre:</strong> {{ selectedLector.nombre }} {{ selectedLector.apellido_pat }} {{ selectedLector.apellido_mat }}</p>
+        <p><strong>CI:</strong> {{ selectedLector.ci }}</p>
+        <p><strong>RU:</strong> {{ selectedLector.ru }}</p>
+        <p><strong>Dirección:</strong> {{ selectedLector.direccion }}</p>
+        <p><strong>Celular:</strong> {{ selectedLector.celular }}</p>
+        <p><strong>Carrera:</strong> {{ selectedLector.carrera }}</p>
+      </div>
+
+      <!-- Buscador de libros -->
+      <div class="mb-3">
+        <label class="form-label">Buscar Libro (Título o Signatura Topográfica)</label>
+        <input
+          v-model="libroSearch"
+          @input="searchLibros"
+          class="form-control"
+          placeholder="Ingrese título o signatura topográfica"
+        />
+      </div>
+
+      <!-- Lista de libros encontrados -->
+      <div v-if="filteredLibros.length" class="mb-3">
+        <label class="form-label">Libros Encontrados</label>
+        <select
+          v-model="formEsta.idLibro"
+          @change="selectLibro"
+          class="form-control"
+          required
+        >
+          <option value="">Seleccione un libro</option>
+          <option
+            v-for="libro in filteredLibros"
+            :key="libro.id_libro"
+            :value="libro.id_libro"
+          >
+            {{ libro.titulo }} (Signatura: {{ libro.signatura_topografica }})
+          </option>
+        </select>
+      </div>
+
+      <!-- Datos del libro seleccionado -->
+      <div v-if="selectedLibro" class="mb-3">
+        <h3 class="text-lg font-bold">Datos del Libro</h3>
+        <p><strong>Título:</strong> {{ selectedLibro.titulo }}</p>
+        <p><strong>Autor:</strong> {{ selectedLibro.autor }}</p>
+        <p><strong>Año:</strong> {{ selectedLibro.anio }}</p>
+        <p><strong>Idioma:</strong> {{ selectedLibro.idioma }}</p>
+        <p><strong>Signatura Topográfica:</strong> {{ selectedLibro.signatura_topografica }}</p>
+        <p><strong>Ejemplares Totales:</strong> {{ selectedLibro.ejemplares }}</p>
+      </div>
+
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="first-col">
+            <!-- Selección de ejemplar -->
+      <div v-if="ejemplaresDisponibles.length" class="mb-3">
+        <label class="form-label">Ejemplar Disponible</label>
+        <select
+          v-model="id_ejemplar"
+          @change="selectEjemplar"
+          class="form-control"
+          required
+        >
+          <option value="">Seleccione un ejemplar</option>
+          <option
+            v-for="ejemplar in ejemplaresDisponibles"
+            :key="ejemplar.codigo"
+            :value="ejemplar.codigo"
+          >
+            Ejemplar {{ ejemplar.codigo }} (Estado: {{ ejemplar.estado }})
+          </option>
+        </select>
+      </div>
+      <!-- Portada del libro -->
+      <div class="mb-4">
+        <label class="form-label">Portada del Libro</label>
+        <div class="mx-auto w-fit overflow-hidden rounded-br-none rounded-tl-none">
+          <img
+            v-if="selectedEjemplar?.portada"
+            :src="selectedEjemplar.portada"
+            alt="Portada"
+            class="object-cover rounded"
+          />
+          <img
+            v-else
+            src="/ruta/portadas/bookCover.png"
+            alt="Portada por defecto"
+            class="object-cover rounded"
+          />
+        </div>
+      </div>
+
+      <!-- Fechas de préstamo y devolución -->
+      <div class="mb-3">
+        <label class="form-label">Fecha de Préstamo</label>
+        <input
+          v-model="form.fecha_pres"
+          type="date"
+          class="form-control transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Fecha de Devolución</label>
+        <input
+          v-model="form.fecha_dev"
+          type="date"
+          class="form-control transition duration-200 ease-in-out focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
+
+      <!-- Botones -->
+      <div class="my-4 text-right">
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          {{ isEditMode ? 'Guardar Cambios' : 'Crear Préstamo' }}
+        </button>
+        <button
+          @click="volver"
+          type="button"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+        >
+          Volver
+        </button>
+      </div>
+    </div>
+  </form>
+</template>
+
+<script lang="ts" setup>
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+import { type Libro, getLibroById, getLibros } from '../../Biblioteca/services/libroService';
+import { type Ejemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
+import { type Lector, getLectors } from '../../users/services/lectorService';
+import { type Prestamo, createPrestamo } from '../services/prestamoService';
+import { type EstaEn } from '../services/estaEnService';
+
+interface Props {
+  idPrestamo?: number;
+}
+const props = defineProps<Props>();
+const router = useRouter();
+const isEditMode = computed(() => !!props.idPrestamo);
+
+const lectorSearch = ref<string>('');
+const libroSearch = ref<string>('');
+const lectores = ref<Lector[]>([]);
+const libros = ref<Libro[]>([]);
+const filteredLectors = ref<Lector[]>([]);
+const filteredLibros = ref<Libro[]>([]);
+const selectedLector = ref<Lector | null>(null);
+const selectedLibro = ref<Libro | null>(null);
+const ejemplaresDisponibles = ref<Ejemplar[]>([]);
+const selectedEjemplar = ref<Ejemplar | null>(null);
+
+const id_ejemplar = ref(0);
+const form = ref<Prestamo>({
+  id_lector: 0,
+  id_prestamo: 0,
+  fecha_pres: '',
+  fecha_dev: ''
+});
+const formEsta = ref<EstaEn>({
+  idLibro: 0,
+  idPrestamo: 0
+})
+
+onMounted(async () => {
+  try {
+    // Cargar lectores
+    lectores.value = await getLectors();
+    filteredLectors.value = lectores.value;
+    libros.value = await getLibros()
+    filteredLibros.value = libros.value
+    if (isEditMode.value && props.idPrestamo) {
+      // const prestamo = await getPrestamoById(props.idPrestamo);
+      // form.value = prestamo;
+      // Cargar lector y libro asociados
+      // selectedLector.value = lectores.value.find(l => l.id_lector === prestamo.id_lector) || null;
+      // selectedLibro.value = await getLibroById(prestamo.id_libro);
+      // ejemplaresDisponibles.value = await getEjemplaresByLibroId(prestamo.id_libro);
+      // selectedEjemplar.value = ejemplaresDisponibles.value.find(e => e.codigo === prestamo.id_ejemplar) || null;
+    }
+  } catch (err) {
+    console.error(err);
+    Swal.fire('Error', 'No se pudo cargar la información.', 'error');
+  }
+});
+
+const searchLectors = () => {
+  const query = lectorSearch.value.toLowerCase();
+  filteredLectors.value = lectores.value.filter(
+    (lector) =>
+      lector.ci.toString().includes(query) ||
+      lector.ru.toString().includes(query) ||
+      `${lector.nombre} ${lector.apellido_pat} ${lector.apellido_mat}`
+        .toLowerCase()
+        .includes(query)
+  );
+};
+
+const selectLector = () => {
+  selectedLector.value =
+    lectores.value.find((l) => l.id_lector === form.value.id_lector) || null;
+};
+
+const searchLibros = async () => {
+  try {
+    const query = libroSearch.value.toLowerCase();
+    filteredLibros.value = libros.value.filter(
+    (libro) =>
+      libro.titulo.toString().includes(query) ||
+      libro.signatura_topografica.toString().includes(query) ||
+      `${libro.titulo} ${libro.signatura_topografica} ${libro.ejemplares}`
+        .toLowerCase()
+        .includes(query)
+    );
+  } catch (err) {
+    console.error(err);
+    Swal.fire('Error', 'No se pudo buscar libros.', 'error');
+  }
+};
+
+const selectLibro = async () => {
+  try {
+    selectedLibro.value =
+      filteredLibros.value.find((l) => l.id_libro === formEsta.value.idLibro) || null;
+    if (selectedLibro.value) {
+      ejemplaresDisponibles.value = (await getEjemplaresByLibroId(formEsta.value.idLibro)).filter(
+        (e) => e.estado === 'Disponible'
+      );
+      selectedEjemplar.value = null;
+      id_ejemplar.value = 0;
+    }
+  } catch (err) {
+    console.error(err);
+    Swal.fire('Error', 'No se pudo cargar los ejemplares.', 'error');
+  }
+};
+
+const selectEjemplar = () => {
+  selectedEjemplar.value =
+    ejemplaresDisponibles.value.find((e) => e.codigo === id_ejemplar.value) || null;
+};
+
+const guardar = async () => {
+  try {
+    if (!form.value.id_lector || !formEsta.value.idLibro || !id_ejemplar.value || !form.value.fecha_pres || !form.value.fecha_dev ) {
+      Swal.fire('Campos incompletos', 'Seleccione un lector, libro, ejemplar. y fechas', 'warning');
+      return;
+    }
+
+    if (isEditMode.value && props.idPrestamo) {
+      // await updatePrestamo(form.value);
+      Swal.fire('Éxito', 'Préstamo actualizado correctamente.', 'success');
+    } else {
+      // console.log(form.value)
+      await createPrestamo(form.value, formEsta.value, selectedEjemplar.value!);
+      Swal.fire('Éxito', 'Préstamo creado correctamente.', 'success');
+    }
+    router.go(-1);
+  } catch (err) {
+    console.error(err);
+    Swal.fire('Error', 'No se pudo guardar el préstamo.', 'error');
+  }
+};
+
+const volver = () => {
+  router.go(-1);
+};
+</script>
+
+<style scoped>
+@import '../../../styles/tailwind.css';
+
+.form-label {
+  @apply block text-gray-700 text-sm font-bold mb-2;
+}
+
+.form-control {
+  @apply shadow appearance-none border rounded w-full px-3 text-gray-700 leading-tight focus:outline-none;
+}
+</style>
