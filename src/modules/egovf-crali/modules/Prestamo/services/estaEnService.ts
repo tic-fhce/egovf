@@ -4,6 +4,7 @@ export interface EstaEn {
   id_esta_en?: number; 
   idLibro: number;
   idPrestamo: number;
+  idEjemplar: number;
 }
 
 // Obtener todos los registros de esta_en
@@ -55,7 +56,7 @@ export const createEstaEn = async (relacion: EstaEn): Promise<EstaEn> => {
 // Actualizar un registro esta_en
 export const updateEstaEn = async (relacion: EstaEn): Promise<EstaEn> => {
   try {
-    const { data } = await SBFApi.put<EstaEn>('/estaen/update', relacion);
+    const { data } = await SBFApi.put<EstaEn>('/esta_en/edit', relacion);
     return data;
   } catch (error) {
     console.error(error);
@@ -66,7 +67,7 @@ export const updateEstaEn = async (relacion: EstaEn): Promise<EstaEn> => {
 // Eliminar un registro esta_en
 export const deleteEstaEn = async (id_esta_en: number): Promise<void> => {
   try {
-    await SBFApi.delete('/estaen/delete', {
+    await SBFApi.delete('/esta_en/delete', {
       data: { id_esta_en }
     });
   } catch (error) {

@@ -101,7 +101,7 @@
       <div v-if="ejemplaresDisponibles.length" class="mb-3">
         <label class="form-label">Ejemplar Disponible</label>
         <select
-          v-model="id_ejemplar"
+          v-model="formEsta.idEjemplar"
           @change="selectEjemplar"
           class="form-control"
           required
@@ -210,8 +210,8 @@ const selectedLector = ref<Lector | null>(null);
 const selectedLibro = ref<Libro | null>(null);
 const ejemplaresDisponibles = ref<Ejemplar[]>([]);
 const selectedEjemplar = ref<Ejemplar | null>(null);
+const selectedEjemplarBefore = ref<Ejemplar | null>(null);
 
-const id_ejemplar = ref(0);
 const form = ref<Prestamo>({
   id_lector: 0,
   id_prestamo: 0,
@@ -220,7 +220,8 @@ const form = ref<Prestamo>({
 });
 const formEsta = ref<EstaEn>({
   idLibro: 0,
-  idPrestamo: 0
+  idPrestamo: 0,
+  idEjemplar: 0
 })
 
 onMounted(async () => {
@@ -243,8 +244,10 @@ onMounted(async () => {
       selectedLector.value = lectores.value.find(l => l.id_lector === prestamo?.id_lector) || null;
       selectedLibro.value = libros.value.find(l => l.id_libro === estaEn.idLibro) || null;
       ejemplaresDisponibles.value = await getEjemplaresByLibroId(estaEn.idLibro);
-      // todo -- seleccionamos el ejemplar que estaba seleccionado
-      // selectedEjemplar.value = ejemplaresDisponibles.value.find(e => e.codigo === prestamo.id_ejemplar) || null;
+      
+      selectedEjemplar.value = ejemplaresDisponibles.value.find(e => e.codigo === estaEn.idEjemplar) || null;
+      // para cambiar el estado del anterior ejemplar
+      selectedEjemplarBefore.value = selectedEjemplar.value 
     }
   } catch (err) {
     console.error(err);
@@ -295,7 +298,7 @@ const selectLibro = async () => {
         (e) => e.estado === 'Disponible'
       );
       selectedEjemplar.value = null;
-      id_ejemplar.value = 0;
+      formEsta.value.idEjemplar = 0;
     }
   } catch (err) {
     console.error(err);
@@ -305,26 +308,25 @@ const selectLibro = async () => {
 
 const selectEjemplar = () => {
   selectedEjemplar.value =
-    ejemplaresDisponibles.value.find((e) => e.codigo === id_ejemplar.value) || null;
+    ejemplaresDisponibles.value.find((e) => e.codigo === formEsta.value.idEjemplar) || null;
 };
 
 const guardar = async () => {
   try {
-    if (!form.value.id_lector || !formEsta.value.idLibro || !id_ejemplar.value || !form.value.fecha_pres || !form.value.fecha_dev ) {
+    if (!form.value.id_lector || !formEsta.value.idLibro || !formEsta.value.idEjemplar || !form.value.fecha_pres || !form.value.fecha_dev ) {
       Swal.fire('Campos incompletos', 'Seleccione un lector, libro, ejemplar. y fechas', 'warning');
       return;
     }
 
     if (isEditMode.value && props.idPrestamo) {
-      // todo -- si se cambia de ejemplar enviar el anterior ejemplar para cambiar de estado a disponible, y el otro ejemplar para prestado
-      await updatePrestamo(form.value, formEsta.value);
+      await updatePrestamo(form.value, formEsta.value, selectedEjemplarBefore.value!, selectedEjemplar.value!);
       Swal.fire('Éxito', 'Préstamo actualizado correctamente.', 'success');
     } else {
       // console.log(form.value)
       await createPrestamo(form.value, formEsta.value, selectedEjemplar.value!);
       Swal.fire('Éxito', 'Préstamo creado correctamente.', 'success');
     }
-    router.go(-1);
+    // router.go(-1);
   } catch (err) {
     console.error(err);
     Swal.fire('Error', 'No se pudo guardar el préstamo.', 'error');

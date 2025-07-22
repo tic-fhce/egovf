@@ -40,6 +40,7 @@ export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
       ...estaEn,
       idPrestamo: savedPrestamo.id_prestamo,
       idLibro: estaEn.idLibro || 0, // Ensure idLibro is provided
+      idEjemplar: estaEn.idEjemplar || 0,
     };
     const savedEstaEn = await createEstaEn(estaEnData);
     
@@ -64,32 +65,43 @@ export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
   }
 };
 
-export const updatePrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partial<EstaEn>, ejemplar?: Partial<Ejemplar>)=> {
+export const updatePrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partial<EstaEn>, ejemplarBefore?: Partial<Ejemplar>, ejemplar?: Partial<Ejemplar>)=> {
   try {
-    const { data } = await SBFApi.put<Prestamo>('/prestamo/update', prestamo);
-    
-    const estaEnData: EstaEn = {
-      ...estaEn,
-      idPrestamo: prestamo.id_prestamo || 0,
-      idLibro: estaEn.idLibro || 0, // Ensure idLibro is provided
-    };
-    const savedEstaEn = await updateEstaEn(estaEnData);
-    
-    // todo -- implementar para cambiar el estado del anterior ejemplar a Disponible
-    const ejemplarUpdate: Partial<Ejemplar> = {
-      ...ejemplar,
-      estado: 'Prestado'
-    };
-    const updatedEjemplar = await updateEjemplar(ejemplarUpdate);
+    const { data } = await SBFApi.put<Prestamo>('/prestamo/edit', prestamo); 
+    if (ejemplar?.codigo !== ejemplarBefore?.codigo) {
+      const estaEnData: EstaEn = {
+        ...estaEn,
+        idPrestamo: prestamo.id_prestamo || 0,
+        idLibro: estaEn.idLibro || 0, // Ensure idLibro is provided
+        idEjemplar: ejemplar?.codigo || 0,
+      };
+      const savedEstaEn = await updateEstaEn(estaEnData);
+      
+      const ejemplarBeforeUpdate: Partial<Ejemplar> = {
+        ...ejemplarBefore,
+        estado: 'Disponible'
+      };
+      const ejemplarUpdate: Partial<Ejemplar> = {
+        ...ejemplar,
+        estado: 'Prestado'
+      };
+       const [updatedEjemplarBefore, updatedEjemplar] = await Promise.all([
+        updateEjemplar(ejemplarBeforeUpdate),
+        updateEjemplar(ejemplarUpdate)
+      ]);
 
+      return {
+        prestamo: data,
+        estaEn: savedEstaEn,
+        ejemplarBefore: updatedEjemplarBefore,
+        ejemplar: updatedEjemplar
+      };
+     }
 
     return {
       prestamo: data,
-      estaEn: savedEstaEn,
-      ejemplar: updatedEjemplar
     };
 
-    return data;
   } catch (error) {
     console.error(error);
     throw new Error('Error al actualizar el préstamo');
