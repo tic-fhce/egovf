@@ -85,5 +85,10 @@ export const craliRoutes = {
       component: () => import('../modules/Unidad/view/UnidadView.vue'),
       beforeEnter: [ isSuperAdminGuard],
     },
+    {
+      path: '/usuarios',
+      name: 'usuarios',
+      component: () => import('../modules/users/views/UserView.vue')
+    },
   ]
 };
