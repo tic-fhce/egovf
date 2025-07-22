@@ -51,5 +51,6 @@ export function useCookies() {
     getCookie,
     isSuperAdmin,
     isAdmin,
+    cif: computed(() => Number(getCookie('cif')) ),
   }
 }

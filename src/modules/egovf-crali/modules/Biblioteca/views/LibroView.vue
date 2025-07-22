@@ -109,6 +109,9 @@ interface Props {
 }
 const props = defineProps<Props>()
 const router = useRouter()
+import { useCookies } from '../../../utils/cookiesManager';
+const { cif } = useCookies()
+
 const idBiblioteca = window.history.state?.idBiblioteca;
 const isEditMode = computed(() => !!props.idLibro)
 const libro = ref<Libro | null>(null)
@@ -132,7 +135,7 @@ const form = ref<Partial<Libro>>({
   signatura_topografica: '',
   ejemplares: undefined,
   contenido_pdf: '',
-  id_usuario: 0, 
+  id_usuario: cif.value || 0, 
   id_biblioteca: 0 
 })
 
