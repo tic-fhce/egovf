@@ -94,7 +94,8 @@ export const craliRoutes = {
     {
       path: '/lectores',
       name: 'lectores',
-      component: () => import('../modules/users/views/LectorView.vue')
+      component: () => import('../modules/users/views/LectorView.vue'),
+      beforeEnter: [ isAdminGuard],
     },
   ]
 };

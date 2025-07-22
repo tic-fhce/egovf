@@ -6,7 +6,7 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="abrirModal(true)" color="success" class="font" size="sm">
+              <CButton v-if="isSuperAdmin" @click="abrirModal(true)" color="success" class="font" size="sm">
                 <CIcon icon="cil-user" class="me-2" />Agregar Lector
               </CButton>
             </CCol>
@@ -23,7 +23,7 @@
                   <th>RU</th>
                   <th>Celular</th>
                   <th>Carrera</th>
-                  <th>Acciones</th>
+                  <th v-if="isSuperAdmin">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -34,7 +34,7 @@
                   <td>{{ lector.ru }}</td>
                   <td>{{ lector.celular }}</td>
                   <td>{{ lector.carrera }}</td>
-                  <td>
+                  <td v-if="isSuperAdmin">
                     <CButton class="font me-1" color="warning" size="sm" @click="editarLector(lector)">
                       <CIcon icon="cil-pencil" class="me-1" /> Editar
                     </CButton>
@@ -129,6 +129,9 @@ import Swal from 'sweetalert2'
 import $ from 'jquery'
 import 'datatables.net'
 import { type Lector, getLectors, createLector, updateLector, deleteLector } from '../services/lectorService'
+
+import { useCookies } from '../../../utils/cookiesManager';
+const { isSuperAdmin } = useCookies()
 
 const titulo = 'Gestión de Lectores'
 
