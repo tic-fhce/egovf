@@ -140,65 +140,63 @@
         <CModalBody>
             <ComponenteNombres :datos="datos" />
             <hr>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">UID - OBS </CInputGroupText>
+                <CFormInput type="text" v-model="obs.uidobs" required="true" placeholder="Ej. FHCE - # de hoja de Ruta"/>
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">UID - OBS :</label>
-                <div class="col-8">
-                    <input type="text" class="form-control" v-model="obs.uidobs" required="true" placeholder="Ej. FHCE - # de hoja de Ruta">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha de Inicio :</label>
-                <div class="col-8">
-                    <input type="date" class="form-control" v-model="obs.fechainicio" required="true">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha Fin :</label>
-                <div class="col-8">
-                    <input type="date" class="form-control" v-model="obs.fechafin" required="true">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Detalle :</label>
-                <div class="col-8">
-                    <textarea class="form-control" v-model="obs.detalle" required="true"></textarea>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="tipo" class="col-4 col-form-label">Tipo :</label>
-                <div class="col-8">
-                    <select class="form-control" v-model="obs.tipo" required="true" @change="getTipo()">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="continuoingreso">Continuo e Ingreso</option>
-                        <option value="asueto">Asueto</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3 row" v-if="mostrarHoraIngreso()"  >
-                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso :</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obs.horaEntrada">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Fecha de Inicio </CInputGroupText>
+                <CFormInput type="date" v-model="obs.fechainicio" required="true" />
+            </CInputGroup>
 
-            <div class="mb-3 row" v-if="mostrarHoraSalida()">
-                <label for="datos" class="col-sm-4 col-form-label">Hora Salida :</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="obs.horaSalida">
-                </div>
-            </div>
-            <div 
-            class="mb-3 row">
-                <label for="archivo" class="col-4 col-form-label">Documento :</label>
-                <div class="col-8">
-                    <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Fecha Fin </CInputGroupText>
+                <CFormInput type="date" v-model="obs.fechafin" required="true" />
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Detalle </CInputGroupText>
+                <CFormTextarea  v-model="obs.detalle" required="true"> </CFormTextarea>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Tipo </CInputGroupText>
+                <CFormSelect  v-model="obs.tipo" required="true" @change="getTipo()">
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="continuoingreso">Continuo e Ingreso</option>
+                    <option value="asueto">Asueto</option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3" v-if="mostrarHoraIngreso()">
+                <CInputGroupText  as="label">Hora Ingreso </CInputGroupText>
+                <CFormInput type="text" v-model="obs.horaEntrada" required="true"/>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3" v-if="mostrarHoraSalida()">
+                <CInputGroupText  as="label">Hora Salida </CInputGroupText>
+                <CFormInput type="text" v-model="obs.horaSalida" required="true"/>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Documento</CInputGroupText>
+                    <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg"  @change="selectFile" :valid="fileValid" required="true"/>
+                    <CInputGroupText v-if="fileValid">
+                        <CIcon icon="cil-check" class="text-success"/>
+                    </CInputGroupText>
+            </CInputGroup>
+            
+            <CProgress v-if="uploading" :height="50" class="mb-3">
+                <CProgressBar  :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated >
+                    Espere un Momento ........... {{ uploadProgress }} %
+                </CProgressBar>
+            </CProgress>
+
         </CModalBody>
         <CModalFooter>
             <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
@@ -218,64 +216,62 @@
         <CModalBody>
             <ComponenteNombres :datos="datos" />
             <hr>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">UID - OBS</label>
-                <div class="col-8">
-                    <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="FHCE - Numero Hoja de Ruta">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
-                <div class="col-8">
-                    <input type="date" class="form-control" v-model="uobs.fechainicio" required="true">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
-                <div class="col-8">
-                    <input type="date" class="form-control" v-model="uobs.fechafin" required="true">
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="datos" class="col-4 col-form-label">Detalle</label>
-                <div class="col-8">
-                    <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
-                </div>
-            </div>
-            <div class="mb-3 row">
-                <label for="tipo" class="col-4 col-form-label">Tipo</label>
-                <div class="col-8">
-                    <select class="form-control" v-model="uobs.tipo" required="true" @change="getUTipo()">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="continuoingreso">Continuo e Ingreso</option>
-                        <option value="asueto">Asueto</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3 row" v-if="mostrarUHoraIngreso()"  >
-                <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="uobs.horaEntrada">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">UID - OBS </CInputGroupText>
+                <CFormInput type="text" v-model="uobs.uidobs" required="true" placeholder="Ej. FHCE - # de hoja de Ruta"/>
+            </CInputGroup>
 
-            <div class="mb-3 row" v-if="mostrarUHoraSalida()">
-                <label for="datos" class="col-sm-4 col-form-label">Hora Salida{{ uobs.horaEntrada }}</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" v-model="uobs.horaSalida">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Fecha de Inicio </CInputGroupText>
+                <CFormInput type="date" v-model="uobs.fechainicio" required="true" />
+            </CInputGroup>
 
-            <div class="mb-3 row">
-                <label for="archivo" class="col-4 col-form-label">Documento</label>
-                <div class="col-8">
-                    <input type="file" ref="file" class="form-control" accept="image/png,image/jpeg" @change="selectFile()" required="true">
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Fecha Fin </CInputGroupText>
+                <CFormInput type="date" v-model="uobs.fechafin" required="true" />
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Detalle </CInputGroupText>
+                <CFormTextarea  v-model="uobs.detalle" required="true"> </CFormTextarea>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Tipo </CInputGroupText>
+                <CFormSelect  v-model="uobs.tipo" required="true" @change="getUTipo()">
+                    <option value="Entrada M.">Entrada Mañana</option>
+                    <option value="Salida M.">Salida Mañana</option>
+                    <option value="Entrada T.">Entrada Tarde</option>
+                    <option value="Salida T.">Salida Tarde</option>
+                    <option value="continuo">Continuo</option>
+                    <option value="continuoingreso">Continuo e Ingreso</option>
+                    <option value="asueto">Asueto</option>
+                </CFormSelect>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3" v-if="mostrarUHoraIngreso()">
+                <CInputGroupText  as="label">Hora Ingreso </CInputGroupText>
+                <CFormInput type="text" v-model="uobs.horaEntrada" required="true"/>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3" v-if="mostrarUHoraSalida()">
+                <CInputGroupText  as="label">Hora Salida </CInputGroupText>
+                <CFormInput type="text" v-model="uobs.horaSalida" required="true"/>
+            </CInputGroup>
+
+            <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Documento</CInputGroupText>
+                    <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg"  @change="selectFile" :valid="fileValid" required="true"/>
+                    <CInputGroupText v-if="fileValid">
+                        <CIcon icon="cil-check" class="text-success"/>
+                    </CInputGroupText>
+            </CInputGroup>
+            
+            <CProgress v-if="uploading" :height="50" class="mb-3">
+                <CProgressBar  :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated >
+                    Espere un Momento ........... {{ uploadProgress }} %
+                </CProgressBar>
+            </CProgress>
 
         </CModalBody>
         <CModalFooter>
@@ -304,7 +300,8 @@ export default {
     data(){
         return {
             titulo:'Observaciones',
-            archivo:'',
+            archivo:null,
+            fileValid: false,
             sccService:null,
             egovfService :null,
             uploadService:null,
@@ -313,6 +310,8 @@ export default {
             listaGestion:[],
             color:'',
             estado:'',
+            uploading: false,
+            uploadProgress: 0,
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
             usuario:{
                 token:'',
@@ -420,8 +419,21 @@ export default {
         this.uploadService = new UploadService();
     },
     methods:{
-        selectFile(){// Funcion que permite cambiar los datos del archivo
-            this.archivo = this.$refs.file.files[0];
+        selectFile(event){// Funcion que permite cambiar los datos del archivo
+            const fileInput = this.getSafeFileInput(event);
+      
+            if (!fileInput?.files?.length) {
+                this.resetFileInput();
+                return;
+            }
+            
+            this.archivo = fileInput.files[0];
+            
+            if (!this.validateFile(this.archivo)) {
+                this.resetFileInput();
+                return;
+            }
+            this.fileValid = true;
         },
         getDatos(){
             //cargamos datos del Usuario
@@ -570,88 +582,102 @@ export default {
         },
 
         async addObs(){ //Funcion para registrar una Observacion del Usuario
-            const fromData = new FormData();
-            fromData.append('archivo',this.archivo);
+            this.uploading = true;
+            this.uploadProgress = 0;
             try{
-                //primero subimos el archivo
-                await this.uploadService.addImagen(fromData).then((response)=>{
-                if(response.status == 200){
-                    this.obs.url = this.uploadService.getUrl()+ response.data.nombre;
-                    this.obs.imagen = response.data.nombre;
-                    this.obs.cif = this.usuario.cif;
-                    this.$swal.fire({
-                        title: 'Deseas Agregar la Observacion de Tu Asistencia ?',
-                        showDenyButton: true,
-                        icon:'info',
-                        confirmButtonText: 'Aceptar',
-                        denyButtonText: 'Cancelar',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.sccService.addObsEmpleado(this.obs).then(response =>{
-                                if(response.status == 201){
-                                    this.$swal.fire('La Observacion fue Agregada Corectamente','Recuerda que para que tenga efecto debe de ser aprobada por tu inmediato superior', 'success').then((res)=>{
-                                        if(res)
-                                            location.reload();
-                                    });
-                                }
-                                else{
-                                    this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
-                                }
-                            });
+                const formData = new FormData();
+                formData.append('archivo',this.archivo);
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        this.uploadProgress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                    }
+                };
+                const uploadResponse = await this.uploadService.addImagen(formData, config);
+                if (uploadResponse.status !== 200) {
+                    throw new Error('Error al subir archivo');
+                }
+                
+                this.obs.url = this.uploadService.getUrl()+ uploadResponse.data.nombre;
+                this.obs.imagen = uploadResponse.data.nombre;
+                this.obs.cif = this.usuario.cif;
+                
+                this.$swal.fire({
+                    title: 'Deseas Agregar la Observacion de Tu Asistencia ?',
+                    showDenyButton: true,
+                    icon:'info',
+                    confirmButtonText: 'Aceptar',
+                    denyButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.sccService.addObsEmpleado(this.obs).then(response =>{
+                            if(response.status == 201){
+                                this.$swal.fire('La Observacion fue Agregada Corectamente','Recuerda que para que tenga efecto debe de ser aprobada por tu inmediato superior', 'success').then((res)=>{
+                                    if(res)
+                                        location.reload();
+                                });
+                            }
+                            else{
+                                this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
+                            }
+                        });
                             
-                        } else if (result.isDenied) {
-                            this.$swal.fire('Datos Cancelados', '', 'info');
-                        }
-                    });
-
-                }
-                else {
-                    this.$swal.fire('El archivo no pudo ser Guardado  ', '','error');
-                }
-            });
+                    } else if (result.isDenied) {
+                        this.$swal.fire('Datos Cancelados', '', 'info');
+                    }
+                });
             }catch(err){
                 this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
+            }finally {
+                this.uploading = false;
+                this.uploadProgress = 0;
             }
         },
         async updateObs(){ //Funcion actualizar una Observacion del Usuario
-            const fromData = new FormData();
-            fromData.append('archivo',this.archivo);
+            this.uploading = true;
+            this.uploadProgress = 0;
             try{
-                //primero subimos el archivo
-                await this.uploadService.addImagen(fromData).then((response)=>{
-                if(response.status == 200){
-                    this.uobs.url = this.uploadService.getUrl()+ response.data.nombre;
-                    this.uobs.imagen = response.data.nombre;
-                    this.$swal.fire({
-                        title: 'Deseas Actualizar la Observacion de Tu Asistencia ?',
-                        showDenyButton: true,
-                        icon:'info',
-                        confirmButtonText: 'Aceptar',
-                        denyButtonText: 'Cancelar',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.sccService.updateObsEmpleado(this.uobs).then(response =>{
-                                if(response.status == 200){
-                                    this.$swal.fire('La Observacion fue Actualizada Corectamente','Recuerda que para que tenga efecto debe de ser aprobada por tu inmediato superior', 'success').then((res)=>{
-                                        if(res)
-                                            location.reload();
-                                    });
-                                }
-                                else{
-                                    this.$swal.fire('La Observacion no pudo ser Actualizada', ''+ response.status, 'error');
-                                }
-                            });
-                            
-                        } else if (result.isDenied) {
-                            this.$swal.fire('Datos Cancelados', '', 'info');
-                        }
-                    });
+                const formData = new FormData();
+                formData.append('archivo',this.archivo);
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        this.uploadProgress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                    }
+                };
+                const uploadResponse = await this.uploadService.addImagen(formData, config);
+                if (uploadResponse.status !== 200) {
+                    throw new Error('Error al subir archivo');
+                }
 
-                }
-                else {
-                    this.$swal.fire('El archivo no pudo ser Guardado  ', '','error');
-                }
-            });
+                this.uobs.url = this.uploadService.getUrl()+ uploadResponse.data.nombre;
+                this.uobs.imagen = uploadResponse.data.nombre;
+                this.$swal.fire({
+                    title: 'Deseas Actualizar la Observacion de Tu Asistencia ?',
+                    showDenyButton: true,
+                    icon:'info',
+                    confirmButtonText: 'Aceptar',
+                    denyButtonText: 'Cancelar',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.sccService.updateObsEmpleado(this.uobs).then(response =>{
+                            if(response.status == 200){
+                                this.$swal.fire('La Observacion fue Actualizada Corectamente','Recuerda que para que tenga efecto debe de ser aprobada por tu inmediato superior', 'success').then((res)=>{
+                                    if(res)
+                                        location.reload();
+                                });
+                            }
+                            else{
+                                this.$swal.fire('La Observacion no pudo ser Actualizada', ''+ response.status, 'error');
+                            }
+                        });
+                            
+                    } else if (result.isDenied) {
+                        this.$swal.fire('Datos Cancelados', '', 'info');
+                    }
+                });
             }catch(err){
                 this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
             }
@@ -735,7 +761,37 @@ export default {
                     this.$swal.fire('Datos Cancelados', '', 'info');
                 }
             });  
-        }
+        },
+
+        //funciones para validar el archivo a subir
+        getSafeFileInput(event) {
+        // Todas las formas posibles de obtener el input
+            return (
+                // CoreUI v4+ (recomendado)
+                this.$refs.fileInput?.$refs?.input ||
+                
+                // Event target
+                event?.target ||
+                
+                // CoreUI v3
+                this.$refs.fileInput?.$el?.querySelector?.('input[type="file"]') ||
+                
+                // Último recurso
+                document.getElementById('filedoc')
+            );
+        },
+    
+        validateFile(file) {
+            const VALID_TYPES = ['image/jpeg', 'image/png'];
+            return file && VALID_TYPES.includes(file.type);
+        },
+    
+        resetFileInput() {
+            this.archivo=null;
+            this.fileValid = false;
+            const input = this.getSafeFileInput();
+            if (input) input.value = '';
+        },
     }
 
 }

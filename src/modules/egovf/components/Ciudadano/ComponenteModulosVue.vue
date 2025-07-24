@@ -38,28 +38,18 @@
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <div class="mb-3 row">
-          <h4 class="card-title">CIF : {{ egovf.cif }}</h4>
-        </div>
-        <div class="mb-3 row">
-          <label for="nombre" class="col-4">Nombre : </label>
-          <label for="nombre" class="col-8">{{ egovf.nombre }}</label>
-        </div>
-        <div class="mb-3 row">
-          <label for="apellido" class="col-4">Apellidos : </label>
-          <label for="nombre" class="col-8">{{ egovf.paterno }} {{ egovf.materno }}</label>
-        </div>
-        <hr />
-        <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Modulo : </label>
-          <div class="col-6">
-            <select v-model="id_modulo" class="form-control" required="true">
-              <option v-for="modulo in listaModulo" :value="modulo.id" :key="modulo.id">
-                {{ modulo.descripcion }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <ComponenteNombres :datos="datos" />
+        <br>
+        
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" for="inputGroupSelect01">Modulo </CInputGroupText>
+          <CFormSelect v-model="id_modulo" :model-value="String(id_modulo)"  @update:model-value="id_modulo = Number($event)" required="true">
+            <option v-for="modulo in listaModulo" :value="modulo.id" :key="modulo.id">
+              {{ modulo.descripcion }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
+
       </CModalBody>
       <CModalFooter>
         <CButton @click="clickModalModulo(false)" color="danger" class="font"
@@ -72,11 +62,17 @@
 </template>
 
 <script>
+// Importamos Componentes
+import ComponenteNombres from '@/modules/egovf/components/Ciudadano/ComponenteNombres.vue';
+
 import ModuloService from "@/modules/egovf/services/moduloService";
 
 export default {
   name: "ComponenteModulosVue",
-  props: ["cif", "egovf"],
+  props: ["cif", "egovf","datos"],
+  components:{
+    ComponenteNombres
+  },
   data() {
     return {
       titulo:"Modulos del Ciudadano",
@@ -109,6 +105,7 @@ export default {
   },
   created() {
     this.moduloService = new ModuloService();
+    
   },
   mounted() {
     this.getDatos();
@@ -116,6 +113,7 @@ export default {
   },
   updated() {
     if (this.cif > 0 && this.getPB) {
+      
       this.getModuloCifEmpleado();
       this.getModulos();
       this.getPB = false;
@@ -133,6 +131,7 @@ export default {
         this.usuario.sigla = this.$cookies.get("sigla");
         this.usuario.foto = this.$cookies.get("foto");
         this.moduloService.headersUsuario(this.usuario.token);
+        
       }
     },
     async getModulos() {

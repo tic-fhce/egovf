@@ -10,11 +10,11 @@
         </ol>
     </nav>
     <!-- Componente de Datos de la Persona -->
-    <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf"/>
+    <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf" />
         
     <!-- Componente de Modulos para el Ciudadano -->
     <br>
-    <ComponenteModulosVue :cif="cifCiudadano" :egovf="egovf"/>
+    <ComponenteModulosVue :cif="cifCiudadano" :egovf="egovf" :datos="datos"/>
 
 </template>
 
@@ -68,7 +68,12 @@ export default {
                 dependiente:'',
                 sigla:'',
                 foto:''
-            }
+            },
+            datos:{
+                cif:0,
+                nombre:'',
+                apellido:''
+            },
         }
     },
     beforeCreate(){        
@@ -102,6 +107,9 @@ export default {
             this.egovfService.headersUsuario(this.usuario.token);
             await this.egovfService.getEgovf(this.cifCiudadano).then((response) =>{
                 this.egovf = response.data;
+                this.datos.cif = this.egovf.cif;
+                this.datos.nombre = this.egovf.nombre;
+                this.datos.apellido = this.egovf.paterno +" " +this.egovf.materno;
             });
         }
     }

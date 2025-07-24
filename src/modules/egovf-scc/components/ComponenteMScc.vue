@@ -441,7 +441,7 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label" for="inputGroupSelect01">Datos del Biometrico</CInputGroupText>
-          <CFormSelect v-model="id_bio" @change="datosChange()" required="true">
+          <CFormSelect v-model="id_bio" :model-value="String(id_bio)"  @update:model-value="id_bio = Number($event)" @change="datosChange()" required="true">
             <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">
                 {{ lista.nombre }} - {{ lista.lugar }}
             </option>
@@ -647,7 +647,7 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText  as="label">Gestion </CInputGroupText>
-          <CFormSelect v-model="reporteMes.gestion" required="true">
+          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)" required="true">
             <option v-for="y in listaGestion" :key="y" :value="y">
               {{ y }}
             </option>
@@ -656,7 +656,7 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Mes </CInputGroupText>
-          <CFormSelect v-model="reporteMes.mes" required="true">
+          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)"  required="true">
             <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
               {{ mes.mes }}
             </option>
@@ -689,7 +689,7 @@
         <hr />
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Gestion </CInputGroupText>
-          <CFormSelect v-model="reporteMes.gestion" required="true">
+          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)" required="true">
             <option v-for="y in listaGestion" :key="y" :value="y">
               {{ y }}
             </option>
@@ -698,7 +698,7 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Mes </CInputGroupText>
-          <CFormSelect v-model="reporteMes.mes" required="true">
+          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)"  required="true">
             <option v-for="mes in listaMes" :key="mes.m" :value="mes.m">
               {{ mes.mes }}
             </option>
@@ -708,14 +708,15 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Inicio </CInputGroupText>
-          <CFormSelect v-model="reporteMes.di" required="true">
+          <CFormSelect v-model="reporteMes.di" :model-value="String(reporteMes.di)" @update:model-value="reporteMes.di = Number($event)" required="true">
+            <option value=""></option>
             <option v-for="i = 1 in 31" :key="i" :value="i">{{ i }}</option>
-          </CFormSelect>
+          </CFormSelect><br>
         </CInputGroup>
 
         <CInputGroup class="mb-3">
           <CInputGroupText  as="label">Fin </CInputGroupText>
-          <CFormSelect v-model="reporteMes.df" required="true">
+          <CFormSelect v-model="reporteMes.df" :model-value="String(reporteMes.df)" @update:model-value="reporteMes.df = Number($event)" required="true">
             <option v-for="j = 1 in 31" :key="j" :value="j">{{ j }}</option>
           </CFormSelect>
         </CInputGroup>

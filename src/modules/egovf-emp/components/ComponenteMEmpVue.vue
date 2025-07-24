@@ -209,16 +209,15 @@
       <CModalBody>
         <ComponenteNombres :datos="datos" />
         <hr />
-        <div class="mb-3 row">
-          <label for="datos" class="col-6 col-form-label">Modulo</label>
-          <div class="col-6">
-            <select v-model="id_modulo" class="form-control" required="true">
-              <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">
-                {{ lm.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Modulo</CInputGroupText>
+          <CFormSelect v-model="id_modulo" :model-value="String(id_modulo)"  @update:model-value="id_modulo = Number($event)" required="true">
+            <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">
+              {{ lm.nombre }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
+        
       </CModalBody>
       <CModalFooter>
         <CButton @click="clickModalModulo(false)" color="danger" class="font"
@@ -233,7 +232,7 @@
   <!-- End Modal  Modulo-->
 
   <!-- Modal  Contrato-->
-  <CModal size="lg" :visible="modalContrato" @close="clickModalContrato(false)">
+  <CModal  :visible="modalContrato" @close="clickModalContrato(false)">
     <form @submit.prevent="addContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
         <CModalTitle>
@@ -243,69 +242,56 @@
       <CModalBody>
         <ComponenteNombres :datos="datos" />
         <hr />
-        <div class="mb-3 row">
-          <label for="numero" class="col-4 col-form-label">Numero de Contrato</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true"/>
-          </div>
-        </div>
+        
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Numero de Contrato</CInputGroupText>
+          <CFormInput type="text" v-model="contrato.numerocontrato" placeholder="Numero de contrato" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Servicios Prestados</label>
-          <div class="col-8">
-            <textarea class="form-control" v-model="contrato.servicio" required="true" rows="5"></textarea>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText  as="label">Servicios Prestados</CInputGroupText>
+          <CFormTextarea  v-model="contrato.servicio" required="true" rows="5"> </CFormTextarea>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Cargo</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="contrato.cargo" placeholder="Cargo del Empleado" required="true" >
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Cargo</CInputGroupText>
+          <CFormInput type="text" v-model="contrato.cargo" placeholder="Cargo del Empleado" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Tipo de Empleado</label>
-          <div class="col-8">
-            <select v-model="contrato.idTipoEmpleado" class="form-control" required="true">
-              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
-                {{ lte.detalle }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Tipo de Empleado</CInputGroupText>
+          <CFormSelect v-model="contrato.idTipoEmpleado" :model-value="String(contrato.idTipoEmpleado)"  @update:model-value="contrato.idTipoEmpleado = Number($event)" required="true">
+            <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+              {{ lte.detalle }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Unidad </label>
-          <div class="col-8">
-            <select v-model="contrato.unidad" class="form-control" required="true" >
-              <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
-                {{ unidad.unidad }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Unidad</CInputGroupText>
+          <CFormSelect v-model="contrato.unidad" :model-value="String(contrato.unidad)" required="true">
+            <option></option>
+            <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
+              {{ unidad.unidad }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="inicio" class="col-4 col-form-label">Fecha de Inicio</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="contrato.inicio" placeholder="Inicio" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Fecha de Inicio</CInputGroupText>
+          <CFormInput type="date" v-model="contrato.inicio" placeholder="Inicio" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="fin" class="col-4 col-form-label" >Fecha de Conclucion </label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="contrato.fin" placeholder="fin" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Fecha de Conclucion</CInputGroupText>
+          <CFormInput type="date" v-model="contrato.fin" placeholder="Inicio" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="detalle" class="col-4 col-form-label">Detalle</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Detalle</CInputGroupText>
+          <CFormInput type="text" v-model="contrato.detalle" placeholder="Detalle del Contrato" required="true"/>
+        </CInputGroup>
+
       </CModalBody>
       <CModalFooter>
         <CButton @click="clickModalContrato(false)" color="danger" class="font">

@@ -89,16 +89,16 @@
         <CModalBody>
             <CInputGroup class="mb-3">
                 <CInputGroupText  as="label">Gestion </CInputGroupText>
-                <CFormSelect v-model="reporteMes.gestion" required="true">
+                <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)" required="true">
                     <option v-for="y in listaGestion" :key="y" :value="y">
                     {{ y }}
                     </option>
-                </CFormSelect>
+                </CFormSelect>                
             </CInputGroup>
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Mes </CInputGroupText>
-                <CFormSelect v-model="reporteMes.mes" required="true">
+                <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)" required="true">
                     <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
                     {{ mes.mes }}
                     </option>
@@ -125,7 +125,7 @@
         <CModalBody>
             <CInputGroup class="mb-3">
                 <CInputGroupText  as="label">Gestion </CInputGroupText>
-                <CFormSelect v-model="reporteMes.gestion" required="true">
+                <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)"  required="true">
                     <option v-for="y in listaGestion" :key="y" :value="y">
                     {{ y }}
                     </option>
@@ -134,7 +134,7 @@
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Mes </CInputGroupText>
-                <CFormSelect v-model="reporteMes.mes" required="true">
+                <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)" required="true">
                     <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
                     {{ mes.mes }}
                     </option>
@@ -143,14 +143,15 @@
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Inicio </CInputGroupText>
-                <CFormSelect v-model="reporteMes.di" required="true">
+                <CFormSelect v-model="reporteMes.di" :model-value="String(reporteMes.di)" @update:model-value="reporteMes.di = Number($event)" required="true">
+                    <option value=""></option>
                     <option v-for="i=1 in 31" :key="i" :value="i">{{i}}</option>
                 </CFormSelect>
             </CInputGroup>
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Fin </CInputGroupText>
-                <CFormSelect v-model="reporteMes.df" required="true">
+                <CFormSelect v-model="reporteMes.df" :model-value="String(reporteMes.df)" @update:model-value="reporteMes.df = Number($event)" required="true">
                     <option v-for="j=1 in 31" :key="j" :value="j">{{j}}</option>
                 </CFormSelect>
             </CInputGroup>
@@ -207,7 +208,7 @@ export default {
             direcciones:["/observaciones","/biometricos","/horarios"],
             reporteMes:{
                 cif:'',
-                gestion:2021,
+                gestion:0,
                 mes:1,
                 di:0,
                 df:0,
@@ -219,11 +220,12 @@ export default {
         this.sccService = new SccService();
         this.uploadService = new UploadService();
         this.getAbiso();
+        this. getGestion();
     },
     mounted(){
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-        this. getGestion();
+        
     },
     beforeCreate(){        
         if(this.$cookies.get('cif')==null){
@@ -251,6 +253,7 @@ export default {
             for(var i=2021; i<= this.obsgestion; i++){
                 lgestion.push(i);
             }
+            this.reporteMes.gestion = this.obsgestion;
             this.listaGestion = lgestion;
         },
         async getAbiso(){
@@ -296,7 +299,6 @@ export default {
             if(this.usuario.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
                 this.getFotoPerfil();
             else{
-                this.reporteMes.di=0;
                 this.modalMes = rmes;
             }
                 
@@ -305,7 +307,6 @@ export default {
             if(this.usuario.foto =='https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
                 this.getFotoPerfil();
             else{
-                this.reporteMes.di=1;
                 this.modalDias = dias;
             }
                 

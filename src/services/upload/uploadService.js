@@ -7,8 +7,17 @@ export default class UploadService {
   getListarCifCero() {
     return axios.get("biometrico/listarCifCero");
   }
-  addImagen(fromData) {
-    return axios.post(url + "upload.php", fromData);
+  addImagen(fromData,config) {
+    return axios.post(url + "upload.php", fromData,{...config,headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
+  addFoto(fromData,config) {
+    return axios.post(url + "foto.php", fromData,{...config,headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
   getUrl() {
     return url + "imagenes/";
