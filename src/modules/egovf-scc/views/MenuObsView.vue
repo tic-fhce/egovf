@@ -9,7 +9,7 @@
                     <CIcon customClassName="nav-icon" icon="cil-check" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="clickModalObs(true)">Ingresar</CButton>
+                    <CButton color="success" size="sm" class="font" @click="clickModalObs(true)">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -23,7 +23,7 @@
                     <CIcon customClassName="nav-icon" icon="cil-folder-open" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="obsUsuario()">Ingresar</CButton>
+                    <CButton color="success" class="font" size="sm" @click="obsUsuario()">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -37,7 +37,7 @@
                     <CIcon customClassName="nav-icon" icon="cil-flip-to-back" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="obsEliminado()">Ingresar</CButton>
+                    <CButton color="success" class="font" size="sm" @click="obsEliminado()">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -45,29 +45,27 @@
 
 <!-- Observaciones de Gestion-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <form @submit.prevent="obsLista()">
+    <CForm @submit.prevent="obsLista()">
         <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
             <CModalTitle>
-                <h5>Observaciones</h5>
+                <h6><CIcon icon="cil-featured-playlist"/> Observaciones</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
 
-            <div class="mb-3 row">
-                <label for="gestion" class="col-6 col-form-label">Gestion :</label>
-                <div class="col-6">
-                    <select v-model="gestion" class="form-control" required="true">
-                        <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                    </select>
-                </div>
-            </div>
+            <CInputGroup class="mb-3">
+                <CInputGroupText  as="label">Gestion </CInputGroupText>
+                <CFormSelect v-model="gestion" :model-value="String(gestion)" @update:model-value="gestion = Number($event)" required="true">
+                    <option v-for="y in listaGestion" :key="y" :value="y">{{ y }}</option>
+                </CFormSelect>
+            </CInputGroup>
             
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-file" class="me-2"/>Ver Lista de Observaciones</button>
+            <CButton @click="clickModalObs(false)" color="danger" size="sm" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" color="success" size="sm"><CIcon icon="cil-file" class="me-2"/>Ver Lista de Observaciones</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 <!-- Observaciones de Gestion-->
 

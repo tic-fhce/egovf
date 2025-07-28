@@ -150,8 +150,8 @@
         </CInputGroup>
     </CModalBody>
     <CModalFooter>
-        <CButton @click="clickModalCelular(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="updatePersona()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Actualizar</CButton>
+        <CButton @click="clickModalCelular(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton @click="updatePersona()" color="success" class="font" size="sm"><CIcon icon="cil-check-alt" class="me-2"/>Actualizar</CButton>
     </CModalFooter>
 </CModal>
 <!-- End Modal  Actualizar Celular-->
@@ -192,15 +192,15 @@
 
     </CModalBody>
     <CModalFooter>
-        <CButton @click="clickModalPass(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton v-if="botones"  @click="updatePass()" color="success" class="font"><CIcon icon="cil-check-alt" class="me-2"/>Actualizar</CButton>
+        <CButton @click="clickModalPass(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton v-if="botones"  @click="updatePass()" color="success" class="font" size="sm"><CIcon icon="cil-check-alt" class="me-2"/>Actualizar</CButton>
     </CModalFooter>
 </CModal>
 <!-- End Modal  Actualizar Contraseña-->
 
 <!-- Modal  Actualizar Foto-->
 <CModal :visible="modalFoto" @close="clickModalFoto(false)">
-    <form @submit.prevent="updateFoto()" enctype="multipart/form-data">
+    <CForm @submit.prevent="updateFoto()" enctype="multipart/form-data">
         <CModalHeader class="headercolor" dismiss @close="clickModalFoto(false)">
             <CModalTitle>
                 <h6><CIcon icon="cil-description" size="lg" class="me-2" />Actualizar Foto de Perfil</h6>
@@ -228,10 +228,10 @@
 
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalFoto(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font"><CIcon icon="cil-camera" class="me-2"/>Actualizar</button>
+            <CButton @click="clickModalFoto(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" color="success" size="sm"><CIcon icon="cil-camera" class="me-2"/>Actualizar</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 <!-- End Modal  Actualizar Foto-->
 </template>
@@ -243,6 +243,7 @@ import ComponenteNombres from '@/modules/egovf/components/Ciudadano/ComponenteNo
 //Importamos Servicios
 import UsuarioService from '@/modules/egovf/services/usuarioService';
 import EgovfService from '@/modules/egovf/services/egovfService';
+import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
 import UploadService from '@/services/upload/uploadService';
 
 export default {
@@ -260,6 +261,7 @@ export default {
             egovfService : null,
             uploadService :null,
             usuarioService: null,
+            empleadoService:null,
             botones:false,
             uploading:false,
             uploadProgress:0,
@@ -318,6 +320,7 @@ export default {
         this.usuarioService = new UsuarioService();
         this.egovfService = new EgovfService();
         this.uploadService = new UploadService();
+        this.empleadoService = new EmpleadoService();
     },
     mounted(){
         this.getDatos();// Llamamos la funcion para recuperar los Datos
@@ -458,6 +461,7 @@ export default {
                     if (result.isConfirmed) {
                         this.usuarioService.updateUsuario(this.egovf).then(response =>{
                             if(response.status == 200){
+                                this.empleadoService.updateFoto(this.egovf.cif,this.egovf.foto);
                                 this.$swal.fire('La Foto de Perfil fue guardado correctamente', '','success').then((res)=>{
                                     if(res)
                                         location.reload();

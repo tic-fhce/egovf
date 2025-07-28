@@ -2,47 +2,54 @@
   <CRow>
     <CCol :lg="12">
       <CCard>
-        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center">
-            <CIcon icon="cil-devices" size="lg" class="me-2 text-light" />
-            <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
-          </div>
-          <CDropdown variant="btn-group">
-            <!--Menus-->
-              <CButtonGroup role="group">
-                <!--Menu Opciones-->
-                <CDropdown variant="btn-group">
-                  <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">
-                    <CIcon icon="cil-menu" color="dark" class="me-2 text-success"/>Opciones</CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem>
-                      <CButton @click="clickModalBiometrico(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Biometrico</CButton>
-                    </CDropdownItem>
-                    <CDropdownDivider />
-                    <CDropdownItem>
-                      <CButton @click="clickModalHorario(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Horario</CButton>
-                    </CDropdownItem>
-                    <CDropdownDivider />
-                    <CDropdownItem>
-                      <CButton @click="clickModalObs(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Observaciones</CButton>
-                    </CDropdownItem>
-                  </CDropdownMenu>
-                </CDropdown>
-                <!--Menu reportes-->
-                <CDropdown variant="btn-group">
-                  <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">Reportes</CDropdownToggle>
-                  <CDropdownMenu>
-                    <CDropdownItem>
-                      <CButton @click="clickModalMes(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual</CButton>
-                    </CDropdownItem>
-                    <CDropdownDivider />
-                    <CDropdownItem>
-                      <CButton @click="clickModalDias(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Segmentado</CButton>
-                    </CDropdownItem>
-                  </CDropdownMenu>
-                </CDropdown>
-              </CButtonGroup>
-          </CDropdown>
+        <CCardHeader class="headercolor justify-content-between">
+          <CRow>
+            <CCol :lg="6">
+              <div class="align-items-center">
+                <CIcon icon="cil-devices" size="lg" class="me-2 text-light" />
+                <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+              </div>
+            </CCol>
+            <CCol :lg="6" class="text-end">
+              <CDropdown variant="btn-group">
+                <!--Menus-->
+                  <CButtonGroup role="group">
+                    <!--Menu Opciones-->
+                    <CDropdown variant="btn-group">
+                      <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">
+                        <CIcon icon="cil-menu" color="dark" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem>
+                          <CButton @click="clickModalBiometrico(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Biometrico</CButton>
+                        </CDropdownItem>
+                        <CDropdownDivider />
+                        <CDropdownItem>
+                          <CButton @click="clickModalHorario(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Horario</CButton>
+                        </CDropdownItem>
+                        <CDropdownDivider />
+                        <CDropdownItem>
+                          <CButton @click="clickModalObs(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Observaciones</CButton>
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                    <!--Menu reportes-->
+                    <CDropdown variant="btn-group">
+                      <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">Reportes</CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem>
+                          <CButton @click="clickModalMes(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual</CButton>
+                        </CDropdownItem>
+                        <CDropdownDivider />
+                        <CDropdownItem>
+                          <CButton @click="clickModalDias(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Segmentado</CButton>
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CButtonGroup>
+              </CDropdown>
+            </CCol>
+          </CRow>
+
         </CCardHeader>
 
         <CCardBody>
@@ -305,26 +312,26 @@
                     </CCardHeader>
                     <CCardBody>
                       <CRow>
-                        <CCol :lg="2">Gestion :</CCol>
-                        <CCol :lg="2">
-                          <select v-model="obsgestion" class="form-control">
-                            <option v-for="y in listaGestion" :key="y" :value="y">
-                              {{ y }}
-                            </option>
-                          </select>
+                        <CCol :lg="4">
+                            <CInputGroup class="mb-3">
+                                <CInputGroupText  as="label">Gestion</CInputGroupText>
+                                <CFormSelect  v-model="obsgestion" :model-value="String(obsgestion)"  @update:model-value="obsgestion = Number($event)" required="true">
+                                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                                </CFormSelect>
+                            </CInputGroup>
                         </CCol>
-                        <CCol :lg="2">Mes :</CCol>
-                        <CCol :lg="2">
-                          <select v-model="obsmes" class="form-control">
-                            <option v-for="mes in listaMes" :key="mes.m" :value="mes.m">
-                              {{ mes.mes }}
-                            </option>
-                          </select>
+
+                        <CCol :lg="4">
+                            <CInputGroup class="mb-3">
+                                <CInputGroupText  as="label">Mes</CInputGroupText>
+                                <CFormSelect  v-model="obsmes" :model-value="String(obsmes)"  required="true">
+                                    <option v-for="mes  in listaMes" :key="mes.m" :value="mes.m">{{mes.mes}}</option>
+                                </CFormSelect>
+                            </CInputGroup>
                         </CCol>
+
                         <CCol :lg="4" class="text-center">
-                          <CButton color="success" class="font" @click="getObsUsuario()" size="sm"><CIcon icon="cil-featured-playlist"></CIcon> Cargar
-                            Observaciones
-                          </CButton>
+                            <CButton color="success" class="font" size="sm" @click="getObsUsuario()"><CIcon icon="cil-featured-playlist"></CIcon> Cargar Observaciones</CButton>
                         </CCol>
                       </CRow>
                     </CCardBody>
@@ -352,6 +359,8 @@
                               </div>
                             </td>
                             <td>
+                              <CButton color="danger" class="font" size="sm" v-if="lsobs.estado === 2" @click="updateObsBio(lsobs.id, 0)" ><CIcon icon="cil-warning" size="lg"/>
+                              </CButton>
                               <CButton color="success" class="font" size="sm" v-if="lsobs.estado === 1" @click="updateObsBio(lsobs.id, 0)" ><CIcon icon="cil-check" size="lg"/>
                               </CButton>
                               <CButton color="warning" class="font" size="sm" v-if="lsobs.estado === 0" @click="updateObsBio(lsobs.id, 1)"><CIcon icon="cil-cloud-upload" size="lg"/>
@@ -387,44 +396,28 @@
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <CRow>
-        <CCol :lg="6">
-          <ComponenteNombres :datos="datos" />
-          <br>
-          <CAlert :color="this.color">{{this.estado}}</CAlert>
-          <CWidgetStatsB class="mb-3" :progress="{ color:this.color, value: 100}">
-            <template #text>
-              {{ obsDetalle.detalle }}<br>
-              <strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}<br> 
-              <strong>Fechas: </strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}<br>
-              <strong>Horas: </strong> 
-              <span class="small text-medium-emphasis">{{ obsDetalle.horaEntrada }}</span> | 
-              <span class="small text-medium-emphasis">{{ obsDetalle.horaSalida }}</span> 
-            </template>
-            <template #title><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</template>
-            <template #value>UID: {{ obsDetalle.uidobs }}</template>
-          </CWidgetStatsB>
-        </CCol>
-        <CCol :lg="6">
-          <img :src="obsDetalle.url" alt="" class="img-fluid" />
-        </CCol>
-      </CRow>
+      <ComponenteObs :obsDetalle="obsDetalle"/>
     </CModalBody>
     <CModalFooter>
-      <CButton @click="clickModalDetalleObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-      <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" >
-        <CIcon icon="cil-cloud-download" class="me-2" />Descargar Documento
-      </CButton>
-      <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" >
-        <CIcon icon="cil-check-alt" class="me-2" />Aporbar
-      </CButton>
+      <CButtonGroup role="group">
+        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm" ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
+        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm" >
+          <CIcon icon="cil-cloud-download" class="me-2" />Descargar
+        </CButton>
+        <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" size="sm">
+          <CIcon icon="cil-check-alt" class="me-2" />Aporbar
+        </CButton>
+        <CButton @click="updateObsBio(obsDetalle.id, 2)" color="dark" class="font" size="sm">
+          <CIcon icon="cil-warning" class="me-2" />Rechazar
+        </CButton>
+      </CButtonGroup>
     </CModalFooter>
   </CModal>
   <!-- END Modal  Detalles de Obs-->
 
   <!-- Modal  Biometrico-->
   <CModal :visible="modalBiometrico" @close="clickModalBiometrico(false)">
-    <form @submit.prevent="updateBiometrico()">
+    <CForm @submit.prevent="updateBiometrico()">
       <CModalHeader class="headercolor" dismiss @close="clickModalBiometrico(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-monitor"/> Agregar Biometrico</h6>
@@ -432,9 +425,8 @@
       </CModalHeader>
 
       <CModalBody>
-        <ComponenteNombres :datos="datos" />
+        <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
-    
         <CInputGroup class="mb-3">
           <h6>{{ empleado.empleado }}</h6>
         </CInputGroup>
@@ -449,27 +441,27 @@
         </CInputGroup>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalBiometrico(false)" color="danger" class="font">
+        <CButton @click="clickModalBiometrico(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Biometrico
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- END Modal  Biometrico-->
 
   <!-- Modal  Horario-->
   <CModal :visible="modalHorario" @close="clickModalHorario(false)" size="lg">
-    <form @submit.prevent="addHorario()">
+    <CForm @submit.prevent="addHorario()">
       <CModalHeader class="headercolor" dismiss @close="clickModalHorario(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-calendar"/> Agregar Nuevo Horario</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <ComponenteNombres :datos="datos" />
+        <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
         <CInputGroup class="mb-3">
           <h6>{{ empleado.empleado }}</h6>
@@ -544,25 +536,25 @@
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalHorario(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <button class="btn btn-success font">
+        <CButton @click="clickModalHorario(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
+        <CButton type="submit" class="font" color="success" size="sm" >
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Horario
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- END Modal  Horario-->
 
   <!-- Modal  Obserbasiones-->
   <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <form @submit.prevent="addObs()" enctype="multipart/form-data">
+    <CForm @submit.prevent="addObs()" enctype="multipart/form-data">
       <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-featured-playlist"/> Agregar Observaciones de Asistencia</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <ComponenteNombres :datos="datos" />
+        <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
 
         <CInputGroup class="mb-3">
@@ -620,29 +612,29 @@
       </CModalBody>
 
       <CModalFooter>
-        <CButton @click="clickModalObs(false)" color="danger" class="font">
+        <CButton @click="clickModalObs(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-check-alt" class="me-2" /> Agregar Observaciones
-        </button>
+        </CButton>
       </CModalFooter>
 
-    </form>
+    </CForm>
   </CModal>
   <!-- END Modal  Obserbasiones-->
 
   
   <!-- Modal Reporte Mensual-->
   <CModal :visible="modalMes" @close="clickModalMes(false)">
-    <form @submit.prevent="getReporteMes()">
+    <CForm @submit.prevent="getReporteMes()">
       <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-description" size="lg" class="me-2" /> Reporte Mensual</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <ComponenteNombres :datos="datos" />
+        <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
 
         <CInputGroup class="mb-3">
@@ -665,27 +657,27 @@
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalMes(false)" color="danger" class="font">
+        <CButton @click="clickModalMes(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-file" class="me-2" />Ver Reporte
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal Reporte Mensual-->
 
   <!-- Modal Reporte Mensual Segmentado-->
   <CModal :visible="modalDias" @close="clickModalDias(false)">
-    <form @submit.prevent="getReporteMes()">
+    <CForm @submit.prevent="getReporteMes()">
       <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual Segmentado</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <ComponenteNombres :datos="datos" />
+        <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Gestion </CInputGroupText>
@@ -723,14 +715,14 @@
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalDias(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar
+        <CButton @click="clickModalDias(false)" color="danger" class="font" size="sm">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-file" class="me-2" />Ver Reporte
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal Reporte Mensual Segmentado-->
 </template>
@@ -738,6 +730,7 @@
 <script>
 //Importamos Componentes
 import ComponenteNombres from "@/modules/egovf/components/Ciudadano/ComponenteNombres.vue";
+import ComponenteObs from "@/modules/egovf-scc/components/ComponenteObs.vue";
 
 //Importamos los Servicios
 import SccService from "@/modules/egovf-scc/services/sccService";
@@ -748,6 +741,7 @@ export default {
   props: ["mscc", "empleado"],
   components: {
     ComponenteNombres,
+    ComponenteObs
   },
   data() {
     return {
@@ -766,8 +760,6 @@ export default {
       reporteFinal: [],
       listaObs: [],
       listaGestion: [],
-      color:'',
-      estado:'',
       listaMes: [
         { m: "01", mes: "Enero" },
         { m: "02", mes: "Febrero" },
@@ -925,23 +917,36 @@ export default {
       },
       obsDetalle: {
         id: 0,
-        cif:"",
-        uidobs: "",
         idObs:0,
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "",
-        horaEntrada: "",
-        horaSalida: "",
-        url: "",
-        estado: 0
-      },
-      datos: {
-        cif: 0,
-        nombre: "",
-        apellido: "",
+        cif:0,
+        sexo:0,
+        uidobs:"",
+        fechainicio:"",
+        fechafin:"",
+        gestion:0,
+        mes:0,
+        di:0,
+        df:0,
+        detalle:"",
+        imagen:"",
+        tipo:"",
+        horaEntrada:"",
+        hentrada:"",
+        mentrada:"",
+        horaSalida:"",
+        hsalida:"",
+        msalida:"",
+        url:"",
+        estado:0,
+        datos: {
+            cif: 0,
+            nombre: "",
+            apellido: "",
+        },
+        forma:{
+            color:'',
+            estado:''
+        }
       },
     };
   },
@@ -959,9 +964,9 @@ export default {
       this.getGestion(); // funcion que crea una lista de gestiones desde el 2021
       this.getPB = false; // cambiamos el valor para evitar la actualizacion constante
     }
-    this.datos.cif = this.egovf.cif;
-    this.datos.nombre = this.egovf.nombre;
-    this.datos.apellido = this.egovf.paterno + " " + this.egovf.materno;
+    this.obsDetalle.datos.cif = this.egovf.cif;
+    this.obsDetalle.datos.nombre = this.egovf.nombre;
+    this.obsDetalle.datos.apellido = this.egovf.paterno + " " + this.egovf.materno;
   },
   methods: {
     selectFile() {
@@ -1109,7 +1114,6 @@ export default {
     },
     async updateObsBio(id, estado) {
       var uObs = {
-
         id: 0,
         cif: 0,
         idObs:0,
@@ -1306,12 +1310,16 @@ export default {
           this.obsDetalle.url = obs.url;
           this.obsDetalle.estado = obs.estado;
           if(this.obsDetalle.estado==1){
-            this.color='success';
-            this.estado='Aprobado';
+              this.obsDetalle.forma.color='success';
+              this.obsDetalle.forma.estado='Aprobado';
           }
-          else{
-            this.color='warning';
-            this.estado='En Espera';
+          if(this.obsDetalle.estado==0){
+              this.obsDetalle.forma.color='warning';
+              this.obsDetalle.forma.estado='En Espera';
+          }
+          if(this.obsDetalle.estado==2){
+              this.obsDetalle.forma.color='danger';
+              this.obsDetalle.forma.estado='Rechazado';
           }
           return true;
         }

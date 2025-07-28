@@ -43,7 +43,8 @@ export default class EmpleadoService {
       "gestion": fecha.getFullYear(),
       "detalle": contrato.detalle,
       "idTipoEmpleado": contrato.idTipoEmpleado,
-      "cargo":contrato.cargo
+      "cargo":contrato.cargo,
+      "foto":contrato.foto
     };
     return axios.post(empleadoUrl + "contrato/addContrato", contratoDtoRequest);
   }
@@ -106,9 +107,23 @@ export default class EmpleadoService {
       "tipo_empleado_id": 0,
       "fecha": '',
       "estado": 0,
-      "salida": ''
+      "salida": '',
+      "foto":''
     };
     return axios.put(empleadoUrl + "empleado/updateEmpleado", empleadoDtoResponse);
+  }
+
+  updateFoto(cif,foto) {
+    const empleadoDtoResponse = {
+      "id": 0,
+      "cif": cif,
+      "tipo_empleado_id": 0,
+      "fecha": '',
+      "estado": 0,
+      "salida": '',
+      "foto":foto
+    };
+    return axios.put(empleadoUrl + "empleado/updateFoto", empleadoDtoResponse);
   }
   
   ////////////////////////////////

@@ -12,33 +12,44 @@
     <CRow>
         <CCol :lg="12">
             <CCard>
-                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                        <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
-                    </div>
-                    <CDropdown variant="btn-group">
-                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
-                        <CDropdownMenu>
-                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
-                        </CDropdownMenu>
-                    </CDropdown>
+                <CCardHeader class="headercolor justify-content-between align-items-center">
+                    <CRow>
+                        <CCol :lg="6">
+                            <div class="align-items-center">
+                                <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                                <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                            </div>
+                        </CCol>
+                        <CCol :lg="6" class="text-end">
+                            <CDropdown variant="btn-group">
+                                <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                                <CDropdownMenu>
+                                    <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                                </CDropdownMenu>
+                            </CDropdown>
+                        </CCol>
+                    </CRow>
                 </CCardHeader>
                 <CCardBody>
                     <CRow>
-                        <CCol :lg="2">Gestion :</CCol>
-                        <CCol :lg="2">
-                            <select v-model="obsgestion"  class="form-control">
-                                <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                            </select>                                                    
+                        <CCol :lg="4">
+                            <CInputGroup class="mb-3">
+                                <CInputGroupText  as="label">Gestion</CInputGroupText>
+                                <CFormSelect  v-model="obsgestion" :model-value="String(obsgestion)"  @update:model-value="obsgestion = Number($event)" required="true">
+                                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
+                                </CFormSelect>
+                            </CInputGroup>
                         </CCol>
-                        <CCol :lg="2">Mes :</CCol>
-                        <CCol :lg="2">
-                            <select v-model="obsmes" class="form-control">
-                                <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
-                            </select>
-                            <br>
+
+                        <CCol :lg="4">
+                            <CInputGroup class="mb-3">
+                                <CInputGroupText  as="label">Mes</CInputGroupText>
+                                <CFormSelect  v-model="obsmes" :model-value="String(obsmes)"  required="true">
+                                    <option v-for="mes  in listaMes" :key="mes.m" :value="mes.m">{{mes.mes}}</option>
+                                </CFormSelect>
+                            </CInputGroup>
                         </CCol>
+
                         <CCol :lg="4" class="text-center">
                             <CButton color="success" class="font" size="sm" @click="getObsUsuario()"><CIcon icon="cil-featured-playlist"></CIcon> Cargar Observaciones</CButton>
                         </CCol>
@@ -68,6 +79,7 @@
                                     </div>
                                 </td>
                                 <td>
+                                    <CBadge color="danger" v-if="lsobs.estado === 2">Rechazado</CBadge>
                                     <CBadge color="success" v-if="lsobs.estado === 1">Aprobado</CBadge>
                                     <CBadge color="warning" v-if="lsobs.estado === 0">En Espera</CBadge>
                                 </td>
@@ -95,50 +107,29 @@
 <CModal size="lg" :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
         <CModalTitle>
-            <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Detalles de la Observacion</h6>
+            <h6><CIcon icon="cil-featured-playlist" size="lg" class="me-2"/>Detalles de la Observacion</h6>
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
-        <CRow>
-            <CCol :lg="6">
-                <ComponenteNombres :datos="datos" />
-                <br>
-                <CAlert :color="this.color">{{this.estado}}</CAlert>
-                <CWidgetStatsB class="mb-3" :progress="{ color:this.color, value: 100}">
-                    <template #text>
-                    {{ obsDetalle.detalle }}<br>
-                    <strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}<br> 
-                    <strong>Fechas: </strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}<br>
-                    <strong>Horas: </strong> 
-                    <span class="small text-medium-emphasis">{{ obsDetalle.horaEntrada }}</span> | 
-                    <span class="small text-medium-emphasis">{{ obsDetalle.horaSalida }}</span> 
-                    </template>
-                    <template #title><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</template>
-                    <template #value>UID: {{ obsDetalle.uidobs }}</template>
-                </CWidgetStatsB>
-            </CCol>
-            <CCol :lg="6">
-                <img :src="obsDetalle.url" alt="" class="img-fluid">
-            </CCol>
-        </CRow>
+        <ComponenteObs :obsDetalle="obsDetalle"/>
     </CModalBody>
     <CModalFooter>
-        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <CButton @click="downloadImg(obsDetalle.url,obsDetalle.imagen)" color="success" class="font"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Documento</CButton>
+        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton @click="downloadImg(obsDetalle.url,obsDetalle.imagen)" color="success" class="font" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Documento</CButton>
     </CModalFooter>
 </CModal>
 <!-- END Modal  Detalles de Obs-->
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <form @submit.prevent="addObs()" enctype="multipart/form-data">
+    <CForm @submit.prevent="addObs()" enctype="multipart/form-data">
         <CModalHeader class="headercolor text-center" dismiss @close="clickModalObs(false)">
             <CModalTitle>
                 <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Registrar una Observacion de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <ComponenteNombres :datos="datos" />
+            <ComponenteNombres :datos="obsDetalle.datos" />
             <hr>
             <CInputGroup class="mb-3">
                 <CInputGroupText  as="label">UID - OBS </CInputGroupText>
@@ -199,22 +190,22 @@
 
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observacion</button>
+            <CButton @click="clickModalObs(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" color="success" size="sm" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observacion</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 
 <!-- Modal Editar Obserbasiones-->
 <CModal :visible="modalObsEditar" @close="clickModalObsEditar(false)">
-    <form @submit.prevent="updateObs()" enctype="multipart/form-data">
+    <CForm @submit.prevent="updateObs()" enctype="multipart/form-data">
         <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
             <CModalTitle>
                 <h6><CIcon icon="cil-pencil" size="lg" class="me-2"/>Actualizar la Observacion de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
-            <ComponenteNombres :datos="datos" />
+            <ComponenteNombres :datos="obsDetalle.datos" />
             <hr>
             <CInputGroup class="mb-3">
                 <CInputGroupText  as="label">UID - OBS </CInputGroupText>
@@ -275,18 +266,18 @@
 
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalObsEditar(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</button>
+            <CButton @click="clickModalObsEditar(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" color="success" size="sm" ><CIcon icon="cil-check-alt" class="me-2"/> Actualizar Observacion</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 <!-- END Modal Editar Obserbasiones-->
 
 </template>
 <script>
 // Importamos Componentes
-import ComponenteNombres from '@/modules/egovf/components/Ciudadano/ComponenteNombres.vue';
-
+import ComponenteObs from "@/modules/egovf-scc/components/ComponenteObs.vue";
+import ComponenteNombres from "@/modules/egovf/components/Ciudadano/ComponenteNombres.vue";
 //Importamos Servicios
 import SccService from '@/modules/egovf-scc/services/sccService';
 import EgovfService from '@/modules/egovf/services/egovfService';
@@ -295,6 +286,7 @@ import UploadService from '@/services/upload/uploadService';
 export default {
     name:'ObservacionesView',
     components:{
+        ComponenteObs,
         ComponenteNombres
     },
     data(){
@@ -308,8 +300,6 @@ export default {
             modalDetalleObs:false,
             modalObsEditar:false,
             listaGestion:[],
-            color:'',
-            estado:'',
             uploading: false,
             uploadProgress: 0,
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
@@ -325,9 +315,9 @@ export default {
             obsgestion:0,
             obsmes:0,
             listaObs:[],
-            obsDetalle:{
-                id:0,
-                idObs:"",
+            obsDetalle: {
+                id: 0,
+                idObs:0,
                 cif:0,
                 sexo:0,
                 uidobs:"",
@@ -340,19 +330,23 @@ export default {
                 detalle:"",
                 imagen:"",
                 tipo:"",
-                horaEntrada:0,
-                hEntrada:0,
-                mEntrada:0,
-                horaSalida:0,
-                hSalida:0,
-                mSalida:0,
+                horaEntrada:"",
+                hentrada:"",
+                mentrada:"",
+                horaSalida:"",
+                hsalida:"",
+                msalida:"",
                 url:"",
-                estado:0
-            },
-            datos:{
-                cif:0,
-                nombre:'',
-                apellido:''
+                estado:0,
+                datos: {
+                    cif: 0,
+                    nombre: "",
+                    apellido: "",
+                },
+                forma:{
+                    color:'',
+                    estado:''
+                }
             },
             egovf:{
                 idPersona:0,
@@ -492,12 +486,16 @@ export default {
                     this.obsDetalle.estado= obs.estado;
 
                     if(this.obsDetalle.estado==1){
-                        this.color='success';
-                        this.estado='Aprobado';
+                        this.obsDetalle.forma.color='success';
+                        this.obsDetalle.forma.estado='Aprobado';
                     }
-                    else{
-                        this.color='warning';
-                        this.estado='En Espera';
+                    if(this.obsDetalle.estado==0){
+                        this.obsDetalle.forma.color='warning';
+                        this.obsDetalle.forma.estado='En Espera';
+                    }
+                    if(this.obsDetalle.estado==2){
+                        this.obsDetalle.forma.color='danger';
+                        this.obsDetalle.forma.estado='Rechazado: Espere la Devolucion de su nota';
                     }
                     return true;
                 }
@@ -511,9 +509,9 @@ export default {
             this.egovfService.headersUsuario(this.usuario.token);
             await this.egovfService.getEgovf(this.usuario.cif).then((response) =>{
                 this.egovf = response.data;
-                this.datos.cif = this.egovf.cif;
-                this.datos.nombre = this.egovf.nombre;
-                this.datos.apellido = this.egovf.paterno +" " +this.egovf.materno;
+                this.obsDetalle.datos.cif = this.egovf.cif;
+                this.obsDetalle.datos.nombre = this.egovf.nombre;
+                this.obsDetalle.datos.apellido = this.egovf.paterno +" " +this.egovf.materno;
             });
         },
         async downloadImg(Url,nombre) {// Funcion que permite Descargar imagen o documento
@@ -734,7 +732,7 @@ export default {
             this.listaObs.forEach(obs => {
                 if(obs.id == id){
                     dObs=obs;
-                    dObs.estado=2;
+                    dObs.estado=3;
                 }
             });
             await this.$swal.fire({

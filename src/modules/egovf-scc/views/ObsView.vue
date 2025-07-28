@@ -2,10 +2,11 @@
   <CRow>
     <CCol :xs="12">
       <CCard>
-        <CCardHeader class="headercolor">
-          <CRow class="text-center">
-            <label class="d-none d-md-flex me-auto">{{titulo}}</label>
-          </CRow>
+        <CCardHeader class="headercolor justify-content-between">
+          <div class="align-items-center">
+            <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+            <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+          </div>
         </CCardHeader>
         <CCardBody>
           <div class="table-responsive">
@@ -50,7 +51,7 @@
                       <CButton color="warning" class="font" size="sm" @click="setObs(lsobs.id)">
                         <CIcon icon="cil-pencil"></CIcon>
                       </CButton>
-                      <CButton color="secondary" class="font" size="sm" @click="setImg(lsobs.id)">
+                      <CButton color="dark" class="font" size="sm" @click="setImg(lsobs.id)">
                         <CIcon icon="cil-clipboard"></CIcon>
                       </CButton>
                     </CButtonGroup>
@@ -69,40 +70,28 @@
 
 
   <!-- Modal  Detalles de OBS-->
-  <CModal :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
+  <CModal size="lg" :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
       <CModalTitle>
-        <h5>Detalles de la Observacion</h5>
+        <h6><CIcon icon="cil-featured-playlist"/> Detalles de la Observacion</h6>
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <CListGroup flush>
-        <CListGroupItem><strong>CIF:</strong> {{ obsDetalle.cif }}</CListGroupItem>
-        <CListGroupItem><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</CListGroupItem>
-        <CListGroupItem><strong>UID:</strong> {{ obsDetalle.uidobs }}</CListGroupItem>
-        <CListGroupItem><strong>Detalle:</strong> {{ obsDetalle.detalle }}</CListGroupItem>
-        <CListGroupItem><strong>Tipo de Obs. :</strong> {{ obsDetalle.tipo }}</CListGroupItem>
-        <CListGroupItem><strong>Fechas:</strong> {{ obsDetalle.fechainicio }} | {{ obsDetalle.fechafin }}</CListGroupItem>
-        <CListGroupItem><strong>Horas:</strong> {{ obsDetalle.horaEntrada }} | {{ obsDetalle.horaSalida }}</CListGroupItem>
-      </CListGroup>
-      <CRow>
-        <CAlert color="success" v-if="obsDetalle.estado === 1">Aprobado</CAlert>
-        <CAlert color="warning" v-if="obsDetalle.estado === 0">En Espera</CAlert>
-      </CRow>
-
-      <CRow>  
-        <CCol>
-          <img :src="obsDetalle.url" alt="" class="img-fluid" />
-        </CCol>
-      </CRow>
+      <ComponenteObs :obsDetalle="obsDetalle"/>
     </CModalBody>
     <CModalFooter>
-      <CButton @click="clickModalDetalleObs(false)" color="danger" class="font">
-        <CIcon icon="cil-x" class="me-2" />Cancelar
-      </CButton>
-      <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font">
-        <CIcon icon="cil-check-alt" class="me-2" />Aprobar
-      </CButton>
+      <CButtonGroup role="group">
+        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm" ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
+        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm" >
+          <CIcon icon="cil-cloud-download" class="me-2" />Descargar
+        </CButton>
+        <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" size="sm">
+          <CIcon icon="cil-check-alt" class="me-2" />Aporbar
+        </CButton>
+        <CButton @click="updateObsBio(obsDetalle.id, 2)" color="dark" class="font" size="sm">
+          <CIcon icon="cil-warning" class="me-2" />Rechazar
+        </CButton>
+      </CButtonGroup>
     </CModalFooter>
   </CModal>
   <!-- END Modal  Detalles de Obs-->
@@ -232,6 +221,9 @@
 </template>
 
 <script>
+//Importamos Componentes
+import ComponenteObs from "@/modules/egovf-scc/components/ComponenteObs.vue";
+
 import EgovfService from "@/modules/egovf/services/egovfService";
 import UploadService from "@/services/upload/uploadService";
 import EmpleadoService from "@/modules/egovf-emp/services/empleadoService";
@@ -246,10 +238,12 @@ DataTable.use(DataTablesLib);
 
 export default {
   name: "ObsView",
-  components: {},
+  components: {
+    ComponenteObs,
+  },
   data() {
     return {
-      titulo: "Observaciones del Empleado",
+      titulo: "Observaciones de los Empleados",
       modalObs: false,
       modalDetalleObs: false,
       modalObsEditar: false,
@@ -265,6 +259,8 @@ export default {
       listaObsCiudadanos: [],
       tipo:0,
       gestion:0,
+      color:'',
+      estado:'',
       listaMes: [
         { m: "01", mes: "Enero" },
         { m: "02", mes: "Febrero" },
@@ -323,7 +319,16 @@ export default {
         hsalida:"",
         msalida:"",
         url:"",
-        estado:0
+        estado:0,
+        datos: {
+          cif: 0,
+          nombre: "",
+          apellido: "",
+        },
+        forma:{
+          color:'',
+          estado:''
+        }
       },
       uobs: {
         id: 0,
@@ -348,7 +353,7 @@ export default {
         msalida:"",
         url:"",
         estado:0
-      },
+      }
     };
   },
   beforeCreate() {
@@ -486,6 +491,27 @@ export default {
           this.obsDetalle.msalida=obs.msalida;
           this.obsDetalle.url=obs.url;
           this.obsDetalle.estado=obs.estado;
+
+          if(this.obsDetalle.estado==1){
+              this.obsDetalle.forma.color='success';
+              this.obsDetalle.forma.estado='Aprobado';
+          }
+          if(this.obsDetalle.estado==0){
+              this.obsDetalle.forma.color='warning';
+              this.obsDetalle.forma.estado='En Espera';
+          }
+          if(this.obsDetalle.estado==2){
+              this.obsDetalle.forma.color='danger';
+              this.obsDetalle.forma.estado='Rechazado';
+          }
+          return true;
+        }
+      });
+      this.listaObsCiudadanos.forEach((ciudadano)=>{
+        if(ciudadano.cif == this.obsDetalle.cif){
+          this.obsDetalle.datos.cif=ciudadano.cif;
+          this.obsDetalle.datos.nombre=ciudadano.nombre;
+          return true;
         }
       });
       this.clickModalDetalleObs(true);
@@ -505,16 +531,17 @@ export default {
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
-          uObs.id = obs.id,
-          uObs.cif = obs.cif,
-          uObs.idObs = obs.idObs,
-          uObs.horaEntrada = obs.horaEntrada,
-          uObs.hentrada = obs.hentrada,
-          uObs.mentrada = obs.mentrada,
-          uObs.horaSalida = obs.horaSalida,
-          uObs.hsalida = obs.hsalida,
-          uObs.msalida = obs.msalida,
-          uObs.estado = estado
+          uObs.id = obs.id;
+          uObs.cif = obs.cif;
+          uObs.idObs = obs.idObs;
+          uObs.horaEntrada = obs.horaEntrada;
+          uObs.hentrada = obs.hentrada;
+          uObs.mentrada = obs.mentrada;
+          uObs.horaSalida = obs.horaSalida;
+          uObs.hsalida = obs.hsalida;
+          uObs.msalida = obs.msalida;
+          uObs.estado = estado;
+          return true;
         }
       });
       await this.$swal.fire({
@@ -697,6 +724,16 @@ export default {
     mostrarUHoraSalida() {
         const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
         return tiposPermitidos.includes(this.uobs.tipo);
+    },
+    async downloadImg(Url, nombre) {
+      // Funcion que permite Descargar imagen o documento
+      const blob = await (await fetch(Url)).blob();
+      const url = URL.createObjectURL(blob);
+      Object.assign(document.createElement("a"), {
+        href: url,
+        download: nombre,
+      }).click();
+      URL.revokeObjectURL(url);
     },
   },
 };

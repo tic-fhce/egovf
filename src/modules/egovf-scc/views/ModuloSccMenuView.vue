@@ -16,7 +16,7 @@
                 <CIcon customClassName="nav-icon" icon="cil-featured-playlist" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
-                <CButton color="success" class="font" @click="getOpciones(direcciones[0])">Ingresar</CButton>
+                <CButton color="success" class="font" @click="getOpciones(direcciones[0])" size="sm">Ingresar</CButton>
             </CCardFooter>
         </CCard>
         </CCol>
@@ -30,7 +30,7 @@
                 <CIcon customClassName="nav-icon" icon="cil-clipboard" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
-                <CButton color="success" class="font" @click="clickModalMes(true)">Ingresar</CButton>
+                <CButton color="success" class="font" @click="clickModalMes(true)" size="sm">Ingresar</CButton>
             </CCardFooter>
         </CCard>
         </CCol>
@@ -44,7 +44,7 @@
                 <CIcon customClassName="nav-icon" icon="cil-clipboard" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
-                <CButton color="success" class="font" @click="clickModalDias(true)">Ingresar</CButton>
+                <CButton color="success" class="font" @click="clickModalDias(true)" size="sm">Ingresar</CButton>
             </CCardFooter>
         </CCard>
         </CCol>
@@ -58,7 +58,7 @@
                 <CIcon customClassName="nav-icon" icon="cil-monitor" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
-                <CButton color="success" class="font" @click="getOpciones(direcciones[1])">Ingresar</CButton>
+                <CButton color="success" class="font" @click="getOpciones(direcciones[1])" size="sm">Ingresar</CButton>
             </CCardFooter>
         </CCard>
         </CCol>
@@ -72,7 +72,7 @@
                 <CIcon customClassName="nav-icon" icon="cil-calendar" class="menuicon"/> 
             </CCardBody>
             <CCardFooter class="text-center">
-                <CButton color="success" class="font" @click="getOpciones(direcciones[2])">Ingresar</CButton>
+                <CButton color="success" class="font" @click="getOpciones(direcciones[2])" size="sm" >Ingresar</CButton>
             </CCardFooter>
         </CCard>
         </CCol>

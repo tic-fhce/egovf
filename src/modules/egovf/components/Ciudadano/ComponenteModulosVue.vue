@@ -19,7 +19,7 @@
                   <CIcon customClassName="nav-icon" :icon="moduloCif.imagen" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                  <CButton color="success" class="font" @click="getModulo(moduloCif.ruta)" >{{ moduloCif.nombre }}</CButton>
+                  <CButton color="success" size="sm" class="font" @click="getModulo(moduloCif.ruta)" >{{ moduloCif.nombre }}</CButton>
                 </CCardFooter>
               </CCard>
             </CCol>
@@ -31,7 +31,7 @@
 
   <!-- Modal  MOdulo-->
   <CModal :visible="modalModulo" @close="clickModalModulo(false)">
-    <form @submit.prevent="addModulo()">
+    <CForm @submit.prevent="addModulo()">
       <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-cloud-upload" class="me-2" />Agregar Modulos</h6>
@@ -52,11 +52,10 @@
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalModulo(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <button class="btn btn-success font"><CIcon icon="cil-check-alt" class="me-2" />Agregar </button>
+        <CButton @click="clickModalModulo(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
+        <CButton type="submit" class="font" color="success" size="sm"><CIcon icon="cil-check-alt" class="me-2" />Agregar </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Modulo-->
 </template>

@@ -5,19 +5,25 @@
     <CRow>
         <CCol :lg="12">
             <CCard>
-                <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                        <label class="mb-0 fs-6 text-white">Reporte de Asistencia del mes de {{mes}} de {{reporte.gestion}}</label>
-                    </div>
-                    <CDropdown variant="btn-group">
-                        <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
-                        <CDropdownMenu>
-                            <CDropdownItem>
-                                <CButton @click="pdf()" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Reporte</CButton>
-                            </CDropdownItem>
-                        </CDropdownMenu>
-                    </CDropdown>
+                <CCardHeader class="headercolor justify-content-between align-items-center">
+                    <CRow>
+                        <CCol :lg="6">
+                            <div class="align-items-center">
+                                <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                                <label class="mb-0 fs-6 text-white">Reporte de Asistencia del mes de {{mes}} de {{reporte.gestion}}</label>
+                            </div>
+                        </CCol>
+                        <CCol :lg="6" class="text-end">
+                            <CDropdown variant="btn-group">
+                                <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                                <CDropdownMenu>
+                                    <CDropdownItem>
+                                        <CButton @click="pdf()" size="sm"><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Reporte</CButton>
+                                    </CDropdownItem>
+                                </CDropdownMenu>
+                            </CDropdown>
+                        </CCol>
+                    </CRow>
                 </CCardHeader>
                 <CCardBody>
                     <!-- Tabla Lista de Biometricos-->

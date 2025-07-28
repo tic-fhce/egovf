@@ -46,26 +46,14 @@
                 </CButton>
               </CNavLink>
             </CNavItem>
-              <CNavItem
-                ><CNavLink :active="tab == 2" @click="clicktab(2)"
-                  ><CButton size="sm"
-                    ><CIcon icon="cil-handshake"></CIcon
-                    ><label class="d-none d-md-flex me-auto"
-                      >Contratos</label
-                    ></CButton
-                  ></CNavLink
-                ></CNavItem
-              >
-              <CNavItem
-                ><CNavLink :active="tab == 3" @click="clicktab(3)"
-                  ><CButton size="sm"
-                    ><CIcon icon="cil-menu"></CIcon
-                    ><label class="d-none d-md-flex me-auto"
-                      >Menu</label
-                    ></CButton
-                  ></CNavLink
-                ></CNavItem
-              >
+            <CNavItem>
+              <CNavLink :active="tab == 2" @click="clicktab(2)">
+                <CButton size="sm">
+                  <CIcon icon="cil-handshake"></CIcon>
+                  <label class="d-none d-md-flex me-auto">Contratos</label>
+                  </CButton>
+                </CNavLink>
+              </CNavItem>
             </CNav>
 
             <CTabContent>
@@ -77,10 +65,11 @@
                     <CCard>
                       <CCardHeader class="headercolor text-center">{{l.nombre}}</CCardHeader>
                       <CCardBody class="text-center">
-                        <CIcon customClassName="nav-icon" :icon="l.imagen" class="menuicon"/> 
+                        <CIcon customClassName="nav-icon" :icon="l.imagen" class="menuicon"/>
+                        <CCardSubtitle class="mb-2 text-body-secondary">{{l.detalle}}</CCardSubtitle> 
                       </CCardBody>
                       <CCardFooter class="text-center">
-                        <CButton color="success" class="font" @click="getModulo(l.ruta)">{{ l.nombre }}</CButton>
+                        <CButton color="success" size="sm" class="font" @click="getModulo(l.ruta)">{{ l.nombre }}</CButton>
                       </CCardFooter>
                     </CCard>
                   </CCol>
@@ -98,7 +87,7 @@
                         <th>#</th>
                         <th>N° Contrato</th>
                         <th>Servicio</th>
-                        <th>Fechas</th>
+                        <th>Cargo</th>
                         <th>Detalle</th>
                         <th></th>
                       </tr>
@@ -108,20 +97,30 @@
                         <td>{{ contrato.id }}</td>
                         <td>
                           {{ contrato.numero_contrato }}<br />
-                          {{ contrato.unidad }}
+                          <label class="small text-medium-emphasis">{{ contrato.unidad }}</label>
                         </td>
-                        <td>{{ contrato.servicio }}</td>
                         <td>
-                          <strong>Fecha Inicio: </strong>{{ contrato.inicio
-                          }}<br />
-                          <strong>Fecha Fin: </strong> {{ contrato.fin }}<br />
-                          <strong>Gestion: </strong>{{ contrato.gestion }}
+                          {{ contrato.servicio }}
+                          <CProgress thin color="success" :value="100"/>
+                          <div class="clearfix">
+                            <div class="float-start">
+                              <strong>{{ contrato.gestion }}</strong>
+                            </div>
+                            <div class="float-end">
+                              <small class="text-medium-emphasis">
+                                {{ contrato.inicio }} | {{ contrato.fin }}
+                              </small>
+                            </div>
+                          </div>
+
                         </td>
+                        <td>{{ contrato.cargo }}</td>
                         <td>{{ contrato.detalle }}</td>
                         <td>
                           <CButton
                             color="warning"
                             class="font"
+                            size="sm"
                             @click="getContrato(contrato.id)"
                             ><CIcon icon="cil-pencil"></CIcon
                           ></CButton>
@@ -136,60 +135,6 @@
               </CTabPane>
               <!--Contratos del Empleado-->
 
-              <!--Menus del Empleado-->
-              <CTabPane :visible="tab == 3">
-                <br />
-                <CCol :xs="12" class="table-responsive">
-                  <h3>ID: {{ menu.id }}</h3>
-                  <h3>Titulo: {{ menu.titulo }}</h3>
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Titulo</th>
-                        <th>Ruta</th>
-                        <th>Estado</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="m in menu.menuObj" :key="m.id">
-                        <td>{{ m.id }}</td>
-                        <td>{{ m.titulo }}</td>
-                        <td>{{ m.ruta }}</td>
-                        <td>
-                          <CBadge v-if="m.estado == 1" color="success"
-                            >Activo</CBadge
-                          >
-                          <CBadge v-else color="danger">Inactivo</CBadge>
-                        </td>
-                        <td>
-                          <CButton
-                            v-if="m.estado == 1"
-                            color="danger"
-                            class="font"
-                            @click="updateMenuUsuario(m.id, m.idmenu, 0)"
-                            size="sm"
-                            ><CIcon icon="cil-trash"></CIcon
-                          ></CButton>
-                          <CButton
-                            v-else
-                            color="success"
-                            class="font"
-                            @click="updateMenuUsuario(m.id, m.idmenu, 1)"
-                            size="sm"
-                            ><CIcon icon="cil-check-alt"></CIcon
-                          ></CButton>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr></tr>
-                    </tfoot>
-                  </table>
-                </CCol>
-              </CTabPane>
-              <!--Menus del Empleado-->
             </CTabContent>
           </CCol>
           <!-- End Tarjetas de Empleado-->
@@ -200,7 +145,7 @@
 
   <!-- Modal  Modulo-->
   <CModal :visible="modalModulo" @close="clickModalModulo(false)">
-    <form @submit.prevent="addEmpleadoModulo()">
+    <CForm @submit.prevent="addEmpleadoModulo()">
       <CModalHeader class="headercolor" dismiss @close="clickModalModulo(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Modulos</h6>
@@ -213,27 +158,26 @@
           <CInputGroupText as="label" >Modulo</CInputGroupText>
           <CFormSelect v-model="id_modulo" :model-value="String(id_modulo)"  @update:model-value="id_modulo = Number($event)" required="true">
             <option v-for="lm in listaModulo" :value="lm.id" :key="lm.id">
-              {{ lm.nombre }}
+              {{ lm.detalle }}
             </option>
           </CFormSelect>
         </CInputGroup>
-        
+
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalModulo(false)" color="danger" class="font"
-          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton
-        >
-        <button class="btn btn-success font">
+        <CButton @click="clickModalModulo(false)" color="danger" size="sm" class="font"
+          ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
+        <CButton type="submit" color="success" size="sm" class="font">
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Modulo
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Modulo-->
 
   <!-- Modal  Contrato-->
   <CModal  :visible="modalContrato" @close="clickModalContrato(false)">
-    <form @submit.prevent="addContrato()">
+    <CForm @submit.prevent="addContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalContrato(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-clipboard" class="me-2" size="lg"/> Agregar Contrato</h6>
@@ -294,19 +238,19 @@
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalContrato(false)" color="danger" class="font">
+        <CButton @click="clickModalContrato(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Contrato
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Contrato-->
 
   <!-- Modal  Editar Contrato-->
-  <CModal size="lg" :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
-    <form @submit.prevent="updateContrato()">
+  <CModal :visible="modalEditarContrato" @close="clickModalEditarContrato(false)">
+    <CForm @submit.prevent="updateContrato()">
       <CModalHeader class="headercolor" dismiss @close="clickModalEditarContrato(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-pencil" class="me-2" />Editar Contrato</h6>
@@ -315,84 +259,68 @@
       <CModalBody>
         <ComponenteNombres :datos="datos" />
         <hr />
-        <div class="mb-3 row">
-          <label for="numero" class="col-4 col-form-label">Numero de Contrato</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true" />
-          </div>
-        </div>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Servicios Prestados</label>
-          <div class="col-8">
-            <textarea class="form-control" v-model="setContrato.servicio" required="true" rows="5"></textarea>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Numero de Contrato</CInputGroupText>
+          <CFormInput type="text" v-model="setContrato.numerocontrato" placeholder="Numero de contrato" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Cargo</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="setContrato.cargo" placeholder="Cargo del Empleado" required="true" >
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText  as="label">Servicios Prestados</CInputGroupText>
+          <CFormTextarea  v-model="setContrato.servicio" required="true" rows="5"> </CFormTextarea>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="servicio" class="col-4 col-form-label">Tipo de Empleado</label>
-          <div class="col-8">
-            <select v-model="setContrato.idTipoEmpleado" class="form-control" required="true">
-              <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
-                {{ lte.detalle }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Cargo </CInputGroupText>
+          <CFormInput type="text" v-model="setContrato.cargo" placeholder="Cargo del empleado" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Unidad </label>
-          <div class="col-8">
-            <select v-model="setContrato.unidad" class="form-control" required="true">
-              <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
-                {{ unidad.unidad }}
-              </option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Tipo de Empleado</CInputGroupText>
+          <CFormSelect v-model="setContrato.idTipoEmpleado" :model-value="String(setContrato.idTipoEmpleado)"  @update:model-value="setContrato.idTipoEmpleado = Number($event)" required="true">
+            <option v-for="lte in listaTipoEmpleado" :value="lte.id" :key="lte.id">
+              {{ lte.detalle }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="inicio" class="col-4 col-form-label" >Fecha de Inicio</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="setContrato.inicio" placeholder="Inicio" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Unidad</CInputGroupText>
+          <CFormSelect v-model="setContrato.unidad" :model-value="String(setContrato.unidad)" required="true">
+            <option v-for="unidad in listaUnidades" :value="unidad.unidad" :key="unidad.id">
+              {{ unidad.unidad }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="fin" class="col-4 col-form-label">Fecha de Conclucion </label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="setContrato.fin" placeholder="fin" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Fecha de Inicio  </CInputGroupText>
+          <CFormInput type="date" v-model="setContrato.inicio" placeholder="Fecha de Inicio" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="fin" class="col-4 col-form-label">Gestion </label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="setContrato.gestion" placeholder="fin" required="true"/>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Fecha de Conclucion  </CInputGroupText>
+          <CFormInput type="date" v-model="setContrato.fin" placeholder="Fecha Fin" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="detalle" class="col-4 col-form-label">Detalle</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Gestion </CInputGroupText>
+          <CFormInput type="text" v-model="setContrato.gestion" placeholder="Gestion" required="true"/>
+        </CInputGroup>
+
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Detalle</CInputGroupText>
+          <CFormInput type="text" v-model="setContrato.detalle" placeholder="Detalle del Contrato" required="true"/>
+        </CInputGroup>
+
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalEditarContrato(false)" color="danger" class="font" >
+        <CButton @click="clickModalEditarContrato(false)" color="danger" class="font" size="sm" >
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font"><CIcon icon="cil-check-alt" class="me-2" />Actualizar Contrato</button>
+        <CButton type="submit" color="success" class="font" size="sm"><CIcon icon="cil-check-alt" class="me-2" />Actualizar Contrato</CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Editar Contrato-->
 </template>
@@ -465,6 +393,7 @@ export default {
         pass: "",
         unidad: "",
         sigla: "",
+        foto:""
       },
       empleado_modulo: {
         cif: 0,
@@ -481,7 +410,8 @@ export default {
         gestion: 0,
         detalle: "",
         idTipoEmpleado:0,
-        cargo:""
+        cargo:"",
+        foto:""
       },
       setContrato: {
         id: 0,
@@ -495,7 +425,8 @@ export default {
         gestion: 0,
         detalle: "",
         idTipoEmpleado:0,
-        cargo:""
+        cargo:"",
+        foto:""
       },
       unidad: {
         id: 0,
@@ -522,6 +453,7 @@ export default {
         unidad: "",
         dependiente: "",
         sigla: "",
+        foto:""
       },
       datos: {
         cif: 0,
@@ -618,10 +550,11 @@ export default {
     async addEmpleadoModulo() {
       // Funcion para registrar al Empleado en un Modulo
       var idmenu = 0;
-
+      //designamos el cif al objeto empleado_modulo e id del modulo
       this.empleado_modulo.cif = this.egovf.cif;
       this.empleado_modulo.id_modulo = this.id_modulo;
 
+      //Seleccionamos el id del memu de la lista de modulos
       this.listaModulo.forEach((modulo) => {
         if (modulo.id == this.id_modulo) {
           idmenu = modulo.idmenu;
@@ -634,8 +567,10 @@ export default {
           denyButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
+            //Agregamos el modulo al empleado
             this.empleadoService.addEmpleadoModulo(this.empleado_modulo).then((response) => {
                 if (response.status == 201) {
+                  //Actualisamos el menu del usuario habilitando el modulo deacuerdo al menu
                   this.menuService.addMenuUsuario(this.empleado_modulo.cif, idmenu).then((res)=>{
                     if(res.status == 201){
                       this.$swal.fire("El Modulo fue Agregado al Empleado Corectamente","","success").then((r)=>{
@@ -657,7 +592,7 @@ export default {
     async addContrato() {
       // Funcion para Agregar Un contrato Al empelado
       this.usuarioService.headersUsuario(this.usuario.token);
-
+      //Buscamos la unidad deacuerdo a la lista seleccionada
       this.listaUnidades.forEach((element) => {
         if (element.unidad == this.contrato.unidad) {
           this.unidad.id = element.id;
@@ -667,9 +602,11 @@ export default {
           return false;
         }
       });
+      //designamos el cif al objeto  Contrato
       this.contrato.cif = this.egovf.cif;
+      this.contrato.foto = this.egovf.foto;
+      //para la actualizacion del usuario designamos el tipo de empleado en id de persona 
       this.egovf.idPersona = this.contrato.idtipo;
-
       await this.$swal.fire({
           title: "Desea Agregar Contrato al Empleado ?",
           showDenyButton: true,
@@ -678,10 +615,13 @@ export default {
           denyButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
+            //Agregamos el contrato del empleado 
             this.empleadoService.addContrato(this.contrato).then((response) => {
               if (response.status == 201) {
+                //Actualizamos el usuario con la Unidad Correspondiente y si es de tipo 2 se actualiza o habilita en el menu
                 this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                     if (respon.status == 200) {
+                      //Agregamos la pertenencia de un usuario a una unidad 
                       this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
                           if (res.status == 201) {
                             this.$swal.fire("El Comtrato fue Agregado al Empleado Corectamente","","success").then((r) => {
@@ -707,6 +647,7 @@ export default {
     // Funcion para Actualizar Un contrato
     async updateContrato() {
       this.usuarioService.headersUsuario(this.usuario.token);
+      //buscamos la unidad si fue modificado
       this.listaUnidades.forEach((element) => {
         if (element.unidad == this.setContrato.unidad) {
           this.unidad.id = element.id;
@@ -724,11 +665,15 @@ export default {
           denyButtonText: "Cancelar",
         }).then((result) => {
           if (result.isConfirmed) {
+            //Actualizamos el contrato del empleado tambien mandamos la foto
             this.empleadoService.updateContrato(this.setContrato,this.egovf.foto).then((response) => {
                 if (response.status == 200) {
+                  //Actualizamos la unidad del empleado
                   this.usuarioService.updateUnidad(this.egovf, this.unidad).then((respon) => {
                       if (respon.status == 200) {
+                        //Creamos la pertenencia de la uniad al empleado
                         this.unidadService.addPertenece(this.egovf, this.unidad).then((res) => {
+                          //Actualizamos el tipo de empleado en el modulo Scc
                           this.sccService.updateTipo(this.egovf.cif, this.setContrato.idTipoEmpleado).then();
                           if (res.status == 201) {
                             this.$swal.fire("El Comtrato fue Actializado al Empleado Corectamente","","success").then((r) => {
@@ -754,57 +699,6 @@ export default {
     async getMenuModulo() {
       await this.menuService.getMenuModulo(this.egovf.cif, "Modulo EMP").then((response) => {
           this.menu = response.data;
-        });
-    },
-    async updateMenuUsuario(id, idmenu, estado) {
-      var ms = "";
-      if (estado == 1) {
-        ms = "Desea Activar El menu para el Ciudadano ";
-      } else {
-        ms = "Desea Desactivar El menu para el Ciudadano ";
-      }
-      this.menuService.headersUsuario(this.usuario.token);
-      await this.$swal
-        .fire({
-          title:
-            ms +
-            this.egovf.nombre +
-            " " +
-            this.egovf.paterno +
-            " " +
-            this.egovf.materno +
-            "?",
-          showDenyButton: true,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-          denyButtonText: "Cancelar",
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.menuService
-              .updateMenuUsuario(id, this.egovf.cif, idmenu, estado)
-              .then((response) => {
-                if (response.status == 200) {
-                  this.$swal
-                    .fire(
-                      "Se Actualizaron los datos Corectamente",
-                      "",
-                      "success"
-                    )
-                    .then((res) => {
-                      if (res) location.reload();
-                    });
-                } else {
-                  this.$swal.fire(
-                    "Los Datos no fueron Guardados Error",
-                    "" + response.status,
-                    "error"
-                  );
-                }
-              });
-          } else if (result.isDenied) {
-            this.$swal.fire("Datos Cancelados", "", "info");
-          }
         });
     },
     async updateEstado() {

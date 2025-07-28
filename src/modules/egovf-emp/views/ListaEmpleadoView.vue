@@ -52,7 +52,7 @@
                                     </td>
                                     <td>
                                         {{ ciudadano.sigla }}<br> 
-                                        <label class="fontabla">{{ ciudadano.unidad }}</label>
+                                        <label class="small text-medium-emphasis">{{ ciudadano.unidad }}</label>
                                     </td>
                                     <td>
                                         <CButtonGroup role="group">

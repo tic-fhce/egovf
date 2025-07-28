@@ -2,12 +2,17 @@
   <CRow>
     <CCol :xs="12">
       <CCard>
-        <CCardHeader class="headercolor">
+        <CCardHeader class="headercolor justify-content-between align-items-center">
           <CRow>
-            <CCol :lg="6">{{ titulo }}</CCol>
+            <CCol :lg="6">
+              <div class="align-items-center">
+                <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                <label class="mb-0 fs-6 text-white">{{titulo}}</label>
+              </div>
+            </CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="clickModalAviso(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
+              <CButton @click="clickModalAviso(true)" color="dark" class="font" size="sm">
+                <CIcon icon="cil-cloud-upload" class="me-2 text-success" />Agregar
               </CButton>
             </CCol>
           </CRow>
@@ -20,24 +25,28 @@
                   <th>ID</th>
                   <th>Titulo</th>
                   <th>Detalle</th>
-                  <th>Estado</th>
                   <th>Operaciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="aviso in listaAvisos" :key="aviso.id">
                   <th scope="row">{{ aviso.id }}</th>
-                  <td>{{ aviso.titulo }}</td>
+                  <td>{{ aviso.titulo }}
+                    <CProgress thin color="success" :value="100"/>
+                    <div class="clearfix">
+                      <div class="float-start">
+                        <strong>{{aviso.icon}}</strong>
+                      </div>
+                      <div class="float-end">
+                        <CBadge v-if="aviso.estado == 1" color="success">Activo</CBadge>
+                        <CBadge v-else color="warning">Inactivo</CBadge>
+                      </div>
+                    </div>
+                  </td>
                   <td>{{ aviso.detalle }}</td>
                   <td>
-                    Icono : {{ aviso.icon }}<br />
-                    <CBadge v-if="aviso.estado == 1" color="success">Activo
-                    </CBadge>
-                    <CBadge v-else color="warning">Inactivo</CBadge>
-                  </td>
-                  <td>
                     <CButton class="font" color="success" @click="avisoSelect(aviso.id)" size="sm">
-                      <CIcon icon="cil-pencil" class="me-2"/>
+                      <CIcon icon="cil-pencil"/>
                     </CButton>
                   </td>
                 </tr>
@@ -51,107 +60,96 @@
 
   <!-- Modal  Add Aviso-->
   <CModal :visible="modalAviso" @close="clickModalAviso(false)">
-    <form @submit.prevent="addAviso()">
+    <CForm @submit.prevent="addAviso()">
       <CModalHeader class="headercolor" dismiss @close="clickModalAviso(false)">
         <CModalTitle>
-          <h5>Agregar Nuevo Aviso</h5>
+          <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Nuevo Aviso</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <div class="mb-3 row">
-          <label for="detalle" class="col-4">Titulo</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="aviso.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
-          </div>
-        </div>
 
-        <div class="mb-3 row">
-          <label for="lugar" class="col-4">Detalle</label>
-          <div class="col-8">
-            <textarea class="form-control" cols="30" rows="5" v-model="aviso.detalle" required="true"></textarea>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Titulo</CInputGroupText>
+          <CFormInput type="text" v-model="aviso.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="ip" class="col-4">Icono</label>
-          <div class="col-8">
-            <select class="form-control" v-model="aviso.icon" required="true">
-              <option value="info">Informacion</option>
-              <option value="error">Error</option>
-              <option value="success">Completo</option>
-              <option value="warning">Incompleto</option>
-              <option value="question">Pregunta</option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText  as="label">Detalle</CInputGroupText>
+          <CFormTextarea  cols="30" rows="5" v-model="aviso.detalle" required="true"> </CFormTextarea>
+        </CInputGroup>
+
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Icono</CInputGroupText>
+          <CFormSelect v-model="aviso.icon" :model-value="String(aviso.icon)" required="true">
+            <option value="info">Informacion</option>
+            <option value="error">Error</option>
+            <option value="success">Completo</option>
+            <option value="warning">Incompleto</option>
+            <option value="question">Pregunta</option>
+          </CFormSelect>
+        </CInputGroup>
+
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalAviso(false)" color="danger" class="font">
+        <CButton @click="clickModalAviso(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" size="sm" color="success">
           <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Add Equipo-->
 
   <!-- Modal  Update Aviso-->
   <CModal :visible="modalAvisoUpdate" @close="clickModalAvisoUpdate(false)">
-    <form @submit.prevent="updateAviso()">
+    <CForm @submit.prevent="updateAviso()">
       <CModalHeader class="headercolor" dismiss @close="clickModalAvisoUpdate(false)">
         <CModalTitle>
-          <h5>Actualizar Aviso</h5>
+          <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Actualizar Aviso</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <div class="mb-3 row">
-          <label for="detalle" class="col-4">Titulo</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="avisoUpdate.titulo" placeholder="Titulo del Aviso a colocar" required="true" />
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Titulo</CInputGroupText>
+          <CFormInput type="text" v-model="avisoUpdate.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="lugar" class="col-4">Detalle</label>
-          <div class="col-8">
-            <textarea class="form-control" cols="30" rows="5" v-model="avisoUpdate.detalle" required="true"></textarea>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText  as="label">Detalle</CInputGroupText>
+          <CFormTextarea  cols="30" rows="5" v-model="avisoUpdate.detalle" required="true"> </CFormTextarea>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="ip" class="col-4">Icono</label>
-          <div class="col-8">
-            <select class="form-control" v-model="avisoUpdate.icon" required="true">
-              <option value="info">Informacion</option>
-              <option value="error">Error</option>
-              <option value="success">Completo</option>
-              <option value="warning">Incompleto</option>
-              <option value="question">Pregunta</option>
-            </select>
-          </div>
-        </div>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Icono</CInputGroupText>
+          <CFormSelect v-model="avisoUpdate.icon" :model-value="String(avisoUpdate.icon)" required="true">
+            <option value="info">Informacion</option>
+            <option value="error">Error</option>
+            <option value="success">Completo</option>
+            <option value="warning">Incompleto</option>
+            <option value="question">Pregunta</option>
+          </CFormSelect>
+        </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="codigo" class="col-4">Estado</label>
-          <div class="col-8">
-            <select class="form-control" v-model="avisoUpdate.estado" required="true">
-              <option value="1">Activo</option>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label" >Estado</CInputGroupText>
+          <CFormSelect v-model="avisoUpdate.estado" :model-value="String(avisoUpdate.estado)" @update:model-value="avisoUpdate.estado = Number($event)" required="true">
+            <option value="1">Activo</option>
               <option value="0">Inactivo</option>
-            </select>
-          </div>
-        </div>
+          </CFormSelect>
+        </CInputGroup>
+
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalAvisoUpdate(false)" color="danger" class="font">
+        <CButton @click="clickModalAvisoUpdate(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-cloud-upload" class="me-2" />Actualizar
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- End Modal  Update Equipo-->
 </template>
