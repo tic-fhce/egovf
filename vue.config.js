@@ -15,7 +15,7 @@ module.exports = defineConfig({
         "@styles": path.resolve(__dirname, "src/styles"),
         "@env": path.resolve(__dirname, "src/env.js"),
         "@scc": path.resolve(__dirname, "src/modules/egovf-scc"),
-        "@sbf": path.resolve(__dirname, "src/modules/egovf-crali"),
+        "@sbf": path.resolve(__dirname, "src/modules/egovf-sbf"),
       },
     },
   },

@@ -1,17 +1,17 @@
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { useCookies } from '../utils/cookiesManager';
 
-const isAdminGuard = async (
+const isSuperAdminGuard = async (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext,
 ) => {
-  const { isAdmin} = useCookies();
+  const { isSuperAdmin} = useCookies();
   // console.log(to)
   // console.log(from)
 
-  isAdmin.value ? next() : next({ name: 'crali' });
+  isSuperAdmin.value ? next() : next({ name: 'sbf' });
 
 };
 
-export default isAdminGuard;
+export default isSuperAdminGuard;

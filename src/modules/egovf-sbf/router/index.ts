@@ -2,12 +2,12 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import isAdminGuard from '../guards/is-admin.guard';
 import isSuperAdminGuard from '../guards/is-superAdmin.guard';
 
-export const craliRoutes = {
-  path: '/crali',
-  name: 'crali',
+export const sbfRoutes = {
+  path: '/sbf',
+  name: 'sbf',
   
-  // redirect: { name: 'crali-dashboard' },
-  component: () => import('../layouts/CraliLayout.vue'),
+  // redirect: { name: 'sbf-dashboard' },
+  component: () => import('../layouts/SbfLayout.vue'),
   children: [
     // {
     //   path: 'dashboard',

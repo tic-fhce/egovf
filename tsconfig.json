@@ -21,7 +21,7 @@
         "src/*",
       ],
       "@env": ["src/env.js"],
-      "@sbf/*": ["src/modules/egovf-crali/*"]
+      "@sbf/*": ["src/modules/egovf-sbf/*"]
     },
     "lib": [
       "esnext",

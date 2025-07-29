@@ -1,7 +1,7 @@
 <template>
   <CFooter>
     <div>
-      <RouterLink to="/crali" target="_blank">eGOVF</RouterLink>
+      <a href="#" target="_blank">eGOVF</a>
       <span class="ms-1"
         >&copy; {{ new Date().getFullYear() }} FHCE.</span
       >
