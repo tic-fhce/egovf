@@ -102,7 +102,7 @@ import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 import { type Libro, getLibroById, updateLibro, createLibroFile } from '../services/libroService'
 import { type Biblioteca, getBibliotecas } from '../services/bibliotecaService'
-import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
+import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 
 interface Props {
   idLibro?: number
@@ -150,7 +150,7 @@ onMounted(async () => {
       }
       ejemplares.value = await getEjemplaresByLibroId(props.idLibro)
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
-      const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === 'Disponible');
+      const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible);
       // const cantidadDisponibles = disponibles.length;
       portada.value = disponibles[0]?.portada || '/ruta/portadas/bookCover.png';
       const dataB = await getBibliotecas()
@@ -237,7 +237,7 @@ const guardar = async () => {
 }
 
 const volver = () => {
-   router.go(-1)
+  router.replace({ name: 'libros' });
 }
 
 </script>

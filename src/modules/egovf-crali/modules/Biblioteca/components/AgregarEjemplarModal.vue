@@ -12,9 +12,10 @@
           <label class="form-label">Estado</label>
           <select class="form-control" v-model="form.estado" required>
             <option value="">Seleccione</option>
-            <option value="Disponible">Disponible</option>
+            <option v-for="estado in estados" :key="estado" :value="estado">{{ estado }}</option>
+            <!-- <option value="Disponible">Disponible</option>
             <option value="Prestado">Prestado</option>
-            <option value="Dañado">Dañado</option>
+            <option value="Dañado">Dañado</option> -->
           </select>
         </div>
 
@@ -49,7 +50,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import Swal from 'sweetalert2'
-import { type Ejemplar, createEjemplar, updateEjemplar } from '../services/ejemplarService'
+import { type Ejemplar, EstadoEjemplar, createEjemplar, updateEjemplar } from '../services/ejemplarService'
 
 const previewPortada = ref<string>('')
 const nameFileImg = ref<string>('')
@@ -63,11 +64,11 @@ const props = defineProps<{
   portadaLibro?: string
   ejemplarEditar?: Ejemplar 
 }>()
-
+const estados = Object.values(EstadoEjemplar).slice(0, -1);
 const emit = defineEmits(['close', 'ejemplarCreado'])
 
 const form = ref<Partial<Ejemplar>>({
-  estado: '',
+  estado: EstadoEjemplar.SinEstado,
   direccion: '',
   portada: '',
   id_libro: props.idLibro,
@@ -88,7 +89,7 @@ watch(() => props.visible, (newVal) => {
       // Si no hay ejemplar, estamos creando uno nuevo
       isEdit.value = false
       form.value = {
-        estado: '',
+        estado: EstadoEjemplar.SinEstado,
         direccion: '',
         portada: props.portadaLibro || '',
         id_libro: props.idLibro,

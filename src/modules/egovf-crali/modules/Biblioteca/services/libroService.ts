@@ -1,5 +1,5 @@
 import { SBFApi } from '@sbf/api/SBFApi';
-import { createEjemplar, uploadFileImage } from './ejemplarService';
+import { createEjemplar, EstadoEjemplar, uploadFileImage } from './ejemplarService';
 
 export interface Libro {
   id_libro: number;
@@ -87,7 +87,7 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
       const ejemplarPromises = Array.from({ length: createdLibro.ejemplares }, (_, index) =>
         createEjemplar({
           codigo: Date.now() + index, // Generate unique code
-          estado: 'Disponible',
+          estado: EstadoEjemplar.Disponible,
           portada: portadaUrl || '/uploads/portadas/bookCover.png',
           direccion: 'S/D',
           id_libro: createdLibro.id_libro

@@ -127,8 +127,8 @@ const editarLibro = () => {
   // if (libro.value) {
   //   router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
   // }
-  router.go(-1)
-  // router.push('/libros')
+  // router.go(-1)
+  router.push('/libros')
 }
 const verPdf = () => {
   if (libro.value?.contenido_pdf) {

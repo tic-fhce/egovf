@@ -1,9 +1,16 @@
 import { SBFApi } from '@sbf/api/SBFApi';
 import { API_URL_EGOVF_SBF_FL } from '@env'
 
+export enum EstadoEjemplar{
+  Disponible = "Disponible",
+  Prestado = "Prestado",
+  Dañado = "Dañado",
+  SinEstado = "",
+}
+
 export interface Ejemplar {
   codigo: number;
-  estado: string;
+  estado: EstadoEjemplar;
   portada: string;
   direccion: string;
   id_libro: number;

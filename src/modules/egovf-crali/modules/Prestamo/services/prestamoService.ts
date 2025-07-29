@@ -1,6 +1,6 @@
 import { SBFApi } from '@sbf/api/SBFApi';
 import { createEstaEn, EstaEn, updateEstaEn } from './estaEnService';
-import { Ejemplar, updateEjemplar } from '../../Biblioteca/services/ejemplarService';
+import { Ejemplar, EstadoEjemplar, updateEjemplar } from '../../Biblioteca/services/ejemplarService';
 
 export interface Prestamo {
   id_prestamo: number;
@@ -48,7 +48,7 @@ export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
 
     const ejemplarUpdate: Partial<Ejemplar> = {
       ...ejemplar,
-      estado: 'Prestado'
+      estado: EstadoEjemplar.Prestado
     };
     console.log({ejemplarUpdate})
     const updatedEjemplar = await updateEjemplar(ejemplarUpdate);
@@ -79,11 +79,11 @@ export const updatePrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
       
       const ejemplarBeforeUpdate: Partial<Ejemplar> = {
         ...ejemplarBefore,
-        estado: 'Disponible'
+        estado: EstadoEjemplar.Disponible
       };
       const ejemplarUpdate: Partial<Ejemplar> = {
         ...ejemplar,
-        estado: 'Prestado'
+      estado: EstadoEjemplar.Prestado
       };
        const [updatedEjemplarBefore, updatedEjemplar] = await Promise.all([
         updateEjemplar(ejemplarBeforeUpdate),

@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { type Ejemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
+import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 // import Swal from 'sweetalert2'
 import { type Libro } from '../services/libroService';
 import { useRouter } from 'vue-router';
@@ -95,8 +95,8 @@ async function cargarDatos() {
     if (ejemplares && ejemplares.length > 0) {
       ejemplar.value = ejemplares[0] 
       portada.value = ejemplares[0].portada 
-      disponible.value = ejemplares.filter(ejemplar => ejemplar.estado === 'Disponible').length
-      ejemplar.value.estado = (disponible.value > 0) ? 'Disponible' : 'No Disponible'
+      disponible.value = ejemplares.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible).length
+      ejemplar.value.estado = (disponible.value > 0) ? EstadoEjemplar.Disponible : EstadoEjemplar.SinEstado
     }else{
       portada.value = defaultImage
     }

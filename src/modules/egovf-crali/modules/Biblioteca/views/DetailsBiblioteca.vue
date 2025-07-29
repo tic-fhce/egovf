@@ -25,7 +25,7 @@
                 class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Agregar Libro</CButton>
 
-              <CButton @click="editarLibro"
+              <CButton @click="volver"
                 class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
                 Volver</CButton>
 
@@ -121,12 +121,8 @@ const crearLibro = () => {
 //     params: { idLibro: libro.id_libro},
 //   })
 // }
-const editarLibro = () => {
-  // if (libro.value) {
-  //   router.push({ name: 'EditarLibro', params: { idLibro: libro.value.id_libro } })
-  // }
-  router.go(-1)
-  // router.push('/libros')
+const volver = () => {
+  router.replace({ name: 'biblioteca' });
 }
 
 onMounted(cargarDatos);

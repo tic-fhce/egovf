@@ -189,7 +189,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
-import { type Ejemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
+import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
 import { type Lector, getLectors } from '../../users/services/lectorService';
 import { type Prestamo, createPrestamo, getPrestamoById, updatePrestamo } from '../services/prestamoService';
 import { getEstaEnByPrestamo, type EstaEn } from '../services/estaEnService';
@@ -244,10 +244,12 @@ onMounted(async () => {
       selectedLector.value = lectores.value.find(l => l.id_lector === prestamo?.id_lector) || null;
       selectedLibro.value = libros.value.find(l => l.id_libro === estaEn.idLibro) || null;
       ejemplaresDisponibles.value = await getEjemplaresByLibroId(estaEn.idLibro);
-      
       selectedEjemplar.value = ejemplaresDisponibles.value.find(e => e.codigo === estaEn.idEjemplar) || null;
       // para cambiar el estado del anterior ejemplar
       selectedEjemplarBefore.value = selectedEjemplar.value 
+      // ejemplaresDisponibles.value = ejemplaresDisponibles.value.filter(
+      //   (e) => e.estado === 'Disponible'
+      // );
     }
   } catch (err) {
     console.error(err);
@@ -295,7 +297,7 @@ const selectLibro = async () => {
       filteredLibros.value.find((l) => l.id_libro === formEsta.value.idLibro) || null;
     if (selectedLibro.value) {
       ejemplaresDisponibles.value = (await getEjemplaresByLibroId(formEsta.value.idLibro)).filter(
-        (e) => e.estado === 'Disponible'
+        (e) => e.estado === EstadoEjemplar.Disponible
       );
       selectedEjemplar.value = null;
       formEsta.value.idEjemplar = 0;
@@ -318,6 +320,10 @@ const guardar = async () => {
       return;
     }
 
+    // if (selectedEjemplar.value!.estado !== EstadoEjemplar.Disponible) {
+    //   Swal.fire('Campos incompletos', 'Seleccion un ejemplar Disponible');
+    //   return;
+    // }
     if (isEditMode.value && props.idPrestamo) {
       await updatePrestamo(form.value, formEsta.value, selectedEjemplarBefore.value!, selectedEjemplar.value!);
       Swal.fire('Éxito', 'Préstamo actualizado correctamente.', 'success');
@@ -326,7 +332,7 @@ const guardar = async () => {
       await createPrestamo(form.value, formEsta.value, selectedEjemplar.value!);
       Swal.fire('Éxito', 'Préstamo creado correctamente.', 'success');
     }
-    // router.go(-1);
+    router.go(-1);
   } catch (err) {
     console.error(err);
     Swal.fire('Error', 'No se pudo guardar el préstamo.', 'error');
@@ -334,7 +340,7 @@ const guardar = async () => {
 };
 
 const volver = () => {
-  router.go(-1);
+  router.replace({ name: 'prestamos' });
 };
 </script>
 
