@@ -9,23 +9,29 @@
   <CRow>
     <CCol :xs="12">
       <CCard>
-        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-          <div class="d-flex align-items-center">
-            <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-            <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
-          </div>
-            <CDropdown variant="btn-group">
-              <CDropdownToggle color="dark" class="font border-0" size="sm">
-                <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>
-                  <CButton @click="clickModalCiudadano(true)" size="sm">
-                    <CIcon icon="cil-cloud-upload" size="lg" class="me-2" /> Agregar
-                  </CButton>
-                </CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
+        <CCardHeader class="headercolor justify-content-between align-items-center">
+          <CRow>
+            <CCol :lg="6">
+              <div class="align-items-center">
+                <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+                <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+              </div>
+            </CCol>
+            <CCol :lg="6" class="text-end">
+              <CDropdown variant="btn-group">
+                <CDropdownToggle color="dark" class="font border-0" size="sm">
+                  <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem>
+                    <CButton @click="clickModalCiudadano(true)" size="sm">
+                      <CIcon icon="cil-cloud-upload" size="lg" class="me-2" /> Agregar
+                    </CButton>
+                  </CDropdownItem>
+                </CDropdownMenu>
+              </CDropdown>
+            </CCol>
+          </CRow>
         </CCardHeader>
         <CCardBody>
           <div class="table-responsive">
@@ -62,115 +68,104 @@
 
 <!-- Modal  Ciudadano-->
 <CModal :visible="modalCiudadano" @close="clickModalCiudadano(false)">
-  <form @submit.prevent="registrarCiudadano()">
+  <CForm @submit.prevent="registrarCiudadano()">
     <CModalHeader class="headercolor" dismiss @close="clickModalCiudadano(false)">
         <CModalTitle>
-          <h4> <CIcon icon="cil-user" size="xl"/> Agregar Nuevo Ciudadano</h4>
+          <h6> <CIcon icon="cil-user" size="sm"/> Agregar Nuevo Ciudadano</h6>
         </CModalTitle>
     </CModalHeader>
     <CModalBody>
-        
-        <div class="mb-3 row">
-            <label for="ci" class="col-6 col-form-label">
-              <p> Celulda de Identidad.</p>
-            </label>
-            <div class="col-6">
-              <input type="text" class="form-control" v-model="persona.ci" placeholder="Cedula de Identidad" @input="validarCI()" @keyup="botonesFuncion()" required="true">
-              <p v-if="errorpersona.ci" style="color: green;">{{ errorCI }}</p>
-              <p v-else style="color: red;">{{ errorCI }}</p>
-            </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="region" class="col-6 col-form-label">
-              <p> Region Exp.</p>
-            </label>
-            <div class="col-6">
-                <select class="form-control" v-model="persona.complemento" required="true">
-                  <option>Seleccionar Region Expedida</option>
-                  <option value="lp">La Paz</option>
-                  <option value="sc">Santa Cruz</option>
-                  <option value="cb">Cochabamba</option>
-                  <option value="or">Oruro</option>
-                  <option value="pt">Potosi</option>
-                  <option value="tr">Tarija</option>
-                  <option value="ch">Chuquisaca</option>
-                  <option value="bn">Beni</option>
-                  <option value="pd">Pando</option>
-                </select>
-            </div>
-        </div>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Celulda de Identidad </CInputGroupText>
+          <CFormInput type="text" v-model="persona.ci" :valid="errorpersona.ci" required="true" placeholder="Cedula de Identidad" @input="validarCI()" @keyup="botonesFuncion()"/>
+        <CInputGroupText v-if="errorpersona.ci">
+          <CIcon icon="cil-check" class="text-success"/>
+        </CInputGroupText>
+        <CInputGroupText v-else>
+          <CIcon icon="cil-x" class="text-danger"/>
+        </CInputGroupText>
+        <label v-if="errorpersona.ci" style="color: green;">{{ errorCI }}</label>
+        <label v-else style="color: red;">{{ errorCI }}</label>
+      </CInputGroup>
+      
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Region Exp</CInputGroupText>
+        <CFormSelect  v-model="persona.complemento" required="true">
+            <option>Seleccionar Region Expedida</option>
+            <option value="lp">La Paz</option>
+            <option value="sc">Santa Cruz</option>
+            <option value="cb">Cochabamba</option>
+            <option value="or">Oruro</option>
+            <option value="pt">Potosi</option>
+            <option value="tr">Tarija</option>
+            <option value="ch">Chuquisaca</option>
+            <option value="bn">Beni</option>
+            <option value="pd">Pando</option>
+        </CFormSelect>
+      </CInputGroup>
 
-        <div class="mb-3 row">
-            <label for="nombre" class="col-6 col-form-label">
-              <p>Nombres.</p>
-            </label>
-            <div class="col-6">
-              <input type="text" class="form-control" v-model="persona.nombre" placeholder="Nombres" required="true">
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="paterno" class="col-6 col-form-label">A. Paterno.</label>
-            <div class="col-6">
-              <input type="text" class="form-control" v-model="persona.paterno" placeholder="Apellido Paterno">
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="materno" class="col-6 col-form-label">A. Materno.</label>
-            <div class="col-6">
-              <input type="text" class="form-control" v-model="persona.materno" placeholder="Apellido Materno">
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <label for="fecha" class="col-6 col-form-label">
-              <p>Fecha de Nacimiento.</p>
-            </label>
-            <div class="col-6">
-              <input type="date" class="form-control" v-model="persona.fecha" required="true">
-            </div>
-        </div>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Nombres </CInputGroupText>
+        <CFormInput type="text" v-model="persona.nombre" placeholder="Nombres" required="true"/>
+      </CInputGroup>
 
-        <div class="mb-3 row">
-            <label for="sexo" class="col-6 col-form-label">
-              <p>Sexo</p>
-            </label>
-            <div class="col-6">
-              <select class="form-control" v-model="persona.sexo" required="true">
-                <option>Seleccionar Sexo</option>
-                <option value="1">Femenino</option>
-                <option value="2">Masculino</option>
-              </select>
-            </div>
-        </div>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">A. Paterno </CInputGroupText>
+        <CFormInput type="text" v-model="persona.paterno" placeholder="Apellido Paterno"/>
+      </CInputGroup>
 
-        <div class="mb-3 row">
-            <label for="celular" class="col-6 col-form-label">
-              <p>Celular.</p>
-            </label>
-            <div class="col-6">
-              <input type="text" class="form-control" v-model="persona.cel" placeholder="Numero de Celular" @input="validarCelular()" @keyup="botonesFuncion()" required="true">
-              <p v-if="errorpersona.cel" style="color: green;">{{ errorCelular }}</p>
-              <p v-else style="color: red;">{{ errorCelular }}</p>
-            </div>
-        </div>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">A. Materno </CInputGroupText>
+        <CFormInput type="text" v-model="persona.materno" placeholder="Apellido Materno"/>
+      </CInputGroup>
 
-        <div class="mb-3 row">
-            <label for="correo" class="col-6 col-form-label">
-              <p>E-mail.</p>
-            </label>
-            <div class="col-6">
-              <input type="email" class="form-control" v-model="persona.correo" placeholder="Correo Electronico" @input="validarCorreo()" @keyup="botonesFuncion()" required="true">
-              <p v-if="errorpersona.correo" style="color: green;">{{ errorCorreo }}</p>
-              <p v-else style="color: red;">{{ errorCorreo }}</p>
-            </div>
-        </div>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Fecha de Nacimiento </CInputGroupText>
+        <CFormInput type="date" v-model="persona.fecha" required="true"/>
+      </CInputGroup>
+
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Sexo</CInputGroupText>
+        <CFormSelect  v-model="persona.sexo" required="true">
+            <option>Seleccionar Sexo</option>
+            <option value="1">Femenino</option>
+            <option value="2">Masculino</option>
+        </CFormSelect>
+      </CInputGroup>
+
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Celular </CInputGroupText>
+          <CFormInput type="text" :valid="errorpersona.cel" v-model="persona.cel" placeholder="Numero de Celular" @input="validarCelular()" @keyup="botonesFuncion()" required="true"/>
+        <CInputGroupText v-if="errorpersona.cel">
+          <CIcon icon="cil-check" class="text-success"/>
+        </CInputGroupText>
+        <CInputGroupText v-else>
+          <CIcon icon="cil-x" class="text-danger"/>
+        </CInputGroupText>
+        <label v-if="errorpersona.cel" style="color: green;">{{ errorCelular }}</label>
+        <label v-else style="color: red;">{{ errorCelular }}</label>
+      </CInputGroup>
+
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">E-mail </CInputGroupText>
+          <CFormInput type="text" :valid="errorpersona.correo" v-model="persona.correo" placeholder="Correo Electronico" @input="validarCorreo()" @keyup="botonesFuncion()" required="true"/>
+        <CInputGroupText v-if="errorpersona.correo">
+          <CIcon icon="cil-check" class="text-success"/>
+        </CInputGroupText>
+        <CInputGroupText v-else>
+          <CIcon icon="cil-x" class="text-danger"/>
+        </CInputGroupText>
+        <label v-if="errorpersona.correo" style="color: green;">{{ errorCorreo }}</label>
+        <label v-else style="color: red;">{{ errorCorreo }}</label>
+      </CInputGroup>
 
     </CModalBody>
     <CModalFooter>
-        <CButton @click="clickModalCiudadano(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-        <button v-if="botones" class="btn btn-success font" ><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</button>
+        <CButton @click="clickModalCiudadano(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+        <CButton type="submit" v-if="botones" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
     </CModalFooter>
-  </form>
+  </CForm>
 </CModal>
 <!-- End Modal  Ciudadano-->
 </template>
@@ -330,7 +325,7 @@ export default {
           this.errorCelular = "El Numero de Celular ya existe, verifique su estado en el sistema"; // Cédula válida
           this.errorpersona.cel=false;
         } else {
-          this.errorCelular = "El Numero de Celular es valido";
+          this.errorCelular = "El Numero de Celular del Ciudadano es valido";
           this.errorpersona.cel=true;
         }
       },
@@ -342,7 +337,7 @@ export default {
           this.errorCorreo = "El correo Electronico ya existe ingrese otro o verifique su existencia en el sistema."; // Cédula válida
           this.errorpersona.correo=false;
         } else {
-          this.errorCorreo = "Correo electronico Valido";
+          this.errorCorreo = "El Correo Electronico del Ciudadano es Valido ";
           this.errorpersona.correo=true;
         }
       },

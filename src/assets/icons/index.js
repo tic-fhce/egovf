@@ -117,6 +117,7 @@ import {
   cilAvTimer,
   cilAt,
   cilWarning,
+  cilPlus,
 } from '@coreui/icons'
 
 export const iconsSet = Object.assign(
@@ -211,6 +212,7 @@ export const iconsSet = Object.assign(
     cilAvTimer,
     cilAt,
     cilWarning,
+    cilPlus,
   },
   {
     cifUs,

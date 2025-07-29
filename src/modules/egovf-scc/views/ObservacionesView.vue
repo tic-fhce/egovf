@@ -338,6 +338,7 @@ export default {
                 msalida:"",
                 url:"",
                 estado:0,
+                idtipo:'PRIVADO',
                 datos: {
                     cif: 0,
                     nombre: "",
@@ -484,6 +485,13 @@ export default {
                     this.obsDetalle.mSalida= obs.mSalida;
                     this.obsDetalle.url= obs.url;
                     this.obsDetalle.estado= obs.estado;
+                    
+                    if(obs.idtipo == 1){
+                        this.obsDetalle.idtipo="GENERAL";
+                    }
+                    else{
+                        this.obsDetalle.idtipo="PRIVADO";
+                    }
 
                     if(this.obsDetalle.estado==1){
                         this.obsDetalle.forma.color='success';

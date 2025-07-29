@@ -15,12 +15,12 @@
                 <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                        <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                        <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
                     </div>
                     <CDropdown variant="btn-group">
                         <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
                         <CDropdownMenu>
-                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" size="lg" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                            <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-plus" size="lg" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
                             <CDropdownDivider/>
                             <CDropdownItem><CButton @click="clickModalRecord(true)" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2" /> Extraer Record</CButton></CDropdownItem>
                         </CDropdownMenu>
@@ -71,10 +71,10 @@
 
 <!-- Modal  Obserbasiones-->
 <CModal :visible="modalObs" @close="clickModalObs(false)">
-    <form @submit.prevent="addObsAll()" enctype="multipart/form-data">
+    <CForm @submit.prevent="addObsAll()" enctype="multipart/form-data">
         <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
             <CModalTitle>
-                <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/> Agregar Observaciones de Asistencia</h6>
+                <h6><CIcon icon="cil-plus" size="lg" class="me-2"/> Agregar Observaciones de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
 
@@ -137,22 +137,31 @@
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Documento</CInputGroupText>
-                <CFormInput type="file" ref="file"  accept="image/png,image/jpeg" @change="selectFile()" required="true"/>
+                    <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg"  @change="selectFile" :valid="fileValid" required="true"/>
+                    <CInputGroupText v-if="fileValid">
+                        <CIcon icon="cil-check" class="text-success"/>
+                    </CInputGroupText>
             </CInputGroup>
+            
+            <CProgress v-if="uploading" :height="50" class="mb-3">
+                <CProgressBar  :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated >
+                    Espere un Momento ........... {{ uploadProgress }} %
+                </CProgressBar>
+            </CProgress>
 
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalObs(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</button>
+            <CButton @click="clickModalObs(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-check-alt" class="me-2"/> Agregar Observaciones</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 <!-- END Modal  Obserbasiones-->
 
 
 <!-- Modal  Record-->
 <CModal :visible="modalRecord" @close="clickModalRecord(false)">
-    <form @submit.prevent="getRecord()">
+    <CForm @submit.prevent="getRecord()">
         <CModalHeader class="headercolor" dismiss @close="clickModalRecord(false)">
             <CModalTitle>
                 <h6><CIcon icon="cil-cloud-download" size="lg" class="me-2" /> Extraer Record de Asistencias</h6>
@@ -162,24 +171,24 @@
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Gestion </CInputGroupText>
-                <CFormSelect v-model="record.gestion" required="true">
+                <CFormSelect v-model="record.gestion" :model-value="String(record.gestion)"  @update:model-value="record.gestion = Number($event)" required="true">
                     <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
                 </CFormSelect>
             </CInputGroup>
 
             <CInputGroup class="mb-3">
                 <CInputGroupText as="label">Mes </CInputGroupText>
-                <CFormSelect v-model="record.mes" required="true">
+                <CFormSelect v-model="record.mes" :model-value="String(record.mes)" required="true">
                     <option v-for = "mes in listaMes" :key = "mes" :value = "mes.m">{{ mes.mes }}</option>
                 </CFormSelect>
             </CInputGroup>
 
         </CModalBody>
         <CModalFooter>
-            <CButton @click="clickModalRecord(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-            <button class="btn btn-success font" ><CIcon icon="cil-check-alt" class="me-2"/> Record</button>
+            <CButton @click="clickModalRecord(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton type="submit" class="font" color="success" size="sm"><CIcon icon="cil-check-alt" class="me-2"/> Record</CButton>
         </CModalFooter>
-    </form>
+    </CForm>
 </CModal>
 <!-- END Modal  Record-->
 
@@ -222,6 +231,9 @@ export default {
             listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
             archivo:'',
             tipoEmpleadoObj:'',
+            fileValid: false,
+            uploading: false,
+            uploadProgress: 0,
             usuario:{
                 token:'',
                 cif:'',
@@ -276,8 +288,21 @@ export default {
         this.getGestion();
     },
     methods:{
-        selectFile(){// Funcion que permite cambiar los datos del archivo
-            this.archivo = this.$refs.obsfile.files[0];
+        selectFile(event){// Funcion que permite cambiar los datos del archivo
+            const fileInput = this.getSafeFileInput(event);
+      
+            if (!fileInput?.files?.length) {
+                this.resetFileInput();
+                return;
+            }
+            
+            this.archivo = fileInput.files[0];
+            
+            if (!this.validateFile(this.archivo)) {
+                this.resetFileInput();
+                return;
+            }
+            this.fileValid = true;
         },
         tablaEmpleado(){
             this.$nextTick(()=>{
@@ -354,47 +379,56 @@ export default {
             this.tablaEmpleado();
         },
         async addObsAll(){ //Funcion para registrar una Observacion del Usuario
-            const fromData = new FormData();
-            fromData.append('archivo',this.archivo);
+            this.uploading = true;
+            this.uploadProgress = 0;
             try{
-                //primero subimos el archivo
-                await this.uploadService.addImagen(fromData).then((response)=>{
-                    if(response.status == 200){
-                        this.obsall.url = this.uploadService.getUrl()+ response.data.nombre;
-                        this.obsall.imagen = response.data.nombre;
-                        this.obsall.cif = this.id_empleado;
-                        this.$swal.fire({
-                            title: 'Desea agregar la Observacione de Asistencia a los Empleados?',
-                            showDenyButton: true,
-                            icon:'info',
-                            confirmButtonText: 'Aceptar',
-                            denyButtonText: 'Cancelar',
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                this.sccService.addObsAll(this.obsall).then(response =>{
-                                    if(response.status == 200){
-                                        this.$swal.fire('Las Observaciones fueron Agregados Corectamente ','', 'success').then((res)=>{
-                                            if(res)
-                                                location.reload();
-                                        });
-                                    }
-                                    else{
-                                        this.$swal.fire('Las Observaciones no fueron Guardados Error'+ response.status, '', 'error');
-                                    }
+                const formData = new FormData();
+                formData.append('archivo',this.archivo);
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        this.uploadProgress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                    }
+                };
+                const uploadResponse = await this.uploadService.addImagen(formData, config);
+                if (uploadResponse.status !== 200) {
+                    throw new Error('Error al subir archivo');
+                }
+                
+                this.obsall.url = this.uploadService.getUrl()+ uploadResponse.data.nombre;
+                this.obsall.imagen = uploadResponse.data.nombre;
+                this.obsall.cif = this.id_empleado;
+                
+                this.$swal.fire({
+                    title: 'Desea agregar la Observacione de Asistencia a los Empleados?',
+                    showDenyButton: true,
+                    icon:'info',
+                    confirmButtonText: 'Aceptar',
+                    denyButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.sccService.addObsAll(this.obsall).then(response =>{
+                            if(response.status == 201){
+                                this.$swal.fire('Las Observaciones fueron Agregadas Corectamente','', 'success').then((res)=>{
+                                    if(res)
+                                        location.reload();
                                 });
-                                
-                            } else if (result.isDenied) {
-                                this.$swal.fire('Datos Cancelados', '', 'info');
+                            }
+                            else{
+                                this.$swal.fire('Las Observaciones no pudieron ser Registradas', ''+ response.status, 'error');
                             }
                         });
-
-                    }
-                    else {
-                        this.$swal.fire('El archivo no pudo ser Guardado  ','', 'error');
+                            
+                    } else if (result.isDenied) {
+                        this.$swal.fire('Datos Cancelados', '', 'info');
                     }
                 });
             }catch(err){
-                this.$swal.fire('El archivo no pudo ser Guardado  '+ err, 'error');
+                this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
+            }finally {
+                this.uploading = false;
+                this.uploadProgress = 0;
             }
         },
         getGestion(){ // funcion que crea una lista de gestiones desde el 2021
@@ -496,7 +530,36 @@ export default {
             const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
             const progreso = (diasPasados / diasTotales) * 100;
             return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-        }
+        },
+         //funciones para validar el archivo a subir
+        getSafeFileInput(event) {
+        // Todas las formas posibles de obtener el input
+            return (
+                // CoreUI v4+ (recomendado)
+                this.$refs.fileInput?.$refs?.input ||
+                
+                // Event target
+                event?.target ||
+                
+                // CoreUI v3
+                this.$refs.fileInput?.$el?.querySelector?.('input[type="file"]') ||
+                
+                // Último recurso
+                document.getElementById('filedoc')
+            );
+        },
+    
+        validateFile(file) {
+            const VALID_TYPES = ['image/jpeg', 'image/png'];
+            return file && VALID_TYPES.includes(file.type);
+        },
+    
+        resetFileInput() {
+            this.archivo=null;
+            this.fileValid = false;
+            const input = this.getSafeFileInput();
+            if (input) input.value = '';
+        },
     }
 }
 </script>

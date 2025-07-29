@@ -12,7 +12,7 @@
             <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
                   <div class="d-flex align-items-center">
                     <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                    <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                    <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
                   </div>
             </CCardHeader>
             <CCardBody>

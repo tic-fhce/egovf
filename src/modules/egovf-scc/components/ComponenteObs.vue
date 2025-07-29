@@ -13,7 +13,7 @@
           <span class="small text-medium-emphasis">{{ obsDetalle.horaEntrada }}</span> | 
           <span class="small text-medium-emphasis">{{ obsDetalle.horaSalida }}</span> 
         </template>
-        <template #title><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }}</template>
+        <template #title><strong>ID:</strong> {{ obsDetalle.id }} | <strong>IDOBS : </strong> {{ obsDetalle.idObs }} | <strong>TIPO :</strong> {{ obsDetalle.idtipo }}</template>
         <template #value>UID: {{ obsDetalle.uidobs }}</template>
       </CWidgetStatsB>
     </CCol>

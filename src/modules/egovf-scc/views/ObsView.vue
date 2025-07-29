@@ -1,4 +1,14 @@
 <template>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb custom-breadcrumb">
+        <li class="breadcrumb-item">
+            <router-link to="/menuObs" class="breadcrumb-link">Menu de Observaciones</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} >
+        </li>
+    </ol>
+  </nav>
   <CRow>
     <CCol :xs="12">
       <CCard>
@@ -97,94 +107,83 @@
   <!-- END Modal  Detalles de Obs-->
 
   <!-- Modal Editar Obserbasiones-->
-  <CModal :visible="modalObsEditar" @close="clickModalObsEditar(false)">
-    <form @submit.prevent="updateObsEmpleado()">
+  <CModal size="lg" :visible="modalObsEditar" @close="clickModalObsEditar(false)">
+    <CForm @submit.prevent="updateObsEmpleado()">
       <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
         <CModalTitle>
-          <h5>Actualizar la Observacion de Asistencia</h5>
+          <h6><CIcon icon="cil-featured-playlist"/> Actualizar la Observacion de Asistencia</h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <div class="mb-3 row">
-          <label for="cif" class="col-4 col-form-label">CIF</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="uobs.cif" required="true" placeholder="CIF"/>
-          </div>
-        </div>
+        <CRow>
+          <CCol :lg="6">
+            <CInputGroup class="mb-3">
+              <CInputGroupText  as="label">CIF </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  type="text" v-model="uobs.cif" required="true" placeholder="CIF" />
+            </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">UID - OBS</label>
-          <div class="col-8">
-            <input type="text" class="form-control" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta"  />
-          </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText  as="label">UID - OBS </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="text" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta"/>
+            </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Fecha de Inicio</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="uobs.fechainicio" required="true" />
-          </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText  as="label">Fecha de Inicio </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date" v-model="uobs.fechainicio" required="true"/>
+            </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Fecha Fin</label>
-          <div class="col-8">
-            <input type="date" class="form-control" v-model="uobs.fechafin" required="true"/>
-          </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText  as="label">Fecha Fin </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date" v-model="uobs.fechafin" required="true"/>
+            </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="datos" class="col-4 col-form-label">Detalle</label>
-          <div class="col-8">
-            <textarea class="form-control" v-model="uobs.detalle" required="true"></textarea>
-          </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText  as="label">Detalle</CInputGroupText>
+              <CFormTextarea :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  v-model="uobs.detalle" required="true"> </CFormTextarea>
+            </CInputGroup>
 
-        <div class="mb-3 row">
-          <label for="tipo" class="col-4 col-form-label">Tipo</label>
-          <div class="col-8">
-            <select class="form-control" v-model="uobs.tipo" required="true" @change="getUTipo()">
-              <option value="Entrada M.">Entrada Mañana</option>
-              <option value="Salida M.">Salida Mañana</option>
-              <option value="Entrada T.">Entrada Tarde</option>
-              <option value="Salida T.">Salida Tarde</option>
-              <option value="continuo">Continuo</option>
-              <option value="continuoingreso">Continuo e Ingreso</option>
-              <option value="horas">Horas de Servicio</option>
-              <option value="extraordinario">Horario Extraordinario</option>
-              <option value="comision">Comisión</option>
-              <option value="permiso">Permiso</option>
-              <option value="asueto">Asueto</option>
-            </select>
-          </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText as="label">Tipo</CInputGroupText>
+              <CFormSelect :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  v-model="uobs.tipo" required="true" @change="getUTipo()"> 
+                  <option value="Entrada M.">Entrada Mañana</option>
+                  <option value="Salida M.">Salida Mañana</option>
+                  <option value="Entrada T.">Entrada Tarde</option>
+                  <option value="Salida T.">Salida Tarde</option>
+                  <option value="continuo">Continuo</option>
+                  <option value="continuoingreso">Continuo e Ingreso</option>
+                  <option value="horas">Horas de Servicio</option>
+                  <option value="extraordinario">Horario Extraordinario</option>
+                  <option value="comision">Comisión</option>
+                  <option value="permiso">Permiso</option>
+                  <option value="asueto">Asueto</option>
+              </CFormSelect>
+            </CInputGroup>
 
-        <div class="mb-3 row" v-if="mostrarUHoraIngreso()"  >
-            <label for="datos" class="col-sm-4 col-form-label">Hora Ingreso</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="uobs.horaEntrada">
-            </div>
-        </div>
+            <CInputGroup class="mb-3">
+              <CInputGroupText as="label">Hora Ingreso</CInputGroupText>
+              <CFormInput type="text"  v-model="uobs.horaEntrada" required="true"/>
+            </CInputGroup>
 
-        <div class="mb-3 row" v-if="mostrarUHoraSalida()">
-            <label for="datos" class="col-sm-4 col-form-label">Hora Salida</label>
-            <div class="col-sm-8">
-                <input type="text" class="form-control" v-model="uobs.horaSalida">
-            </div>
-        </div>
-        <CCol>
-          <img :src="uobs.url" alt="" class="img-fluid" />
-        </CCol>
+            <CInputGroup class="mb-3">
+              <CInputGroupText as="label">Hora Salida</CInputGroupText>
+              <CFormInput type="text"  v-model="uobs.horaSalida" required="true"/>
+            </CInputGroup>
+
+          </CCol>
+          <CCol :lg="6">
+            <img :src="uobs.url" alt="" class="img-fluid" />
+          </CCol>
+        </CRow>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalObsEditar(false)" color="danger" class="font">
+        <CButton @click="clickModalObsEditar(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
-        <button class="btn btn-success font">
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-check-alt" class="me-2" /> Actualizar Observacion
-        </button>
+        </CButton>
       </CModalFooter>
-    </form>
+    </CForm>
   </CModal>
   <!-- END Modal Editar Obserbasiones-->
 
@@ -243,7 +242,7 @@ export default {
   },
   data() {
     return {
-      titulo: "Observaciones de los Empleados",
+      titulo: "Solicitud de Observaciones de los Empleados",
       modalObs: false,
       modalDetalleObs: false,
       modalObsEditar: false,
@@ -320,6 +319,7 @@ export default {
         msalida:"",
         url:"",
         estado:0,
+        idtipo:"PRIVADO",
         datos: {
           cif: 0,
           nombre: "",
@@ -352,7 +352,8 @@ export default {
         hsalida:"",
         msalida:"",
         url:"",
-        estado:0
+        estado:0,
+        idtipo:0
       }
     };
   },
@@ -491,6 +492,13 @@ export default {
           this.obsDetalle.msalida=obs.msalida;
           this.obsDetalle.url=obs.url;
           this.obsDetalle.estado=obs.estado;
+          
+          if(obs.idtipo == 1){
+            this.obsDetalle.idtipo="GENERAL";
+          }
+          else{
+            this.obsDetalle.idtipo="PRIVADO";
+          }
 
           if(this.obsDetalle.estado==1){
               this.obsDetalle.forma.color='success';
@@ -569,7 +577,7 @@ export default {
     async updateObsEmpleado() {
       //Funcion actualizar una Observacion del Usuario
       this.$swal.fire({
-          title: "Deseas Actualizar la Observacion de Tu Asistencia ?",
+          title: "Deseas Actualizar la Observacion de Asistencia ?",
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
@@ -654,6 +662,7 @@ export default {
           this.uobs.msalida=obs.msalida;
           this.uobs.url=obs.url;
           this.uobs.estado=obs.estado;
+          this.uobs.idtipo=obs.idtipo;
         }
       });
       this.clickModalObsEditar(true);

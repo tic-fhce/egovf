@@ -12,25 +12,42 @@
                 </CCardHeader>
                 <CCardBody>
                     <CRow>
-                        <h2 class="text-center">Estadisticas de Asistencia</h2>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="printAsistencia">
-                                <thead>
-                                    <tr>
-                                        <th>#</th><th>Detalle</th><th>Cantidad</th><th>%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr><td>1</td><td>Excelente</td><td>{{ stadist.excelente }}</td><td>{{ (stadist.excelente/ln * 100).toFixed(2) }}%</td></tr>
-                                    <tr><td>2</td><td>Regular</td><td>{{ stadist.regular }}</td><td>{{ (stadist.regular/ln * 100).toFixed(2) }}%</td></tr>
-                                    <tr><td>3</td><td>En Linea Roja</td><td>{{ stadist.roja }}</td><td>{{ (stadist.roja/ln * 100).toFixed(2) }}%</td></tr>
-                                    <tr><td>4</td><td>Llamada de Atencion</td><td>{{ stadist.atencion }}</td><td>{{ (stadist.atencion/ln * 100).toFixed(2) }}%</td></tr>
-                                    <tr></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <CCol :lg="6">
+                            <CCard>
+                                <CCardHeader class="headercolor"> Estadisticas de Asistencia </CCardHeader>
+                                <CCardBody>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" id="printAsistencia">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th><th>Detalle</th><th>Cantidad</th><th>%</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>1</td><td>Excelente</td><td>{{ stadist.excelente }}</td><td>{{ (stadist.excelente/ln * 100).toFixed(2) }}%</td></tr>
+                                                <tr><td>2</td><td>Regular</td><td>{{ stadist.regular }}</td><td>{{ (stadist.regular/ln * 100).toFixed(2) }}%</td></tr>
+                                                <tr><td>3</td><td>En Linea Roja</td><td>{{ stadist.roja }}</td><td>{{ (stadist.roja/ln * 100).toFixed(2) }}%</td></tr>
+                                                <tr><td>4</td><td>Llamada de Atencion</td><td>{{ stadist.atencion }}</td><td>{{ (stadist.atencion/ln * 100).toFixed(2) }}%</td></tr>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </CCardBody>
+                            </CCard>
+                        </CCol>
+
+                        <CCol :lg="6">
+                            <CCard>
+                                <CCardHeader class="headercolor"> Grafico de Asistencia</CCardHeader>
+                                <CCardBody>
+                                
+                                </CCardBody>
+                            </CCard>
+                        </CCol>
                     </CRow>
+                    <CRow><br></CRow>
                     <CRow>
+                        <br>
                         <h2 class="text-center">Ranking de Asistencias</h2>
                         <hr>
                         <div class="table-responsive">
@@ -43,7 +60,7 @@
                                 <tbody>
                                     <tr v-for="ciudadano in listaR" :key="ciudadano.id">
                                         <td>{{ciudadano.id}}</td>
-                                        <td><CButton color="success" class="font" @click="getReporteMes(ciudadano.cif)">{{ciudadano.cif}}</CButton></td>
+                                        <td><CButton color="success" class="font" size="sm" @click="getReporteMes(ciudadano.cif)">{{ciudadano.cif}}</CButton></td>
                                         <td>{{ ciudadano.ci }}</td>
                                         <td>
                                             <div>{{ ciudadano.nombre }}<br></div>

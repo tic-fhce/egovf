@@ -606,7 +606,7 @@ export default {
       this.contrato.cif = this.egovf.cif;
       this.contrato.foto = this.egovf.foto;
       //para la actualizacion del usuario designamos el tipo de empleado en id de persona 
-      this.egovf.idPersona = this.contrato.idtipo;
+      this.egovf.idPersona = this.contrato.idTipoEmpleado;
       await this.$swal.fire({
           title: "Desea Agregar Contrato al Empleado ?",
           showDenyButton: true,

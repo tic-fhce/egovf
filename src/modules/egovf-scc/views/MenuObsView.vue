@@ -1,4 +1,11 @@
 <template>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb custom-breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} >
+            </li>
+        </ol>
+    </nav>
     <CRow>
         <!--Card para observaciones Aprobadas-->
         <CCol :lg="3">
@@ -77,6 +84,7 @@ export default {
   components: {},
   data() {
     return {
+        titulo:'Menu de Observaciones',
         listaGestion:[],
         modalObs:false,
         gestion:0,

@@ -20,15 +20,15 @@
                         <CIcon icon="cil-menu" color="dark" class="me-2 text-success"/>Opciones</CDropdownToggle>
                       <CDropdownMenu>
                         <CDropdownItem>
-                          <CButton @click="clickModalBiometrico(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Biometrico</CButton>
+                          <CButton @click="clickModalBiometrico(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Biometrico</CButton>
                         </CDropdownItem>
                         <CDropdownDivider />
                         <CDropdownItem>
-                          <CButton @click="clickModalHorario(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Horario</CButton>
+                          <CButton @click="clickModalHorario(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Horario</CButton>
                         </CDropdownItem>
                         <CDropdownDivider />
                         <CDropdownItem>
-                          <CButton @click="clickModalObs(true)" size="sm"><CIcon icon="cil-medical-cross" size="lg" class="me-2" />Agregar Observaciones</CButton>
+                          <CButton @click="clickModalObs(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Observaciones</CButton>
                         </CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>
@@ -938,6 +938,7 @@ export default {
         msalida:"",
         url:"",
         estado:0,
+        idtipo:"PRIVADO",
         datos: {
             cif: 0,
             nombre: "",
@@ -1309,6 +1310,13 @@ export default {
           this.obsDetalle.horaSalida = obs.horaSalida;
           this.obsDetalle.url = obs.url;
           this.obsDetalle.estado = obs.estado;
+
+          if(obs.idtipo == 1){
+            this.obsDetalle.idtipo="GENERAL";
+          }
+          else{
+            this.obsDetalle.idtipo="PRIVADO";
+          }
           if(this.obsDetalle.estado==1){
               this.obsDetalle.forma.color='success';
               this.obsDetalle.forma.estado='Aprobado';

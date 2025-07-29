@@ -139,7 +139,8 @@ export default class SccService {
       "hsalida": obs.horaSalida.substring(0, 2),
       "msalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "estado": obs.estado
+      "estado": obs.estado,
+      "idtipo":obs.idtipo
     };
     return axios.put(msccUrl + "obs/updateObsEmpleado", obsDtoObj);
   }
@@ -308,7 +309,8 @@ export default class SccService {
       "hSalida": obs.horaSalida.substring(0, 2),
       "mSalida": obs.horaSalida.substring(3, 5),
       "url": obs.url,
-      "estado": 1
+      "estado": 1,
+      "idtipo":1
     };
     return axios.post(msccUrl + "obs/addObsAll", obsDtoObj);
   }
