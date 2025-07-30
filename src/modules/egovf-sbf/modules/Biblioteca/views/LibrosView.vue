@@ -6,8 +6,9 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isAdmin" @click="crearLibro" color="success" class="font" size="sm">
-                <CIcon icon="cil-book" class="me-2" />Agregar Libro
+              <CButton v-if="isAdmin" title="Agregar Libro" @click="crearLibro" color="success" class="font" size="sm">
+                <!-- <CIcon icon="cil-book" class="me-2" />Agregar Libro -->
+                <AddIcon class="w-6 h-6"/>
               </CButton>
             </CCol>
           </CRow>
@@ -37,18 +38,22 @@
                   <td>{{ libro.ejemplares }}</td>
                   <td>{{ getNombreBiblioteca(libro.id_biblioteca) }}</td>
                   <td>
-                    <CButton class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
-                      <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
+                    <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
+                      <!-- <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles -->
+                      <VerIcon class="w-6 h-6"/>
                     </CButton>
-                    <CButton v-if="libro?.contenido_pdf" class="font me-1" color="success" size="sm" @click="verPdf(libro)">
-                      <CIcon icon="cil-file" class="me-1" />Ver PDF
+                    <CButton v-if="isAdmin" title="Ver Pdf" class="font me-1" color="secondary" size="sm" @click="viewPdf(libro)">
+                      <!-- <CIcon icon="cil-file" class="me-1" />Ver PDF -->
+                      <PdfIcon class="w-6 h-6"/>
                     </CButton>
                     <template v-if="isAdmin">
-                      <CButton class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
-                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      <CButton title="Editar Libro"  class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
+                        <!-- <CIcon icon="cil-pencil" class="me-1" />Editar -->
+                        <EditIcon class="w-6 h-6"/>
                       </CButton>
-                      <CButton class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
-                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      <CButton title="Eliminar Libro" class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
+                        <!-- <CIcon icon="cil-trash" class="me-1" />Eliminar -->
+                        <DeleteIcon class="w-6 h-6"/>
                       </CButton>
                     </template>
                   </td>
@@ -74,15 +79,17 @@ import Swal from 'sweetalert2'
 
 import $ from 'jquery'
 import 'datatables.net'
-import { API_URL_EGOVF_SBF_FL } from '@/env'
 
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
+import { AddIcon, DeleteIcon, EditIcon, PdfIcon, VerIcon } from '../../components'
+import { Ejemplar, EstadoEjemplar, getEjemplaresByLibroId, verPdf } from '../services/ejemplarService'
 const { isAdmin } = useCookies()
 const titulo = 'Gestión de Libros'
 
 const libros = ref<Libro[]>([])
 const bibliotecas = ref<Biblioteca[]>([])
+const ejemplar = ref<Ejemplar | null>(null)
 const tablaCargada = ref(false)
 
 onMounted(async () => {
@@ -93,8 +100,15 @@ async function cargarDatos() {
   try {
     destruirDataTable()
     tablaCargada.value = false
-    libros.value = await getLibros()
-    bibliotecas.value = await getBibliotecas()
+
+    const [dataLibro, dataBibliotecas] = await Promise.all([
+      getLibros(),
+      getBibliotecas(),
+    ]);
+
+    libros.value = dataLibro
+    bibliotecas.value = dataBibliotecas
+
     await nextTick()
     tablaCargada.value = true
     await nextTick()
@@ -180,15 +194,21 @@ const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: stri
     showConfirmButton: false,
   })
 }
-const verPdf = (libro: Libro) => {
-  if (libro?.contenido_pdf) {
-    const fullUrl = libro?.contenido_pdf.startsWith('http')
-    ? libro?.contenido_pdf
-    : `${API_URL_EGOVF_SBF_FL}${libro?.contenido_pdf.startsWith('/') ? '' : '/'}${libro.contenido_pdf}`
-    window.open(fullUrl, '_blank')
-  } else {
-    Swal.fire('Sin PDF', 'Este libro no tiene un PDF disponible.', 'info')
-  }
+const viewPdf = async(libro: Libro) => {
+  const EjemplarData = await getEjemplaresByLibroId(libro.id_libro);
+  if(EjemplarData.length < 0) return
+
+  const estadosPermitidos = [EstadoEjemplar.Disponible, EstadoEjemplar.Prestado];
+  
+  const ejemplarDisponible = EjemplarData.find(
+    e =>
+      estadosPermitidos.includes(e.estado) &&
+      e.contenido_pdf && e.contenido_pdf.trim() !== ""
+  ) || null;
+
+  ejemplar.value = ejemplarDisponible;
+  verPdf(ejemplar.value!);
+
 }
 
 </script>

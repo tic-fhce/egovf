@@ -36,7 +36,8 @@ export const getEjemplaresByLibroId = async (idLibro: number): Promise<Ejemplar[
     const { data } = await SBFApi.get<Ejemplar[]>(`/ejemplar/buscar/libro?idLibro=${idLibro}`);
     return data.map(ejemplar => ({
       ...ejemplar,
-      portada: getProductImageAction(ejemplar.portada)
+      portada: getProductImageAction(ejemplar.portada),
+      contenido_pdf: ejemplar.contenido_pdf || '',
     }));
     // return data;
   } catch (error) {
@@ -146,7 +147,7 @@ export const getProductImageAction = (imageName: string): string => {
 }
 
 export const verPdf = (ejemplarDisponible: Ejemplar) => {
-  const pdf = ejemplarDisponible.contenido_pdf;
+  const pdf = ejemplarDisponible?.contenido_pdf;
   if (pdf) {
     const fullUrl = pdf.startsWith('http')
     ? pdf

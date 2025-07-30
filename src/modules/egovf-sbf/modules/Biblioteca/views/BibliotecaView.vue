@@ -6,8 +6,9 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isAdmin" @click="abrirModal(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-library" class="me-2" />Agregar Biblioteca
+              <CButton v-if="isAdmin" title="Agregar Biblioteca" @click="abrirModal(true)" color="success" class="font" size="sm">
+                <!-- <CIcon icon="cil-library" class="me-2" />Agregar Biblioteca -->
+                <AddIcon class="w-6 h-6"/>
               </CButton>
             </CCol>
           </CRow>
@@ -114,7 +115,7 @@ import { getLibrosByIdBiblioteca } from '../services/libroService'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
-import { AddEjemplarIcon, DeleteIcon, EditIcon } from '../../components'
+import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon } from '../../components'
 const { isAdmin } = useCookies()
 
 const titulo = 'Gestión de Bibliotecas'
