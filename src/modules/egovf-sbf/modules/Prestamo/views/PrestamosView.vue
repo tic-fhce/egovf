@@ -6,8 +6,9 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isAdmin" @click="crearPrestamo" color="success" class="font" size="sm">
-                <CIcon icon="cil-book" class="me-2" />Agregar Préstamo
+              <CButton v-if="isAdmin" title="Agregar Prestamo" @click="crearPrestamo" color="success" class="font" size="sm">
+                <!-- <CIcon icon="cilNotes" class="me-2" /> -->
+                <AddIcon class="w-6 h-6" />
               </CButton>
             </CCol>
           </CRow>
@@ -44,15 +45,15 @@
                     </ul>
                   </td>
                   <td>
-                    <CButton class="font me-1" color="info" size="sm" @click="verDetalles(prestamo)">
-                      <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles
+                    <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetalles(prestamo)">
+                      <CIcon icon="cil-magnifying-glass" class="me-1" />
                     </CButton>
                     <template v-if="isAdmin">
-                      <CButton class="font me-1" color="warning" size="sm" @click="editarPrestamo(prestamo)">
-                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      <CButton title="Editar" class="font me-1" color="warning" size="sm" @click="editarPrestamo(prestamo)">
+                        <CIcon icon="cil-pencil" class="me-1" />
                       </CButton>
-                      <CButton class="font" color="danger" size="sm" @click="eliminarPrestamo(prestamo.id_prestamo)">
-                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      <CButton title="Eliminar" class="font" color="danger" size="sm" @click="eliminarPrestamo(prestamo.id_prestamo)">
+                        <CIcon icon="cil-trash" class="me-1" />
                       </CButton>
                     </template>
                   </td>
@@ -94,6 +95,7 @@ import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 
 const router = useRouter();
 import { useCookies } from '../../../utils/cookiesManager';
+import { AddIcon } from '../../components';
 const { isAdmin } = useCookies()
 
 const titulo = 'Gestión de Préstamos';

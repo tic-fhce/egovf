@@ -6,8 +6,8 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isSuperAdmin" @click="abrirModal(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-user" class="me-2" />Agregar Lector
+              <CButton v-if="isSuperAdmin" title="Agregar Lector" @click="abrirModal(true)" color="success" class="font" size="sm">
+                <CIcon icon="cilUserFollow" class="w-6 h-6" />
               </CButton>
             </CCol>
           </CRow>
@@ -35,11 +35,11 @@
                   <td>{{ lector.celular }}</td>
                   <td>{{ lector.carrera }}</td>
                   <td v-if="isSuperAdmin">
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarLector(lector)">
-                      <CIcon icon="cil-pencil" class="me-1" /> Editar
+                    <CButton title="Editar" class="font me-1" color="warning" size="sm" @click="editarLector(lector)">
+                      <CIcon icon="cil-pencil" class="me-1" />
                     </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarLector(lector.id_lector)">
-                      <CIcon icon="cil-trash" class="me-1" /> Eliminar
+                    <CButton title="Eliminar" class="font" color="danger" size="sm" @click="eliminarLector(lector.id_lector)">
+                      <CIcon icon="cil-trash" class="me-1" />
                     </CButton>
                   </td>
                 </tr>
@@ -112,11 +112,11 @@
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="abrirModal(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
+        <CButton title="Cancelar" @click="abrirModal(false)" color="danger" class="font">
+          <CIcon icon="cil-x"  />
         </CButton>
-        <button type="submit" class="btn btn-success font">
-          <CIcon icon="cil-user" class="me-2" />{{ btnEdit }}
+        <button type="submit" :title="btnEdit" class="btn btn-success font">
+          <CIcon icon="cilUserFollow" />
         </button>
       </CModalFooter>
     </form>

@@ -6,8 +6,8 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="abrirModal(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-user" class="me-2" />Agregar Usuario
+              <CButton title="Agregar User" @click="abrirModal(true)" color="success" class="font" size="sm">
+                <CIcon icon="cilUserFollow" class="me-2" />
               </CButton>
             </CCol>
           </CRow>
@@ -33,11 +33,11 @@
                   <!-- <td>{{ usuario.contrasena }}</td> -->
                   <td>{{ usuario.rol }}</td>
                   <td>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarUsuario(usuario)">
-                      <CIcon icon="cil-pencil" class="me-1" /> Editar
+                    <CButton title="Editar" class="font me-1" color="warning" size="sm" @click="editarUsuario(usuario)">
+                      <CIcon icon="cil-pencil" class="me-1" />
                     </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarUsuario(usuario.id_usuario)">
-                      <CIcon icon="cil-trash" class="me-1" /> Eliminar
+                    <CButton title="Eliminar" class="font" color="danger" size="sm" @click="eliminarUsuario(usuario.id_usuario)">
+                      <CIcon icon="cil-trash" class="me-1" />
                     </CButton>
                   </td>
                 </tr>
@@ -118,11 +118,11 @@
       </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="abrirModal(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
+        <CButton title="Cancelar" @click="abrirModal(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-2" />
         </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-user" class="me-2" />{{ btnEdit }}
+        <button  :title="btnEdit" class="btn btn-success font">
+          <CIcon icon="cilUserFollow" class="me-2" />
         </button>
       </CModalFooter>
     </form>

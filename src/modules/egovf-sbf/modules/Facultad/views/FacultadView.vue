@@ -6,8 +6,8 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton @click="abrirModal(true)" color="success" class="font" size="sm">
-                <CIcon icon="cil-library" class="me-2" />Agregar Facultad
+              <CButton title="Agregar" @click="abrirModal(true)" color="success" class="font" size="sm">
+                <CIcon icon="cilNotes" class="me-2" />
               </CButton>
             </CCol>
           </CRow>
@@ -29,11 +29,11 @@
                   <td>{{ index+1 }}</td>
                   <td>{{ facultad.nombre }}</td>
                   <td>
-                    <CButton class="font me-1" color="warning" size="sm" @click="editarFacultad(facultad)">
-                      <CIcon icon="cil-pencil" class="me-1" /> Editar
+                    <CButton title="Editar" class="font me-1" color="warning" size="sm" @click="editarFacultad(facultad)">
+                      <CIcon icon="cil-pencil" class="me-1" />
                     </CButton>
-                    <CButton class="font" color="danger" size="sm" @click="eliminarFacultad(facultad.id_facultad)">
-                      <CIcon icon="cil-trash" class="me-1" /> Eliminar
+                    <CButton title="Eliminar" class="font" color="danger" size="sm" @click="eliminarFacultad(facultad.id_facultad)">
+                      <CIcon icon="cil-trash" class="me-1" />
                     </CButton>
                   </td>
                 </tr>
@@ -65,11 +65,11 @@
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="abrirModal(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
+        <CButton title="Cancelar" @click="abrirModal(false)" color="danger" class="font">
+          <CIcon icon="cil-x"/>
         </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-library" class="me-2" />{{ btnEdit }}
+        <button :title="btnEdit" class="btn btn-success font">
+          <CIcon icon="cilNotes" />
         </button>
       </CModalFooter>
     </form>
