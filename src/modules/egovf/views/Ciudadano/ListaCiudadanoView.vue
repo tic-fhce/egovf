@@ -93,7 +93,10 @@
       </CRow>
     </CModalBody>
     <CModalFooter>
-      <CButton @click="clickModalCiudadano(false)" color="danger" class="font"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>        
+      <CButton @click="clickModalCiudadano(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+      <!--
+      <CButton @click="reporteCiudadano(ciudadano.cif)" color="success" class="font" size="sm"><CIcon icon="cil-description" class="me-2"/>Ver Reporte de Ciudadano</CButton>        
+      -->
     </CModalFooter>
 </CModal>
 <!-- End Modal  Ciudadano-->
@@ -240,6 +243,20 @@ export default {
       },
       clickModalCiudadano(ciudadano){//funcion para Visibilisar el modal
         this.modalCiudadano = ciudadano;
+      },
+      reporteCiudadano(cif){
+        const tiempoTranscurrido = Date.now();
+        const hoy = new Date(tiempoTranscurrido);
+        var gestion = hoy.getFullYear(tiempoTranscurrido);
+        var mes = hoy.getMonth()+1;
+        var m = mes.toString().padStart(2, '0');
+        this.clickModalCiudadano(false);
+        this.$router.push({
+          name: "UsuarioReporteView",
+          params:{
+            uri:cif+'j'+gestion+'m'+m+'m00k00'
+          }
+        });
       },
       esFechaPasada(fechaSalida) {
         if (!fechaSalida) return 'warning';

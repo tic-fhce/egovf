@@ -50,12 +50,6 @@ export default {
         this.reporte.di = this.uri.substring(20,22);
         this.reporte.df = this.uri.slice(23);
         this.reporte.uri = this.uri;
-        console.log(this.cifCiudadano);
-        console.log(this.reporte.gestion);
-        console.log(this.reporte.mes);
-        console.log(this.reporte.di);
-        console.log(this.reporte.df);
-
         this.getReporteBiometrico();
     },
     created(){

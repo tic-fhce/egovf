@@ -34,9 +34,9 @@
                         <tbody>
                             <tr v-for="perfil in reporteUsuario.listaPerfil" :key="perfil.id">
                                 <td><strong>ID Biometrico : </strong>{{perfil.id}}</td>
-                                <td><strong>User ID : </strong>{{perfil._01user_id}}</td>
-                                <td><strong>Nombre : </strong>{{perfil._02nombre}}</td>
-                                <td><strong>Lugar : </strong>{{perfil._06lugar}}</td>
+                                <td><strong>User ID : </strong>{{perfil.user_id}}</td>
+                                <td><strong>Nombre : </strong>{{perfil.nombre}}</td>
+                                <td><strong>Lugar : </strong>{{perfil.lugar}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,16 +90,16 @@
                                     {{value.retraso[0]}}<br>{{value.retraso[1]}}<br>{{value.retraso[2]}}<br>{{value.retraso[3]}}
                                 </td>
                                 <td>
-                                    <div class="obserbaciones" v-for="listobs in value.obserModel" :key="listobs.id">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}<br></div>
+                                    <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}<br></div>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th></th><th></th><th></th><th></th><th>Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                                <th colspan="5">Total Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
                             </tr>
                             <tr>
-                                <th></th><th></th><th></th><th></th><th>Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
+                                <th colspan="5">Total Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -156,6 +156,7 @@ export default {
         getReporteMesUsuario(){
             this.biometricoService.getReporteMes(this.reporteUsuario).then((result) => {
                 this.listaReporte=result.data;
+                console.log(this.listaReporte);
                 this.sumaRetraso();
             }).catch((err) => {
                 console.log(err);
@@ -221,13 +222,13 @@ export default {
     width: 150px;
 }
 .obs{
-    width: 550px;
+    width: 200px;
 }
 .numeral{
     width: 50px;
 }
 .lugar{
-    width: 250px;
+    width: 150px;
 }
 
 </style>
