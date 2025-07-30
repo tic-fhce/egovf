@@ -24,19 +24,26 @@
             <p class="text-base text-gray-700">Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque it.</p>
 
-            <div class="mt-10 flex flex-col items-center md:flex-row">
+            <div class="mt-10 flex flex-row items-center md:flex-row">
+
               <CButton @click="abrirModal" v-if="isAdmin"
-                class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Agregar Ejemplar</CButton>
+              title="Agregar ejemplar"
+                class=" inline-flex h-12  items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                <AddEjemplarIcon class="w-8 h-8"/>
+              </CButton>
 
               <CButton @click="editarLibro"
-                class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Volver</CButton>
-              <CButton v-if="ejemplarDisponible?.contenido_pdf"
-                @click="verPdf(ejemplarDisponible)"
-                class="inline-flex h-12 w-full items-center justify-center rounded bg-blue-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Ver PDF
+                title="Volver Atras"
+                class="inline-flex h-12 items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                <BackIcon class="w-8 h-8"/>
               </CButton>
+              <CButton v-if="ejemplarDisponible?.contenido_pdf"
+              title="Ver Pdf"
+                @click="verPdf(ejemplarDisponible)"
+                class="inline-flex h-12 items-center justify-center rounded bg-blue-100 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-200 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                <PdfIcon class="w-8 h-8"/>
+              </CButton>
+            
             </div>
           </div>
 
@@ -93,6 +100,7 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
+import { AddEjemplarIcon, BackIcon, PdfIcon } from '../../components'
 const { isAdmin } = useCookies()
 
 const libro = ref<Libro | null>(null)

@@ -245,7 +245,8 @@ const guardar = async () => {
 }
 
 const volver = () => {
-  router.replace({ name: 'libros' });
+  // router.replace({ name: 'libros' });
+  router.go(-1);
 }
 
 </script>

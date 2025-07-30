@@ -35,15 +35,18 @@
                   <td>{{ getNombreFacultad(biblio.id_facultad) }}</td>
                   <td v-if="isAdmin">{{ numerosLibros[biblio.id_biblioteca] || 0 }}</td>
                   <td>
-                    <CButton v-if="numerosLibros[biblio.id_biblioteca]" class="font me-1" color="info" size="sm" @click="verLibros(biblio)">
-                      <CIcon icon="cil-magnifying-glass" class="me-1" />Ver Libros
+                    <CButton title="Agregar Libros" class="font me-1" color="success" size="sm" @click="verLibros(biblio)">
+                      <AddEjemplarIcon class="w-6 h-6"/>
+                      <!-- <CIcon icon="cil-magnifying-glass" class="me-1" />Ver Libros -->
                     </CButton>
                     <template v-if="isAdmin">
-                      <CButton class="font me-1" color="warning" size="sm" @click="editarBiblioteca(biblio)">
-                        <CIcon icon="cil-pencil" class="me-1" />Editar
+                      <CButton title="Editar Biblioteca" class="font me-1" color="warning" size="sm" @click="editarBiblioteca(biblio)">
+                        <EditIcon class="w-6 h-6"/>
+                        <!-- <CIcon icon="cil-pencil" class="me-1" />Editar -->
                       </CButton>
-                      <CButton class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
-                        <CIcon icon="cil-trash" class="me-1" />Eliminar
+                      <CButton title="Eliminar Biblioteca" class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
+                        <DeleteIcon class="w-6 h-6"/>
+                        <!-- <CIcon icon="cil-trash" class="me-1" />Eliminar -->
                       </CButton>
                     </template>
                   </td>
@@ -111,6 +114,7 @@ import { getLibrosByIdBiblioteca } from '../services/libroService'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
+import { AddEjemplarIcon, DeleteIcon, EditIcon } from '../../components'
 const { isAdmin } = useCookies()
 
 const titulo = 'Gestión de Bibliotecas'

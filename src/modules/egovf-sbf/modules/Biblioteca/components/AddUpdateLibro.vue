@@ -45,14 +45,14 @@
           <input type="number" class="form-control" v-model.number="form.ejemplares" min="0" required />
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label">Contenido (PDF)</label>
           <input type="file" class="form-control" accept="application/pdf" @change="handleFileChange" />
         </div>
 
         <div v-if="previewPdf" class="text-center">
           <p class="text-sm text-gray-500">Archivo seleccionado: {{ previewPdf }}</p>
-        </div>
+        </div> -->
       </CModalBody>
 
       <CModalFooter>
@@ -87,7 +87,7 @@ const form = ref<Partial<Libro>>({
   idioma: '',
   signatura_topografica: '',
   ejemplares: 0,
-  contenido_pdf: '',
+  // contenido_pdf: '',
   id_usuario: props.id_usuario,
   id_biblioteca: props.id_biblioteca,
 })
@@ -102,7 +102,7 @@ watch(() => props.visible, (newVal) => {
         id_usuario: props.id_usuario,
         id_biblioteca: props.id_biblioteca,
       }
-      previewPdf.value = props.libroEditar.contenido_pdf || ''
+      // previewPdf.value = props.libroEditar.contenido_pdf || ''
     } else {
       // Creation mode
       isEdit.value = false
@@ -113,7 +113,7 @@ watch(() => props.visible, (newVal) => {
         idioma: '',
         signatura_topografica: '',
         ejemplares: 0,
-        contenido_pdf: '',
+        // contenido_pdf: '',
         id_usuario: props.id_usuario,
         id_biblioteca: props.id_biblioteca,
       }
@@ -122,33 +122,33 @@ watch(() => props.visible, (newVal) => {
   }
 })
 
-const handleFileChange = (e: Event) => {
-  const input = e.target as HTMLInputElement
-  const file = input.files?.[0]
+// const handleFileChange = (e: Event) => {
+//   const input = e.target as HTMLInputElement
+//   const file = input.files?.[0]
 
-  if (!file) return
+//   if (!file) return
 
-  if (!file.type.startsWith('application/pdf')) {
-    Swal.fire('Archivo inválido', 'Solo se permiten archivos PDF.', 'warning')
-    return
-  }
+//   if (!file.type.startsWith('application/pdf')) {
+//     Swal.fire('Archivo inválido', 'Solo se permiten archivos PDF.', 'warning')
+//     return
+//   }
 
-  const reader = new FileReader()
-  reader.onload = (event) => {
-    const result = event.target?.result
-    if (typeof result === 'string') {
-      form.value.contenido_pdf = `ruta/pdfs/${file.name}`
-      previewPdf.value = file.name
-    }
-  }
+//   const reader = new FileReader()
+//   reader.onload = (event) => {
+//     const result = event.target?.result
+//     if (typeof result === 'string') {
+//       // form.value.contenido_pdf = `ruta/pdfs/${file.name}`
+//       previewPdf.value = file.name
+//     }
+//   }
 
-  reader.onerror = (error) => {
-    console.error('Error leyendo el archivo:', error)
-    Swal.fire('Error', 'No se pudo cargar el archivo PDF.', 'error')
-  }
+//   reader.onerror = (error) => {
+//     console.error('Error leyendo el archivo:', error)
+//     Swal.fire('Error', 'No se pudo cargar el archivo PDF.', 'error')
+//   }
 
-  reader.readAsDataURL(file)
-}
+//   reader.readAsDataURL(file)
+// }
 
 const cerrar = () => {
   previewPdf.value = ''

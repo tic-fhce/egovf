@@ -1,6 +1,6 @@
 <template>
 
-   <div v-if="!biblioteca" class="text-center h-[200px] mt-10">
+  <div v-if="!biblioteca" class="text-center h-[200px] mt-10">
     <h2 class="text-lg font-semibold">Cargando información de la Biblioteca...</h2>
     <p>Espere por favor</p>
   </div>
@@ -21,13 +21,15 @@
               accusantium doloremque it.</p>
 
             <div class="mt-10 flex flex-col items-center md:flex-row">
-              <CButton @click="crearLibro" v-if="isAdmin"
-                class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Agregar Libro</CButton>
+              <CButton @click="crearLibro" v-if="isAdmin" title="Agregar Libro"
+                class=" inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-green-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                <AddEjemplarIcon class="w-8 h-8" />
+              </CButton>
 
-              <CButton @click="volver"
-                class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
-                Volver</CButton>
+              <CButton @click="volver" title="Volver Atras"
+                class="inline-flex h-12 w-full items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                <BackIcon class="w-8 h-8" />
+              </CButton>
 
             </div>
           </div>
@@ -44,19 +46,19 @@
   </div>
 
 
-    <!-- Lista de Libros -->
-    <div class="mt-2">
-      <h2 class="text-xl font-semibold text-gray-800 text-center mb-1">Libros</h2>
+  <!-- Lista de Libros -->
+  <div class="mt-2">
+    <h2 class="text-xl font-semibold text-gray-800 text-center mb-1">Libros</h2>
 
-      <div v-if="!libros.length" class="text-center">
-        <p class="text-gray-500">No se encontraron Libros.</p>
-      </div>
-
-      <LibroList v-else :Libros="libros" :id-biblioteca="props.idBiblioteca"  @libro-creado="libroCreado"/>
+    <div v-if="!libros.length" class="text-center">
+      <p class="text-gray-500">No se encontraron Libros.</p>
     </div>
 
-     <!-- Modal: Agregar Libro -->
-     <!-- <AddUpdateLibro
+    <LibroList v-else :Libros="libros" :id-biblioteca="props.idBiblioteca" @libro-creado="libroCreado" />
+  </div>
+
+  <!-- Modal: Agregar Libro -->
+  <!-- <AddUpdateLibro
       :visible="modalVisible"
       :id_biblioteca="props.idBiblioteca"
       @close="cerrarModal"
@@ -74,6 +76,7 @@ import { type Biblioteca, getBibliotecaById } from '../services/bibliotecaServic
 import { getLibrosByIdBiblioteca, type Libro } from '../services/libroService'
 import LibroList from '../components/LibroList.vue'
 import { useCookies } from '../../../utils/cookiesManager';
+import { AddEjemplarIcon, BackIcon } from '../../components'
 const { isAdmin } = useCookies()
 // import AddUpdateLibro from '../components/AddUpdateLibro.vue'
 
@@ -111,8 +114,8 @@ const cargarDatos = async () => {
 const crearLibro = () => {
   router.push({
     name: 'libro',
-    params: { idLibro: 0},
-    state: { idBiblioteca: props.idBiblioteca } 
+    params: { idLibro: 0 },
+    state: { idBiblioteca: props.idBiblioteca }
   })
 }
 // const editarLibro = (libro: Libro) => {
