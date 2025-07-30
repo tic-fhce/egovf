@@ -60,6 +60,12 @@
 
     <!-- Columna derecha -->
     <div class="first-col">
+      <!-- Advertencia en modo edición -->
+      <p v-if="isEditMode" class="text-red-600 text-sm mt-2">
+        ⚠️ No es posible modificar la portada ni el contenido del libro en modo edición. 
+        Editar estos archivos afectaría las portadas y los contenidos ya asociados a sus ejemplares, 
+        lo que puede provocar pérdida o inconsistencia de datos.
+      </p>
       <div class="mb-4">
         <label class="form-label">Portada Actual</label>
         <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-br-none rounded-tl-none">
@@ -73,12 +79,12 @@
 
       <div class="mb-4">
         <label class="form-label">Subir Nueva Portada</label>
-        <input type="file" accept="image/*" class="form-control" @change="onFileChanged" ref="imageInput"/>
+        <input type="file" accept="image/*" class="form-control" @change="onFileChanged" ref="imageInput" :disabled="isEditMode"/>
       </div>
 
       <div class="mb-4">
         <label class="form-label">Contenido (PDF)</label>
-        <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" ref="pdfInput" />
+        <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" ref="pdfInput" :disabled="isEditMode"/>
         <p v-if="previewPdf" class="text-sm mt-1 text-gray-500">Archivo seleccionado: {{ previewPdf }}</p>
       </div>
 
@@ -134,8 +140,8 @@ const form = ref<Partial<Libro>>({
   idioma: '',
   signatura_topografica: '',
   ejemplares: undefined,
-  contenido_pdf: '',
-  id_usuario: cif.value || 0, 
+  // contenido_pdf: '',
+  id_usuario: 0, 
   id_biblioteca: 0 
 })
 
@@ -146,7 +152,7 @@ onMounted(async () => {
       libro.value = data
       if (data) {
         form.value = { ...data }
-        previewPdf.value = data.contenido_pdf || ''
+        // previewPdf.value = data.contenido_pdf || ''
       }
       ejemplares.value = await getEjemplaresByLibroId(props.idLibro)
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
@@ -166,6 +172,7 @@ onMounted(async () => {
       if(idBiblioteca)
         form.value.id_biblioteca = idBiblioteca
       portada.value = '/ruta/portadas/bookCover.png';
+      form.value.id_usuario = cif.value
     } catch (err) {
       console.error(err)
       Swal.fire('Error', 'No se pudieron cargar las bibliotecas.', 'error')
@@ -221,7 +228,8 @@ const guardar = async () => {
     }
 
     if (isEditMode.value && props.idLibro) {
-      await updateLibro(form.value, pdfFile.value as File)
+      // await updateLibro(form.value, pdfFile.value as File)
+      await updateLibro(form.value)
       Swal.fire('Éxito', 'Libro actualizado correctamente.', 'success')
     } else {
       // await createLibro(form.value as Libro)

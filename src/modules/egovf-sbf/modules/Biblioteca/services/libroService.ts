@@ -1,5 +1,5 @@
 import { SBFApi } from '@sbf/api/SBFApi';
-import { createEjemplar, EstadoEjemplar, uploadFileImage } from './ejemplarService';
+import { createEjemplar, EstadoEjemplar, uploadFile, uploadFileImage } from './ejemplarService';
 
 export interface Libro {
   id_libro: number;
@@ -9,7 +9,7 @@ export interface Libro {
   idioma: string;
   signatura_topografica: string;
   ejemplares: number;
-  contenido_pdf: string;
+  // contenido_pdf: string;
   id_usuario: number;
   id_biblioteca: number;
 }
@@ -80,7 +80,7 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
     }
     const libroData: Partial<Libro> = {
       ...libro,
-      contenido_pdf: pdfUrl || libro.contenido_pdf || '',
+      // contenido_pdf: pdfUrl || libro.contenido_pdf || '',
     };
     const { data: createdLibro } = await SBFApi.post<Libro>('/libro/add', libroData);
     if (createdLibro.ejemplares && createdLibro.ejemplares > 0) {
@@ -90,7 +90,8 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
           estado: EstadoEjemplar.Disponible,
           portada: portadaUrl || '/uploads/portadas/bookCover.png',
           direccion: 'S/D',
-          id_libro: createdLibro.id_libro
+          id_libro: createdLibro.id_libro,
+          contenido_pdf: pdfUrl || '',
         })
       );
 
@@ -107,15 +108,15 @@ export const createLibroFile = async (libro: Partial<Libro>, imageFile:File, pdf
 };
 
 // Editar libro existente
-export const updateLibro = async (libro: Partial<Libro>, pdfFile?: File,): Promise<Libro> => {
+export const updateLibro = async (libro: Partial<Libro>): Promise<Libro> => {
   try {
-    let pdfUrl = "";
-    if (pdfFile) {
-      pdfUrl = await uploadFile(pdfFile);
-    }
+    // let pdfUrl = "";
+    // if (pdfFile) {
+    //   pdfUrl = await uploadFile(pdfFile);
+    // }
     const libroData: Partial<Libro> = {
       ...libro,
-      contenido_pdf: pdfUrl || libro.contenido_pdf || '',
+      // contenido_pdf: pdfUrl || libro.contenido_pdf || '',
     };
     const { data } = await SBFApi.put<Libro>('/libro/edit', libroData);
     return data;
@@ -132,16 +133,5 @@ export const deleteLibro = async (id_libro: number): Promise<void> => {
   } catch (error) {
     console.error(error);
     throw new Error('Error deleting libro');
-  }
-};
-
-const uploadFile = async (file: File)=> {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    const { data } = await SBFApi.post('/libro/upload', formData);
-    return data;
-  } catch (error) {
-    throw new Error(`Error uploading file ${file.name}`);
   }
 };

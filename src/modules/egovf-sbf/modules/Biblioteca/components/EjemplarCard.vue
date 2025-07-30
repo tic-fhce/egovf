@@ -1,7 +1,7 @@
 <template>
   <article class="bg-white p-3 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl">
 
-    <a href="#">
+    <a href="#"  @click.prevent>
       <div class="relative overflow-hidden rounded-xl">
         <img v-if="ejemplar.portada" :src="getImageSrc(ejemplar.portada)" alt="Portada" class="h-64 w-full object-cover"
           @error="handleImageError" />
@@ -16,13 +16,13 @@
         <p>{{ ejemplar.direccion }}</p>
         <!-- <p><span class="font-semibold">ID Libro:</span> {{ ejemplar.id_libro }}</p> -->
         <!-- <div class="mt-3 flex items-end justify-between"> -->
-        <div v-if="isAdmin" class="mt-10 flex flex-col items-center md:flex-row">
+        <div v-if="isAdmin" class="mt-3 flex flex-row items-center md:flex-row">
           <template v-if="isAdmin">
 
             <div @click="emitEdit"
-              class="inline-flex w-full items-center  rounded-lg bg-orange-500 px-4 py-1.5 text-white duration-100 hover:bg-orange-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+              class="inline-flex items-center  rounded-lg bg-orange-500 px-2 py-1.5 text-white duration-100 hover:bg-orange-600 focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
-                stroke="currentColor" class="h-4 w-4">
+                stroke="currentColor" class="h-6 w-6">
                 <!-- <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g> -->
                 <g id="SVGRepo_iconCarrier">
@@ -34,13 +34,13 @@
                     fill="#ffffff"></path>
                 </g>
               </svg>
-              <button class="text-sm">Modificar</button>
+              <button class="text-sm"></button>
             </div>
-  
+
             <div @click="eliminarEjemplar(ejemplar.codigo)"
-              class="inline-flex w-full items-center  rounded-lg  bg-red-500 px-1 py-1.5 text-white duration-100  hover:bg-red-600 focus:outline-none md:mr-4 md:mb-0 md:w-auto">
+              class="inline-flex  items-center  rounded-lg  bg-red-500 px-1 py-1.5 text-white duration-100  hover:bg-red-600 focus:outline-none">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0"
-                stroke="currentColor" class="h-4 w-4">
+                stroke="currentColor" class="h-6 w-6">
                 <g id="SVGRepo_bgCarrier" stroke-width="1.5"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
@@ -56,8 +56,32 @@
                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </g>
               </svg>
-              <button class="text-sm">Eliminar</button>
+              <button class="text-sm"></button>
             </div>
+
+            <div v-if="ejemplar.contenido_pdf" @click="verPdf(ejemplar)"
+              class="inline-flex items-center  rounded-lg bg-gray-400 px-2 py-1.5 text-white duration-100 hover:bg-gray-500 focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 64" enable-background="new 0 0 56 64"
+                xml:space="preserve" fill="#000000" class="h-8 w-8">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <g>
+                    <path fill="#8C181A"
+                      d="M5.1,0C2.3,0,0,2.3,0,5.1v53.8C0,61.7,2.3,64,5.1,64h45.8c2.8,0,5.1-2.3,5.1-5.1V20.3L37.1,0H5.1z">
+                    </path>
+                    <path fill="#6B0D12" d="M56,20.4v1H43.2c0,0-6.3-1.3-6.1-6.7c0,0,0.2,5.7,6,5.7H56z"></path>
+                    <path opacity="0.5" fill="#FFFFFF" enable-background="new "
+                      d="M37.1,0v14.6c0,1.7,1.1,5.8,6.1,5.8H56L37.1,0z"></path>
+                  </g>
+                  <path fill="#FFFFFF"
+                    d="M14.9,49h-3.3v4.1c0,0.4-0.3,0.7-0.8,0.7c-0.4,0-0.7-0.3-0.7-0.7V42.9c0-0.6,0.5-1.1,1.1-1.1h3.7 c2.4,0,3.8,1.7,3.8,3.6C18.7,47.4,17.3,49,14.9,49z M14.8,43.1h-3.2v4.6h3.2c1.4,0,2.4-0.9,2.4-2.3C17.2,44,16.2,43.1,14.8,43.1z M25.2,53.8h-3c-0.6,0-1.1-0.5-1.1-1.1v-9.8c0-0.6,0.5-1.1,1.1-1.1h3c3.7,0,6.2,2.6,6.2,6C31.4,51.2,29,53.8,25.2,53.8z M25.2,43.1 h-2.6v9.3h2.6c2.9,0,4.6-2.1,4.6-4.7C29.9,45.2,28.2,43.1,25.2,43.1z M41.5,43.1h-5.8V47h5.7c0.4,0,0.6,0.3,0.6,0.7 s-0.3,0.6-0.6,0.6h-5.7v4.8c0,0.4-0.3,0.7-0.8,0.7c-0.4,0-0.7-0.3-0.7-0.7V42.9c0-0.6,0.5-1.1,1.1-1.1h6.2c0.4,0,0.6,0.3,0.6,0.7 C42.2,42.8,41.9,43.1,41.5,43.1z">
+                  </path>
+                </g>
+              </svg>
+              <button class="text-sm"></button>
+            </div>
+
           </template>
 
         </div>
@@ -69,11 +93,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { deleteEjemplar, type Ejemplar } from '../services/ejemplarService'
+import { deleteEjemplar, verPdf, type Ejemplar } from '../services/ejemplarService'
 import Swal from 'sweetalert2'
 
 const props = defineProps<{ ejemplar: Ejemplar }>()
-const emit = defineEmits(['edit','ejemplarEliminado'])
+const emit = defineEmits(['edit', 'ejemplarEliminado'])
 import { useCookies } from '../../../utils/cookiesManager';
 const { isAdmin } = useCookies()
 

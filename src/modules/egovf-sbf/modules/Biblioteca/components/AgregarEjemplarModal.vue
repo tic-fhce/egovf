@@ -37,11 +37,22 @@
           <img v-if="!isBase64" :src="`${form.portada}`" class="max-h-40 mx-auto rounded border" alt="Portada" />
           
         </div>
+        <div class="mb-4">
+          <label class="form-label">Contenido (PDF)</label>
+          <input type="file" class="form-control" accept="application/pdf" @change="handlePdfChange" ref="pdfInput"/>
+          <p v-if="previewPdf" class="text-sm mt-1 text-gray-500">Archivo seleccionado: {{ previewPdf }}</p>
+        </div>
+
       </CModalBody>
 
       <CModalFooter>
-        <CButton color="danger" @click="cerrar">Cancelar</CButton>
-        <CButton color="success" type="submit">{{ isEdit ? 'Actualizar' : 'Guardar' }}</CButton>
+        <CButton color="danger" class="text-white"  @click="cerrar">Cancelar</CButton>
+        <CButton color="success" class="text-white" type="submit">{{ isEdit ? 'Actualizar' : 'Guardar' }}</CButton>
+        <CButton v-if="props.ejemplarEditar?.contenido_pdf"
+          @click="verPdf(props.ejemplarEditar)"
+          class="bg-blue-600 tracking-wide text-white shadow-md transition hover:bg-blue-700 focus:outline-none">
+          Ver PDF
+        </CButton>
       </CModalFooter>
     </form>
   </CModal>
@@ -50,13 +61,15 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import Swal from 'sweetalert2'
-import { type Ejemplar, EstadoEjemplar, createEjemplar, updateEjemplar } from '../services/ejemplarService'
+import { type Ejemplar, EstadoEjemplar, createEjemplar, updateEjemplar, verPdf } from '../services/ejemplarService'
 
 const previewPortada = ref<string>('')
 const nameFileImg = ref<string>('')
 const isBase64 = ref<boolean>(false)
 const isEdit = ref<boolean>(false)
 const imageFile = ref<File>();
+const pdfFile = ref<File>();
+const previewPdf = ref<string>('')
 
 const props = defineProps<{
   visible: boolean
@@ -71,6 +84,7 @@ const form = ref<Partial<Ejemplar>>({
   estado: EstadoEjemplar.SinEstado,
   direccion: '',
   portada: '',
+  contenido_pdf: '',
   id_libro: props.idLibro,
 })
 
@@ -85,6 +99,7 @@ watch(() => props.visible, (newVal) => {
         id_libro: props.idLibro, // Asegurar que el id del libro sea el correcto
       }
       previewPortada.value = props.ejemplarEditar.portada || '/uploads/portadas/bookCover.png'
+      previewPdf.value = props.ejemplarEditar.contenido_pdf;
     } else {
       // Si no hay ejemplar, estamos creando uno nuevo
       isEdit.value = false
@@ -92,6 +107,7 @@ watch(() => props.visible, (newVal) => {
         estado: EstadoEjemplar.SinEstado,
         direccion: '',
         portada: props.portadaLibro || '',
+        contenido_pdf: '',
         id_libro: props.idLibro,
       }
       previewPortada.value = props.portadaLibro || '/uploads/portadas/bookCover.png'
@@ -129,6 +145,19 @@ const handleFileChange = (e: Event) => {
   reader.readAsDataURL(file)
 }
 
+const handlePdfChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file || !file.type.includes('pdf')) {
+    Swal.fire('Archivo inválido', 'Solo se permiten archivos PDF.', 'warning')
+    return
+  }
+  pdfFile.value = file
+  
+  form.value.contenido_pdf = `nuevo`
+  previewPdf.value = file.name
+}
+
 const cerrar = () => {
   isBase64.value = false
   nameFileImg.value = ''
@@ -136,6 +165,7 @@ const cerrar = () => {
 }
 
 const guardar = async () => {
+  console.log('guardar')
   if (!form.value.estado || !form.value.direccion) {
     Swal.fire('Campos incompletos', 'Debe llenar todos los campos obligatorios.', 'warning')
     return
@@ -145,14 +175,17 @@ const guardar = async () => {
     form.value.portada = (isBase64.value) ? `/uploads/portadas/${nameFileImg.value}`: form.value.portada
     if (isEdit.value) {
       // Si es edición, actualizamos el ejemplar
-      await updateEjemplar(form.value, imageFile.value as File)
+      await updateEjemplar(form.value, imageFile.value as File, pdfFile.value)
       Swal.fire('Éxito', 'Ejemplar actualizado correctamente.', 'success')
     } else {
       // Si es creación, agregamos el ejemplar
-      await createEjemplar(form.value, imageFile.value as File)
+      await createEjemplar(form.value, imageFile.value as File, pdfFile.value)
       Swal.fire('Éxito', 'Ejemplar agregado correctamente.', 'success')
     }
-
+    pdfFile.value = undefined;
+    imageFile.value = undefined;
+    previewPdf.value = ''
+    
     emit('ejemplarCreado')
     cerrar()
   } catch (error) {
