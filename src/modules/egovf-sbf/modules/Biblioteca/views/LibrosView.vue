@@ -198,6 +198,9 @@ const viewPdf = async(libro: Libro) => {
   const EjemplarData = await getEjemplaresByLibroId(libro.id_libro);
   if(EjemplarData.length < 0) return
 
+  EjemplarData.forEach(ej => {
+    ej.estado = Number(ej.estado)
+  })
   const estadosPermitidos = [EstadoEjemplar.Disponible, EstadoEjemplar.Prestado];
   
   const ejemplarDisponible = EjemplarData.find(

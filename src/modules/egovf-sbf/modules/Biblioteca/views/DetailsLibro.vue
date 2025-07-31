@@ -123,8 +123,14 @@ const cargarDatos = async () => {
     libro.value = await getLibroById(props.idLibro)
     if (libro.value?.id_libro) {
       ejemplares.value = await getEjemplaresByLibroId(libro.value.id_libro)
-      ejemplarDisponible.value = ejemplares.value.find(e => e.estado === EstadoEjemplar.Disponible && e.portada) || null
+      ejemplares.value.forEach(ej => {
+        ej.estado = Number(ej.estado)
+      })
+      ejemplarDisponible.value = ejemplares.value.find(
+        e => [EstadoEjemplar.Disponible, EstadoEjemplar.Reservado].includes(e.estado) && e.portada
+      ) || null;
       portada.value = ejemplarDisponible.value?.portada || '/ruta/portadas/bookCover.png'
+      console.log(portada.value)
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || '/uploads/portadas/bookCover.png'
     }
   } catch (error) {

@@ -155,6 +155,9 @@ onMounted(async () => {
         // previewPdf.value = data.contenido_pdf || ''
       }
       ejemplares.value = await getEjemplaresByLibroId(props.idLibro)
+      ejemplares.value.forEach(ej => {
+        ej.estado = Number(ej.estado)
+      })
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
       const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible);
       // const cantidadDisponibles = disponibles.length;
