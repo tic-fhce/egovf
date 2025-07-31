@@ -29,7 +29,29 @@ export const getPrestamoById = async (id_prestamo: number): Promise<Prestamo|nul
     throw new Error('Error al obtener los préstamos');
   }
 };
+export const getPrestamoByIdLector = async (id: number): Promise<Prestamo[]|[]> => {
+  try {
+    const { data } = await SBFApi.get<Prestamo[]>(`/prestamo/prestamos-lector`, {
+      params: { id }
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al obtener los préstamos de usuario');
+  }
+};
 
+export const getPrestamoByIdAdmin = async (idUsuario: number): Promise<Prestamo[]|null|[]> => {
+  try {
+    const { data } = await SBFApi.get<Prestamo[]>(`/prestamo/prestamos-admin-biblioteca`, {
+      params: { idUsuario }
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al obtener los préstamos de usuario');
+  }
+};
 
 export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partial<EstaEn>, ejemplar: Partial<Ejemplar>) => {
   try {

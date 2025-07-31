@@ -90,17 +90,17 @@ interface EstaEn {
 }
 
 // Servicios (asumidos, deben implementarse)
-import { getPrestamos, deletePrestamo } from '../services/prestamoService';
+import { getPrestamos, deletePrestamo, getPrestamoByIdLector, getPrestamoByIdAdmin } from '../services/prestamoService';
 import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 
 const router = useRouter();
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon } from '../../components';
-const { isAdmin } = useCookies()
+const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 
 const titulo = 'Gestión de Préstamos';
 
-const prestamos = ref<Prestamo[]>([]);
+const prestamos = ref<Prestamo[]| [] | null>([]);
 const libros = ref<Libro[]>([]);
 const esta_en = ref<EstaEn[]>([]);
 const tablaCargada = ref(false);
@@ -114,7 +114,7 @@ async function cargarDatos() {
     destruirDataTable();
     tablaCargada.value = false;
     const [prestamosData, librosData, ] = await Promise.all([
-      getPrestamos(),
+      getPrestamosUser(),
       getLibros(),
     ]);
     prestamos.value = prestamosData;
@@ -139,6 +139,19 @@ const destruirDataTable = () => {
   const table = $('#prestamosTabla').DataTable();
   if (table) table.destroy();
 };
+
+const getPrestamosUser = async (): Promise<Prestamo[] | [] | null> => {
+  if (isLector.value) {
+    if (!cif.value) throw new Error('No se encontró el ID del lector')
+    return await getPrestamoByIdLector(+cif.value)
+  } else if (isSuperAdmin.value) {
+    return await getPrestamos()
+  } else if (isAdmin.value) {
+     return await getPrestamoByIdAdmin(+cif.value)
+  } else {
+    throw new Error('Rol de usuario no reconocido')
+  }
+}
 
 const crearPrestamo = () => {
   router.push({
@@ -182,7 +195,7 @@ const eliminarPrestamo = async (id_prestamo: number) => {
       deletePrestamo(id_prestamo),
       fetch(`/api/esta_en/${id_prestamo}`, { method: 'DELETE' }),
     ]);
-    prestamos.value = prestamos.value.filter(p => p.id_prestamo !== id_prestamo);
+    prestamos.value = prestamos.value?.filter(p => p.id_prestamo !== id_prestamo) || [] || null;
     showToast('success', 'Préstamo eliminado correctamente');
     await cargarDatos();
   } catch {
