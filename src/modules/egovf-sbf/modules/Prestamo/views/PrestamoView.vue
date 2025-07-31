@@ -9,35 +9,31 @@
   <form @submit.prevent="guardar" class="grid grid-cols-1 sm:grid-cols-2 bg-white px-5 gap-5">
     <!-- Columna izquierda -->
     <div class="first-col">
-      <!-- Buscador de lectores -->
-      <div class="mb-3">
+      
+      <!-- Autocompletado de lectores -->
+      <div class="mb-3 relative">
         <label class="form-label">Buscar Lector (CI, RU o Nombre)</label>
         <input
           v-model="lectorSearch"
           @input="searchLectors"
           class="form-control"
           placeholder="Ingrese CI, RU o nombre"
+          @focus="showLectorDropdown = true"
+          @blur="hideDropdownWithDelay"
         />
-      </div>
-
-      <!-- Lista de lectores encontrados -->
-      <div v-if="filteredLectors.length" class="mb-3">
-        <label class="form-label">Lectores Encontrados</label>
-        <select
-          v-model="form.id_lector"
-          @change="selectLector"
-          class="form-control"
-          required
+        <ul
+          v-if="showLectorDropdown && filteredLectors.length"
+          class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-auto"
         >
-          <option value="">Seleccione un lector</option>
-          <option
+          <li
             v-for="lector in filteredLectors"
             :key="lector.id_lector"
-            :value="lector.id_lector"
+            @mousedown.prevent="selectLectorFromDropdown(lector)"
+            class="px-4 py-2 hover:bg-blue-100 cursor-pointer"
           >
             {{ lector.nombre }} {{ lector.apellido_pat }} {{ lector.apellido_mat }} (CI: {{ lector.ci }})
-          </option>
-        </select>
+          </li>
+        </ul>
       </div>
 
       <!-- Datos del lector seleccionado -->
@@ -51,35 +47,30 @@
         <p><strong>Carrera:</strong> {{ selectedLector.carrera }}</p>
       </div>
 
-      <!-- Buscador de libros -->
-      <div class="mb-3">
+      <!-- Autocompletado de libros -->
+      <div class="mb-3 relative">
         <label class="form-label">Buscar Libro (Título o Signatura Topográfica)</label>
         <input
           v-model="libroSearch"
           @input="searchLibros"
           class="form-control"
           placeholder="Ingrese título o signatura topográfica"
+          @focus="showLibroDropdown = true"
+          @blur="hideLibroDropdownWithDelay"
         />
-      </div>
-
-      <!-- Lista de libros encontrados -->
-      <div v-if="filteredLibros.length" class="mb-3">
-        <label class="form-label">Libros Encontrados</label>
-        <select
-          v-model="formEsta.idLibro"
-          @change="selectLibro"
-          class="form-control"
-          required
+        <ul
+          v-if="showLibroDropdown && filteredLibros.length"
+          class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg max-h-60 overflow-auto"
         >
-          <option value="">Seleccione un libro</option>
-          <option
+          <li
             v-for="libro in filteredLibros"
             :key="libro.id_libro"
-            :value="libro.id_libro"
+            @mousedown.prevent="selectLibroFromDropdown(libro)"
+            class="px-4 py-2 hover:bg-blue-100 cursor-pointer"
           >
             {{ libro.titulo }} (Signatura: {{ libro.signatura_topografica }})
-          </option>
-        </select>
+          </li>
+        </ul>
       </div>
 
       <!-- Datos del libro seleccionado -->
@@ -269,9 +260,24 @@ const searchLectors = () => {
   );
 };
 
-const selectLector = () => {
-  selectedLector.value =
-    lectores.value.find((l) => l.id_lector === form.value.id_lector) || null;
+const showLectorDropdown = ref(false);
+let hideDropdownTimeout: number | null = null;
+
+const hideDropdownWithDelay = () => {
+  // Esto da tiempo a que el usuario haga clic en una opción
+  hideDropdownTimeout = window.setTimeout(() => {
+    showLectorDropdown.value = false;
+  }, 150);
+};
+
+const selectLectorFromDropdown = (lector: Lector) => {
+  form.value.id_lector = lector.id_lector;
+  selectedLector.value = lector;
+  lectorSearch.value = `${lector.nombre} ${lector.apellido_pat} ${lector.apellido_mat}`;
+  showLectorDropdown.value = false;
+  if (hideDropdownTimeout) {
+    clearTimeout(hideDropdownTimeout);
+  }
 };
 
 const searchLibros = async () => {
@@ -291,20 +297,33 @@ const searchLibros = async () => {
   }
 };
 
-const selectLibro = async () => {
+const showLibroDropdown = ref(false);
+let hideLibroDropdownTimeout: number | null = null;
+
+const hideLibroDropdownWithDelay = () => {
+  hideLibroDropdownTimeout = window.setTimeout(() => {
+    showLibroDropdown.value = false;
+  }, 150);
+};
+
+const selectLibroFromDropdown = async (libro: Libro) => {
+  formEsta.value.idLibro = libro.id_libro;
+  selectedLibro.value = libro;
+  libroSearch.value = `${libro.titulo}`;
+  showLibroDropdown.value = false;
+  if (hideLibroDropdownTimeout) {
+    clearTimeout(hideLibroDropdownTimeout);
+  }
+
   try {
-    selectedLibro.value =
-      filteredLibros.value.find((l) => l.id_libro === formEsta.value.idLibro) || null;
-    if (selectedLibro.value) {
-      ejemplaresDisponibles.value = (await getEjemplaresByLibroId(formEsta.value.idLibro)).filter(
-        (e) => Number(e.estado) === EstadoEjemplar.Disponible
-      );
-      ejemplaresDisponibles.value.forEach(ej => {
-        ej.estado = Number(ej.estado)
-      })
-      selectedEjemplar.value = null;
-      formEsta.value.idEjemplar = 0;
-    }
+    ejemplaresDisponibles.value = (await getEjemplaresByLibroId(libro.id_libro)).filter(
+      (e) => Number(e.estado) === EstadoEjemplar.Disponible
+    );
+    ejemplaresDisponibles.value.forEach(ej => {
+      ej.estado = Number(ej.estado);
+    });
+    selectedEjemplar.value = null;
+    formEsta.value.idEjemplar = 0;
   } catch (err) {
     console.error(err);
     Swal.fire('Error', 'No se pudo cargar los ejemplares.', 'error');
