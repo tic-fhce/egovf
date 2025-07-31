@@ -10,7 +10,7 @@ export interface EstaEn {
 // Obtener todos los registros de esta_en
 export const getEstaEn = async (): Promise<EstaEn[]> => {
   try {
-    const { data } = await SBFApi.get<EstaEn[]>('/estaen/all');
+    const { data } = await SBFApi.get<EstaEn[]>('/esta_en/listar');
     return data;
   } catch (error) {
     console.error(error);
@@ -27,6 +27,18 @@ export const getEstaEnByPrestamo = async (id_prestamo: number): Promise<EstaEn> 
   } catch (error) {
     console.error(error);
     throw new Error('Error al buscar relaciones esta_en por id_prestamo');
+  }
+};
+
+export const getEstaEnByPrestamoEjemplar = async (idPrestamo: number) => {
+  try {
+    const { data } = await SBFApi.get(`/esta_en/detalle-ejemplares-prestamo`, {
+      params: { idPrestamo }
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al buscar ejemplar por id_prestamo');
   }
 };
 

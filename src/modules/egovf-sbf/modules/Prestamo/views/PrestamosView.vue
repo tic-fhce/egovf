@@ -6,7 +6,8 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isAdmin" title="Agregar Prestamo" @click="crearPrestamo" color="success" class="font" size="sm">
+              <CButton v-if="isAdmin" title="Agregar Prestamo" @click="crearPrestamo" color="success" class="font"
+                size="sm">
                 <!-- <CIcon icon="cilNotes" class="me-2" /> -->
                 <AddIcon class="w-6 h-6" />
               </CButton>
@@ -35,24 +36,25 @@
                   <td>{{ formatDate(prestamo.fecha_pres) }}</td>
                   <td>{{ formatDate(prestamo.fecha_dev) }}</td>
                   <td>
-                    <ul>
-                      <li
-                        v-for="libroId in getLibrosPrestamo(prestamo.id_prestamo)"
-                        :key="libroId"
-                      >
-                        {{ getLibroTitulo(libroId) }}
-                      </li>
-                    </ul>
+                    <div class="flex flex-wrap gap-2">
+                      <div v-for="libro in librosPorPrestamo[prestamo.id_prestamo] || []" :key="libro.id"
+                        class="w-12 h-16">
+                        <img :src="libro.portada || '/ruta/portadas/bookCover.png'" :alt="libro.titulo"
+                          :title="libro.titulo" class="object-cover w-full h-full rounded shadow" />
+                      </div>
+                    </div>
                   </td>
                   <td>
                     <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetalles(prestamo)">
                       <CIcon icon="cil-magnifying-glass" class="me-1" />
                     </CButton>
                     <template v-if="isAdmin">
-                      <CButton title="Editar" class="font me-1" color="warning" size="sm" @click="editarPrestamo(prestamo)">
+                      <CButton title="Editar" class="font me-1" color="warning" size="sm"
+                        @click="editarPrestamo(prestamo)">
                         <CIcon icon="cil-pencil" class="me-1" />
                       </CButton>
-                      <CButton title="Eliminar" class="font" color="danger" size="sm" @click="eliminarPrestamo(prestamo.id_prestamo)">
+                      <CButton title="Eliminar" class="font" color="danger" size="sm"
+                        @click="eliminarPrestamo(prestamo.id_prestamo)">
                         <CIcon icon="cil-trash" class="me-1" />
                       </CButton>
                     </template>
@@ -96,24 +98,33 @@ import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 const router = useRouter();
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon } from '../../components';
+import { getEstaEnByPrestamoEjemplar } from '../services/estaEnService';
 const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 
 const titulo = 'Gestión de Préstamos';
 
-const prestamos = ref<Prestamo[]| [] | null>([]);
+const prestamos = ref<Prestamo[] | [] | null>([]);
+const librosPorPrestamo = ref<Record<number, { id: number; estado: string; portada: string; dir: string; titulo: string }[]>>({});
 const libros = ref<Libro[]>([]);
 const esta_en = ref<EstaEn[]>([]);
 const tablaCargada = ref(false);
 
 onMounted(async () => {
   await cargarDatos();
+  // Pre-cargar libros por préstamo
+  if (prestamos.value) {
+    for (const prestamo of prestamos.value) {
+      await verDetalles(prestamo);
+    }
+  }
+  console.log(librosPorPrestamo.value)
 });
 
 async function cargarDatos() {
   try {
     destruirDataTable();
     tablaCargada.value = false;
-    const [prestamosData, librosData, ] = await Promise.all([
+    const [prestamosData, librosData,] = await Promise.all([
       getPrestamosUser(),
       getLibros(),
     ]);
@@ -147,7 +158,7 @@ const getPrestamosUser = async (): Promise<Prestamo[] | [] | null> => {
   } else if (isSuperAdmin.value) {
     return await getPrestamos()
   } else if (isAdmin.value) {
-     return await getPrestamoByIdAdmin(+cif.value)
+    return await getPrestamoByIdAdmin(+cif.value)
   } else {
     throw new Error('Rol de usuario no reconocido')
   }
@@ -160,11 +171,33 @@ const crearPrestamo = () => {
   });
 };
 
-const verDetalles = (prestamo: Prestamo) => {
-  router.push({
-    name: 'DetallesPrestamo',
-    params: { idPrestamo: prestamo.id_prestamo },
-  });
+const verDetallesPrestamo = async (prestamo: Prestamo) => {
+  await getEstaEnByPrestamoEjemplar(prestamo.id_prestamo)
+  // router.push({
+  // name: 'DetallesPrestamo',
+  // params: { idPrestamo: prestamo.id_prestamo },
+  //});
+};
+
+const verDetalles = async (prestamo: Prestamo) => {
+  try {
+    const data = await getEstaEnByPrestamoEjemplar(prestamo.id_prestamo);
+
+    if (Array.isArray(data)) {
+      librosPorPrestamo.value[prestamo.id_prestamo] = data.map((lib: any) => ({
+        id: lib[0],
+        estado: lib[1],
+        portada: lib[2],
+        dir: lib[3],
+        titulo: lib[4]
+      }));
+    } else {
+      console.warn('Formato de datos inesperado:', data);
+    }
+  } catch (err) {
+    console.error('Error al obtener detalles del préstamo:', err);
+    showToast('error', 'No se pudieron cargar los libros del préstamo');
+  }
 };
 
 const editarPrestamo = (prestamo: Prestamo) => {
