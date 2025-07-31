@@ -6,7 +6,7 @@
           <CRow>
             <CCol :lg="6">{{ titulo }}</CCol>
             <CCol :lg="6" class="text-end">
-              <CButton v-if="isAdmin" title="Agregar Biblioteca" @click="abrirModal(true)" color="success" class="font" size="sm">
+              <CButton v-if="isSuperAdmin" title="Agregar Biblioteca" @click="abrirModal(true)" color="success" class="font" size="sm">
                 <!-- <CIcon icon="cil-library" class="me-2" />Agregar Biblioteca -->
                 <AddIcon class="w-6 h-6"/>
               </CButton>
@@ -24,6 +24,7 @@
                   <th>Horario</th>
                   <th>Facultad</th>
                   <th v-if="isAdmin">Nro. Libros</th>
+                  <th v-if="isSuperAdmin">User</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -35,6 +36,7 @@
                   <td>{{ biblio.horario_atencion }}</td>
                   <td>{{ getNombreFacultad(biblio.id_facultad) }}</td>
                   <td v-if="isAdmin">{{ numerosLibros[biblio.id_biblioteca] || 0 }}</td>
+                  <td v-if="isSuperAdmin">{{ biblio.id_usuario }}</td>
                   <td>
                     <CButton title="Agregar Libros" class="font me-1" color="success" size="sm" @click="verLibros(biblio)">
                       <AddEjemplarIcon class="w-6 h-6"/>
@@ -45,7 +47,7 @@
                         <EditIcon class="w-6 h-6"/>
                         <!-- <CIcon icon="cil-pencil" class="me-1" />Editar -->
                       </CButton>
-                      <CButton title="Eliminar Biblioteca" class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
+                      <CButton v-if="isSuperAdmin" title="Eliminar Biblioteca" class="font" color="danger" size="sm" @click="eliminarBiblioteca(biblio.id_biblioteca)">
                         <DeleteIcon class="w-6 h-6"/>
                         <!-- <CIcon icon="cil-trash" class="me-1" />Eliminar -->
                       </CButton>
@@ -87,6 +89,23 @@
             </select>
           </div>
         </div>
+
+        <div class="mb-3 row">
+          <label class="col-4 col-form-label">Usuario Responsable</label>
+          <div class="col-8">
+            <select class="form-select" v-model="bibliotecaForm.id_usuario">
+              <option disabled value="0">Seleccione un usuario</option>
+              <option
+                v-for="user in usuariosFiltrados"
+                :key="user.id_usuario"
+                :value="user.id_usuario"
+              >
+                {{ user.nombre_usuario }} ({{ user.rol }})
+              </option>
+            </select>
+          </div>
+        </div>
+
       </CModalBody>
       <CModalFooter>
         <CButton @click="abrirModal(false)" color="danger" class="font">
@@ -101,7 +120,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, computed } from 'vue'
 import {
   Biblioteca, getBibliotecas, createBiblioteca,
   updateBiblioteca, deleteBiblioteca
@@ -116,7 +135,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon } from '../../components'
-const { isAdmin } = useCookies()
+import { getUsers, Rol, User } from '../../users/services/userService'
+const { isAdmin, isSuperAdmin } = useCookies()
 
 const titulo = 'Gestión de Bibliotecas'
 
@@ -128,6 +148,12 @@ const esEdicion = ref(false)
 const btnEdit = ref('Agregar')
 const tablaCargada = ref(false)
 
+const usuarios = ref<User[]>([])
+const usuariosFiltrados = computed(() =>
+  usuarios?.value.filter(u =>
+    u.rol.includes(Rol.admin) || u.rol.includes(Rol.superAdmin)
+  )
+)
 type BibliotecaFormFields = {
   [key: string]: string | number
 }
@@ -139,6 +165,7 @@ const bibliotecaForm = ref<BibliotecaFormFields>({
   longitud: 0,
   horario_atencion: '',
   id_facultad: 0,
+  id_usuario: 0,
 })
 
 const camposFormulario: Record<string, string> = {
@@ -152,6 +179,8 @@ const camposFormulario: Record<string, string> = {
 
 onMounted(async () => {
   await cargarDatos()
+  if(isSuperAdmin.value)
+    usuarios.value = await getUsers()
 })
 
 async function cargarDatos() {
@@ -205,7 +234,8 @@ function abrirModal(estado: boolean) {
       latitud: 0,
       longitud: 0,
       horario_atencion: '',
-      id_facultad: 0
+      id_facultad: 0,
+      id_usuario: 0,
     }
     esEdicion.value = false
     btnEdit.value = 'Agregar'
@@ -264,7 +294,6 @@ const guardarBiblioteca = async () => {
     }
     abrirModal(false)
     await cargarDatos()
-    // location.reload()
   } catch(error) {
     console.log(error)
     showToast('error', 'Error al guardar la biblioteca')

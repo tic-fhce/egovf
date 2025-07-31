@@ -8,6 +8,7 @@ export interface Biblioteca {
   longitud: number;
   horario_atencion: string;
   id_facultad: number;
+  id_usuario: number;
 }
 
 // Obtener todas las bibliotecas
@@ -48,6 +49,7 @@ export const createBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
 // Editar biblioteca existente
 export const updateBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
   try {
+    console.log({biblioteca})
     const { data } = await SBFApi.put<Biblioteca>(`/biblioteca/editBiblioteca`, biblioteca);
     return data;
   } catch (error) {
