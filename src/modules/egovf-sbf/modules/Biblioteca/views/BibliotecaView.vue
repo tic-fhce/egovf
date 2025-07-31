@@ -122,7 +122,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, nextTick, computed } from 'vue'
 import {
-  Biblioteca, getBibliotecas, createBiblioteca,
+  Biblioteca, getBibliotecas, getBibliotecaByUser, createBiblioteca,
   updateBiblioteca, deleteBiblioteca
 } from '../services/bibliotecaService'
 import { Facultad, getFacultades } from '../../Facultad/services/facultadService'
@@ -136,7 +136,7 @@ const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon } from '../../components'
 import { getUsers, Rol, User } from '../../users/services/userService'
-const { isAdmin, isSuperAdmin } = useCookies()
+const { isAdmin, isSuperAdmin, isLector,cif } = useCookies()
 
 const titulo = 'Gestión de Bibliotecas'
 
@@ -187,7 +187,11 @@ async function cargarDatos() {
   try {
     destruirDataTable()
     tablaCargada.value = false 
-    bibliotecas.value = await getBibliotecas()
+    if(isSuperAdmin.value || isLector.value)
+      bibliotecas.value = await getBibliotecas()
+    else
+      bibliotecas.value = await getBibliotecaByUser(+cif.value) || null;
+
     for (const biblio of bibliotecas.value) {
       numerosLibros.value[biblio.id_biblioteca] = await getNroLibros(biblio.id_biblioteca)
     }

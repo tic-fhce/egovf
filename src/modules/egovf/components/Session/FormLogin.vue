@@ -90,7 +90,8 @@ const login = async (e) => {
 
     userService.headersUsuario(res.data.token);
     setUserCookies(res.data)
-    router.push('/egovf')
+    // router.push('/egovf')
+    router.push('/sbf')
   } catch (error) {
     Swal.fire({
       icon: 'error',

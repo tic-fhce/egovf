@@ -8,7 +8,7 @@
             <CCol :lg="6" class="text-end">
               <CButton v-if="isAdmin" title="Agregar Libro" @click="crearLibro" color="success" class="font" size="sm">
                 <!-- <CIcon icon="cil-book" class="me-2" />Agregar Libro -->
-                <AddIcon class="w-6 h-6"/>
+                <AddIcon class="w-6 h-6" />
               </CButton>
             </CCol>
           </CRow>
@@ -40,20 +40,23 @@
                   <td>
                     <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetalles(libro)">
                       <!-- <CIcon icon="cil-magnifying-glass" class="me-1" />Detalles -->
-                      <VerIcon class="w-6 h-6"/>
+                      <VerIcon class="w-6 h-6" />
                     </CButton>
-                    <CButton v-if="isAdmin" title="Ver Pdf" class="font me-1" color="secondary" size="sm" @click="viewPdf(libro)">
+                    <CButton v-if="isAdmin" title="Ver Pdf" class="font me-1" color="secondary" size="sm"
+                      @click="viewPdf(libro)">
                       <!-- <CIcon icon="cil-file" class="me-1" />Ver PDF -->
-                      <PdfIcon class="w-6 h-6"/>
+                      <PdfIcon class="w-6 h-6" />
                     </CButton>
                     <template v-if="isAdmin">
-                      <CButton title="Editar Libro"  class="font me-1" color="warning" size="sm" @click="editarLibro(libro)">
+                      <CButton title="Editar Libro" class="font me-1" color="warning" size="sm"
+                        @click="editarLibro(libro)">
                         <!-- <CIcon icon="cil-pencil" class="me-1" />Editar -->
-                        <EditIcon class="w-6 h-6"/>
+                        <EditIcon class="w-6 h-6" />
                       </CButton>
-                      <CButton title="Eliminar Libro" class="font" color="danger" size="sm" @click="eliminarLibro(libro.id_libro)">
+                      <CButton title="Eliminar Libro" class="font" color="danger" size="sm"
+                        @click="eliminarLibro(libro.id_libro)">
                         <!-- <CIcon icon="cil-trash" class="me-1" />Eliminar -->
-                        <DeleteIcon class="w-6 h-6"/>
+                        <DeleteIcon class="w-6 h-6" />
                       </CButton>
                     </template>
                   </td>
@@ -72,9 +75,10 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import {
-  Libro, getLibros, deleteLibro
+  Libro, getLibros, deleteLibro,
+  getLibrosByIdBiblioteca
 } from '../services/libroService'
-import { Biblioteca, getBibliotecas } from '../services/bibliotecaService'
+import { Biblioteca, getBibliotecaByUser, getBibliotecas } from '../services/bibliotecaService'
 import Swal from 'sweetalert2'
 
 import $ from 'jquery'
@@ -84,7 +88,7 @@ const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon, DeleteIcon, EditIcon, PdfIcon, VerIcon } from '../../components'
 import { Ejemplar, EstadoEjemplar, getEjemplaresByLibroId, verPdf } from '../services/ejemplarService'
-const { isAdmin } = useCookies()
+const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 const titulo = 'Gestión de Libros'
 
 const libros = ref<Libro[]>([])
@@ -100,11 +104,22 @@ async function cargarDatos() {
   try {
     destruirDataTable()
     tablaCargada.value = false
-
-    const [dataLibro, dataBibliotecas] = await Promise.all([
-      getLibros(),
-      getBibliotecas(),
-    ]);
+    let dataLibro: Libro[] = [];
+    let dataBibliotecas: Biblioteca[] = [];
+    if (isSuperAdmin.value || isLector.value) {   
+      [dataLibro, dataBibliotecas] = await Promise.all([
+        getLibros(),
+        getBibliotecas(),
+      ]);
+    }else{
+      const dataBibliotecas = await getBibliotecaByUser(+cif.value);
+        if (dataBibliotecas.length > 0) {
+        const librosPorBiblioteca = await Promise.all(
+          dataBibliotecas.map(b => getLibrosByIdBiblioteca(b.id_biblioteca))
+        );
+        dataLibro = librosPorBiblioteca.flat();
+      }
+    }
 
     libros.value = dataLibro
     bibliotecas.value = dataBibliotecas
@@ -146,15 +161,15 @@ const verDetalles = (libro: Libro) => {
 
   router.push({
     name: 'DetallesLibro',
-    params: { idLibro: libro.id_libro},
+    params: { idLibro: libro.id_libro },
   })
 
 }
 
 function editarLibro(libro: Libro) {
-   router.push({
+  router.push({
     name: 'libro',
-    params: { idLibro: libro.id_libro},
+    params: { idLibro: libro.id_libro },
   })
 }
 
@@ -194,15 +209,15 @@ const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: stri
     showConfirmButton: false,
   })
 }
-const viewPdf = async(libro: Libro) => {
+const viewPdf = async (libro: Libro) => {
   const EjemplarData = await getEjemplaresByLibroId(libro.id_libro);
-  if(EjemplarData.length < 0) return
+  if (EjemplarData.length < 0) return
 
   EjemplarData.forEach(ej => {
     ej.estado = Number(ej.estado)
   })
   const estadosPermitidos = [EstadoEjemplar.Disponible, EstadoEjemplar.Prestado];
-  
+
   const ejemplarDisponible = EjemplarData.find(
     e =>
       estadosPermitidos.includes(e.estado) &&

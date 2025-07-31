@@ -35,6 +35,18 @@ export const getBibliotecaById = async (idBiblioteca: number) => {
   }
 };
 
+export const getBibliotecaByUser = async (idUsuario: number) => {
+  try {
+    const { data } = await SBFApi.get<Biblioteca[]>(`/biblioteca/por-usuario`, {
+      params: { idUsuario }
+    });
+    return data;
+  } catch (error) {
+    console.error('Error al obtener la biblioteca:', error);
+    throw new Error('Error getting bibliotecas');
+  }
+};
+
 // Crear nueva biblioteca
 export const createBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
   try {

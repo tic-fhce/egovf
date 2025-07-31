@@ -45,12 +45,17 @@ export function useCookies() {
     const rol = getCookie('rol');
     return rol ? rol.includes(Rol.admin) : false; // Verifica que rol no sea null
   });
+  const isLector = computed(() => {
+    const rol = getCookie('rol');
+    return rol ? rol.includes(Rol.lector) : false; // Verifica que rol no sea null
+  });
 
   return {
     setUserRolCookies,
     getCookie,
     isSuperAdmin,
     isAdmin,
+    isLector,
     cif: computed(() => Number(getCookie('cif')) ),
   }
 }
