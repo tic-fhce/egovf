@@ -112,7 +112,7 @@
             :key="ejemplar.codigo"
             :value="ejemplar.codigo"
           >
-            Ejemplar {{ ejemplar.codigo }} (Estado: {{ ejemplar.estado }})
+            Ejemplar {{ ejemplar.codigo }} (Estado: {{ estadoNombre(ejemplar.estado) }})
           </option>
         </select>
       </div>
@@ -297,8 +297,11 @@ const selectLibro = async () => {
       filteredLibros.value.find((l) => l.id_libro === formEsta.value.idLibro) || null;
     if (selectedLibro.value) {
       ejemplaresDisponibles.value = (await getEjemplaresByLibroId(formEsta.value.idLibro)).filter(
-        (e) => e.estado === EstadoEjemplar.Disponible
+        (e) => Number(e.estado) === EstadoEjemplar.Disponible
       );
+      ejemplaresDisponibles.value.forEach(ej => {
+        ej.estado = Number(ej.estado)
+      })
       selectedEjemplar.value = null;
       formEsta.value.idEjemplar = 0;
     }
@@ -313,6 +316,10 @@ const selectEjemplar = () => {
     ejemplaresDisponibles.value.find((e) => e.codigo === formEsta.value.idEjemplar) || null;
 };
 
+const estadoNombre = (estado: number | string | null | undefined): string => {
+  const num = Number(estado ?? EstadoEjemplar.SinEstado)
+  return EstadoEjemplar[num] ?? 'Desconocido'
+}
 const guardar = async () => {
   try {
     if (!form.value.id_lector || !formEsta.value.idLibro || !formEsta.value.idEjemplar || !form.value.fecha_pres || !form.value.fecha_dev ) {
