@@ -12,10 +12,7 @@
           <label class="form-label">Estado</label>
           <select class="form-control" v-model="form.estado" required>
             <option value="">Seleccione</option>
-            <option v-for="estado in estados" :key="estado" :value="estado">{{ estado }}</option>
-            <!-- <option value="Disponible">Disponible</option>
-            <option value="Prestado">Prestado</option>
-            <option value="Dañado">Dañado</option> -->
+            <option v-for="estado in estados" :key="estado.value" :value="estado.value">{{ estado.label }}</option>
           </select>
         </div>
 
@@ -77,7 +74,11 @@ const props = defineProps<{
   portadaLibro?: string
   ejemplarEditar?: Ejemplar 
 }>()
-const estados = Object.values(EstadoEjemplar).slice(0, -1);
+// const estados = Object.values(EstadoEjemplar).slice(0, -1);
+const estados = Object.entries(EstadoEjemplar)
+  .filter(([key, value]) => typeof value === 'number' && key !== 'SinEstado')
+  .map(([key, value]) => ({ label: key, value }))
+
 const emit = defineEmits(['close', 'ejemplarCreado'])
 
 const form = ref<Partial<Ejemplar>>({
@@ -165,12 +166,10 @@ const cerrar = () => {
 }
 
 const guardar = async () => {
-  console.log('guardar')
   if (!form.value.estado || !form.value.direccion) {
     Swal.fire('Campos incompletos', 'Debe llenar todos los campos obligatorios.', 'warning')
     return
   }
-
   try {
     form.value.portada = (isBase64.value) ? `/uploads/portadas/${nameFileImg.value}`: form.value.portada
     if (isEdit.value) {

@@ -3,10 +3,12 @@ import { API_URL_EGOVF_SBF_FL } from '@env'
 import Swal from 'sweetalert2'
 
 export enum EstadoEjemplar{
-  Disponible = "Disponible",
-  Prestado = "Prestado",
-  Dañado = "Dañado",
-  SinEstado = "",
+  Disponible = 1,
+  Prestado = 2,
+  Reservado = 3,
+  Perdido = 4,
+  Dañado = 5,
+  SinEstado = 6,
 }
 
 export interface Ejemplar {

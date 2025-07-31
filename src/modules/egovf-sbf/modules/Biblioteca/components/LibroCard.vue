@@ -1,7 +1,7 @@
 <template>
   <article class="bg-white p-3 rounded-xl shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-xl">
 
-    <a href="#" >
+    <a href="#" @click.prevent>
       <div class="relative overflow-hidden rounded-xl">
         <img v-if="portada && !imageFailed" :src="getImageSrc(portada)" alt="Portada" class="h-64 w-full object-cover"
           />
@@ -17,7 +17,7 @@
         <p><span class="font-semibold">Disponible:</span> {{ disponible }}</p>
         <p v-if="ejemplar">
           <span class="font-semibold">Estado: </span>
-          <span :class="estadoClass">{{ ejemplar.estado }}</span>
+          <span :class="estadoClass">{{ estadoNombre  }}</span>
         </p>
           <div class="mt-10 flex flex-row items-center md:flex-row">
 
@@ -69,10 +69,13 @@ async function cargarDatos() {
   try {
     const ejemplares = await getEjemplaresByLibroId(props.libro.id_libro)
     if (ejemplares && ejemplares.length > 0) {
+      ejemplares.forEach(ej => {
+        ej.estado = Number(ej.estado)
+      })
       ejemplar.value = ejemplares[0] 
       portada.value = ejemplares[0].portada 
       disponible.value = ejemplares.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible).length
-      ejemplar.value.estado = (disponible.value > 0) ? EstadoEjemplar.Disponible : EstadoEjemplar.SinEstado
+      ejemplar.value.estado = (disponible.value > 0) ? EstadoEjemplar.Disponible : EstadoEjemplar.Prestado || EstadoEjemplar.Reservado
     }else{
       portada.value = defaultImage
     }
@@ -98,17 +101,27 @@ const getImageSrc = (portada: string) => {
 // }
 
 const estadoClass = computed(() => {
-  if (!ejemplar.value) return 'text-gray-600'
-  switch (ejemplar.value.estado.toLowerCase()) {
-    case 'disponible':
+  const estadoNum = Number(ejemplar.value?.estado ?? 0)
+
+  switch (estadoNum) {
+    case EstadoEjemplar.Disponible:
       return 'text-green-600 font-semibold'
-    case 'prestado':
+    case EstadoEjemplar.Prestado:
       return 'text-red-600 font-semibold'
+    case EstadoEjemplar.Reservado:
+      return 'text-yellow-600 font-semibold'
+    case EstadoEjemplar.Perdido:
+    case EstadoEjemplar.Dañado:
+      return 'text-gray-500 font-semibold italic'
     default:
-      return 'text-red-600 font-semibold'
+      return 'text-gray-400 italic'
   }
 })
 
+const estadoNombre = computed(() => {
+  const num = Number(ejemplar.value?.estado ?? EstadoEjemplar.SinEstado)
+  return EstadoEjemplar[num] ?? 'Desconocido'
+})
 const verLibro = async (codigo: number) => {
     
   router.push({

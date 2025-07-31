@@ -12,7 +12,7 @@
       <div class="mt-3 px-1">
         <p><span class="font-semibold">Código Ejemplar:</span> {{ ejemplar.codigo }}</p>
         <!-- <p><span class="font-semibold">portada:</span> {{ ejemplar.portada }}</p> -->
-        <p> <span :class="estadoClass">{{ ejemplar.estado }}</span></p>
+        <p> <span :class="estadoClass">{{ estadoNombre }}</span></p>
         <p>{{ ejemplar.direccion }}</p>
         <!-- <p><span class="font-semibold">ID Libro:</span> {{ ejemplar.id_libro }}</p> -->
         <!-- <div class="mt-3 flex items-end justify-between"> -->
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { deleteEjemplar, verPdf, type Ejemplar } from '../services/ejemplarService'
+import { deleteEjemplar, EstadoEjemplar, verPdf, type Ejemplar } from '../services/ejemplarService'
 import Swal from 'sweetalert2'
 
 const props = defineProps<{ ejemplar: Ejemplar }>()
@@ -73,15 +73,37 @@ const handleImageError = () => {
   imageFailed.value = true
 }
 
+// const estadoClass = computed(() => {
+//   switch (props.ejemplar.estado.toLowerCase()) {
+//     case 'disponible':
+//       return 'text-green-600 font-semibold'
+//     case 'prestado':
+//       return 'text-red-600 font-semibold'
+//     default:
+//       return 'text-red-600'
+//   }
+// })
 const estadoClass = computed(() => {
-  switch (props.ejemplar.estado.toLowerCase()) {
-    case 'disponible':
+  const estadoNum = Number(props.ejemplar?.estado ?? 0)
+
+  switch (estadoNum) {
+    case EstadoEjemplar.Disponible:
       return 'text-green-600 font-semibold'
-    case 'prestado':
+    case EstadoEjemplar.Prestado:
       return 'text-red-600 font-semibold'
+    case EstadoEjemplar.Reservado:
+      return 'text-yellow-600 font-semibold'
+    case EstadoEjemplar.Perdido:
+    case EstadoEjemplar.Dañado:
+      return 'text-gray-500 font-semibold italic'
     default:
-      return 'text-red-600'
+      return 'text-gray-400 italic'
   }
+})
+
+const estadoNombre = computed(() => {
+  const num = Number(props.ejemplar?.estado ?? EstadoEjemplar.SinEstado)
+  return EstadoEjemplar[num] ?? 'Desconocido'
 })
 
 const eliminarEjemplar = async (codigo: number) => {
