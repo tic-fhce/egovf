@@ -1,11 +1,23 @@
 <template>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb custom-breadcrumb">
+        <li class="breadcrumb-item">
+            <router-link to="/menuObs" class="breadcrumb-link">Menu de Observaciones</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} >
+        </li>
+    </ol>
+  </nav>
   <CRow>
+
     <CCol :xs="12">
       <CCard>
-        <CCardHeader class="headercolor">
-          <CRow class="text-center">
-            <label class="d-none d-md-flex me-auto">{{titulo}}</label>
-          </CRow>
+        <CCardHeader class="headercolor justify-content-between">
+          <div class="align-items-center">
+            <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
+            <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
+          </div>
         </CCardHeader>
         <CCardBody>
           <div class="table-responsive">

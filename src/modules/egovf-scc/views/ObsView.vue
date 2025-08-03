@@ -24,9 +24,9 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>CIF</th>
+                  <th>Ciudadano</th>
+                  <th>Datos</th>
                   <th>UidObs</th>
-                  <th>Tipo</th>
                   <th>Detalle</th>
                   <th>Opciones</th>
                 </tr>
@@ -34,19 +34,19 @@
               <tbody>
                 <tr v-for="lsobs in listaObsCiudadanos" :key="lsobs.id">
                   <th scope="row">{{ lsobs.id }}</th>
+                  <td><CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+ lsobs.foto"  width="70" height="70"/></td>
                   <td>
                     <div>{{ lsobs.cif }}</div>
                     <div class="small text-medium-emphasis">
                         <span>{{ lsobs.nombre }}</span>
                     </div>
                   </td>
-                  <td>{{ lsobs.uidobs }}</td>
-                  <td>
-                    <div>{{ lsobs.tipo }}</div>
+                  <td>{{ lsobs.uidobs }}
                     <div class="small text-medium-emphasis">
-                        <span>{{ lsobs.horas }}</span>
+                        <span>{{ lsobs.tipo }}<br> {{ lsobs.horas }}</span>
                     </div>
                   </td>
+
                   <td>
                     <div>{{ lsobs.detalle }}</div>
                     <div class="small text-medium-emphasis">
@@ -60,9 +60,6 @@
                       </CButton>
                       <CButton color="warning" class="font" size="sm" @click="setObs(lsobs.id)">
                         <CIcon icon="cil-pencil"></CIcon>
-                      </CButton>
-                      <CButton color="dark" class="font" size="sm" @click="setImg(lsobs.id)">
-                        <CIcon icon="cil-clipboard"></CIcon>
                       </CButton>
                     </CButtonGroup>
                   </td>
@@ -119,7 +116,7 @@
           <CCol :lg="6">
             <CInputGroup class="mb-3">
               <CInputGroupText  as="label">CIF </CInputGroupText>
-              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  type="text" v-model="uobs.cif" required="true" placeholder="CIF" />
+              <CFormInput type="text" v-model="uobs.cif" required="true" placeholder="CIF" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
@@ -171,7 +168,7 @@
 
           </CCol>
           <CCol :lg="6">
-            <img :src="uobs.url" alt="" class="img-fluid" />
+            <ComponenteImagen :imagen="uobs.url" />
           </CCol>
         </CRow>
       </CModalBody>
@@ -186,42 +183,12 @@
     </CForm>
   </CModal>
   <!-- END Modal Editar Obserbasiones-->
-
-  <!-- Modal IMG Obserbasiones-->
-  <CModal :visible="modalImgEditar" @close="clickModalImgEditar(false)">
-    <form @submit.prevent="updateImgEmpleado()" enctype="multipart/form-data">
-      <CModalHeader class="headercolor text-center" dismiss @close="clickModalImgEditar(false)">
-        <CModalTitle>
-          <h5>Actualizar Imagen de Observacion</h5>
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <div class="mb-3 row">
-          <label for="imagen" class="col-4 col-form-label">Documento</label>
-          <div class="col-8">
-            <input type="file" ref="obsfileimg" class="form-control" accept="image/png,image/jpeg" @change="selectFileImg()" required="true"/>
-          </div>
-        </div>
-        <CCol>
-          <img :src="uobs.url" alt="" class="img-fluid" />
-        </CCol>
-      </CModalBody>
-      <CModalFooter>
-        <CButton @click="clickModalImgEditar(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
-        </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-check-alt" class="me-2" /> Actualizar Observacion
-        </button>
-      </CModalFooter>
-    </form>
-  </CModal>
-  <!-- END Modal Editar Obserbasiones-->
 </template>
 
 <script>
 //Importamos Componentes
 import ComponenteObs from "@/modules/egovf-scc/components/ComponenteObs.vue";
+import ComponenteImagen from "@/components/Imagen/ComponenteImagen.vue";
 
 import EgovfService from "@/modules/egovf/services/egovfService";
 import UploadService from "@/services/upload/uploadService";
@@ -239,6 +206,7 @@ export default {
   name: "ObsView",
   components: {
     ComponenteObs,
+    ComponenteImagen
   },
   data() {
     return {
@@ -372,6 +340,7 @@ export default {
     this.getDatos();
     this.getGestion();
     this.getListaTipoEmpleado();
+
   },
   methods: {
     selectFile() {
@@ -445,6 +414,7 @@ export default {
             detalle: "",
             fechas:"",
             horas:"",
+            foto:""
 
           };
           if (empleado.cif == obs.cif) {
@@ -458,6 +428,7 @@ export default {
             obsCiudadano.detalle = obs.detalle;
             obsCiudadano.fechas = obs.fechainicio+" | "+obs.fechafin;
             obsCiudadano.horas = obs.horaEntrada+" | "+obs.horaSalida;
+            obsCiudadano.foto = empleado.foto;
             this.listaObsCiudadanos.push(obsCiudadano);
             return false;
           }
@@ -598,44 +569,6 @@ export default {
           }
         });
     },
-    async updateImgEmpleado() {
-      //Funcion actualizar una Observacion del Usuario
-      const fromData = new FormData();
-      fromData.append("archivo", this.archivo);
-      try {
-        await this.uploadService.addImagen(fromData).then((response) => {
-          if (response.status == 200) {
-            this.uobs.url = this.uploadService.getUrl() + response.data.nombre;
-            this.uobs.imagen = response.data.nombre;
-            this.$swal.fire({
-                title:"Desea agregar la Observacione de Asistencia a los Empleados?",
-                showDenyButton: true,
-                icon: "info",
-                confirmButtonText: "Aceptar",
-                denyButtonText: "Cancelar",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.sccService.updateObsEmpleado(this.uobs).then((response) => {
-                      if (response.status == 200) {
-                        this.$swal.fire("El Documento fue Actualizado Corectamente ","","success").then((res) => {
-                            if (res) location.reload();
-                          });
-                      } else {
-                        this.$swal.fire("El Documento no fue Guardad Error" + response.status,"","error");
-                      }
-                    });
-                } else if (result.isDenied) {
-                  this.$swal.fire("Datos Cancelados", "", "info");
-                }
-              });
-          } else {
-            this.$swal.fire("El archivo no pudo ser Guardado  ", "", "error");
-          }
-        });
-      } catch (err) {
-        this.$swal.fire("El archivo no pudo ser Guardado  " + err, "error");
-      }
-    },
     setObs(id) {
       // Funcion que carga los datos de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
@@ -666,28 +599,6 @@ export default {
         }
       });
       this.clickModalObsEditar(true);
-    },
-    setImg(id) {
-      // Funcion que carga los datos de las Observaciones del Usuario
-      this.listaObs.forEach((obs) => {
-        if (obs.id === id) {
-          this.uobs.id = id;
-          this.uobs.idObs = obs.idObs;
-          this.uobs.cif = obs.cif;
-          this.uobs.sexo = obs.sexo;
-          this.uobs.uidobs = obs.uidobs;
-          this.uobs.fechainicio = obs.fechainicio;
-          this.uobs.fechafin = obs.fechafin;
-          this.uobs.detalle = obs.detalle;
-          this.uobs.imagen = obs.imagen;
-          this.uobs.tipo = obs.tipo;
-          this.uobs.horaEntrada = obs.horaEntrada;
-          this.uobs.horaSalida = obs.horaSalida;
-          this.uobs.url = obs.url;
-          this.uobs.estado = obs.estado;
-        }
-      });
-      this.clickModalImgEditar(true);
     },
     clickModalDetalleObs(Obs) {
       this.modalDetalleObs = Obs;

@@ -18,7 +18,7 @@
       </CWidgetStatsB>
     </CCol>
     <CCol :lg="6">
-      <img :src="obsDetalle.url" alt="" class="img-fluid" />
+      <ComponenteImagen :imagen = "obsDetalle.url"/>
     </CCol>
   </CRow>
 
@@ -27,12 +27,13 @@
 
 //Importamos Componentes
 import ComponenteNombres from "@/modules/egovf/components/Ciudadano/ComponenteNombres.vue";
-
+import ComponenteImagen from "@/components/Imagen/ComponenteImagen.vue";
 export default {
   name:'ComponenteObs',
   props:['obsDetalle'],
   components: {
       ComponenteNombres,
-  },
+      ComponenteImagen
+  }
 }
 </script>

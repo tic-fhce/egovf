@@ -605,9 +605,18 @@
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText as="label">Documento</CInputGroupText>
-          <CFormInput type="file" ref="file"  accept="image/png,image/jpeg" @change="selectFile()" required="true"/>
+            <CInputGroupText as="label">Documento</CInputGroupText>
+                <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg"  @change="selectFile" :valid="fileValid" required="true"/>
+                <CInputGroupText v-if="fileValid">
+                    <CIcon icon="cil-check" class="text-success"/>
+                </CInputGroupText>
         </CInputGroup>
+        
+        <CProgress v-if="uploading" :height="50" class="mb-3">
+            <CProgressBar  :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated >
+                Espere un Momento ........... {{ uploadProgress }} %
+            </CProgressBar>
+        </CProgress>
 
       </CModalBody>
 
@@ -755,6 +764,9 @@ export default {
       modalDias: false,
       sccService: null,
       uploadService: null,
+      uploading: false,
+      uploadProgress: 0,
+      fileValid: false,
       listaBiometrico: [],
       listaPerfil: [],
       reporteFinal: [],
@@ -970,9 +982,20 @@ export default {
     this.obsDetalle.datos.apellido = this.egovf.paterno + " " + this.egovf.materno;
   },
   methods: {
-    selectFile() {
-      // Funcion que permite cambiar los datos del archivo
-      this.archivo = this.$refs.file.files[0];
+    selectFile(event){// Funcion que permite cambiar los datos del archivo
+        const fileInput = this.getSafeFileInput(event);
+        if (!fileInput?.files?.length) {
+            this.resetFileInput();
+            return;
+        }
+        
+        this.archivo = fileInput.files[0];
+        
+        if (!this.validateFile(this.archivo)) {
+            this.resetFileInput();
+            return;
+        }
+        this.fileValid = true;
     },
     async getListarCifCero() {
       // funcion que trae una lista de usuarios Registrados en los Biometricos
@@ -1075,42 +1098,56 @@ export default {
     },
     async addObs() {
       //Funcion para registrar una Observacion del Usuario
-      const fromData = new FormData();
-      fromData.append("archivo", this.archivo);
-      try {
-        //primero subimos el archivo
-        await this.uploadService.addImagen(fromData).then((response) => {
-          if (response.status == 200) {
-            this.obs.url = this.uploadService.getUrl() + response.data.nombre;
-            this.obs.imagen = response.data.nombre;
-            this.obs.cif = this.egovf.cif;
-            this.$swal.fire({
-                title:"Desea agregar las Observaciones de Asistencia al Empleado?" +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
-                showDenyButton: true,
-                icon: "info",
-                confirmButtonText: "Aceptar",
-                denyButtonText: "Cancelar",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.sccService.addObs(this.obs).then((response) => {
-                    if (response.status == 201) {
-                      this.$swal.fire("Las Observaciones fueron Agregados Corectamente a " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,"","success").then((res) => {
-                          if (res) location.reload();
-                        });
-                    } else {
-                      this.$swal.fire("Las Observaciones no fueron Guardados Error" +response.status,"","error");
-                    }
-                  });
-                } else if (result.isDenied) {
-                  this.$swal.fire("Datos Cancelados", "", "info");
-                }
-              });
-          } else {
-            this.$swal.fire("El archivo no pudo ser Guardado  ", "", "error");
+      this.uploading = true;
+      this.uploadProgress = 0;
+      try{
+          const formData = new FormData();
+          formData.append('archivo',this.archivo);
+          const config = {
+              onUploadProgress: progressEvent => {
+                  this.uploadProgress = Math.round(
+                      (progressEvent.loaded * 100) / progressEvent.total
+                  );
+              }
+          };
+          const uploadResponse = await this.uploadService.addImagen(formData, config);
+          if (uploadResponse.status !== 200) {
+              throw new Error('Error al subir archivo');
           }
-        });
-      } catch (err) {
-        this.$swal.fire("El archivo no pudo ser Guardado  " + err, "", "error");
+          
+          this.obs.url = this.uploadService.getUrl()+ uploadResponse.data.nombre;
+          this.obs.imagen = uploadResponse.data.nombre;
+          this.obs.cif = this.egovf.cif;
+
+          this.$swal.fire({
+              title: "Desea agregar las Observaciones de Asistencia al Empleado?" +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
+              showDenyButton: true,
+              icon:'info',
+              confirmButtonText: 'Aceptar',
+              denyButtonText: 'Cancelar',
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  this.sccService.addObs(this.obs).then(response =>{
+                      if(response.status == 201){
+                          this.$swal.fire("Las Observaciones fueron Agregados Corectamente a " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,"","success").then((res)=>{
+                              if(res)
+                                location.reload();
+                          });
+                      }
+                      else{
+                          this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
+                      }
+                  });
+                      
+              } else if (result.isDenied) {
+                  this.$swal.fire('Datos Cancelados', '', 'info');
+              }
+          });
+      }catch(err){
+          this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
+      }finally {
+          this.uploading = false;
+          this.uploadProgress = 0;
       }
     },
     async updateObsBio(id, estado) {
@@ -1390,7 +1427,36 @@ export default {
     mostrarHoraSalida() {
         const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
         return tiposPermitidos.includes(this.obs.tipo);
-    }
+    },
+    //funciones para validar el archivo a subir
+    getSafeFileInput(event) {
+    // Todas las formas posibles de obtener el input
+        return (
+            // CoreUI v4+ (recomendado)
+            this.$refs.fileInput?.$refs?.input ||
+            
+            // Event target
+            event?.target ||
+            
+            // CoreUI v3
+            this.$refs.fileInput?.$el?.querySelector?.('input[type="file"]') ||
+            
+            // Último recurso
+            document.getElementById('filedoc')
+        );
+    },
+
+    validateFile(file) {
+        const VALID_TYPES = ['image/jpeg', 'image/png'];
+        return file && VALID_TYPES.includes(file.type);
+    },
+
+    resetFileInput() {
+        this.archivo=null;
+        this.fileValid = false;
+        const input = this.getSafeFileInput();
+        if (input) input.value = '';
+    },
   },
 };
 </script>

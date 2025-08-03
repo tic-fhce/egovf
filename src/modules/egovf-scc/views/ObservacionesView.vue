@@ -1,3 +1,10 @@
+<!--Observaciones del usuario
+muestra una lista de las obserbaciones deacuerdo a la gestion y el mes seleccionado permite realiza :
+- Visualizar
+- Registrar
+- Editar
+- Eliminar
+ -->
 <template>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb custom-breadcrumb">
@@ -24,7 +31,7 @@
                             <CDropdown variant="btn-group">
                                 <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
                                 <CDropdownMenu>
-                                    <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
+                                    <CDropdownItem><CButton @click="clickModalObs(true)" size="sm" ><CIcon icon="cil-plus" class="me-2" /> Agregar Observaciones</CButton></CDropdownItem>
                                 </CDropdownMenu>
                             </CDropdown>
                         </CCol>
@@ -125,7 +132,7 @@
     <CForm @submit.prevent="addObs()" enctype="multipart/form-data">
         <CModalHeader class="headercolor text-center" dismiss @close="clickModalObs(false)">
             <CModalTitle>
-                <h6><CIcon icon="cil-medical-cross" size="lg" class="me-2"/>Registrar una Observacion de Asistencia</h6>
+                <h6><CIcon icon="cil-plus" size="lg" class="me-2"/>Registrar una Observacion de Asistencia</h6>
             </CModalTitle>
         </CModalHeader>
         <CModalBody>
