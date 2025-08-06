@@ -49,8 +49,12 @@
 
         </div>
         <div class="relative hidden lg:ml-2  lg:block lg:w-1/2">
-          <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-[6rem] rounded-br-none rounded-tl-none">
-            <img :src="`${portada}`">
+          <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-[6rem] rounded-br-none rounded-tl-none ">
+            <img
+              :src="`${portada}`"
+              class="max-w-[300px] max-h-[400px] object-contain"
+              alt="Portada"
+            >
           </div>
         </div>
       </div>
