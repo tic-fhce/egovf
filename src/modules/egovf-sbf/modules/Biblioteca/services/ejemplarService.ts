@@ -38,7 +38,7 @@ export const getEjemplaresByLibroId = async (idLibro: number): Promise<Ejemplar[
     const { data } = await SBFApi.get<Ejemplar[]>(`/ejemplar/buscar/libro?idLibro=${idLibro}`);
     return data.map(ejemplar => ({
       ...ejemplar,
-      portada: getProductImageAction(ejemplar.portada),
+      portada: ejemplar.portada ? getProductImageAction(ejemplar.portada) : '',
       contenido_pdf: ejemplar.contenido_pdf || '',
     }));
     // return data;
