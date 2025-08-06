@@ -1,6 +1,6 @@
 import { SBFApi } from '@sbf/api/SBFApi';
 import { createEstaEn, EstaEn, updateEstaEn } from './estaEnService';
-import { Ejemplar, EstadoEjemplar, updateEjemplar } from '../../Biblioteca/services/ejemplarService';
+import { Ejemplar, EstadoEjemplar, updateStateEjemplar } from '../../Biblioteca/services/ejemplarService';
 
 export interface Prestamo {
   id_prestamo: number;
@@ -65,21 +65,14 @@ export const createPrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
       idEjemplar: estaEn.idEjemplar || 0,
     };
     const savedEstaEn = await createEstaEn(estaEnData);
-    
-    // id 6 /uploads/portadas/esta1.jpg
 
-    const ejemplarUpdate: Partial<Ejemplar> = {
-      ...ejemplar,
-      estado: EstadoEjemplar.Prestado
-    };
-    console.log({ejemplarUpdate})
-    const updatedEjemplar = await updateEjemplar(ejemplarUpdate);
+    const updatedEjemplar = await updateStateEjemplar(ejemplar, EstadoEjemplar.Prestado);
+
     return {
       prestamo: savedPrestamo,
       estaEn: savedEstaEn,
       ejemplar: updatedEjemplar
     };
-
 
   } catch (error) {
     console.error(error);
@@ -99,17 +92,9 @@ export const updatePrestamo = async (prestamo: Partial<Prestamo>, estaEn: Partia
       };
       const savedEstaEn = await updateEstaEn(estaEnData);
       
-      const ejemplarBeforeUpdate: Partial<Ejemplar> = {
-        ...ejemplarBefore,
-        estado: EstadoEjemplar.Disponible
-      };
-      const ejemplarUpdate: Partial<Ejemplar> = {
-        ...ejemplar,
-      estado: EstadoEjemplar.Prestado
-      };
        const [updatedEjemplarBefore, updatedEjemplar] = await Promise.all([
-        updateEjemplar(ejemplarBeforeUpdate),
-        updateEjemplar(ejemplarUpdate)
+        updateStateEjemplar(ejemplarBefore!, EstadoEjemplar.Disponible),
+        updateStateEjemplar(ejemplar!, EstadoEjemplar.Prestado)
       ]);
 
       return {

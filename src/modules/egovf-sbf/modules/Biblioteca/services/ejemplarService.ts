@@ -105,6 +105,20 @@ export const updateEjemplar = async (ejemplar: Partial<Ejemplar>, imageFile?:Fil
   }
 };
 
+export const updateStateEjemplar = async(ejemplar: Partial<Ejemplar>, state: EstadoEjemplar) => {
+  try {
+    const ejemplarUpdate: Partial<Ejemplar> = {
+      ...ejemplar,
+    estado: state
+    };
+    const { data } = await SBFApi.put<Ejemplar>('/ejemplar/edit', ejemplarUpdate);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error updating ejemplar');
+  }
+}
+
 export const deleteEjemplar = async (codigo: number): Promise<void> => {
   try {
     await SBFApi.delete('/ejemplar/delete', { data: { codigo } });
