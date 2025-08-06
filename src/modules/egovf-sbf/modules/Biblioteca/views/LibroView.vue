@@ -71,9 +71,9 @@
         <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-br-none rounded-tl-none">
           <!-- <img :src="`/${portada}`" alt="Portada" class="object-cover rounded" /> -->
              <!-- Previsualización de la imagen (base64) -->
-          <img v-if="isBase64" :src="previewPortada" alt="Portada" class="object-cover rounded" />
+          <img v-if="isBase64" :src="previewPortada" alt="Portada" class="object-cover rounded  max-w-[300px] max-h-[300px]" />
           <!-- Imagen cargada en el servidor -->
-          <img v-if="!isBase64" :src="`${portada}`" alt="Portada" class="object-cover rounded" />
+          <img v-if="!isBase64" :src="`${portada}`" alt="Portada" class="object-cover rounded  max-w-[300px] max-h-[300px]" />
         </div>
       </div>
 

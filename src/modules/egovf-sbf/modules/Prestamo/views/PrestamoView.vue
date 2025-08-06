@@ -115,7 +115,7 @@
             v-if="selectedEjemplar?.portada"
             :src="selectedEjemplar.portada"
             alt="Portada"
-            class="object-cover rounded"
+            class="object-cover rounded max-w-[300px] max-h-[300px]"
           />
           <img
             v-else
