@@ -77,28 +77,13 @@ import $ from 'jquery';
 import 'datatables.net';
 import { CRow, CCol, CCard, CCardHeader, CCardBody, CButton } from '@coreui/vue';
 
-// Interfaces
-interface Prestamo {
-  id_prestamo: number;
-  fecha_pres: string;
-  fecha_dev: string;
-  id_lector: number;
-}
-
-
-interface EstaEn {
-  id_prestamo: number;
-  id_libro: number;
-}
-
-// Servicios (asumidos, deben implementarse)
-import { getPrestamos, deletePrestamo, getPrestamoByIdLector, getPrestamoByIdAdmin } from '../services/prestamoService';
+import { getPrestamos, deletePrestamo, getPrestamoByIdLector, getPrestamoByIdAdmin, Prestamo } from '../services/prestamoService';
 import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 
 const router = useRouter();
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon } from '../../components';
-import { getEstaEnByPrestamoEjemplar } from '../services/estaEnService';
+import { deleteEstaEn, EstaEn, getEstaEnByPrestamoEjemplar } from '../services/estaEnService';
 const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 
 const titulo = 'Gestión de Préstamos';
@@ -117,7 +102,6 @@ onMounted(async () => {
       await verDetalles(prestamo);
     }
   }
-  console.log(librosPorPrestamo.value)
 });
 
 async function cargarDatos() {
@@ -224,27 +208,21 @@ const eliminarPrestamo = async (id_prestamo: number) => {
   if (!confirm.isConfirmed) return;
 
   try {
-    await Promise.all([
-      deletePrestamo(id_prestamo),
-      fetch(`/api/esta_en/${id_prestamo}`, { method: 'DELETE' }),
-    ]);
+    const ejemplar = librosPorPrestamo.value[id_prestamo] ;
+    if (ejemplar){
+      for (const ejem of ejemplar) {
+        console.log(ejem.id);
+        await deleteEstaEn(ejem.id, id_prestamo);
+      }
+    }
+    await deletePrestamo(id_prestamo);
+    // console.log({id_prestamo})
     prestamos.value = prestamos.value?.filter(p => p.id_prestamo !== id_prestamo) || [] || null;
     showToast('success', 'Préstamo eliminado correctamente');
     await cargarDatos();
   } catch {
     showToast('error', 'Error al eliminar el préstamo');
   }
-};
-
-const getLibrosPrestamo = (id_prestamo: number): number[] => {
-  return esta_en.value
-    .filter(rel => rel.id_prestamo === id_prestamo)
-    .map(rel => rel.id_libro);
-};
-
-const getLibroTitulo = (id_libro: number): string => {
-  const libro = libros.value.find(l => l.id_libro === id_libro);
-  return libro ? libro.titulo : 'N/D';
 };
 
 const formatDate = (date: string): string => {

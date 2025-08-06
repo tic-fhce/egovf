@@ -1,4 +1,5 @@
 import { SBFApi } from '@sbf/api/SBFApi';
+import { EstadoEjemplar, getEjemplarById, updateStateEjemplar } from '../../Biblioteca/services/ejemplarService';
 
 export interface EstaEn {
   id_esta_en?: number; 
@@ -27,6 +28,18 @@ export const getEstaEnByPrestamo = async (id_prestamo: number): Promise<EstaEn> 
   } catch (error) {
     console.error(error);
     throw new Error('Error al buscar relaciones esta_en por id_prestamo');
+  }
+};
+
+export const getEstaEnByIdEjemplar = async (idEjemplar: number): Promise<EstaEn> => {
+  try {
+    const { data } = await SBFApi.get<EstaEn[]>(`/esta_en/por-ejemplar`, {
+      params: { idEjemplar }
+    });
+    return data[0];
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al buscar relaciones esta_en por id_ejemplar');
   }
 };
 
@@ -77,11 +90,16 @@ export const updateEstaEn = async (relacion: EstaEn): Promise<EstaEn> => {
 };
 
 // Eliminar un registro esta_en
-export const deleteEstaEn = async (id_esta_en: number): Promise<void> => {
+export const deleteEstaEn = async (id_Ejemplar: number, id_prestamo: number): Promise<void> => {
   try {
-    await SBFApi.delete('/esta_en/delete', {
-      data: { id_esta_en }
-    });
+    const estaEn = await getEstaEnByIdEjemplar(id_Ejemplar);
+
+    // TODO antes de eliminar cambiar el estado del libro(desde el backend)
+    const ejemplar = await getEjemplarById(estaEn.idEjemplar);
+
+    await updateStateEjemplar(ejemplar, EstadoEjemplar.Disponible);
+
+    await SBFApi.delete(`/esta_en/delete?id_libro=${estaEn.idLibro}&id_prestamo=${id_prestamo}`)
   } catch (error) {
     console.error(error);
     throw new Error('Error al eliminar la relación esta_en');

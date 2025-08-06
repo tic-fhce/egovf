@@ -26,8 +26,22 @@ export const getEjemplares = async (): Promise<Ejemplar[]> => {
     // return data;
     return data.map(ejemplar => ({
       ...ejemplar,
-      portada: getProductImageAction(ejemplar.portada)
+      portada: ejemplar.portada ? getProductImageAction(ejemplar.portada) : '',
     }));
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error getting ejemplares');
+  }
+};
+
+export const getEjemplarById = async (codigo: number): Promise<Ejemplar> => {
+  try {
+    const data = await getEjemplares();
+    const ejemplar = data.find((ejemplar) => ejemplar.codigo === codigo);
+    if (!ejemplar) {
+      throw new Error(`Ejemplar con código ${codigo} no encontrado`);
+    }
+    return ejemplar;
   } catch (error) {
     console.error(error);
     throw new Error('Error getting ejemplares');
