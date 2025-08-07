@@ -37,6 +37,27 @@ export const getLectorById = async (id_lector: number): Promise<Lector> => {
     throw new Error('Error al obtener el lector');
   }
 };
+
+export const getLectorNameById = async (id_lector: number): Promise<Partial<Lector>> => {
+  try {
+    const lectors = await getLectors();
+    const lector = lectors.find(lector => lector.id_lector === id_lector);
+
+    if (lector) {
+      // Retornar solo id_lector y nombre combinado
+      return {
+        id_lector: lector.id_lector,
+        nombre: `${lector.nombre} ${lector.apellido_pat}`
+      };
+    } else {
+      throw new Error('Lector no encontrado');
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al obtener el lector');
+  }
+};
+
 export const getLectorByCi = async (ci_lector: number): Promise<Lector> => {
   try {
     const lectors = await getLectors();

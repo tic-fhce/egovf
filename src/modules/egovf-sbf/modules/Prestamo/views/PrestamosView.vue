@@ -33,7 +33,7 @@
                 <tr v-for="(prestamo, index) in prestamos" :key="prestamo.id_prestamo">
                   <td>{{ index + 1 }}</td>
                   <!-- <td>{{ prestamo.id_prestamo }}</td> -->
-                  <td>{{ prestamo.id_lector }}</td>
+                  <td>{{ lectoresMap[prestamo.id_lector] || 'Lector no encontrado' }}</td>
                   <td>{{ formatDate(prestamo.fecha_pres) }}</td>
                   <td>
                     <span :class="{
@@ -109,6 +109,7 @@ import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon, CalendarIcon } from '../../components';
 import { deleteEstaEn, getEstaEnByPrestamoEjemplar } from '../services/estaEnService';
 import { EstadoEjemplar, getEjemplarById, updateStateEjemplar } from '../../Biblioteca/services/ejemplarService';
+import { getLectors } from '../../users/services/lectorService';
 const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 
 const titulo = 'Gestión de Préstamos';
@@ -117,6 +118,8 @@ const prestamos = ref<Prestamo[] | [] | null>([]);
 const librosPorPrestamo = ref<Record<number, { id: number; estado: string; portada: string; dir: string; titulo: string }[]>>({});
 const libros = ref<Libro[]>([]);
 const tablaCargada = ref(false);
+
+const lectoresMap = ref<Record<number, string>>({});
 
 const estadoPrestamo = computed(() => {
   return (prestamo: Prestamo) => {
@@ -145,6 +148,7 @@ async function cargarDatos() {
         await verDetalles(prestamo);
       }
     }
+    await cargarLectores();
     await nextTick();
     tablaCargada.value = true;
     await nextTick();
@@ -238,6 +242,17 @@ const verDetalles = async (prestamo: Prestamo) => {
   }
 };
 
+async function cargarLectores() {
+  try {
+    const lectors = await getLectors(); // Llamar al servicio que obtiene los lectores
+    lectors.forEach(lector => {
+      lectoresMap.value[lector.id_lector] = `${lector.nombre} ${lector.apellido_pat}`;
+    });
+  } catch (error) {
+    console.error('Error al obtener los lectores:', error);
+  }
+}
+
 const editarPrestamo = (prestamo: Prestamo) => {
   router.push({
     name: 'prestamo',
@@ -304,25 +319,21 @@ const devolverLibro = async (id_prestamo: number) => {
     if (ejemplar && ejemplar.length > 0) {
       for (const ejem of ejemplar) {
         console.log(`Devolviendo libro con ID: ${ejem.id}`);
-        // Aquí podrías actualizar el estado de los libros en lugar de eliminarlos
-        // Actualizar el estado del libro a "Disponible"
+        // obtenemos el ejemplar completo(para no borrar los datos del ejemplar)(modificar backend para que reciba ciertos params en editar)
         const data = await getEjemplarById(ejem.id)
-        // console.log(data)
+        // Actualizar el estado del libro a "Disponible"
         await updateStateEjemplar(data, EstadoEjemplar.Disponible);
       }
 
-      // Mostrar un mensaje de éxito
       showToast('success', 'Libro(s) devuelto(s) correctamente');
     } else {
       showToast('error', 'No se encontraron libros en este préstamo.');
     }
 
-    // Recargar datos después de la devolución
     prestamos.value = prestamos.value?.filter(p => p.id_prestamo !== id_prestamo) || [] || null;
     await cargarDatos();
 
   } catch (error) {
-    // Mostrar error en caso de que algo falle
     console.error('Error al devolver el libro:', error);
     showToast('error', 'Error al devolver el libro');
   }
