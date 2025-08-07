@@ -101,7 +101,7 @@ import $ from 'jquery';
 import 'datatables.net';
 import { CRow, CCol, CCard, CCardHeader, CCardBody, CButton } from '@coreui/vue';
 
-import { getPrestamos, deletePrestamo, getPrestamoByIdLector, getPrestamoByIdAdmin, Prestamo } from '../services/prestamoService';
+import { getPrestamos, deletePrestamo, getPrestamoByIdLector, getPrestamoByIdAdmin, Prestamo, getPrestamoByIdAdminFrontend } from '../services/prestamoService';
 import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
 
 const router = useRouter();
@@ -177,7 +177,10 @@ const getPrestamosUser = async (): Promise<Prestamo[] | [] | null> => {
   } else if (isSuperAdmin.value) {
     return await getPrestamos()
   } else if (isAdmin.value) {
-    return await getPrestamoByIdAdmin(+cif.value)
+    const data = await getPrestamoByIdAdminFrontend(+cif.value)
+    console.log(data)
+    return data
+    // return await getPrestamoByIdAdmin(+cif.value)
   } else {
     throw new Error('Rol de usuario no reconocido')
   }
