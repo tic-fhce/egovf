@@ -71,7 +71,7 @@ export const sbfRoutes = {
       props: (route: RouteLocationNormalizedLoaded) => ({
         idPrestamo: Number(route.params.idPrestamo),
       }),
-      // component: () => import('../modules/Prestamo/views/PrestamoView.vue')
+      component: () => import('../modules/Prestamo/views/DetailsPrestamo.vue'),
     },
     {
       path: '/facultad',

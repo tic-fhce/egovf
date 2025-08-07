@@ -62,15 +62,17 @@
                     </div>
                   </td>
                   <td>
-                    <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetalles(prestamo)">
-                      <CIcon icon="cil-magnifying-glass" class="me-1" />
+                    <CButton title="Detalles" class="font me-1" color="info" size="sm" @click="verDetallesPrestamo(prestamo)">
+                      <!-- <CIcon icon="cil-magnifying-glass" class="me-1" /> -->
+                      <CIcon icon="cil-list" class="me-1" />
                     </CButton>
                     <template v-if="isAdmin">
                       <CButton v-if="estadoPrestamo(prestamo) !== 'Devuelto'" title="Editar" class="font me-1" color="warning" size="sm"
                         @click="editarPrestamo(prestamo)">
                         <CIcon icon="cil-pencil" class="me-1" />
                       </CButton>
-                      <CButton title="Eliminar" class="font me-1" color="danger" size="sm"
+                      <CButton v-if="estadoPrestamo(prestamo) !== 'Devuelto'"
+                        title="Eliminar" class="font me-1" color="danger" size="sm"
                         @click="eliminarPrestamo(prestamo.id_prestamo)">
                         <CIcon icon="cil-trash" class="me-1" />
                       </CButton>
@@ -185,11 +187,10 @@ const crearPrestamo = () => {
 };
 
 const verDetallesPrestamo = async (prestamo: Prestamo) => {
-  await getEstaEnByPrestamoEjemplar(prestamo.id_prestamo)
-  // router.push({
-  // name: 'DetallesPrestamo',
-  // params: { idPrestamo: prestamo.id_prestamo },
-  //});
+  router.push({
+  name: 'DetallesPrestamo',
+  params: { idPrestamo: prestamo.id_prestamo },
+  });
 };
 
 const getEstadoPrestamo = (libros: { estado: string }[], fechaDevolucion: string): string => {
