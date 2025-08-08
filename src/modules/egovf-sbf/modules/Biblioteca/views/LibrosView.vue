@@ -112,7 +112,7 @@ async function cargarDatos() {
         getBibliotecas(),
       ]);
     }else{
-      const dataBibliotecas = await getBibliotecaByUser(+cif.value);
+      dataBibliotecas = await getBibliotecaByUser(+cif.value);
         if (dataBibliotecas.length > 0) {
         const librosPorBiblioteca = await Promise.all(
           dataBibliotecas.map(b => getLibrosByIdBiblioteca(b.id_biblioteca))
@@ -123,7 +123,6 @@ async function cargarDatos() {
 
     libros.value = dataLibro
     bibliotecas.value = dataBibliotecas
-
     await nextTick()
     tablaCargada.value = true
     await nextTick()

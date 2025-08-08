@@ -208,8 +208,13 @@ async function cargarDatos() {
 }
 
 const getNroLibros = async(id: number) =>{
-  const data = await getLibrosByIdBiblioteca(id);
-  return data.length;
+  try {
+    const data = await getLibrosByIdBiblioteca(id);
+    return data.length;
+  } catch (error) {
+    console.error('Error in getNroLibros:', error);
+    return 0; // Return 0 as a fallback
+  }
 }
 
 const getNombreFacultad = (id: number) => {
