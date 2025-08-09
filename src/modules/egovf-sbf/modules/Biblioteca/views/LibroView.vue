@@ -107,7 +107,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
 import { type Libro, getLibroById, updateLibro, createLibroFile } from '../services/libroService'
-import { type Biblioteca, getBibliotecas } from '../services/bibliotecaService'
+import { type Biblioteca, getBibliotecaByUser, getBibliotecas } from '../services/bibliotecaService'
 import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 
 interface Props {
@@ -116,7 +116,7 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
-const { cif } = useCookies()
+const { isSuperAdmin, cif } = useCookies()
 
 const idBiblioteca = window.history.state?.idBiblioteca;
 const isEditMode = computed(() => !!props.idLibro)
@@ -146,42 +146,54 @@ const form = ref<Partial<Libro>>({
 })
 
 onMounted(async () => {
-  if (isEditMode.value && props.idLibro) {
-    try {
-      const data = await getLibroById(props.idLibro)
-      libro.value = data
-      if (data) {
-        form.value = { ...data }
-        // previewPdf.value = data.contenido_pdf || ''
-      }
-      ejemplares.value = await getEjemplaresByLibroId(props.idLibro)
-      ejemplares.value.forEach(ej => {
-        ej.estado = Number(ej.estado)
-      })
-      // portada.value = ejemplares.value.find(e => e.portada)?.portada || 'ruta/portadas/bookCover.png'
-      const disponibles = ejemplares.value.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible);
-      // const cantidadDisponibles = disponibles.length;
-      portada.value = disponibles[0]?.portada || '/ruta/portadas/bookCover.png';
-      const dataB = await getBibliotecas()
-      bibliotecas.value = dataB
-    } catch (err) {
-      console.error(err)
-      Swal.fire('Error', 'No se pudo cargar la información del libro.', 'error')
+  try {
+    // Cargar bibliotecas según rol
+    bibliotecas.value = await cargarBibliotecas()
+
+    if (isEditMode.value && props.idLibro) {
+      await cargarDatosLibro(props.idLibro)
+    } else {
+      inicializarFormularioNuevo()
     }
-  } else {
-    try {
-      const data = await getBibliotecas()
-      bibliotecas.value = data
-      if(idBiblioteca)
-        form.value.id_biblioteca = idBiblioteca
-      portada.value = '/ruta/portadas/bookCover.png';
-      form.value.id_usuario = cif.value
-    } catch (err) {
-      console.error(err)
-      Swal.fire('Error', 'No se pudieron cargar las bibliotecas.', 'error')
-    }
+  } catch (err) {
+    console.error(err)
+    Swal.fire('Error', 'Ocurrió un error al cargar los datos.', 'error')
   }
 })
+
+const cargarBibliotecas = async (): Promise<Biblioteca[]> => {
+  return isSuperAdmin.value
+    ? await getBibliotecas()
+    : await getBibliotecaByUser(+cif.value)
+}
+
+const cargarDatosLibro = async (id: number) => {
+  const data = await getLibroById(id)
+  if (!data) {
+    throw new Error("Libro no encontrado")
+  }
+
+  libro.value = data
+  form.value = { ...data }
+
+  ejemplares.value = await getEjemplaresByLibroId(id)
+  ejemplares.value.forEach(ej => {
+    ej.estado = Number(ej.estado)
+  })
+
+  const disponibles = ejemplares.value.filter(ej => ej.estado === EstadoEjemplar.Disponible)
+  portada.value = disponibles[0]?.portada || '/ruta/portadas/bookCover.png'
+}
+
+const inicializarFormularioNuevo = () => {
+  portada.value = '/ruta/portadas/bookCover.png'
+  form.value.id_usuario = cif.value
+
+  if (idBiblioteca) {
+    form.value.id_biblioteca = idBiblioteca
+  }
+}
+
 
 const handlePdfChange = (event: Event) => {
   const input = event.target as HTMLInputElement
