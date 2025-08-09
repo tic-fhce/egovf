@@ -10,7 +10,9 @@
       <CModalBody>
         <div class="mb-3">
           <label class="form-label">Estado</label>
-          <select class="form-control" v-model="form.estado" required>
+          <select class="form-control" v-model="form.estado" required
+            :disabled="isEdit && form.estado === EstadoEjemplar.Prestado"
+          >
             <option value="">Seleccione</option>
             <option v-for="estado in estados" :key="estado.value" :value="estado.value">{{ estado.label }}</option>
           </select>
