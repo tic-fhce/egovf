@@ -179,12 +179,14 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
-import { type Libro, getLibros } from '../../Biblioteca/services/libroService';
+import { type Libro, getLibros, getLibrosByIdBiblioteca } from '../../Biblioteca/services/libroService';
 import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
 import { type Lector, getLectors } from '../../users/services/lectorService';
 import { type Prestamo, createPrestamo, getPrestamoById, updatePrestamo } from '../services/prestamoService';
 import { getEstaEnByPrestamo, type EstaEn } from '../services/estaEnService';
-
+import { useCookies } from '../../../utils/cookiesManager';
+import { getBibliotecaByUser } from '../../Biblioteca/services/bibliotecaService';
+const { isSuperAdmin,cif } = useCookies()
 interface Props {
   idPrestamo?: number;
 }
@@ -220,8 +222,20 @@ onMounted(async () => {
     // Cargar lectores
     lectores.value = await getLectors();
     filteredLectors.value = lectores.value;
-    libros.value = await getLibros()
-    filteredLibros.value = libros.value
+    let dataLibro: Libro[] = []
+    if(isSuperAdmin.value){
+      dataLibro = await getLibros();
+    }else{
+      const bibliotecasData = await getBibliotecaByUser(+cif.value);
+      const librosPorBiblioteca = await Promise.all(
+        bibliotecasData.map(biblioteca => getLibrosByIdBiblioteca(biblioteca.id_biblioteca))
+      );
+      dataLibro = librosPorBiblioteca.flat()
+    }
+
+    libros.value = dataLibro;
+    filteredLibros.value = [...dataLibro]
+    
     if (isEditMode.value && props.idPrestamo) {
 
       const [prestamo, estaEn] = await Promise.all([
