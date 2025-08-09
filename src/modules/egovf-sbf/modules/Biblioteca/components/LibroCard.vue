@@ -33,7 +33,10 @@
             <EditIcon class="w-6 h-6"/>
             
           </button>
-
+          <CButton v-if="isAdmin" title="Ver Pdf" class="font me-1" color="secondary" size="sm"
+            @click="viewPdf()">
+            <PdfIcon class="w-6 h-6" />
+          </CButton>
         </div>
       </div>
     </a>
@@ -43,23 +46,24 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
-// import Swal from 'sweetalert2'
+import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId, verPdf } from '../services/ejemplarService'
+import Swal from 'sweetalert2'
 import { type Libro } from '../services/libroService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
-import { EditIcon, VerIcon } from '../../components';
+import { EditIcon, PdfIcon, VerIcon } from '../../components';
 const { isAdmin } = useCookies()
 
 const props = defineProps<{ libro: Libro }>()
-const emit = defineEmits(['edit','libroEliminado'])
+const emit = defineEmits(['edit','libroEliminado', 'view-pdf'])
 const defaultImage = '/ruta/portadas/bookCover.png'
 const imageFailed = ref(false)
 const portada = ref<string>('')
 const disponible = ref<number>(0)
 const ejemplar = ref<Ejemplar | null>(null)
+const EjemplarData = ref<Ejemplar[] | null>(null)
 
 onMounted(async () => {
   await cargarDatos()
@@ -69,6 +73,7 @@ async function cargarDatos() {
   try {
     const ejemplares = await getEjemplaresByLibroId(props.libro.id_libro)
     if (ejemplares && ejemplares.length > 0) {
+      EjemplarData.value = ejemplares;
       ejemplares.forEach(ej => {
         ej.estado = Number(ej.estado)
       })
@@ -77,6 +82,7 @@ async function cargarDatos() {
       disponible.value = ejemplares.filter(ejemplar => ejemplar.estado === EstadoEjemplar.Disponible).length
       ejemplar.value.estado = (disponible.value > 0) ? EstadoEjemplar.Disponible : EstadoEjemplar.Prestado || EstadoEjemplar.Reservado
     }else{
+      EjemplarData.value = [];
       portada.value = defaultImage
     }
   } catch (error) {
@@ -94,11 +100,6 @@ const getImageSrc = (portada: string) => {
   }
   return `${portada}`
 }
-
-// Handle image load error
-// const handleImageError = () => {
-//   imageFailed.value = true
-// }
 
 const estadoClass = computed(() => {
   const estadoNum = Number(ejemplar.value?.estado ?? 0)
@@ -135,7 +136,31 @@ const emitEdit = () => {
   emit('edit', props.libro)
 }
 
+const viewPdf = async () => {
+  // const EjemplarData = await getEjemplaresByLibroId(libro.id_libro);
+  if (EjemplarData.value!.length < 0) return
 
+  EjemplarData.value?.forEach(ej => {
+    ej.estado = Number(ej.estado)
+  })
+  const estadosPermitidos = [EstadoEjemplar.Disponible, EstadoEjemplar.Prestado];
+
+  const ejemplarDisponible = EjemplarData.value?.find(
+    e =>
+      estadosPermitidos.includes(e.estado) &&
+      e.contenido_pdf && e.contenido_pdf.trim() !== ""
+  ) || null;
+
+  if (ejemplarDisponible) {
+    const urlpdf = verPdf(ejemplarDisponible);
+    if (urlpdf) {
+      emit('view-pdf', urlpdf); // Emitir el evento con la URL del PDF
+    }
+  }else{
+    Swal.fire('Sin PDF', 'Este libro no tiene un PDF disponible.', 'info')
+  }
+
+}
 // const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
 //   Swal.fire({
 //     icon,

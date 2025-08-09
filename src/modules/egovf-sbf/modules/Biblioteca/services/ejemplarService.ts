@@ -182,7 +182,8 @@ export const verPdf = (ejemplarDisponible: Ejemplar) => {
     const fullUrl = pdf.startsWith('http')
     ? pdf
     : `${API_URL_EGOVF_SBF_FL}${pdf.startsWith('/') ? '' : '/'}${pdf}`
-    window.open(fullUrl, '_blank')
+    // window.open(fullUrl, '_blank')
+    return fullUrl;
   } else {
     Swal.fire('Sin PDF', 'Este libro no tiene un PDF disponible.', 'info')
   }

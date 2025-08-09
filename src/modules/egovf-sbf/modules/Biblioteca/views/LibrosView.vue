@@ -68,6 +68,11 @@
       </CCard>
     </CCol>
   </CRow>
+  <PdfViewerModal
+    :visible="mostrarModalPdf"
+    :pdfUrl="ejemplarPdfUrl"
+    @close="cerrarModalPdf"
+  />
 
 </template>
 
@@ -88,6 +93,7 @@ const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddIcon, DeleteIcon, EditIcon, PdfIcon, VerIcon } from '../../components'
 import { Ejemplar, EstadoEjemplar, getEjemplaresByLibroId, verPdf } from '../services/ejemplarService'
+import PdfViewerModal from '../components/PdfViewerModal.vue'
 const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
 const titulo = 'Gestión de Libros'
 
@@ -96,9 +102,18 @@ const bibliotecas = ref<Biblioteca[]>([])
 const ejemplar = ref<Ejemplar | null>(null)
 const tablaCargada = ref(false)
 
+const mostrarModalPdf = ref(false)
+const ejemplarPdfUrl = ref<string | null>(null)
+
+
 onMounted(async () => {
   await cargarDatos()
 })
+
+const cerrarModalPdf = () => {
+  mostrarModalPdf.value = false
+  ejemplarPdfUrl.value = null
+}
 
 async function cargarDatos() {
   try {
@@ -224,7 +239,11 @@ const viewPdf = async (libro: Libro) => {
   ) || null;
 
   ejemplar.value = ejemplarDisponible;
-  verPdf(ejemplar.value!);
+  const urlpdf = verPdf(ejemplar.value!);
+  if(urlpdf){
+    ejemplarPdfUrl.value = urlpdf || '';
+    mostrarModalPdf.value = true
+  }
 
 }
 

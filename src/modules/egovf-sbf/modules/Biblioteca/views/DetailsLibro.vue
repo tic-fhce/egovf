@@ -39,7 +39,7 @@
               </CButton>
               <CButton v-if="ejemplarDisponible?.contenido_pdf"
               title="Ver Pdf"
-                @click="verPdf(ejemplarDisponible)"
+                @click="viewPdf(ejemplarDisponible)"
                 class="inline-flex h-12 items-center justify-center rounded bg-blue-100 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-200 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
                 <PdfIcon class="w-8 h-8"/>
               </CButton>
@@ -82,6 +82,12 @@
       @close="cerrarModal"
       @ejemplarCreado="ejemplarCreado"
     />
+
+    <PdfViewerModal
+      :visible="mostrarModalPdf"
+      :pdfUrl="ejemplarPdfUrl"
+      @close="cerrarModalPdf"
+    />
 </template>
 
 <script lang="ts" setup>
@@ -105,6 +111,7 @@ const props = defineProps<Props>()
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddEjemplarIcon, BackIcon, PdfIcon } from '../../components'
+import PdfViewerModal from '../components/PdfViewerModal.vue'
 const { isAdmin } = useCookies()
 
 const libro = ref<Libro | null>(null)
@@ -116,6 +123,15 @@ const portada = ref('');
 const modalVisible = ref(false)
 const abrirModal = () => (modalVisible.value = true)
 const cerrarModal = () => (modalVisible.value = false)
+
+const mostrarModalPdf = ref(false)
+const ejemplarPdfUrl = ref<string | null>(null)
+
+const cerrarModalPdf = () => {
+  mostrarModalPdf.value = false
+  ejemplarPdfUrl.value = null
+}
+
 // Recargar datos después de agregar
 const ejemplarCreado = async () => {
   await cargarDatos()
@@ -134,7 +150,6 @@ const cargarDatos = async () => {
         e => [EstadoEjemplar.Disponible, EstadoEjemplar.Reservado].includes(e.estado) && e.portada
       ) || null;
       portada.value = ejemplarDisponible.value?.portada || '/ruta/portadas/bookCover.png'
-      console.log(portada.value)
       // portada.value = ejemplares.value.find(e => e.portada)?.portada || '/uploads/portadas/bookCover.png'
     }
   } catch (error) {
@@ -149,6 +164,15 @@ const editarLibro = () => {
   // }
   // router.go(-1)
   router.push('/libros')
+}
+
+const viewPdf = async (ejemplar: Ejemplar) => {
+  const urlpdf = verPdf(ejemplar);
+  if(urlpdf){
+    ejemplarPdfUrl.value = urlpdf || '';
+    mostrarModalPdf.value = true
+  }
+
 }
 
 onMounted(cargarDatos);

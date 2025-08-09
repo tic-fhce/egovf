@@ -29,7 +29,7 @@
               <DeleteIcon class="w-6 h-6" />
             </button>
 
-            <button v-if="ejemplar.contenido_pdf" @click="verPdf(ejemplar)" title="Ver Pdf"
+            <button v-if="ejemplar.contenido_pdf" @click="viewPdf(ejemplar)" title="Ver Pdf"
               class="inline-flex items-center  rounded-lg bg-gray-400 px-2 py-1.5 text-white duration-100 hover:bg-gray-500 focus:outline-none">
               <PdfIcon class="w-8 h-8" />
             </button>
@@ -40,7 +40,11 @@
       </div>
     </a>
   </article>
-
+  <PdfViewerModal
+    :visible="mostrarModalPdf"
+    :pdfUrl="ejemplarPdfUrl"
+    @close="cerrarModalPdf"
+  />
 </template>
 
 <script setup lang="ts">
@@ -52,10 +56,19 @@ const props = defineProps<{ ejemplar: Ejemplar }>()
 const emit = defineEmits(['edit', 'ejemplarEliminado'])
 import { useCookies } from '../../../utils/cookiesManager';
 import { DeleteIcon, EditIcon, PdfIcon } from '../../components';
+import PdfViewerModal from './PdfViewerModal.vue';
 const { isAdmin } = useCookies()
 
 const defaultImage = '/ruta/portadas/bookCover.png'
 const imageFailed = ref(false)
+
+const mostrarModalPdf = ref(false)
+const ejemplarPdfUrl = ref<string | null>(null)
+
+const cerrarModalPdf = () => {
+  mostrarModalPdf.value = false
+  ejemplarPdfUrl.value = null
+}
 
 const getImageSrc = (portada: string) => {
   if (!portada || imageFailed.value) {
@@ -73,16 +86,6 @@ const handleImageError = () => {
   imageFailed.value = true
 }
 
-// const estadoClass = computed(() => {
-//   switch (props.ejemplar.estado.toLowerCase()) {
-//     case 'disponible':
-//       return 'text-green-600 font-semibold'
-//     case 'prestado':
-//       return 'text-red-600 font-semibold'
-//     default:
-//       return 'text-red-600'
-//   }
-// })
 const estadoClass = computed(() => {
   const estadoNum = Number(props.ejemplar?.estado ?? 0)
 
@@ -138,6 +141,14 @@ const emitEdit = () => {
   emit('edit', props.ejemplar)
 }
 
+const viewPdf = async (ejemplar: Ejemplar) => {
+  const urlpdf = verPdf(ejemplar);
+  if(urlpdf){
+    ejemplarPdfUrl.value = urlpdf || '';
+    mostrarModalPdf.value = true
+  }
+
+}
 
 const showToast = (icon: 'success' | 'error' | 'info' | 'warning', message: string) => {
   Swal.fire({
