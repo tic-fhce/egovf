@@ -5,15 +5,14 @@ import isSuperAdminGuard from '../guards/is-superAdmin.guard';
 export const sbfRoutes = {
   path: '/sbf',
   name: 'sbf',
-  
-  // redirect: { name: 'sbf-dashboard' },
+  redirect: { name: 'dashboard' },
   component: () => import('../layouts/SbfLayout.vue'),
   children: [
-    // {
-    //   path: 'dashboard',
-    //   name: 'admin-dashboard',
-    //   component: () => import('@/modules/admin/views/DashboardView.vue')
-    // },
+    {
+      path: 'dashboard',
+      name: 'dashboard',
+      component: () => import('../layouts/DashBoard.vue')
+    },
     {
       path: '/biblioteca',
       name: 'biblioteca',
