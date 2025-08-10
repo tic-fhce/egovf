@@ -71,6 +71,16 @@ const userRol = ref<string>('')
 const modulo = ref<Modulo[]>([
   {
     id: 1,
+    titulo: 'Dashboard',
+    descripcion: 'Módulo principal de dashboard',
+    icono: 'cil-folder-open',
+    importancia: 1,
+    menuDtoObj: [
+      { id: 1, titulo: 'Dashboard', ruta: '/dashboard', icono: 'icon', idModulo: 1 },
+    ]
+  },
+  {
+    id: 2,
     titulo: 'Biblioteca',
     descripcion: 'Módulo principal de biblioteca',
     icono: 'cil-folder-open',
@@ -81,7 +91,7 @@ const modulo = ref<Modulo[]>([
     ]
   },
   {
-    id: 2,
+    id: 3,
     titulo: 'Usuarios',
     descripcion: 'Módulo principal de Usuarios',
     icono: 'cil-clipboard',
@@ -92,7 +102,7 @@ const modulo = ref<Modulo[]>([
     ]
   },
   {
-    id: 3,
+    id: 4,
     titulo: 'UNIDAD',
     descripcion: 'Módulo de unidad',
     icono: 'cil-clipboard',
@@ -103,7 +113,7 @@ const modulo = ref<Modulo[]>([
     ]
   },
   {
-    id: 4,
+    id: 5,
     titulo: 'Prestamos',
     descripcion: 'Módulo de historial',
     icono: 'cil-clipboard',
@@ -118,9 +128,9 @@ const filteredModules = computed(() => {
   if (userRol.value.includes(Rol.superAdmin)) {
     return modulo.value
   } else if (userRol.value === Rol.admin) {
-    return modulo.value.filter(m => ['Biblioteca', 'Usuarios', 'Prestamos'].includes(m.titulo))
+    return modulo.value.filter(m => ['Dashboard', 'Biblioteca', 'Usuarios', 'Prestamos'].includes(m.titulo))
   } else if (userRol.value === Rol.lector) {
-    return modulo.value.filter(m => ['Biblioteca', 'Prestamos'].includes(m.titulo))
+    return modulo.value.filter(m => ['Dashboard', 'Biblioteca', 'Prestamos'].includes(m.titulo))
   }
   return []
 })

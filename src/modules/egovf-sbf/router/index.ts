@@ -5,11 +5,11 @@ import isSuperAdminGuard from '../guards/is-superAdmin.guard';
 export const sbfRoutes = {
   path: '/sbf',
   name: 'sbf',
-  redirect: { name: 'dashboard' },
+  // redirect: { name: 'dashboard' },
   component: () => import('../layouts/SbfLayout.vue'),
   children: [
     {
-      path: 'dashboard',
+      path: '/dashboard',
       name: 'dashboard',
       component: () => import('../layouts/DashBoard.vue')
     },
