@@ -27,11 +27,7 @@
           <label class="form-label">Idioma</label>
           <select class="form-control" v-model="form.idioma" required>
             <option value="">Seleccione</option>
-            <option value="Español">Español</option>
-            <option value="Inglés">Inglés</option>
-            <option value="Francés">Francés</option>
-            <option value="Alemán">Alemán</option>
-            <option value="Otro">Otro</option>
+            <option v-for="idioma in idiomas" :key="idioma.value" :value="idioma.value">{{ idioma.label }}</option>
           </select>
         </div>
 
@@ -66,10 +62,15 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import Swal from 'sweetalert2'
-import { type Libro, createLibro, updateLibro } from '../services/libroService'
+import { Idioma, type Libro, createLibro, updateLibro } from '../services/libroService'
 
 const previewPdf = ref<string>('')
 const isEdit = ref<boolean>(false)
+
+const idiomas = Object.entries(Idioma)
+  .filter(([key, value]) => typeof value === 'string' && key !== 'SinEstado')
+  .map(([key, value]) => ({ label: key, value }))
+
 
 const props = defineProps<{
   visible: boolean
@@ -84,7 +85,7 @@ const form = ref<Partial<Libro>>({
   titulo: '',
   autor: '',
   anio: 0,
-  idioma: '',
+  idioma: Idioma.SinEstado,
   signatura_topografica: '',
   ejemplares: 0,
   // contenido_pdf: '',
@@ -110,7 +111,7 @@ watch(() => props.visible, (newVal) => {
         titulo: '',
         autor: '',
         anio: 0,
-        idioma: '',
+        idioma: Idioma.SinEstado,
         signatura_topografica: '',
         ejemplares: 0,
         // contenido_pdf: '',

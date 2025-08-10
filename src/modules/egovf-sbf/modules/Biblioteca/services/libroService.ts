@@ -1,12 +1,25 @@
 import { SBFApi } from '@sbf/api/SBFApi';
 import { createEjemplar, EstadoEjemplar, uploadFile, uploadFileImage } from './ejemplarService';
 
+export enum Idioma {
+  Ingles = "Inglés",
+  Frances = "Francés",
+  Aymara = "Aymara",
+  Quechua = "Quechua",
+  Espanol = "Español",
+  Portugues = "Portugués",
+  Coreano = "Coreano",
+  Aleman = "Alemán",
+  Otro = "Otro",
+  SinEstado = "",
+}
+
 export interface Libro {
   id_libro: number;
   titulo: string;
   autor: string;
   anio: number;
-  idioma: string;
+  idioma: Idioma;
   signatura_topografica: string;
   ejemplares: number;
   // contenido_pdf: string;

@@ -27,13 +27,9 @@
 
       <div class="mb-3">
         <label class="form-label">Idioma</label>
-        <select v-model="form.idioma" class="form-control" required>
+        <select class="form-control" v-model="form.idioma" required>
           <option value="">Seleccione</option>
-          <option value="Español">Español</option>
-          <option value="Inglés">Inglés</option>
-          <option value="Francés">Francés</option>
-          <option value="Alemán">Alemán</option>
-          <option value="Otro">Otro</option>
+          <option v-for="idioma in idiomas" :key="idioma.value" :value="idioma.value">{{ idioma.label }}</option>
         </select>
       </div>
 
@@ -106,7 +102,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-import { type Libro, getLibroById, updateLibro, createLibroFile } from '../services/libroService'
+import { type Libro, Idioma, getLibroById, updateLibro, createLibroFile } from '../services/libroService'
 import { type Biblioteca, getBibliotecaByUser, getBibliotecas } from '../services/bibliotecaService'
 import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../services/ejemplarService'
 
@@ -137,7 +133,7 @@ const form = ref<Partial<Libro>>({
   titulo: '',
   autor: '',
   anio: undefined,
-  idioma: '',
+  idioma: Idioma.SinEstado,
   signatura_topografica: '',
   ejemplares: undefined,
   // contenido_pdf: '',
@@ -145,7 +141,11 @@ const form = ref<Partial<Libro>>({
   id_biblioteca: 0 
 })
 
-onMounted(async () => {
+const idiomas = Object.entries(Idioma)
+  .filter(([key, value]) => typeof value === 'string' && key !== 'SinEstado')
+  .map(([key, value]) => ({ label: key, value }))
+
+  onMounted(async () => {
   try {
     // Cargar bibliotecas según rol
     bibliotecas.value = await cargarBibliotecas()
