@@ -111,7 +111,6 @@ const libroCreado = async () => {
 const cargarDatos = async () => {
   try {
     biblioteca.value = await getBibliotecaById(props.idBiblioteca)
-    console.log(biblioteca.value)
     if (biblioteca.value?.id_biblioteca) {
       libros.value = await getLibrosByIdBiblioteca(biblioteca.value.id_biblioteca)
     }
