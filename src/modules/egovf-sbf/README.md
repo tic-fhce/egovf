@@ -1,4 +1,3 @@
-Aquí tienes un ejemplo de un README para tu archivo de rutas en Vue.js:
 
 ---
 
