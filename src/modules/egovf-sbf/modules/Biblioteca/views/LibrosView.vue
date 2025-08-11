@@ -59,6 +59,13 @@
                         <DeleteIcon class="w-6 h-6" />
                       </CButton>
                     </template>
+                    <CButton
+                      title="Ver Ubicación en Google Maps"
+                      class="font me-1"
+                      @click="abrirMapa(libro.id_biblioteca)"
+                    >
+                      <MapsIcon class="w-6 h-6" />
+                    </CButton>
                   </td>
                 </tr>
               </tbody>
@@ -91,7 +98,7 @@ import 'datatables.net'
 
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
-import { AddIcon, DeleteIcon, EditIcon, PdfIcon, VerIcon } from '../../components'
+import { AddIcon, DeleteIcon, EditIcon, MapsIcon, PdfIcon, VerIcon } from '../../components'
 import { Ejemplar, EstadoEjemplar, getEjemplaresByLibroId, verPdf } from '../services/ejemplarService'
 import PdfViewerModal from '../components/PdfViewerModal.vue'
 const { isAdmin, isSuperAdmin, isLector, cif } = useCookies()
@@ -151,6 +158,16 @@ const getNombreBiblioteca = (id: number) => {
   const biblio = bibliotecas.value.find(b => b.id_biblioteca === id)
   return biblio ? biblio.nombre : 'N/D'
 }
+
+const abrirMapa = (id_biblioteca: number) => {
+  const biblio = bibliotecas.value.find(b => b.id_biblioteca === id_biblioteca);
+  if (biblio?.latitud && biblio?.longitud) {
+    const url = `https://www.google.com/maps?q=${biblio.latitud},${biblio.longitud}`;
+    window.open(url, '_blank', 'noopener');
+  } else {
+    showToast('warning', 'La ubicación no está disponible.');
+  }
+};
 
 const inicializarDataTable = () => {
   const tableEl = document.getElementById('librosTabla')

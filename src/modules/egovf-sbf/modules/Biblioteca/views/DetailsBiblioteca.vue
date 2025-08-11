@@ -37,7 +37,15 @@
         </div>
         <div class="relative hidden lg:ml-2  lg:block lg:w-1/2">
           <div class="abg-orange-400 mx-auto w-fit overflow-hidden rounded-[6rem] rounded-br-none rounded-tl-none">
-            <img :src="`/ruta/portadas/mapa.png`">
+            <a
+            v-if="biblioteca?.latitud && biblioteca?.longitud"
+            :href="`https://www.google.com/maps?q=${biblioteca.latitud},${biblioteca.longitud}`"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Ver ubicación en Google Maps"
+          >
+            <img :src="`/ruta/portadas/mapa.png`" class="cursor-pointer hover:opacity-90 transition-opacity" />
+          </a>
           </div>
         </div>
       </div>
@@ -103,6 +111,7 @@ const libroCreado = async () => {
 const cargarDatos = async () => {
   try {
     biblioteca.value = await getBibliotecaById(props.idBiblioteca)
+    console.log(biblioteca.value)
     if (biblioteca.value?.id_biblioteca) {
       libros.value = await getLibrosByIdBiblioteca(biblioteca.value.id_biblioteca)
     }

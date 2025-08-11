@@ -5,6 +5,7 @@ export { default as BackIcon } from './BackIcon.vue';
 export { default as CalendarIcon } from './CalendarTimeIcon.vue';
 export { default as DeleteIcon } from './DeleteIcon.vue';
 export { default as EditIcon } from './EditIcon.vue';
+export { default as MapsIcon } from './MapsIcon.vue';
 export { default as PdfIcon } from './PdfIcon.vue';
 export { default as VerIcon } from './VerIcon.vue';
 export { default as SaveIcon } from './SaveIcon.vue';

@@ -52,6 +52,15 @@
                         <!-- <CIcon icon="cil-trash" class="me-1" />Eliminar -->
                       </CButton>
                     </template>
+                    <a
+                      :href="`https://www.google.com/maps?q=${biblio.latitud},${biblio.longitud}`"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <CButton title="Ver Ubicación" class="font me-1" size="sm">
+                        <MapsIcon class="w-6 h-6" />
+                      </CButton>
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -137,6 +146,7 @@ const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
 import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon, SaveIcon } from '../../components'
 import { getUsers, Rol, User } from '../../users/services/userService'
+import MapsIcon from '../../components/MapsIcon.vue'
 const { isAdmin, isSuperAdmin, isLector,cif } = useCookies()
 
 const titulo = 'Gestión de Bibliotecas'
