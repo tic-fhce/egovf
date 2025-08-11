@@ -215,8 +215,18 @@ const routes = [
       //MODULO SRA
       {
         path: "/ambientes",
-        name: "AmbientesView",
-        component: () => import("../modules/egovf-sra/views/AmbientesView.vue"),
+        name: "ListaAmbientesView",
+        component: () => import("@/modules/egovf-sra/views/ListaAmbientesView.vue"),
+      },
+      {
+        path: "/servicios:ambiente",
+        name: "ListaServiciosView",
+        component: () => import("@/modules/egovf-sra/views/ListaServiciosView.vue"),
+      },
+      {
+        path: "/fechas:ambiente",
+        name: "FechasView",
+        component: () => import("@/modules/egovf-sra/views/FechasView.vue"),
       },
       {
         path: "/eventos",

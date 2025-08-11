@@ -24,7 +24,7 @@ app.use(VueAxios,axios)
 app.use(VueCookies,{expires:'1d'})
 app.use(VueSweetalert2)
 app.use(jsPDF)
-app.use(VueSweetalert2)
+
 app.provide('icons', icons)
 app.component('CIcon', CIcon)
 app.mount('#app')

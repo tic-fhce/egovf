@@ -118,6 +118,9 @@ import {
   cilAt,
   cilWarning,
   cilPlus,
+  cilAddressBook,
+  cilBank,
+  cilNoteAdd,
 } from '@coreui/icons'
 
 export const iconsSet = Object.assign(
@@ -213,6 +216,9 @@ export const iconsSet = Object.assign(
     cilAt,
     cilWarning,
     cilPlus,
+    cilAddressBook,
+    cilBank,
+    cilNoteAdd,
   },
   {
     cifUs,

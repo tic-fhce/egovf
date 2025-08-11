@@ -212,7 +212,7 @@ export default {
             this.totalanticipado = res;
             this.totalsin = sin;
             const dir = '/libreReporte'+this.uri;
-            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'http://192.168.31.34:8080'+dir;
+            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo'+dir;
         },
         getMes(){// Funcion para colocar el Mes en formato Literal
             if(this.reporte.mes==1){this.mes='Enero';}
