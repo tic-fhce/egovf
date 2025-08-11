@@ -96,5 +96,11 @@ export const sbfRoutes = {
       component: () => import('../modules/users/views/LectorView.vue'),
       beforeEnter: [ isAdminGuard],
     },
-  ]
+    {
+      path: '/:pathMatch(.*)*', // Catch-all route for 404
+      name: 'NotFound',
+      component: () => import('../layouts/NotFound404.vue'),
+    }
+  ],
+  
 };

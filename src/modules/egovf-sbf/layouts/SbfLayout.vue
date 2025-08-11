@@ -175,3 +175,6 @@ onMounted(async () => {
 // }
 
 </script>
+<style scoped>
+@import '../styles/tailwind.css';
+</style>
