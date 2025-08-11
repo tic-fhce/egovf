@@ -34,7 +34,7 @@
 
               <CButton @click="editarLibro"
                 title="Volver Atras"
-                class="inline-flex h-12 items-center justify-center rounded bg-yellow-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-yellow-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
+                class="inline-flex h-12 items-center justify-center rounded bg-blue-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-700 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
                 <BackIcon class="w-8 h-8"/>
               </CButton>
               <CButton v-if="ejemplarDisponible?.contenido_pdf"

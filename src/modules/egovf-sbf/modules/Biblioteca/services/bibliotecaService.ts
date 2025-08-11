@@ -61,7 +61,7 @@ export const createBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
 // Editar biblioteca existente
 export const updateBiblioteca = async (biblioteca: Partial<Biblioteca>) => {
   try {
-    console.log({biblioteca})
+    // console.log({biblioteca})
     const { data } = await SBFApi.put<Biblioteca>(`/biblioteca/editBiblioteca`, biblioteca);
     return data;
   } catch (error) {

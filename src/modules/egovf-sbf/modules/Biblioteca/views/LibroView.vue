@@ -85,13 +85,21 @@
       </div>
 
       <div class="my-4 text-right">
-        <button  @click="guardar"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          {{ isEditMode ? 'Guardar Cambios' : 'Crear Libro' }}
+        
+        <button
+          @click="guardar"
+          :title=" isEditMode ? 'Guardar Cambios' : 'Crear Libro'"
+           class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          <SaveIcon class="w-7 h-7"/>
         </button>
-        <button @click="volver" type="submit"
-          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-          Volver
+       <button
+          title="Volver"
+          @click="volver"
+          type="button"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded ml-2"
+        >
+          <BackIcon class="w-7 h-7"/>
         </button>
       </div>
     </div>
@@ -112,6 +120,7 @@ interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
+import { BackIcon, SaveIcon } from '../../components'
 const { isSuperAdmin, cif } = useCookies()
 
 const idBiblioteca = window.history.state?.idBiblioteca;

@@ -178,7 +178,7 @@ const getPrestamosUser = async (): Promise<Prestamo[] | [] | null> => {
     return await getPrestamos()
   } else if (isAdmin.value) {
     const data = await getPrestamoByIdAdminFrontend(+cif.value)
-    console.log(data)
+    // console.log(data)
     return data
     // return await getPrestamoByIdAdmin(+cif.value)
   } else {
@@ -283,7 +283,7 @@ const eliminarPrestamo = async (id_prestamo: number) => {
     const ejemplar = librosPorPrestamo.value[id_prestamo];
     if (ejemplar) {
       for (const ejem of ejemplar) {
-        console.log(ejem.id);
+        // console.log(ejem.id);
         await deleteEstaEn(ejem.id, id_prestamo);
       }
     }

@@ -33,8 +33,9 @@
             <EditIcon class="w-6 h-6"/>
             
           </button>
-          <CButton v-if="isAdmin" title="Ver Pdf" class="font me-1" color="secondary" size="sm"
-            @click="viewPdf()">
+          <CButton v-if="isAdmin" title="Ver Pdf" size="sm"
+            @click="viewPdf()"
+            class="inline-flex  items-center  rounded-lg  bg-gray-400 px-2 py-1.5 text-white duration-100  hover:bg-gray-500 focus:outline-none md:mr-1 md:mb-0 md:w-auto">
             <PdfIcon class="w-6 h-6" />
           </CButton>
         </div>

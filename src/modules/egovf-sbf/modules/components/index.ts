@@ -7,3 +7,4 @@ export { default as DeleteIcon } from './DeleteIcon.vue';
 export { default as EditIcon } from './EditIcon.vue';
 export { default as PdfIcon } from './PdfIcon.vue';
 export { default as VerIcon } from './VerIcon.vue';
+export { default as SaveIcon } from './SaveIcon.vue';

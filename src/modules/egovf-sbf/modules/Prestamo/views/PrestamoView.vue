@@ -159,16 +159,19 @@
       <div class="my-4 text-right">
         <button
           type="submit"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          :title="isEditMode ? 'Guardar Prestamo' : 'Crear Préstamo'"
+          class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded"
         >
-          {{ isEditMode ? 'Guardar Cambios' : 'Crear Préstamo' }}
+          <!-- {{ isEditMode ? 'Guardar Cambios' : 'Crear Préstamo' }} -->
+          <SaveIcon class="w-7 h-7"/>
         </button>
         <button
+          title="Volver"
           @click="volver"
           type="button"
-          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded ml-2"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded ml-2"
         >
-          Volver
+          <BackIcon class="w-7 h-7"/>
         </button>
       </div>
     </div>
@@ -179,6 +182,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+import { BackIcon, SaveIcon } from '../../components';
 import { type Libro, getLibros, getLibrosByIdBiblioteca } from '../../Biblioteca/services/libroService';
 import { type Ejemplar, EstadoEjemplar, getEjemplaresByLibroId } from '../../Biblioteca/services/ejemplarService';
 import { type Lector, getLectors } from '../../users/services/lectorService';

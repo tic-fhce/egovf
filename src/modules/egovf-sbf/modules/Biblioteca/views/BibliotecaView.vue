@@ -108,11 +108,12 @@
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="abrirModal(false)" color="danger" class="font">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
+        <CButton title="Canclear" @click="abrirModal(false)" color="danger" class="font">
+          <CIcon icon="cil-x" class="me-1" />
         </CButton>
-        <button class="btn btn-success font">
-          <CIcon icon="cil-library" class="me-2" />{{ btnEdit }}
+        <button :title="btnEdit" class="btn btn-success font">
+          <!-- <CIcon icon="cil-library" class="me-2" />{{ btnEdit }} -->
+           <SaveIcon class="w-6 h-6"/>
         </button>
       </CModalFooter>
     </form>
@@ -134,7 +135,7 @@ import { getLibrosByIdBiblioteca } from '../services/libroService'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 import { useCookies } from '../../../utils/cookiesManager';
-import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon } from '../../components'
+import { AddEjemplarIcon, AddIcon, DeleteIcon, EditIcon, SaveIcon } from '../../components'
 import { getUsers, Rol, User } from '../../users/services/userService'
 const { isAdmin, isSuperAdmin, isLector,cif } = useCookies()
 
