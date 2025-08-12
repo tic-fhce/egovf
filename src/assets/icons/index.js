@@ -25,7 +25,6 @@ import {
   cibCcAmex,
   cibMicrosoft,
 
-
 } from '@coreui/icons'
 import { cifUs, cifBr, cifIn, cifFr, cifEs, cifPl } from '@coreui/icons'
 import {
@@ -109,9 +108,11 @@ import {
   cilLinkBroken,
   cilHistory,
   cilQrCode,
-  cilMedicalCross,
-  cilDoor,
-  cilScreenDesktop,
+  cilBarcode,
+  cilDesktop,
+  cilComputer,
+  cilPhone,
+  cilPrinter,
   cilRouter,
   cilCouch,
   cilEducation,
@@ -120,11 +121,6 @@ import {
   cilAvTimer,
   cilAt,
   cilWarning,
-  cilBarcode,
-  cilDesktop,
-  cilComputer,
-  cilPhone,
-  cilPrinter,
   cilTablet,
   cilMobile,
   cilUsers,
@@ -301,9 +297,6 @@ export const iconsSet = Object.assign(
     cilLinkBroken,
     cilHistory,
     cilQrCode,
-    cilMedicalCross,
-    cilDoor,
-    cilScreenDesktop,
     cilCouch,
     cilEducation,
     cilGroup,
