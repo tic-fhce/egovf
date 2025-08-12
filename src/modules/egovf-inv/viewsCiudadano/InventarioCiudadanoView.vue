@@ -3,51 +3,44 @@
   <ol class="breadcrumb custom-breadcrumb">
     
     <li class="breadcrumb-item active" aria-current="page">
-      Inventario >
+      Inventario
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        <CIcon @click="irCiudadano(cifCiudadano)" class="breadcrumb-link menuicon" icon="cil-user"/>
+
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        <label @click="irCiudadano(cifCiudadano)" class="breadcrumb-link">{{ cifCiudadano }} </label>
+        >
     </li>
   </ol>
 </nav>
     <CRow>
-        <CCol :lg="3" >
-            <CCard class="mb-3">
-                <CCardHeader class="headercolor text-center">Tipo de Equipos</CCardHeader>
+        <CCol>
+            <CCard>
+                <CCardHeader class="headercolor text-center">Todos los Equipos</CCardHeader>
                 <CCardBody class="text-center">
                     <CIcon customClassName="nav-icon" icon="cil-list" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getTipo()">Ver Tipos de Equipo</CButton>
+                    <CButton color="success" class="font" @click="getTipo()">Ver Todos</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
-        
-        <CCol :lg="3" v-for="tipo in listaTipo" :key="tipo.id">
-            <CCard class="mb-3">
-                <CCardHeader class="headercolor text-center">{{tipo.sigla}}</CCardHeader>
-                <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" :icon="tipo.icono" class="menuicon"/> 
-                    
-                </CCardBody>
-                <CCardFooter class="text-center">
-                    <CButton color="primary" class="font" @click="getLista(tipo.idTipo)">Ver {{ tipo.nombre }}</CButton>
-                </CCardFooter>
-            </CCard>
-        </CCol>
-
-        
-        <CCol :lg="3">
-            <CCard class="mb-3">
+        <CCol>
+            <CCard>
                 <CCardHeader class="headercolor text-center">Atenciones</CCardHeader>
                 <CCardBody class="text-center">
                     <CIcon customClassName="nav-icon" icon="cil-bell" class="menuicon"/> 
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="primary" class="font" @click="()=> this.$router.push('/atenciones')">Ver Atenciones</CButton>
+                    <CButton color="primary" class="font" @click="getAtenciones()">Ver Atenciones</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
+
     </CRow>
     <br>
-    
 </template>
 <script>
 
@@ -58,6 +51,7 @@ export default {
     },
     data(){
         return {
+            cifCiudadano: this.$route.params.cifCiudadano,
             direcciones:["/at-tic","/cpu","/monitores","/impresora","/telefono","/ubicacion"],
             listaTipo:[],
             usuario:{
@@ -84,8 +78,17 @@ export default {
         this.getDatos();
         this.getInventario();
     },
-    methods:{
-        getDatos(){
+    methods: {
+        irCiudadano(cifCiudadano){
+          this.$router.push({
+              name: "PerfilCiudadanoView",
+              params: {
+                  cifCiudadano:cifCiudadano
+              },
+          });
+        },
+        getDatos() {
+            
             //cargamos datos del Usuario
             if(this.$cookies.get('cif')!=null){
                 this.usuario.token=this.$cookies.get('token');
@@ -104,7 +107,20 @@ export default {
             });
         },
         getTipo(){
-            this.$router.push("/tipoEquipos");
+            this.$router.push({
+                name: "TodosEquipoView",
+                params: {
+                    cifCiudadano:this.cifCiudadano
+                },
+            });
+        },
+        getAtenciones(){
+            this.$router.push({
+                name: "AtencionesporCifView",
+                params: {
+                    cifCiudadano:this.cifCiudadano
+                },
+            });
         },
         getLista(id){
             this.$router.push({
@@ -135,4 +151,20 @@ export default {
     color: #00222f;
     
 }
+.breadcrumb-link {
+    text-decoration: none;
+    color: #00222f;
+    font-weight: 500;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .breadcrumb-link:hover {
+    color: white;
+    text-shadow: 0 0 10px rgba(7, 26, 59, 0.941);
+  }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: #bbb;
+  }
+  
 </style>

@@ -1,18 +1,23 @@
 <template>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link to="/inventario" class="breadcrumb-link">Inventario</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-      
-      <router-link to="/tipoEquipos" class="breadcrumb-link">Tipos de Equipos</router-link>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb custom-breadcrumb">
+    
+    <li class="breadcrumb-item active" aria-current="page">
+      Inventario
     </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          {{ titulo }} >
-        </li>
-      </ol>
-    </nav>
+    <li class="breadcrumb-item active" aria-current="page">
+        <CIcon @click="irCiudadano(cifCiudadano)" class="breadcrumb-link menuicon" icon="cil-user"/>
+
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+        <label @click="irInventario(cifCiudadano)" class="breadcrumb-link">{{ cifCiudadano }} </label>
+        
+    </li>
+    <li>
+        <label>Listado de Equipos ></label>
+    </li>
+  </ol>
+</nav>
   
  <div class="d-flex justify-content-between align-items-start mb-3"> 
    <h1>{{ titulo }}</h1>
@@ -62,7 +67,6 @@
   DataTable.use(DataTablesLib);
   
   export default {
-    name: 'ListaEquiposView',
     data() {
       return {
         inventarioService: null,

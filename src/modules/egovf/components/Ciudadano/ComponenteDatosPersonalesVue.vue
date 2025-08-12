@@ -161,7 +161,7 @@
 
                                     <CInputGroup size="sm" class="mb-3">
                                         <CInputGroupText as="label">Contraseña</CInputGroupText>
-                                        <CFormInput type="text" value="***************" disabled/>
+                                        <CFormInput type="text" :value="egovf.pass" disabled/>
                                         <CButton  type="button" color="success" class="font" size="sm" @click="clickModalPass(true)"> Actualizar Contraseña</CButton>
                                     </CInputGroup>
                                 </CCol>
