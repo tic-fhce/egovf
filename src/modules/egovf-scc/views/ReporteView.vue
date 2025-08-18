@@ -138,7 +138,7 @@ export default {
     async getReporteBiometrico() {
       await this.sccService.getPerfil(this.reporte.cif).then((response) => {
           this.reporte.listaPerfil = response.data;
-        });
+      });
       this.getListaHorario();
     },
     async getListaHorario() {

@@ -16,6 +16,8 @@ import VueCookies from 'vue-cookies';
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
+import VueSelect  from "vue-select";
+
 const app = createApp(Fhce) 
 app.use(store)
 app.use(router)
@@ -27,4 +29,5 @@ app.use(jsPDF)
 
 app.provide('icons', icons)
 app.component('CIcon', CIcon)
+app.component('v-select', VueSelect)
 app.mount('#app')

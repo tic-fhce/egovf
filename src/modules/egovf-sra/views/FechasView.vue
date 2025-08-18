@@ -273,9 +273,20 @@ export default {
                     if (result.isConfirmed) {
                         this.sraService.addEvento(this.evento).then(response =>{
                             if(response.status == 201){
-                                this.$swal.fire('El evento fue creado correctamente','Recuerda que para ser aprobado, debes de mandar una solicitud a Decanato', 'success').then((res)=>{
-                                    if(res)
+                                this.$swal.fire({
+                                    title:'El evento fue creado correctamente',
+                                    showDenyButton: true,
+                                    titleText:'Recuerda que para ser aprobado, debes de mandar una solicitud a Decanato, Deseas Crear una Solicitud Ahora ????', 
+                                    icon:'success',
+                                    confirmButtonText: 'Aceptar',
+                                    denyButtonText: 'Cancelar',
+                                }).then((res)=>{
+                                    if(res.isConfirmed){
+                                        this.solicitudes(response.data.id);
+                                    }
+                                    else{
                                         location.reload();
+                                    }
                                 });
                             }
                             else{
@@ -359,7 +370,6 @@ export default {
             }*/
         },
         handleEventClick(clickInfo) {
-            console.log(this.listaEventos);
             this.listaEventos.forEach(evento =>{
                 if(evento.id == clickInfo.event.id){
                     this.eventoDetalle.id = evento.id;
@@ -424,6 +434,15 @@ export default {
             const url = URL.createObjectURL(blob);
             Object.assign(document.createElement('a'), { href: url, download: nombre }).click();
             URL.revokeObjectURL(url);
+        },
+        solicitudes(idEvento){
+            console.log(idEvento);
+            this.$router.push({
+                name: 'ListaSolicitudesView',
+                params:{
+                    idEvento: idEvento
+                }
+            });
         },
 
     }

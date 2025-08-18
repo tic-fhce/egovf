@@ -417,7 +417,7 @@
 
   <!-- Modal  Biometrico-->
   <CModal :visible="modalBiometrico" @close="clickModalBiometrico(false)">
-    <CForm @submit.prevent="updateBiometrico()">
+    <CForm @submit.prevent="updateBiometricoCif()">
       <CModalHeader class="headercolor" dismiss @close="clickModalBiometrico(false)">
         <CModalTitle>
           <h6><CIcon icon="cil-monitor"/> Agregar Biometrico</h6>
@@ -433,7 +433,7 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label" for="inputGroupSelect01">Datos del Biometrico</CInputGroupText>
-          <CFormSelect v-model="id_bio" :model-value="String(id_bio)"  @update:model-value="id_bio = Number($event)" @change="datosChange()" required="true">
+          <CFormSelect v-model="id_bio" :model-value="String(id_bio)"  @update:model-value="id_bio = Number($event)" required="true">
             <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">
                 {{ lista.nombre }} - {{ lista.lugar }}
             </option>
@@ -1058,12 +1058,15 @@ export default {
       //Funcion que cambia los parametros del Biometrico para su registro
       //verificado
       this.listaBiometrico.forEach((element) => {
+
         if (element.id === this.id_bio) {
           this.biometrico = element;
           this.biometrico.cif = this.egovf.cif;
           this.biometrico.id_tipo = this.empleado.tipoempleado_id;
           this.biometrico.sexo = this.egovf.sexo;
+          return (true);
         }
+        
       });
     },
     addHorario() {
@@ -1214,6 +1217,43 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateBiometrico(this.biometrico).then((response) => {
+                if (response.status == 200) {
+                  this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente","","success").then((res) => {
+                      if (res) location.reload();
+                    });
+                } else {
+                  this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
+                }
+              });
+          } else if (result.isDenied) {
+            this.$swal.fire("Datos Cancelados", "", "info");
+          }
+        });
+    },
+    async updateBiometricoCif() {
+      this.listaBiometrico.forEach((element) => {
+        if (element.id === this.id_bio) {
+          this.biometrico = element;
+          this.biometrico.cif = this.egovf.cif;
+          this.biometrico.id_tipo = this.empleado.tipoempleado_id;
+          this.biometrico.sexo = this.egovf.sexo;
+          return (true);
+        }
+      });
+      // Funcion para registrar al usuario con un biometrico
+      // verificado
+
+      await this.$swal
+        .fire({
+          title:"Desea Agregar el Biometrico  al Ciudadano ? " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
+          showDenyButton: true,
+          icon: "info",
+          confirmButtonText: "Aceptar",
+          denyButtonText: "Cancelar",
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.sccService.updateBiometricoCif(this.biometrico).then((response) => {
                 if (response.status == 200) {
                   this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente","","success").then((res) => {
                       if (res) location.reload();

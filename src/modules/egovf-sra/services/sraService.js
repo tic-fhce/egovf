@@ -43,6 +43,13 @@ export default class SraService {
     }
 
     //SERVICES EVENTO
+    getEvento(idEvento){
+        return axios.get(sraUrl + "evento/getEvento",{
+            params:{
+                idEvento:idEvento
+            }
+        });
+    }
 
     addEvento(evento) {
         const eventoDtoRequest = {
@@ -72,6 +79,41 @@ export default class SraService {
                 idAmbiente:idAmbiente
             }
         });
+    }
+    // SERVICIO SOLICITUDES
+    getListaSolicitud() {
+        return axios.get(sraUrl + "solicitud/getListaSolicitud");
+    }
+    getSolicitudes() {
+        return axios.get(sraUrl + "solicitud/getSolicitudes");
+    }
+
+    addSolicitud(solicitud) {
+        const solicitudDtoRequest = {
+            "cite":"",
+            "fecha":"",
+            "idEvento":solicitud.idEvento,
+            "idServicio":solicitud.idServicio,
+            "hojaRuta":"#",
+            "cifResponsable":solicitud.responsable.cif,
+            "detalle":solicitud.old,
+            "gestion":0
+        };
+        return axios.post(sraUrl + "solicitud/addSolicitud", solicitudDtoRequest);
+    }
+    updateSolicitud(solicitud) {
+        const solicitudDtoResponse = {
+            "id":solicitud.id,
+            "cite":solicitud.cite,
+            "fecha":solicitud.fecha,
+            "idEvento":solicitud.idEvento,
+            "idServicio":solicitud.idServicio,
+            "hojaRuta":"#",
+            "cifResponsable":solicitud.responsable.cif,
+            "detalle":solicitud.old,
+            "gestion":solicitud.gestion
+        };
+        return axios.put(sraUrl + "solicitud/updateSolicitud", solicitudDtoResponse);
     }
 
 }

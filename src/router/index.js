@@ -229,6 +229,11 @@ const routes = [
         component: () => import("@/modules/egovf-sra/views/FechasView.vue"),
       },
       {
+        path: "/listasolicitudes:idEvento",
+        name: "ListaSolicitudesView",
+        component: () => import("@/modules/egovf-sra/views/ListaSolicitudesView.vue"),
+      },
+      {
         path: "/eventos",
         name: "EventosView",
         component: () => import("../modules/egovf-sra/views/EventosView.vue"),

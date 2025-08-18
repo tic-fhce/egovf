@@ -24,4 +24,8 @@ export default class EgovfService {
     //Servicio que retorna una lista de Ciudadanos que son empleados
     return axios.get(egovfUrl + "ciudadano/getListaEmpleado");
   }
+  getListaResponsable() {
+    //Servicio que retorna una lista de Ciudadanos para ser responsables en una actividad 
+    return axios.get(egovfUrl + "ciudadano/getListaResponsable");
+  }
 }

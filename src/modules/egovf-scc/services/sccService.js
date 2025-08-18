@@ -13,7 +13,7 @@ export default class SccService {
     });
   }
   getListarCifCero() {
-    return axios.get(msccUrl + "biometrico/listarCifCero");
+    return axios.get(msccUrl + "biometrico/getListarCifCero");
   }
 
   getHorario(gestion, cif) {
@@ -27,6 +27,21 @@ export default class SccService {
   // Funcion que actualiza los datos del biomatrico con el usuario
   updateBiometrico(biometricoDtoResponse) {
     return axios.put(msccUrl + "biometrico/updateBiometrico", biometricoDtoResponse);
+  }
+  updateBiometricoCif(biometrico) {
+    const biometricoDtoResponse={
+      "id":biometrico.id,
+      "user_id":biometrico.user_id,
+      "nombre":biometrico.nombre,
+      "cif":biometrico.cif,
+      "estado":biometrico.estado,
+      "horario_id":biometrico.horario_id,
+      "lugar":biometrico.lugar,
+      "id_tipo":biometrico.id_tipo,
+      "detalle":biometrico.detalle,
+      "sexo":biometrico.sexo
+    };
+    return axios.put(msccUrl + "biometrico/updateBiometricoCif", biometricoDtoResponse);
   }
   getAvisoAll() {
     return axios.get(msccUrl + "aviso/getAvisoAll");

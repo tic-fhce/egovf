@@ -31,7 +31,7 @@
                         <CCol :lg="12" class="table-responsive">
                             <table class="table table-striped table-hover" id="printDatos">
                                 <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
-                                <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
+                                <tr v-for="perfil in perfilesFiltrados" :key="perfil.id">
                                     <td><CBadge color="light">ID-B : {{perfil.id}}</CBadge></td>
                                     <td><CBadge color="light">User ID : {{perfil.user_id}}</CBadge></td>
                                     <td><CBadge color="light">Nombre : {{perfil.nombre}}</CBadge></td>
@@ -176,6 +176,11 @@ export default {
             this.getMes(); // Funcion que Debuelbe el mes Literal
             this.getReporteMes(); // Funcion que Contruye los Repostes del mes
             this.getPB=false; // Valor que cambia para no actualizar constante mente 
+        }
+    },
+    computed: {
+        perfilesFiltrados() {
+            return this.reporte.listaPerfil.filter(perfil => perfil.estado !== 0);
         }
     },
     methods:{

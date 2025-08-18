@@ -32,27 +32,27 @@ export default {
   },
   methods:{
         formatearFecha(fechaStr) {
-        // Dividir la fecha en día, mes y año
-        const [anio, mes, dia] = fechaStr.split('-').map(Number);
-        
-        // Crear objeto Date (los meses en JS son 0-indexados, por eso mes - 1)
-        const fecha = new Date(anio, mes - 1, dia);
-        
-        // Verificar si la fecha es válida
-        if (isNaN(fecha.getTime())) {
-            throw new Error('Fecha inválida');
-        }
+          // Dividir la fecha en día, mes y año
+          const [anio, mes, dia] = fechaStr.split('-').map(Number);
+          
+          // Crear objeto Date (los meses en JS son 0-indexados, por eso mes - 1)
+          const fecha = new Date(anio, mes - 1, dia);
+          
+          // Verificar si la fecha es válida
+          if (isNaN(fecha.getTime())) {
+              throw new Error('Fecha inválida');
+          }
 
-        // Opciones para formatear la fecha
-        const opciones = { 
-            weekday: 'long',   // "lunes"
-            day: 'numeric',    // "20"
-            month: 'long',     // "enero"
-            year: 'numeric'    // "2025"
-        };
+          // Opciones para formatear la fecha
+          const opciones = { 
+              weekday: 'long',   // "lunes"
+              day: 'numeric',    // "20"
+              month: 'long',     // "enero"
+              year: 'numeric'    // "2025"
+          };
 
-        // Formatear según la configuración regional (español)
-        return fecha.toLocaleDateString('es-ES', opciones);
+          // Formatear según la configuración regional (español)
+          return fecha.toLocaleDateString('es-ES', opciones);
         }
     }
 }
