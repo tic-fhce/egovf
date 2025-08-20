@@ -1,11 +1,12 @@
 <template>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">
-            {{ titulo }} >
+    <ol class="breadcrumb custom-breadcrumb">
+        <li class="breadcrumb-item">
+            <router-link to="/menusolicitudes" class="breadcrumb-link">Solicitudes</router-link>
         </li>
-        </ol>
-    </nav>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{titulo}} >
+        </li>
+    </ol>
     <CRow>
         <CCol :xs="12">
             <CCard>
@@ -36,6 +37,9 @@
                                       <div class="small text-medium-emphasis">
                                         {{solicitud.fecha}}
                                       </div>
+                                      <CProgress>
+                                        <CProgressBar :key="solicitud.idSolicitud" :color="solicitud.color" :value="solicitud.total">{{ solicitud.total }} %</CProgressBar>
+                                      </CProgress>
                                     </td>
                                     <td>
                                       {{ solicitud.evento.nombre }}
@@ -63,7 +67,7 @@
                                         </CTooltip>
                                         <CTooltip content="Aprobar Evento y Solicitud" placement="bottom">
                                         <template #toggler="{ id, on }">
-                                            <CButton :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="fechas(solicitud.idSolicitud)"><CIcon icon="cil-check-alt"/></CButton>
+                                            <CButton :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="getSolicitudAprobar(solicitud.idSolicitud)"><CIcon icon="cil-check-alt"/></CButton>
                                         </template>
                                         </CTooltip>
                                         
@@ -204,6 +208,39 @@
     </CModal>
     <!-- End Modal  Editar Solicitud-->
 
+    <!-- Modal Aprobar Solicitud-->
+    <CModal  :visible="modalSolicitudAprobar" @close="clickModalSolicitudAprobar(false)">
+        <CForm @submit.prevent="updateSolicitudAprobar()">
+            <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudAprobar(false)">
+                <CModalTitle>
+                    <h6> <CIcon icon="cil-clipboard" size="xl"/> Aprobar Solicitud</h6>
+                </CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+                <CAlert color="success" class="text-end">Ref. {{solicitudEditar.evento.nombre}}</CAlert>
+                
+                <CInputGroup class="mb-3">
+                    <CInputGroupText  as="label">Hoja de Ruta</CInputGroupText>
+                    <CFormInput  v-model="solicitudEditar.hojaRuta" required="true"/> 
+                </CInputGroup>
+                
+                <CInputGroup class="mb-3">
+                   <br>
+                  <div>
+                    {{ solicitudEditar.detalle }} ......
+                  </div>
+                </CInputGroup>
+                  
+            </CModalBody>
+            <CModalFooter>
+                <CButton @click="clickModalSolicitudAprobar(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+                <CButton type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-check-alt" class="me-2"/>Aprobar Solicitud</CButton>
+            </CModalFooter>
+        </CForm>
+    </CModal>
+    <!-- End Modal  Editar Solicitud-->
+
+
     <!-- Modal  Detalle Solicitud-->
     <CModal size="lg" :visible="modalSolicitudDetalle" @close="clickModalSolicitudDetalle(false)">
       <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudDetalle(false)">
@@ -234,7 +271,7 @@
           </div>
           <br>
           <div>
-            {{ solicitudDetalle.responsable }}
+            {{ solicitudDetalle.responsable.detalle }}
           </div>
           
         </CModalBody>
@@ -286,7 +323,7 @@ export default {
     },
     data(){
         return {
-          titulo:'Lista de Solicitudes',
+          titulo:'Lista de Solicitudes en Espera',
           sraService:null,
           egovfService:null,
           listaSolicitudes:[],
@@ -294,6 +331,7 @@ export default {
           modalSolicitud:false,
           modalSolicitudDetalle:false,
           modalSolicitudEditar:false,
+          modalSolicitudAprobar:false,
           modalEventoDetalle:false,
           idEvento:0,
           usuario:{
@@ -350,8 +388,13 @@ export default {
             fecha:'',
             detalle:'',
             servicio:'',
-            responsable:'',
-            evento:null
+            evento:null,
+            responsable:{
+              detalle:'',
+              nombre:'',
+              celular:'',
+              ci:''
+            }
           },
           eventoDetalle:{
             id:'',
@@ -415,9 +458,17 @@ export default {
         this.egovfService.headersUsuario(this.usuario.token);
         await this.sraService.getSolicitudes().then(response => {
           this.listaSolicitudes = response.data;
-          this.tabla();
-          this.getListaResponsable();
         });
+        this.progreso();
+      },
+      progreso(){
+        this.listaSolicitudes.forEach(solicitud =>{
+          solicitud.color = this.esFechaPasada(solicitud.evento.fechaInicio);
+          solicitud.total = this.calcularDiasRestantes(this.cambioFecha(),solicitud.evento.fechaInicio);
+
+        });
+        this.tabla();
+        this.getListaResponsable();
       },
 
       async getListaResponsable(){ // Funcion que crea una lista de Ciudadanos 
@@ -475,12 +526,36 @@ export default {
           title: 'Desea Actualizar la Solicitud del evento '+this.evento.nombre+"??",
           icon:'info',
           showDenyButton: true,
-          confirmButtonText: 'Registrar',
+          confirmButtonText: 'Actualizar',
           denyButtonText: 'Cancelar'}).then((result) => {
             if (result.isConfirmed) {
               this.sraService.updateSolicitud(this.solicitudEditar).then(response =>{
                 if(response.status==200){
                   this.$swal.fire('Solicitud Actualizada Correctamente', '', 'success').then((result) => {
+                    if(result)
+                      location.reload();
+                  });
+                }  
+                else{
+                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                }
+              });
+            } else if (result.isDenied) {
+              this.$swal.fire('Datos Cancelados', '', 'info');
+            }
+          });
+      },
+      updateSolicitudAprobar(){ // funcion para Aprobar la solicitud
+        this.$swal.fire({
+          title: 'Desea Aprobar la Solicitud del evento '+this.evento.nombre+"??",
+          icon:'info',
+          showDenyButton: true,
+          confirmButtonText: 'Aprobar',
+          denyButtonText: 'Cancelar'}).then((result) => {
+            if (result.isConfirmed) {
+              this.sraService.updateSolicitud(this.solicitudEditar).then(response =>{
+                if(response.status==200){
+                  this.$swal.fire('Solicitud Aprobada Correctamente', '', 'success').then((result) => {
                     if(result)
                       location.reload();
                   });
@@ -522,7 +597,10 @@ export default {
             this.solicitudDetalle.servicio = solicitud.servicio;
             this.listaResponsable.forEach(responsable=>{
               if(responsable.cif == solicitud.cifResponsable){
-                this.solicitudDetalle.responsable = "Para tal motivo el responsable del evento es "+responsable.nombre +", con cedula de identidad "+responsable.ci +" y celular :"+responsable.celular;
+                this.solicitudDetalle.responsable.detalle = "Para tal motivo el responsable del evento es "+responsable.nombre +", con cedula de identidad "+responsable.ci +" y celular :"+responsable.celular;
+                this.solicitudDetalle.responsable.nombre = responsable.nombre;
+                this.solicitudDetalle.responsable.celular = responsable.celular;
+                this.solicitudDetalle.responsable.ci = responsable.ci;
                 return true;
               }
             });
@@ -557,7 +635,16 @@ export default {
           this.clickModalEventoDetalle(true);
       },
       getSolicitudEditar(id){
-        
+        this.selectSolicitud(id);
+        this.clickModalSolicitudEditar(true);
+      },
+      getSolicitudAprobar(id){
+        this.selectSolicitud(id);
+        this.solicitudEditar.hojaRuta="";
+        this.clickModalSolicitudAprobar(true);
+
+      },
+      selectSolicitud(id){
         this.listaSolicitudes.forEach(solicitud =>{
           if(solicitud.idSolicitud==id){
             this.solicitudEditar.id = solicitud.idSolicitud;
@@ -580,10 +667,7 @@ export default {
             this.solicitudEditar.gestion = solicitud.gestion;            
             return true;
           }
-
         });
-        this.clickModalSolicitudEditar(true);
-
       },
       listaEvento(){
         this.$router.push({
@@ -610,16 +694,13 @@ export default {
         const fechaSalida = new Date(fs);
         const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
         const fechaActual = new Date();
-        if (!fechaSalida) this.total = 0;
-        
-        if (fechaActual >= fechaSalida) {
-          this.total =100;
-        }
-        else{
-          const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-          const progreso = (diasPasados / diasTotales) * 100;
-          this.total = parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-        }
+        if (!fechaSalida) return 0;
+            
+        if (fechaActual >= fechaSalida) return 100;
+
+        const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
+        const progreso = (diasPasados / diasTotales) * 100;
+        return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
       },
       cambio(fechaOriginal){
         fechaOriginal = fechaOriginal.split(" ")[0];
@@ -627,6 +708,13 @@ export default {
         const [dia, mes, año] = fechaStr.split("-");
         const fechaFormateada = `${año}-${mes}-${dia}`;
         return(this.formatearFecha(fechaFormateada));
+      },
+      cambioFecha(){
+        const primerDia = new Date();
+        const año = primerDia.getFullYear();
+        const mes = String(primerDia.getMonth() + 1).padStart(2, '0');
+        const primerDiaFormateado = `${año}-${mes}-01`;
+        return(primerDiaFormateado);
       },
       formatearFecha(fechaStr) {
 
@@ -667,13 +755,17 @@ export default {
       clickModalSolicitudEditar(solicitud){
         this.modalSolicitudEditar = solicitud;
       },
+      clickModalSolicitudAprobar(solicitud){
+        this.modalSolicitudAprobar = solicitud;
+      },
       pdf(){ //Funcion que Constuye el PDF de la solicitud
             
             //const fecha = new Date();
+
             const doc = new jsPDF('p','mm','letter');
             
             //const doc = new jsPDF('p','mm','legal');
-            
+            doc.setFont('times');
             doc.setFontSize(10);
             doc.setFont(undefined, 'bold');
             doc.text(this.solicitudDetalle.cite,(200),45,{align:"right"});
@@ -695,10 +787,10 @@ export default {
 
             doc.setFont(undefined, 'normal');
 
-            const lineHeight = 8; // Espacio entre líneas (interlineado)
+            const lineHeight = 5; // Espacio entre líneas (interlineado)
             const maxWidth = 180;
             // Dividir el texto en líneas
-            const lineas = doc.splitTextToSize(this.solicitudDetalle.detalle+"\n"+this.solicitudDetalle.servicio+"\n"+this.solicitudDetalle.responsable+"\n\nCon este grato motivo saludo a usted con las consideraciones más distinguidas y esperando una respuesta.", maxWidth);
+            const lineas = doc.splitTextToSize(this.solicitudDetalle.detalle+"\n\n"+this.solicitudDetalle.servicio+"\n\n"+this.solicitudDetalle.responsable.detalle+"\n\nCon este grato motivo saludo a usted con las consideraciones más distinguidas y esperando una respuesta.", maxWidth);
 
             // Escribir cada línea con interlineado
             let y = 140; // Posición inicial Y
@@ -706,6 +798,19 @@ export default {
               doc.text(linea, 20, y, { align: "justify", maxWidth :180 });
               y += lineHeight; // Aumenta la posición Y para la siguiente línea
             });
+
+            doc.text(this.solicitudDetalle.responsable.nombre,(215/4),y+25,{align:"center"});
+            doc.text("C.I. : "+this.solicitudDetalle.responsable.ci,(215/4),y+30,{align:"center"});
+            doc.text("Celular : "+this.solicitudDetalle.responsable.celular,(215/4),y+35,{align:"center"});
+
+            doc.text("Vo. Bo.",(162),y+25,{align:"center"});
+
+
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(8);
+            doc.text("Universidad del Bicentenario de Bolivia",(215/2),y+50,{align:"center"});
+            doc.text("(1825-2025)",(215/2),y+55,{align:"center"});
+            
 
             
 

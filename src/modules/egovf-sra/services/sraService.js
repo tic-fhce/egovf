@@ -108,7 +108,7 @@ export default class SraService {
             "fecha":solicitud.fecha,
             "idEvento":solicitud.idEvento,
             "idServicio":solicitud.idServicio,
-            "hojaRuta":"#",
+            "hojaRuta":solicitud.hojaRuta.toUpperCase(),
             "cifResponsable":solicitud.responsable.cif,
             "detalle":solicitud.old,
             "gestion":solicitud.gestion
