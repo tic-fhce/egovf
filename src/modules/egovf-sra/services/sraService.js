@@ -50,6 +50,9 @@ export default class SraService {
             }
         });
     }
+    getListaEventos(){
+        return axios.get(sraUrl + "evento/getListaEventos");
+    }
 
     addEvento(evento) {
         const eventoDtoRequest = {
@@ -84,8 +87,12 @@ export default class SraService {
     getListaSolicitud() {
         return axios.get(sraUrl + "solicitud/getListaSolicitud");
     }
-    getSolicitudes() {
-        return axios.get(sraUrl + "solicitud/getSolicitudes");
+    getSolicitudes(estado) {
+        return axios.get(sraUrl + "solicitud/getSolicitudes",{
+            params:{
+                estado:estado
+            }
+        });
     }
 
     addSolicitud(solicitud) {

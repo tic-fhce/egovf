@@ -18,7 +18,7 @@
                     <h6>Solicitudes Aprobadas</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getListaSolicitud(1,0,'Solicitudes Aprobadas')">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol> 
@@ -32,7 +32,7 @@
                     <h6>Solicitudes En Espera</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getListaSolicitud()">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getListaSolicitud(0,0,'Solicitudes En Espera')">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -46,7 +46,7 @@
                     <h6>Solicitudes Rechazadas</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getListaSolicitud()">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getListaSolicitud(2,0,'Solicitudes Rechazadas')">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -60,7 +60,7 @@
                     <h6>Todas las Solicitudes</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getListaSolicitud()">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getListaSolicitud(1,0,'Todas las Solicitudes')">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
@@ -114,11 +114,13 @@ export default {
                 this.usuario.foto = this.$cookies.get("foto");
             }
         },
-        getListaSolicitud(){
+        getListaSolicitud(estado,idEvento,titulo){
             this.$router.push({
                 name: 'ListaSolicitudesView',
                 params: {
-                    idEvento: 0
+                    estado: estado,
+                    idEvento: idEvento,
+                    titulo:titulo
                 }
             });
         }

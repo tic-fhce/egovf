@@ -436,11 +436,12 @@ export default {
             URL.revokeObjectURL(url);
         },
         solicitudes(idEvento){
-            console.log(idEvento);
             this.$router.push({
                 name: 'ListaSolicitudesView',
                 params:{
-                    idEvento: idEvento
+                    estado: 0,
+                    idEvento: idEvento,
+                    titulo:"Solicitudes En Espera"
                 }
             });
         },

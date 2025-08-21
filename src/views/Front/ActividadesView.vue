@@ -1,29 +1,30 @@
 <template>
+    <CRow :xs="{ cols: 1, gutter: 4}" :md="{ cols:2 }">
+        <CCol xs>
+            <CCard style="width: 18rem">
+  <CCardImage orientation="top" src="https://fhcevirtual.umsa.bo/egovf-img/imagenes/202508211755745564.jpeg" />
+  <CCardBody>
+    <CCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CCardText>
+  </CCardBody>
+</CCard>
+</CCol><CCol xs>
+<CCard style="width: 18rem">
+  <CCardImage orientation="top" src="https://fhcevirtual.umsa.bo/egovf-img/imagenes/202508211755745029.jpeg" />
+  <CCardBody>
+    <CCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CCardText>
+  </CCardBody>
+</CCard>
 
-    <CRow>
-        <CCol :lg="6" v-for="evento in listaEventos" :key="evento.id">
-            <CCard class="mb-3" >
-                <CRow class="g-0">
-                    <CCol :md="4">
-                        <CCardImage class="rounded-0" :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/'+evento.imagen" />
-                    </CCol>
-                    <CCol :md="8">
-                        <CCardBody>
-                            <CCardTitle>{{formatearFecha(evento.fechaInicio)}}</CCardTitle>
-                            <CCardText>{{ evento.nombre }}</CCardText>
-                            <CCardText><small class="text-body-secondary">De horas {{ evento.horaInicio }}:00 a {{ evento.horaFin }}:00</small></CCardText>
-                            <CAlert :color="evento.color">{{evento.estado}}</CAlert>
-                            <CButton :color="evento.color" class="font" size="sm" @click="getEventoDetalle(evento.id)">Ver Evento</CButton>
-                        </CCardBody>
-                    </CCol>
-                </CRow>
-            </CCard>
         </CCol>
+
+
+
     </CRow>
+  
 
-    
+    <FooterComponent />
 
-  <!-- Modal  Detalles de Evento-->
+<!-- Modal  Detalles de Evento-->
   <CModal size="lg" :visible="modalEventoDetalle" @close="clickModalEventoDetalle(false)">
       <CModalHeader class="headercolor" dismiss @close="clickModalEventoDetalle(false)">
           <CModalTitle>
@@ -37,8 +38,8 @@
           <CButton @click="clickModalEventoDetalle(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
       </CModalFooter>
   </CModal>
-  <!-- END Modal  Detalles de Evento -->
-     
+<!-- END Modal  Detalles de Evento -->
+  
 </template>
 
 <script>
@@ -46,29 +47,22 @@
 // Importamos Componentes
 import ComponenteEvento from '@/components/Evento/ComponenteEvento.vue';
 
+import FooterComponent from '@/modules/egovf/sections/home/Footer/FooterComponent.vue';
+
 //Importamos Servicios
 import SraService from '@/modules/egovf-sra/services/sraService';
 
 export default {
-    name:'EventosView',
+    name:'ActividadesView',
     components:{
-      ComponenteEvento
+      ComponenteEvento,
+      FooterComponent
     },
     data(){
         return {
           sraService:null,
           listaEventos:[],
           modalEventoDetalle:false,
-          usuario:{
-            token:'',
-            cif:'',
-            correo:'',
-            celular:'',
-            pass:'',
-            unidad:'',
-            sigla:'',
-            foto:''
-          },
           eventoDetalle:{
             id:'',
             nombre:'',
@@ -88,9 +82,7 @@ export default {
         }
     },
     beforeCreate(){        
-        if(this.$cookies.get('cif')==null){
-            this.$router.push('/');
-        }
+
     },
     created(){
       this.sraService = new SraService();
@@ -228,9 +220,6 @@ export default {
 </script>
 
 <style scoped>
-.imagen-fija {
-  width: 300px;
-  height: 200px;
-  object-fit: cover;
-}
+
+
 </style>

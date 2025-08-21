@@ -17,6 +17,11 @@ const routes = [
         component: () => import('@/modules/egovf/views/HomeView.vue')
       },
       {
+        path: "/actividad",
+        name: "ActividadesView",
+        component: () => import("@/views/Front/ActividadesView.vue"),
+      },
+      {
         path: "/sesion",
         name: "SesionView",
         //component: () => import("@/views/Front/SesionView.vue"),
@@ -234,9 +239,10 @@ const routes = [
         component: () => import("@/modules/egovf-sra/views/MenuSolicitudesView.vue"),
       },
       {
-        path: "/listasolicitudes:idEvento",
+        path: "/solicitudes/:estado/:idEvento/:titulo",
         name: "ListaSolicitudesView",
         component: () => import("@/modules/egovf-sra/views/ListaSolicitudesView.vue"),
+        props:true
       },
       {
         path: "/eventos",

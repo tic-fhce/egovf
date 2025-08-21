@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import HeaderNavigation from '@/modules/egovf/components/HeaderNavigation.vue';
+import HeaderNavigation from '@/components/Front/HeaderNavigation.vue';
+
 export default {
     name: 'FrontLayout',
     components: {

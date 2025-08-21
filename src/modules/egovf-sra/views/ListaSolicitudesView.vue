@@ -62,12 +62,12 @@
                                         </CTooltip>
                                         <CTooltip content="Editar la Solicitud" placement="bottom">
                                         <template #toggler="{ id, on }">
-                                            <CButton :aria-describedby="id" v-on="on" class="font" color="warning" size="sm" @click="getSolicitudEditar(solicitud.idSolicitud)"><CIcon icon="cil-pencil"/></CButton>
+                                            <CButton v-if="estado==0" :aria-describedby="id" v-on="on" class="font" color="warning" size="sm" @click="getSolicitudEditar(solicitud.idSolicitud)"><CIcon icon="cil-pencil"/></CButton>
                                         </template>
                                         </CTooltip>
                                         <CTooltip content="Aprobar Evento y Solicitud" placement="bottom">
                                         <template #toggler="{ id, on }">
-                                            <CButton :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="getSolicitudAprobar(solicitud.idSolicitud)"><CIcon icon="cil-check-alt"/></CButton>
+                                            <CButton v-if="estado==0" :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="getSolicitudAprobar(solicitud.idSolicitud)"><CIcon icon="cil-check-alt"/></CButton>
                                         </template>
                                         </CTooltip>
                                         
@@ -318,12 +318,16 @@ DataTable.use(DataTablesLib);
 
 export default {
     name:'ListaSolicitudesView',
+    props: {
+      estado: {type: Number,required: true},
+      idEvento: {type: Number,required: true},
+      titulo:{type:String,required:true},
+    },
     components:{
       ComponenteEvento
     },
     data(){
         return {
-          titulo:'Lista de Solicitudes en Espera',
           sraService:null,
           egovfService:null,
           listaSolicitudes:[],
@@ -333,7 +337,6 @@ export default {
           modalSolicitudEditar:false,
           modalSolicitudAprobar:false,
           modalEventoDetalle:false,
-          idEvento:0,
           usuario:{
             token:'',
             cif:'',
@@ -424,7 +427,7 @@ export default {
       this.egovfService = new EgovfService();
     },
     mounted(){
-        this.idEvento = this.$route.params.idEvento; //resivimos el cif del ciudadano
+        //this.idEvento = this.$route.params.idEvento; //resivimos el cif del ciudadano
         this.getDatos(); // Llamamos los datos del Usuario
         this.getSolicitudes();
         if(this.idEvento>0){
@@ -456,7 +459,7 @@ export default {
       },
       async getSolicitudes(){ // Funcion que crea una lista de Ciudadanos 
         this.egovfService.headersUsuario(this.usuario.token);
-        await this.sraService.getSolicitudes().then(response => {
+        await this.sraService.getSolicitudes(this.estado).then(response => {
           this.listaSolicitudes = response.data;
         });
         this.progreso();
