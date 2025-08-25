@@ -1,7 +1,9 @@
 <template>
-<FullCalendar :options="calendarOptions">
+    <div class="calendar-container">
+        <FullCalendar :options="calendarOptions">
+        </FullCalendar>
+    </div>
 
-</FullCalendar>
 
 <!-- Modal  Evento-->
 <CModal :visible="modalEvento" @close="clickModalEvento(false)">
@@ -198,11 +200,11 @@ export default {
  
     },
     methods:{
-      tabla(){
-        this.$nextTick(()=>{
-          //$('#EventoTabla').DataTable();
-        });
-      },
+        tabla(){
+            this.$nextTick(()=>{
+            //$('#EventoTabla').DataTable();
+            });
+        },
         selectFile(event){// Funcion que permite cambiar los datos del archivo
             const fileInput = this.getSafeFileInput(event);
       
@@ -354,20 +356,6 @@ export default {
             this.evento.cif=this.usuario.cif;
             this.evento.idAmbiente=this.idAmbiente;
             this.clickModalEvento(true);
-            /*let title = prompt('Por favor ingrese un título para el evento')
-            let calendarApi = selectInfo.view.calendar
-
-            calendarApi.unselect() // clear date selection
-
-            if (title) {
-                calendarApi.addEvent({
-                    id: Math.random().toString(36).substring(2, 9),
-                    title,
-                    start: selectInfo.startStr,
-                    end: selectInfo.endStr,
-                    allDay: selectInfo.allDay
-                })
-            }*/
         },
         handleEventClick(clickInfo) {
             this.listaEventos.forEach(evento =>{
@@ -451,6 +439,34 @@ export default {
 </script>
 
 <style scoped>
+.calendar-container {
+  flex-grow: 1;
+  padding: 1em;
+}
+/* Cambiar color de TODO el texto del calendario */
+:deep(.fc) {
+  color: #2c3e50 !important; /* Color principal */
+  font-family: 'Arial', sans-serif;
+}
 
+/* Texto de los días de la semana (Lun, Mar, Mié...) */
+:deep(.fc-col-header-cell) {
+  color: #000000 !important; /* Azul */
+  font-weight: 600;
+}
+
+/* Texto de los números de días */
+:deep(.fc-daygrid-day-number) {
+  color: #2c3e50 !important; /* Gris oscuro */
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+:deep(.fc a) {
+  text-decoration: none !important;
+}
+/* Toolbar text */
+:deep(.fc-toolbar-chunk) {
+  color: #7f8c8d !important;
+}
 </style>
 

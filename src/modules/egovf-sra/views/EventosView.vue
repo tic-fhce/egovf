@@ -1,27 +1,30 @@
 <template>
-
-    <CRow>
-        <CCol :lg="6" v-for="evento in listaEventos" :key="evento.id">
-            <CCard class="mb-3" >
-                <CRow class="g-0">
-                    <CCol :md="4">
-                        <CCardImage class="rounded-0" :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/'+evento.imagen" />
-                    </CCol>
-                    <CCol :md="8">
-                        <CCardBody>
-                            <CCardTitle>{{formatearFecha(evento.fechaInicio)}}</CCardTitle>
-                            <CCardText>{{ evento.nombre }}</CCardText>
-                            <CCardText><small class="text-body-secondary">De horas {{ evento.horaInicio }}:00 a {{ evento.horaFin }}:00</small></CCardText>
-                            <CAlert :color="evento.color">{{evento.estado}}</CAlert>
-                            <CButton :color="evento.color" class="font" size="sm" @click="getEventoDetalle(evento.id)">Ver Evento</CButton>
-                        </CCardBody>
-                    </CCol>
-                </CRow>
-            </CCard>
-        </CCol>
-    </CRow>
-
-    
+  <CRow>
+    <CButton class="floating-btn" @click="clickModalAmbiente(true)" >
+        Reservar Evento
+    </CButton>
+  </CRow>
+  
+  <CRow>
+      <CCol :lg="6" v-for="evento in listaEventos" :key="evento.id">
+          <CCard class="mb-3" >
+              <CRow class="g-0">
+                  <CCol :md="4">
+                      <CCardImage class="rounded-0" :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/'+evento.imagen" />
+                  </CCol>
+                  <CCol :md="8">
+                      <CCardBody>
+                          <CCardTitle>{{formatearFecha(evento.fechaInicio)}}</CCardTitle>
+                          <CCardText>{{ evento.nombre }}</CCardText>
+                          <CCardText><small class="text-body-secondary">De horas {{ evento.horaInicio }}:00 a {{ evento.horaFin }}:00</small></CCardText>
+                          <CAlert :color="evento.color">{{evento.estado}}</CAlert>
+                          <CButton :color="evento.color" class="font" size="sm" @click="getEventoDetalle(evento.id)">Ver Evento</CButton>
+                      </CCardBody>
+                  </CCol>
+              </CRow>
+          </CCard>
+      </CCol>
+  </CRow>
 
   <!-- Modal  Detalles de Evento-->
   <CModal size="lg" :visible="modalEventoDetalle" @close="clickModalEventoDetalle(false)">
@@ -38,6 +41,30 @@
       </CModalFooter>
   </CModal>
   <!-- END Modal  Detalles de Evento -->
+
+  <!-- Modal  Ambiente del Evento-->
+  <CModal :visible="modalAmbiente" @close="clickModalAmbiente(false)">
+      <CModalHeader class="headercolor" dismiss @close="clickModalAmbiente(false)">
+          <CModalTitle>
+              <h6><CIcon icon="cil-calendar" size="lg" class="me-2"/>Seleccionar Ambiente</h6>
+          </CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CInputGroup class="mb-3">
+          <CInputGroupText  as="label">Ambiente </CInputGroupText>
+          <CFormSelect v-model="idAmbiente" :model-value="String(idAmbiente)" @update:model-value="idAmbiente = Number($event)" required="true">
+            <option v-for="ambiente in listaAmbiente" :key="ambiente.id" :value="ambiente.id">
+              {{ ambiente.nombre }}
+            </option>
+          </CFormSelect>
+        </CInputGroup>
+      </CModalBody>
+      <CModalFooter>
+          <CButton @click="clickModalAmbiente(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+          <CButton @click="clickAmbiente()" color="success" class="font" size="sm"><CIcon icon="cil-pencil" class="me-2"/>Reservar Ambiente</CButton>
+      </CModalFooter>
+  </CModal>
+  <!-- END Modal  Ambiente del Evento -->
      
 </template>
 
@@ -57,8 +84,11 @@ export default {
     data(){
         return {
           sraService:null,
+          idAmbiente:0,
           listaEventos:[],
+          listaAmbiente:[],
           modalEventoDetalle:false,
+          modalAmbiente:false,
           usuario:{
             token:'',
             cif:'',
@@ -97,6 +127,7 @@ export default {
     },
     mounted(){
         this.getDatos(); // Llamamos los datos del Usuario
+        this.getListaAmbiente();
         this.getListaEventos();
     },
     methods:{
@@ -119,20 +150,12 @@ export default {
         });
         //this.progreso();
       },
-      progreso(){
-        this.listaSolicitudes.forEach(solicitud =>{
-          solicitud.color = this.esFechaPasada(solicitud.evento.fechaInicio);
-          solicitud.total = this.calcularDiasRestantes(this.cambioFecha(),solicitud.evento.fechaInicio);
-
+      async getListaAmbiente(){ // Funcion que crea una lista de Ambientes 
+        await this.sraService.getListaAmbiente().then(response => {
+            this.listaAmbiente = response.data;
         });
+        //this.progreso();
       },
-
-
-      async getEvento(){ 
-
-
-      },
-
       getEventoDetalle(id){
         this.listaEventos.forEach(evento =>{
             if(evento.id == id){
@@ -156,31 +179,6 @@ export default {
           this.clickModalEventoDetalle(true);
       },
 
-      esFechaPasada(fechaSalida) {
-        if (!fechaSalida) return 'warning';
-        
-        const fechaTermino = new Date(fechaSalida);
-        const hoy = new Date();
-        
-        // Normalizar fechas (ignorar horas)
-        fechaTermino.setHours(0, 0, 0, 0);
-        hoy.setHours(0, 0, 0, 0);
-        
-        return fechaTermino < hoy ? 'danger' : 'success';
-      },
-      calcularDiasRestantes(fi,fs) {
-        const fechaInicio = new Date(fi);
-        const fechaSalida = new Date(fs);
-        const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-        const fechaActual = new Date();
-        if (!fechaSalida) return 0;
-            
-        if (fechaActual >= fechaSalida) return 100;
-
-        const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-        const progreso = (diasPasados / diasTotales) * 100;
-        return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-      },
       cambio(fechaOriginal){
         fechaOriginal = fechaOriginal.split(" ")[0];
         const fechaStr = fechaOriginal.replace(/\//g, "-");
@@ -222,7 +220,19 @@ export default {
       
       clickModalEventoDetalle(evento){
         this.modalEventoDetalle=evento;
-      }
+      },
+      clickModalAmbiente(ambiente){
+        this.modalAmbiente=ambiente;
+      },
+      clickAmbiente(){
+        this.clickModalAmbiente(false);
+        this.$router.push({
+          name: 'FechasView',
+          params:{
+            ambiente: this.idAmbiente
+          }
+        });
+      },
     }
 }
 </script>
@@ -232,5 +242,39 @@ export default {
   width: 300px;
   height: 200px;
   object-fit: cover;
+}
+.floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    cursor: pointer;
+    z-index: 1000;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.floating-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+}
+
+.floating-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+.floating-btn svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
 }
 </style>

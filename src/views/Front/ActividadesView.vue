@@ -1,27 +1,41 @@
 <template>
-    <CRow :xs="{ cols: 1, gutter: 4}" :md="{ cols:2 }">
-        <CCol xs>
-            <CCard style="width: 18rem">
-  <CCardImage orientation="top" src="https://fhcevirtual.umsa.bo/egovf-img/imagenes/202508211755745564.jpeg" />
-  <CCardBody>
-    <CCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CCardText>
-  </CCardBody>
-</CCard>
-</CCol><CCol xs>
-<CCard style="width: 18rem">
-  <CCardImage orientation="top" src="https://fhcevirtual.umsa.bo/egovf-img/imagenes/202508211755745029.jpeg" />
-  <CCardBody>
-    <CCardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CCardText>
-  </CCardBody>
-</CCard>
+    <CRow class="margen">
+        <CCol :lg="6">
+            <Carousel v-bind="carouselConfig">
+                <Slide v-for="evento in listaEventos" :key="evento.id">
+                    <CCard class="mb-3" >
+                        <CCardImage class="rounded-0" :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/'+evento.imagen" />
+                        <CCardImageOverlay>
+                            <div class="titulo">
+                                <CCardTitle>{{formatearFecha(evento.fechaInicio)}}</CCardTitle>
+                                <CCardText>{{ evento.nombre }}</CCardText>
+                                <CCardText><small>De horas {{ evento.horaInicio }}:00 a {{ evento.horaFin }}:00</small></CCardText>
+                            </div>
+                            <br>
+                            <CAlert :color="evento.color">{{evento.estado}}</CAlert>
+                            <CButton :color="evento.color" class="font" size="sm" @click="getEventoDetalle(evento.id)">Ver Evento</CButton>
+                        </CCardImageOverlay>
+                    </CCard>
+                </Slide>
 
+                <template #addons>
+                    <Navigation />
+                </template>
+            </Carousel>
         </CCol>
-
-
-
+        <CCol :lg="6">
+            <div class="calendar-container">
+                <FullCalendar :options="calendarOptions">
+                </FullCalendar>
+            </div>
+            
+        </CCol>
     </CRow>
-  
-
+    <CRow class="seccion">
+        <hr>
+        <ComponenteInfo />
+    </CRow>
+    
     <FooterComponent />
 
 <!-- Modal  Detalles de Evento-->
@@ -45,40 +59,77 @@
 <script>
 
 // Importamos Componentes
+import 'vue3-carousel/carousel.css'
+import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import ComponenteEvento from '@/components/Evento/ComponenteEvento.vue';
-
+import ComponenteInfo from '@/components/Evento/ComponenteInfo.vue';
 import FooterComponent from '@/modules/egovf/sections/home/Footer/FooterComponent.vue';
 
 //Importamos Servicios
 import SraService from '@/modules/egovf-sra/services/sraService';
 
+import FullCalendar from '@fullcalendar/vue3'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import listPlugin from '@fullcalendar/list'
+import interactionPlugin from '@fullcalendar/interaction'
+
 export default {
     name:'ActividadesView',
     components:{
       ComponenteEvento,
-      FooterComponent
+      FooterComponent,
+      Carousel,
+      Slide,
+      Navigation,
+      FullCalendar,
+      ComponenteInfo
     },
     data(){
         return {
-          sraService:null,
-          listaEventos:[],
-          modalEventoDetalle:false,
-          eventoDetalle:{
-            id:'',
-            nombre:'',
-            detalle:'',
-            fechaInicio:'',
-            fechaFin:'',
-            horaInicio:'',
-            horaFin:'',
-            estado:0,
-            ambiente:'',
-            imagen:'',
-            url:'',
-            fecha:'',
-            fechaE:'',
-            color:''
-          },
+            sraService:null,
+            listaEventos:[],
+            modalEventoDetalle:false,
+            eventoDetalle:{
+                id:'',
+                nombre:'',
+                detalle:'',
+                fechaInicio:'',
+                fechaFin:'',
+                horaInicio:'',
+                horaFin:'',
+                estado:0,
+                ambiente:'',
+                imagen:'',
+                url:'',
+                fecha:'',
+                fechaE:'',
+                color:''
+            },
+            carouselConfig : {
+                height: 500,
+                itemsToShow: 2,
+                wrapAround: true,
+            },
+            calendarOptions: {
+                plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                editable: true,
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: true,
+                weekends: true,
+                locale: 'es',
+                select: this.handleDateSelect,
+                eventClick: this.handleEventClick,
+                eventsSet: this.handleEvents,
+                events: []
+            },
         }
     },
     beforeCreate(){        
@@ -109,22 +160,23 @@ export default {
         await this.sraService.getListaEventos().then(response => {
             this.listaEventos = response.data;
         });
+        this.listaEventos.forEach(evento=>{
+            if(evento.estado == "Aprobado"){
+                evento.estado = "Evento Confirmado";
+            }
+            else{
+                evento.estado = "Evento Por Confirmar";
+            }
+        });
+        this.calendarOptions.events = this.listaEventos.map(evento =>({
+            id:evento.id,
+            title:evento.nombre,
+            start:evento.fechaInicio,
+            end:evento.fechaFin,
+            color:evento.colorCalendar
+        }));
         //this.progreso();
       },
-      progreso(){
-        this.listaSolicitudes.forEach(solicitud =>{
-          solicitud.color = this.esFechaPasada(solicitud.evento.fechaInicio);
-          solicitud.total = this.calcularDiasRestantes(this.cambioFecha(),solicitud.evento.fechaInicio);
-
-        });
-      },
-
-
-      async getEvento(){ 
-
-
-      },
-
       getEventoDetalle(id){
         this.listaEventos.forEach(evento =>{
             if(evento.id == id){
@@ -146,32 +198,6 @@ export default {
             }
           });
           this.clickModalEventoDetalle(true);
-      },
-
-      esFechaPasada(fechaSalida) {
-        if (!fechaSalida) return 'warning';
-        
-        const fechaTermino = new Date(fechaSalida);
-        const hoy = new Date();
-        
-        // Normalizar fechas (ignorar horas)
-        fechaTermino.setHours(0, 0, 0, 0);
-        hoy.setHours(0, 0, 0, 0);
-        
-        return fechaTermino < hoy ? 'danger' : 'success';
-      },
-      calcularDiasRestantes(fi,fs) {
-        const fechaInicio = new Date(fi);
-        const fechaSalida = new Date(fs);
-        const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-        const fechaActual = new Date();
-        if (!fechaSalida) return 0;
-            
-        if (fechaActual >= fechaSalida) return 100;
-
-        const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-        const progreso = (diasPasados / diasTotales) * 100;
-        return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
       },
       cambio(fechaOriginal){
         fechaOriginal = fechaOriginal.split(" ")[0];
@@ -211,15 +237,157 @@ export default {
         // Formatear según la configuración regional (español)
         return fecha.toLocaleDateString('es-ES', opciones);
       },
-      
       clickModalEventoDetalle(evento){
         this.modalEventoDetalle=evento;
-      }
+      },
+      handleEventClick(clickInfo) {
+        this.getEventoDetalle(clickInfo.event.id);
+      },
+      handleDateSelect(selectInfo) {
+            var minDate = new Date();
+
+            minDate.setDate(minDate.getDate() + 12);
+            const selectedDate = selectInfo.start;
+            const dayOfWeek = selectedDate.getDay();
+            
+            if (selectInfo.start < minDate) {
+                this.$swal.fire({
+                    title:'ERROR',
+                    text:'Lo sentimos, pero solo puedes realizar tus eventos a partir del  '+minDate.toDateString(),
+                    icon:'error',
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                this.$swal.fire({
+                    title:'Cuidado',
+                    text:'Lo sentimos no puedes realizar eventos los dias Sabados y Domingos',
+                    icon:'warning',
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            this.$swal.fire({
+                title:'Te Informamos Que: ',
+                text:'Para realizar la reserva de tu evento, debes de acudir a la Dirección de tu Carrera o a la Unidad a la que perteneces, previamente o acudir personalmente a la Administración Facultativa, ubicada en la Casa Marcelo Quiroga Santa Cruz, Av. 6 de Agosto N.º 2118, entre calles Aspiazu y Guachalla.',
+                icon:'info',
+                showCloseButton: true
+            });
+        },
+
     }
 }
 </script>
 
 <style scoped>
+.margen{
+    margin-top: 5em;	
+}
+.seccion{
+    background-color: #8080803b;
+}
+.titulo{
+    background-color: rgba(15, 15, 15, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 15px;
+}
+:root {
+  --carousel-transition: 300ms;
+  --carousel-opacity-inactive: 0.7;
+  --carousel-opacity-active: 1;
+  --carousel-opacity-near: 0.9;
 
+  background-color: #242424;
+}
 
+.carousel {
+  --vc-nav-background: rgba(255, 255, 255, 0.7);
+  --vc-nav-border-radius: 100%;
+}
+
+img {
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel__viewport {
+  perspective: 2000px;
+}
+
+.carousel__track {
+  transform-style: preserve-3d;
+}
+
+.carousel__slide--sliding {
+  transition:
+    opacity var(--carousel-transition),
+    transform var(--carousel-transition);
+}
+
+.carousel.is-dragging .carousel__slide {
+  transition:
+    opacity var(--carousel-transition),
+    transform var(--carousel-transition);
+}
+
+.carousel__slide {
+  opacity: var(--carousel-opacity-inactive);
+  transform: translateX(10px) rotateY(-12deg) scale(0.9);
+}
+
+.carousel__slide--prev {
+  opacity: var(--carousel-opacity-near);
+  transform: rotateY(-10deg) scale(0.95);
+}
+
+.carousel__slide--active {
+  opacity: var(--carousel-opacity-active);
+  transform: rotateY(0) scale(1);
+}
+
+.carousel__slide--next {
+  opacity: var(--carousel-opacity-near);
+  transform: rotateY(10deg) scale(0.95);
+}
+
+.carousel__slide--next ~ .carousel__slide {
+  opacity: var(--carousel-opacity-inactive);
+  transform: translateX(-10px) rotateY(12deg) scale(0.9);
+}
+
+.calendar-container {
+  flex-grow: 1;
+  padding: 1em;
+}
+/* Cambiar color de TODO el texto del calendario */
+:deep(.fc) {
+  color: #2c3e50 !important; /* Color principal */
+  font-family: 'Arial', sans-serif;
+}
+
+/* Texto de los días de la semana (Lun, Mar, Mié...) */
+:deep(.fc-col-header-cell) {
+  color: #000000 !important; /* Azul */
+  font-weight: 600;
+}
+
+/* Texto de los números de días */
+:deep(.fc-daygrid-day-number) {
+  color: #2c3e50 !important; /* Gris oscuro */
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+:deep(.fc a) {
+  text-decoration: none !important;
+}
+/* Toolbar text */
+:deep(.fc-toolbar-chunk) {
+  color: #7f8c8d !important;
+}
 </style>
