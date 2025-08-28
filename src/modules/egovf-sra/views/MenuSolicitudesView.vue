@@ -60,11 +60,59 @@
                     <h6>Todas las Solicitudes</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getListaSolicitud(1,0,'Todas las Solicitudes')">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="clickModalSolicitud(true)">Ingresar</CButton>
+                </CCardFooter>
+            </CCard>
+        </CCol>
+
+        <CCol :lg="3">
+            <br />
+            <CCard>
+                <CCardHeader class="headercolor text-center">G.S.A.</CCardHeader>
+                <CCardBody class="text-center">
+                    <CIcon customClassName="nav-icon" icon="cil-check" class="menuicon"/> 
+                    <h6>Generar Solicitud</h6>
+                </CCardBody>
+                <CCardFooter class="text-center">
+                    <CButton color="success" class="font" @click="getListaSolicitud(405,0,'Genrar Solicitudes')">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol>
     </CRow>
+
+  <!-- Modal  Ambiente del Evento-->
+  <CModal :visible="modalSolicitud" @close="clickModalSolicitud(false)">
+      <CModalHeader class="headercolor" dismiss @close="clickModalSolicitud(false)">
+          <CModalTitle>
+              <h6><CIcon icon="cil-calendar" size="lg" class="me-2"/>Solicitudes</h6>
+          </CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <CInputGroup class="mb-3">
+            <CInputGroupText  as="label">Gestion </CInputGroupText>
+            <CFormSelect v-model="gestion" :model-value="String(gestion)" @update:model-value="gestion = Number($event)" required="true">
+                <option v-for="y in listaGestion" :key="y" :value="y">
+                {{ y }}
+                </option>
+            </CFormSelect>                
+        </CInputGroup>
+
+        <CInputGroup class="mb-3">
+            <CInputGroupText as="label">Mes </CInputGroupText>
+            <CFormSelect v-model="rmes" :model-value="String(mes)" required="true">
+                <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
+                {{ mes.mes }}
+                </option>
+            </CFormSelect>
+        </CInputGroup>
+
+      </CModalBody>
+      <CModalFooter>
+          <CButton @click="clickModalSolicitud(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+          <CButton @click="clickSolicitud()" color="success" class="font" size="sm"><CIcon icon="cil-check" class="me-2"/>Ver Solicitudes</CButton>
+      </CModalFooter>
+  </CModal>
+  <!-- END Modal  Ambiente del Evento -->
 </template>
 
 <script>
@@ -87,7 +135,12 @@ export default {
                 unidad:'',
                 sigla:'',
                 foto:''
-            }
+            },
+            modalSolicitud:false,
+            listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
+            listaGestion:[],
+            gestion:0,
+            mes:0
         }
     },
     beforeCreate(){        
@@ -99,6 +152,7 @@ export default {
     },
     mounted(){
         this.getDatos();
+        this.getGestion();
     },
     methods:{
         getDatos(){
@@ -123,7 +177,30 @@ export default {
                     titulo:titulo
                 }
             });
-        }
+        },
+        getLista(){
+            this.$router.push({
+                name: 'ListaView',
+                params: {
+                    gestion: this.gestion,
+                    mes: this.mes
+                }
+            });
+        },
+        clickModalSolicitud(solicitud){
+            this.modalSolicitud=solicitud;
+        },
+        getGestion(){ // funcion que crea una lista de gestiones desde el 2021
+            var lgestion=[];
+            const fecha = new Date();
+            this.obsgestion = fecha.getFullYear();
+            for(var i=2021; i<= this.obsgestion; i++){
+                lgestion.push(i);
+            }
+            this.listaGestion = lgestion;
+        },
+
+
     }
 }
 </script>

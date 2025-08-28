@@ -328,17 +328,17 @@ import jsPDF from 'jspdf';
 DataTable.use(DataTablesLib);
 
 export default {
-    name:'ListaSolicitudesView',
+    name:'ListaView',
     props: {
-      estado: {type: [Number, String],required: true},
-      idEvento: {type: [Number, String],required: true},
-      titulo:{type:String,required:true},
+      gestion: {type: [Number, String],required: true},
+      mesz: {type: [Number, String],required: true},
     },
     components:{
       ComponenteEvento
     },
     data(){
         return {
+          titulo:'Solicitudes del Mes de ',
           sraService:null,
           egovfService:null,
           listaSolicitudes:[],
@@ -447,9 +447,7 @@ export default {
 
     },
     computed:{
-      checkSeleccion() {
-        return(this.solicitud.responsable !== null);
-      },
+
     },
     methods:{
       tabla(){
@@ -471,181 +469,12 @@ export default {
       },
       async getSolicitudes(){ // Funcion que crea una lista de Ciudadanos 
         this.egovfService.headersUsuario(this.usuario.token);
-        if(this.estado==405){
-          await this.sraService.getSolicitudesEventos().then(response => {
+        await this.sraService.getLista(this.gestion,this.mes).then(response => {
             this.listaSolicitudes = response.data;
-          });
-        }
-        else{
-          await this.sraService.getSolicitudes(this.estado).then(response => {
-            this.listaSolicitudes = response.data;
-          });
-        }
-        
-        this.progreso();
-      },
-      progreso(){
-        this.listaSolicitudes.forEach(solicitud =>{
-          solicitud.color = this.esFechaPasada(solicitud.evento.fechaInicio);
-          solicitud.total = this.calcularDiasRestantes(this.cambioFecha(),solicitud.evento.fechaInicio);
-
         });
         this.tabla();
-        this.getListaResponsable();
       },
 
-      async getListaResponsable(){ // Funcion que crea una lista de Ciudadanos 
-        await this.egovfService.getListaResponsable().then(response => {
-          this.listaResponsable = response.data;
-        });
-      },
-
-      async getEvento(idEvento){ // Funcion que crea una lista de Ciudadanos 
-        await this.sraService.getEvento(idEvento).then(response => {
-          this.evento = response.data;
-
-          this.solicitud.detalle="A tiempo de saludarle y desearle éxitos en sus funciones, me dirijo a su autoridad con el fin de solicitar la reserva del "+this.evento.ambiente +", con el fin de realizar el evento "+this.evento.nombre+", mismo que será llevado a cabo el dia "+this.formatearFecha(this.evento.fechaInicio)+" de "+ this.evento.horaInicio+":00  a "+ this.evento.horaFin +":00 horas, para lo cual requerimos:"
-          this.solicitud.old = this.solicitud.detalle;
-          this.solicitud.idEvento = idEvento;
-          this.clickModalSolicitud(true);
-        });
-
-      },
-      checkServicio(requerimiento,id){
-        this.solicitud.detalle = this.solicitud.old+"\n\n"+requerimiento;
-        this.solicitud.idServicio= id;
-      },
-
-      checkServicioEditar(requerimiento,id){
-        this.solicitudEditar.detalle = this.solicitudEditar.old+"\n\n"+requerimiento;
-        this.solicitudEditar.idServicio= id;
-      },
-      addSolicitud(){ // funcion para el registro de un ciudadano
-        this.$swal.fire({
-          title: 'Desea Registrar la Solicitud para el evento '+this.evento.nombre+"??",
-          icon:'info',
-          showDenyButton: true,
-          confirmButtonText: 'Registrar',
-          denyButtonText: 'Cancelar'}).then((result) => {
-            if (result.isConfirmed) {
-              this.sraService.addSolicitud(this.solicitud).then(response =>{
-                if(response.status==201){
-                  this.$swal.fire('Solicitud Registrada Correctamente', '', 'success').then((result) => {
-                    if(result)
-                      this.listaEvento();
-                  });
-                }  
-                else{
-                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                }
-              });
-            } else if (result.isDenied) {
-              this.$swal.fire('Datos Cancelados', '', 'info');
-            }
-          });
-      },
-      updateSolicitud(){ // funcion para el registro de un ciudadano
-        this.$swal.fire({
-          title: 'Desea Actualizar la Solicitud del evento '+this.evento.nombre+"??",
-          icon:'info',
-          showDenyButton: true,
-          confirmButtonText: 'Actualizar',
-          denyButtonText: 'Cancelar'}).then((result) => {
-            if (result.isConfirmed) {
-              this.sraService.updateSolicitud(this.solicitudEditar).then(response =>{
-                if(response.status==200){
-                  this.$swal.fire('Solicitud Actualizada Correctamente', '', 'success').then((result) => {
-                    if(result)
-                      location.reload();
-                  });
-                }  
-                else{
-                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                }
-              });
-            } else if (result.isDenied) {
-              this.$swal.fire('Datos Cancelados', '', 'info');
-            }
-          });
-      },
-      updateSolicitudAprobar(){ // funcion para Aprobar la solicitud
-        this.$swal.fire({
-          title: 'Desea Aprobar la Solicitud del evento '+this.evento.nombre+"??",
-          icon:'info',
-          showDenyButton: true,
-          confirmButtonText: 'Aprobar',
-          denyButtonText: 'Cancelar'}).then((result) => {
-            if (result.isConfirmed) {
-              this.sraService.updateSolicitud(this.solicitudEditar).then(response =>{
-                if(response.status==200){
-                  this.$swal.fire('Solicitud Aprobada Correctamente', '', 'success').then((result) => {
-                    if(result)
-                      location.reload();
-                  });
-                }  
-                else{
-                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                }
-              });
-            } else if (result.isDenied) {
-              this.$swal.fire('Datos Cancelados', '', 'info');
-            }
-          });
-      },
-      updateSolicitudCancelar(id){
-        this.solicitudEditar.id=id;
-        this.solicitudEditar.cite = "";
-        this.solicitudEditar.fecha = "";
-        this.solicitudEditar.idEvento = 0;
-        this.solicitudEditar.evento = null;
-        this.solicitudEditar.idServicio = "";
-        this.solicitudEditar.hojaRuta = "cancelado";
-        this.solicitudEditar.responsable = 0;
-        this.solicitudEditar.detalle = "";
-        this.solicitudEditar.old = "";
-        this.solicitudEditar.gestion = 0;            
-            
-        this.$swal.fire({
-          title: 'Desea Cancelar la Solicitud del Evento '+this.evento.nombre+"??",
-          icon:'error',
-          showDenyButton: true,
-          confirmButtonText: 'Aprobar',
-          denyButtonText: 'Cancelar'}).then((result) => {
-            if (result.isConfirmed) {
-              this.sraService.updateSolicitud(this.solicitudEditar).then(response =>{
-                if(response.status==200){
-                  this.$swal.fire('Solicitud Cancelada Correctamente', 'La Solicitud y el Evento fueron cancelados Corectamente', 'success').then((result) => {
-                    if(result)
-                      location.reload();
-                  });
-                }  
-                else{
-                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
-                }
-              });
-            } else if (result.isDenied) {
-              this.$swal.fire('Datos Cancelados', '', 'info');
-            }
-          });
-
-      },
-      servicio(idAmbiente){
-        this.$router.push({
-          name: 'ListaServiciosView',
-          params:{
-            ambiente: idAmbiente
-          }
-        });
-      },
-
-      fechas(idAmbiente){
-        this.$router.push({
-          name: 'FechasView',
-          params:{
-            ambiente: idAmbiente
-          }
-        });
-      },
       getSolicitud(id){
         this.listaSolicitudes.forEach(solicitud =>{
           if(solicitud.idSolicitud==id){
@@ -694,17 +523,6 @@ export default {
           });
           this.clickModalEventoDetalle(true);
       },
-      getSolicitudEditar(id){
-        this.selectSolicitud(id);
-        this.clickModalSolicitudEditar(true);
-      },
-      getSolicitudAprobar(id){
-        this.selectSolicitud(id);
-        this.solicitudEditar.hojaRuta="";
-        this.clickModalSolicitudAprobar(true);
-
-      },
-      
       selectSolicitud(id){
         this.listaSolicitudes.forEach(solicitud =>{
           if(solicitud.idSolicitud==id){
@@ -727,14 +545,6 @@ export default {
             this.solicitudEditar.old = solicitud.detalle;
             this.solicitudEditar.gestion = solicitud.gestion;            
             return true;
-          }
-        });
-      },
-      listaEvento(){
-        this.$router.push({
-          name: 'ListaSolicitudesView',
-          params:{
-            idEvento: 0
           }
         });
       },
@@ -871,80 +681,6 @@ export default {
             doc.setFontSize(8);
             doc.text("Universidad del Bicentenario de Bolivia",(215/2),y+50,{align:"center"});
             doc.text("(1825-2025)",(215/2),y+55,{align:"center"});
-            
-
-            
-
-            
-
-
-            
-
-            /*doc.setFontSize(15);
-            doc.text("Datos de Personales :",20,40);
-            
-            doc.setFontSize(10);
-
-            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+this.reporte.persona.foto;
-            doc.addImage(img,'JPEG', 20,47,30,30);
-
-            doc.text("CIF : "+this.reporte.cif,52,50);
-            doc.text("Nombre : "+this.reporte.persona.nombre,52,55);
-            doc.text("Apellidos : "+this.reporte.persona.paterno+" "+this.reporte.persona.materno,52,60);
-            doc.text("Celular : "+this.reporte.persona.celular,52,65);
-            doc.text("Unidad : "+this.reporte.sigla,52,70);
-            doc.text("ID app : "+this.reporte.persona.id,120,50);
-            doc.text("C.I. : "+this.reporte.persona.ci,120,55);
-            doc.text("Correo : "+this.reporte.persona.correo,120,60);
-            doc.setFontSize(15);
-            
-            doc.text("Retraso  : "+this.totalretraso+" min.",120,70);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,80);
-            doc.setFontSize(6);
-            doc.text("Fecha de Imprecion : "+fecha,120,86);
-            doc.setFontSize(10);
-            var finalY=95;
-            
-            if(this.reporte.cif != 20903198600){
-                doc.text("Lic. Jaime A. Montecinos Marquez",(215/4),finalY+25,{align:"center"});
-                doc.text("Responsable Unidad TIC.",(215/4),finalY+30,{align:"center"});
-
-                doc.text("Vo. Bo.",(162),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(162),finalY+30,{align:"center"});
-            }
-            else{
-                doc.text("Vo. Bo.",(215/2),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(215/2),finalY+30,{align:"center"});
-            }
-
-            finalY = finalY+45;
-            autoTable(doc, {
-                theme:'striped',
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printDatos',
-                showFoot: 'lastPage'
-            });
-            finalY = doc.lastAutoTable.finalY;
-            finalY = finalY+10;
-            autoTable(doc, {
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printHorario',
-                showFoot: 'lastPage'
-            });
-            finalY = doc.lastAutoTable.finalY;
-            doc.setFontSize(15);
-            doc.text("Reporte de Asistencia del mes de " + this.mes +" del "+this.reporte.gestion,(215/2),finalY+10,{align:"center"});
-            autoTable(doc, {
-                startY:finalY+15,
-                margin: {left:15 },
-                styles:{fontSize:7.5},
-                html:'#printMarcado',
-                showFoot: 'lastPage'
-            });*/
             const name = this.solicitudDetalle.cite.replace(/\//g, "");
             doc.save(name+'.pdf');
       },

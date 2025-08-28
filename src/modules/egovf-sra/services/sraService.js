@@ -84,6 +84,9 @@ export default class SraService {
         });
     }
     // SERVICIO SOLICITUDES
+    getLista() {
+        return axios.get(sraUrl + "solicitud/getListaSolicitud");
+    }
     getListaSolicitud() {
         return axios.get(sraUrl + "solicitud/getListaSolicitud");
     }
@@ -93,6 +96,10 @@ export default class SraService {
                 estado:estado
             }
         });
+    }
+
+    getSolicitudesEventos() {
+        return axios.get(sraUrl + "solicitud/getSolicitudesEventos");
     }
 
     addSolicitud(solicitud) {
