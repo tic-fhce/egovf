@@ -501,7 +501,7 @@ export default {
         });
       }
       else {//cargamos las solicitudes 
-        await this.sraService.getSolicitudes(this.estado).then(response => {
+        await this.sraService.getSolicitudesUnidad(this.estado,this.usuario.sigla).then(response => {
           this.listaSolicitudes = response.data;
         });
       }

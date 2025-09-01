@@ -13,6 +13,14 @@ export default class ModuloService {
       },
     });
   }
+  getModuloMenu(cif,idModulo){
+    return axios.get(moduloUrl + "modulo/getModuloMenu", {
+      params: {
+        cif: cif,
+        idModulo:idModulo
+      },
+    });
+  }
   getModuloCif(cif) {
     // correcto funcionando
     return axios.get(moduloUrl + "modulo/getModuloCif", {

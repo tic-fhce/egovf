@@ -24,8 +24,13 @@ const routes = [
       {
         path: "/sesion",
         name: "SesionView",
-        //component: () => import("@/views/Front/SesionView.vue"),
-        component:()=> import('@/modules/egovf/views/SessionView.vue')
+        component:()=> import('@/modules/egovf/views/SessionView.vue'),
+      },
+      {
+        path: "/evento/:idEvento",
+        name: "EventoView",
+        component: () => import("@/views/Front/EventoView.vue"),
+        props:true
       },
       {
         path: "/libreReporte:uriu",
@@ -66,9 +71,16 @@ const routes = [
         component: () => import("@/modules/egovf/views/Ciudadano/ListaCiudadanoView.vue"),
       },
       {
-        path: "/perfilCiudadano:cifCiudadano",
+        path: "/perfilCiudadano/:cifCiudadano",
         name: "PerfilCiudadanoView",
         component: () => import("@/modules/egovf/views/Ciudadano/PerfilCiudadanoView.vue"),
+        props:true
+      },
+      {
+        path: "/moduloCiudadano/:cifCiudadano/:idModulo/:titulo",
+        name: "MenuView",
+        component: () => import("@/modules/egovf/views/Ciudadano/MenuView.vue"),
+        props:true
       },
       //MODULO EMPLEADO
       {
@@ -229,9 +241,10 @@ const routes = [
         component: () => import("@/modules/egovf-sra/views/ListaServiciosView.vue"),
       },
       {
-        path: "/fechas:ambiente",
+        path: "/fechas/:idAmbiente",
         name: "FechasView",
         component: () => import("@/modules/egovf-sra/views/FechasView.vue"),
+        props:true
       },
       {
         path: "/menusolicitudes",
@@ -245,16 +258,23 @@ const routes = [
         props:true
       },
       {
-        path: "/lista/:gestion/:mes",
-        name: "ListaView",
-        component: () => import("@/modules/egovf-sra/views/ListaView.vue"),
+        path: "/listaSolicitudes/:gestion/:mes",
+        name: "SolicitudesView",
+        component: () => import("@/modules/egovf-sra/views/SolicitudesView.vue"),
+        props:true
+      },
+      {
+        path: "/usuarioSolicitudes/:estado/:idEvento/:titulo",
+        name: "ListaSolicitudesUsuarioView",
+        component: () => import("@/modules/egovf-sra/views/ListaSolicitudesUsuarioView.vue"),
         props:true
       },
       {
         path: "/eventos",
         name: "EventosView",
-        component: () => import("../modules/egovf-sra/views/EventosView.vue"),
+        component: () => import("@/modules/egovf-sra/views/EventosView.vue"),
       },
+      
     ],
   },
 ];

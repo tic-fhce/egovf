@@ -84,8 +84,13 @@ export default class SraService {
         });
     }
     // SERVICIO SOLICITUDES
-    getLista() {
-        return axios.get(sraUrl + "solicitud/getListaSolicitud");
+    getLista(gestion,mes) {
+        return axios.get(sraUrl + "solicitud/getLista",{
+            params:{
+                gestion:gestion,
+                mes:mes
+            }
+        });
     }
     getListaSolicitud() {
         return axios.get(sraUrl + "solicitud/getListaSolicitud");
@@ -94,6 +99,14 @@ export default class SraService {
         return axios.get(sraUrl + "solicitud/getSolicitudes",{
             params:{
                 estado:estado
+            }
+        });
+    }
+    getSolicitudesUnidad(estado,unidad) {
+        return axios.get(sraUrl + "solicitud/getSolicitudesUnidad",{
+            params:{
+                estado:estado,
+                unidad:unidad
             }
         });
     }

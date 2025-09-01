@@ -108,6 +108,9 @@ export default {
         FullCalendar,
         ComponenteEvento
     },
+    props: {
+        idAmbiente: { type: [Number, String], required: true }
+    },
     data(){
         return {
             titulo:'Fechas Reservadas',
@@ -116,7 +119,6 @@ export default {
             modalEvento:false,
             modalEventoDetalle:false,
             modalInventario:false,
-            idAmbiente:0,
             usuario:{
                 token:'',
                 cif:'',
@@ -192,7 +194,6 @@ export default {
       this.uploadService = new UploadService();
     },
     mounted(){
-        this.idAmbiente = this.$route.params.ambiente; //resivimos el id del Ambiente
         this.getDatos(); // Llamamos los datos del Usuario
         this.getEventos();
     },
@@ -424,8 +425,12 @@ export default {
             URL.revokeObjectURL(url);
         },
         solicitudes(idEvento){
+            var vista ='ListaSolicitudesUsuarioView';
+            if(this.usuario.sigla == 'UTIC' || this.usuario.sigla=='ADM'){
+                vista='ListaSolicitudesView';
+            }
             this.$router.push({
-                name: 'ListaSolicitudesView',
+                name: vista,
                 params:{
                     estado: 0,
                     idEvento: idEvento,

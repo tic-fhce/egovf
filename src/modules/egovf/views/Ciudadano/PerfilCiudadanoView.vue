@@ -34,11 +34,13 @@ export default {
         ComponenteDatosPersonalesVue,
         ComponenteModulosVue
     },
+    props: {
+        cifCiudadano: { type: [Number, String], required: true }
+    },
     data(){
         return {
             titulo:'Perfil del Ciudadano',
             egovfService:null,
-            cifCiudadano:'',
             usuario:{
                 token:'',
                 cif:'',
@@ -85,7 +87,6 @@ export default {
         this.egovfService = new EgovfService();
     },
     mounted(){
-        this.cifCiudadano = this.$route.params.cifCiudadano; //resivimos el cif del ciudadano
         this.getDatos(); // Llamamos los datos del Usuario
         this.getEgovf(); //llamamos los datos del ciudadano
 

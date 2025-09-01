@@ -50,38 +50,16 @@
                                     </td>
                                     <td>
                                     <CButtonGroup role="group">
-                                        <CTooltip content="Generar Solicitud de Evento" placement="bottom">
-                                        <template #toggler="{ id, on }">
-                                            <CButton v-if="estado==405" :aria-describedby="id" v-on="on" class="font" color="success" size="sm" @click="solicitudes(solicitud.evento.id)"><CIcon icon="cil-pencil"/></CButton>
-                                        </template>
-                                        </CTooltip>
-
                                         <CTooltip content="Ver Detalle de la Solicitud" placement="bottom">
                                         <template #toggler="{ id, on }">
-                                            <CButton v-if="estado!=405" :aria-describedby="id" v-on="on" class="font" color="success" size="sm" @click="getSolicitud(solicitud.idSolicitud)"><CIcon icon="cil-featured-playlist"/></CButton>
+                                            <CButton :aria-describedby="id" v-on="on" class="font" color="success" size="sm" @click="getSolicitud(solicitud.idSolicitud)"><CIcon icon="cil-featured-playlist"/></CButton>
                                         </template>
                                         </CTooltip>
                                         <CTooltip content="Ver Evento" placement="bottom">
                                         <template #toggler="{ id, on }">
                                             <CButton  :aria-describedby="id" v-on="on" class="font" color="info" size="sm" @click="getEventoDetalle(solicitud.evento.id)"><CIcon icon="cil-calendar"/></CButton>
                                         </template>
-                                        </CTooltip>
-                                        <CTooltip content="Editar la Solicitud" placement="bottom">
-                                        <template #toggler="{ id, on }">
-                                            <CButton v-if="estado==0" :aria-describedby="id" v-on="on" class="font" color="warning" size="sm" @click="getSolicitudEditar(solicitud.idSolicitud)"><CIcon icon="cil-pencil"/></CButton>
-                                        </template>
-                                        </CTooltip>
-                                        <CTooltip content="Aprobar Evento y Solicitud" placement="bottom">
-                                        <template #toggler="{ id, on }">
-                                            <CButton v-if="estado==0" :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="getSolicitudAprobar(solicitud.idSolicitud)"><CIcon icon="cil-check-alt"/></CButton>
-                                        </template>
-                                        </CTooltip>
-                                        <CTooltip content="Rechazar o Cancelar Solicitud y Evento" placement="bottom">
-                                        <template #toggler="{ id, on }">
-                                            <CButton v-if="estado==0" :aria-describedby="id" v-on="on" class="font" color="danger" size="sm" @click="updateSolicitudCancelar(solicitud.idSolicitud)"><CIcon icon="cil-trash"/></CButton>
-                                        </template>
-                                        </CTooltip>
-                                        
+                                        </CTooltip>                                        
                                     </CButtonGroup>
                                     </td>
                                 </tr>
@@ -92,164 +70,6 @@
             </CCard>
         </CCol>
     </CRow>
-
-    <!-- Modal  Solicitud-->
-    <CModal size="lg" :visible="modalSolicitud" @close="clickModalSolicitud(false)">
-        <CForm @submit.prevent="addSolicitud()">
-            <CModalHeader class="headercolor" dismiss @close="clickModalSolicitud(false)">
-                <CModalTitle>
-                    <h6> <CIcon icon="cil-clipboard" size="xl"/> Crear Solicitud</h6>
-                </CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <CAlert color="success" class="text-end">Ref. {{evento.nombre}}</CAlert>
-
-                <CInputGroup class="mb-3">
-                    <CInputGroupText  as="label">Detalle</CInputGroupText>
-                    <CFormTextarea  v-model="solicitud.detalle" required="true" rows="6"> </CFormTextarea>
-                </CInputGroup>
-
-                <CInputGroup class="mb-3">
-                  <CTooltip
-                    v-for="servicio in evento.servicios"
-                    :key="servicio.id"
-                    :content="servicio.detalle"
-                    placement="bottom"
-                  >
-                    <template #toggler="{ on }">
-                      <CFormCheck 
-                        inline
-                        type="radio" 
-                        name="servicio" 
-                        :label="servicio.nombre"
-                        :value="String(servicio.id)"
-                        v-on="on" 
-                        required="true"
-                        @click="checkServicio(servicio.detalle,servicio.id)"
-                      />
-                    </template>
-                  </CTooltip>
-                </CInputGroup>
-                <hr>
-                <div id="app">
-                  <h4>Responsable</h4>
-                  <v-select
-                    v-model="solicitud.responsable"
-                    :options="listaResponsable"
-                    label="nombre"
-                    :filterable="true"
-                    placeholder="Buscar responsable..."
-                  >
-                    <template #option="{ nombre, ci }">
-                      <strong>{{ nombre }} </strong>
-                      <small class="text-muted"> - {{ ci }}</small>
-                    </template>
-                  </v-select>
-                </div>
-                  
-            </CModalBody>
-            <CModalFooter>
-                <CButton @click="clickModalSolicitud(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-                <CButton v-if="checkSeleccion" type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-upload" class="me-2"/>Agregar</CButton>
-            </CModalFooter>
-        </CForm>
-    </CModal>
-    <!-- End Modal  Solicitud-->
-
-    <!-- Modal Editar Solicitud-->
-    <CModal size="lg" :visible="modalSolicitudEditar" @close="clickModalSolicitudEditar(false)">
-        <CForm @submit.prevent="updateSolicitud()">
-            <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudEditar(false)">
-                <CModalTitle>
-                    <h6> <CIcon icon="cil-clipboard" size="xl"/> Editar Solicitud</h6>
-                </CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <CAlert color="success" class="text-end">Ref. {{solicitudEditar.evento.nombre}}</CAlert>
-
-                <CInputGroup class="mb-3">
-                    <CInputGroupText  as="label">Detalle</CInputGroupText>
-                    <CFormTextarea  v-model="solicitudEditar.detalle" required="true" rows="6"> </CFormTextarea>
-                </CInputGroup>
-
-                <CInputGroup class="mb-3">
-                  <CTooltip
-                    v-for="servicio in solicitudEditar.evento.servicios"
-                    :key="servicio.id"
-                    :content="servicio.detalle"
-                    placement="bottom"
-                  >
-                    <template #toggler="{ on }">
-                      <CFormCheck 
-                        inline
-                        type="radio" 
-                        name="servicio" 
-                        :label="servicio.nombre"
-                        :value="String(servicio.id)"
-                        v-on="on" 
-                        required="true"
-                        @click="checkServicioEditar(servicio.detalle,servicio.id)"
-                      />
-                    </template>
-                  </CTooltip>
-                </CInputGroup>
-                <hr>
-                <div id="app">
-                  <h4>Responsable</h4>
-                  <v-select
-                    v-model="solicitudEditar.responsable"
-                    :options="listaResponsable"
-                    label="nombre"
-                    :filterable="true"
-                    placeholder="Buscar responsable..."
-                  >
-                    <template #option="{ nombre, ci }">
-                      <strong>{{ nombre }} </strong>
-                      <small class="text-muted"> - {{ ci }}</small>
-                    </template>
-                  </v-select>
-                </div>
-                  
-            </CModalBody>
-            <CModalFooter>
-                <CButton @click="clickModalSolicitudEditar(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-                <CButton type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-upload" class="me-2"/>Actualizar</CButton>
-            </CModalFooter>
-        </CForm>
-    </CModal>
-    <!-- End Modal  Editar Solicitud-->
-
-    <!-- Modal Aprobar Solicitud-->
-    <CModal  :visible="modalSolicitudAprobar" @close="clickModalSolicitudAprobar(false)">
-        <CForm @submit.prevent="updateSolicitudAprobar()">
-            <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudAprobar(false)">
-                <CModalTitle>
-                    <h6> <CIcon icon="cil-clipboard" size="xl"/> Aprobar Solicitud</h6>
-                </CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-                <CAlert color="success" class="text-end">Ref. {{solicitudEditar.evento.nombre}}</CAlert>
-                
-                <CInputGroup class="mb-3">
-                    <CInputGroupText  as="label">Hoja de Ruta</CInputGroupText>
-                    <CFormInput  v-model="solicitudEditar.hojaRuta" required="true"/> 
-                </CInputGroup>
-                
-                <CInputGroup class="mb-3">
-                   <br>
-                  <div>
-                    {{ solicitudEditar.detalle }} ......
-                  </div>
-                </CInputGroup>
-                  
-            </CModalBody>
-            <CModalFooter>
-                <CButton @click="clickModalSolicitudAprobar(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-                <CButton type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-check-alt" class="me-2"/>Aprobar Solicitud</CButton>
-            </CModalFooter>
-        </CForm>
-    </CModal>
-    <!-- End Modal  Editar Solicitud-->
 
 
     <!-- Modal  Detalle Solicitud-->
@@ -286,10 +106,10 @@
           </div>
           
         </CModalBody>
-            <CModalFooter>
-                <CButton @click="clickModalSolicitudDetalle(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
-                <CButton @click="pdf()" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Solicitud</CButton>
-            </CModalFooter>
+        <CModalFooter>
+            <CButton @click="clickModalSolicitudDetalle(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+            <CButton @click="pdf()" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-download" class="me-2"/>Descargar Solicitud</CButton>
+        </CModalFooter>
     </CModal>
     <!-- End Modal Detalle Solicitud-->
 
@@ -328,10 +148,10 @@ import jsPDF from 'jspdf';
 DataTable.use(DataTablesLib);
 
 export default {
-    name:'ListaView',
+    name:'SolicitudesView',
     props: {
       gestion: {type: [Number, String],required: true},
-      mesz: {type: [Number, String],required: true},
+      mes: {type: [Number, String],required: true},
     },
     components:{
       ComponenteEvento
@@ -343,11 +163,9 @@ export default {
           egovfService:null,
           listaSolicitudes:[],
           listaResponsable:[],
-          modalSolicitud:false,
           modalSolicitudDetalle:false,
-          modalSolicitudEditar:false,
-          modalSolicitudAprobar:false,
           modalEventoDetalle:false,
+          listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
           usuario:{
             token:'',
             cif:'',
@@ -364,19 +182,6 @@ export default {
             old:'',
             responsable:null,
             idEvento:0
-          },
-          solicitudEditar:{
-            id:0,
-            cite:'',
-            fecha:'',
-            idEvento:0,
-            idServicio:0,
-            hojaRuta:0,
-            responsable:null,
-            detalle:'',
-            old:'',
-            gestion:0,
-            evento:null
           },
           evento:{
             id:'',
@@ -441,9 +246,7 @@ export default {
         //this.idEvento = this.$route.params.idEvento; //resivimos el cif del ciudadano
         this.getDatos(); // Llamamos los datos del Usuario
         this.getSolicitudes();
-        if(this.idEvento>0){
-            this.getEvento(this.idEvento);
-        }
+        this.titulo=this.titulo+' '+this.listaMes[Number(this.mes)-1].mes;
 
     },
     computed:{
@@ -523,31 +326,6 @@ export default {
           });
           this.clickModalEventoDetalle(true);
       },
-      selectSolicitud(id){
-        this.listaSolicitudes.forEach(solicitud =>{
-          if(solicitud.idSolicitud==id){
-            this.solicitudEditar.id = solicitud.idSolicitud;
-            this.solicitudEditar.cite = solicitud.cite;
-            this.solicitudEditar.fecha = solicitud.fecha;
-            this.solicitudEditar.idEvento = solicitud.evento.id;
-            this.solicitudEditar.evento = solicitud.evento;
-            
-            this.solicitudEditar.idServicio = solicitud.idServicio;
-            this.solicitudEditar.hojaRuta = solicitud.hojaRuta;
-            this.listaResponsable.forEach(responsable =>{
-              if(responsable.cif==solicitud.cifResponsable){
-                this.solicitudEditar.responsable = responsable;
-                return true;
-              }
-            });
-          
-            this.solicitudEditar.detalle = solicitud.detalle +"\n\n"+solicitud.servicio;
-            this.solicitudEditar.old = solicitud.detalle;
-            this.solicitudEditar.gestion = solicitud.gestion;            
-            return true;
-          }
-        });
-      },
       esFechaPasada(fechaSalida) {
         if (!fechaSalida) return 'warning';
         
@@ -611,24 +389,13 @@ export default {
         // Formatear según la configuración regional (español)
         return fecha.toLocaleDateString('es-ES', opciones);
       },
-      clickModalSolicitud(solicitud){//funcion para Visibilisar el modal de registro
-        if(!solicitud){
-            this.listaEvento();
-        }
-        this.modalSolicitud = solicitud;
-      },
       clickModalSolicitudDetalle(solicitud){//funcion para Visibilisar el modal de detalle
         this.modalSolicitudDetalle = solicitud;
       },
       clickModalEventoDetalle(evento){
         this.modalEventoDetalle=evento;
       },
-      clickModalSolicitudEditar(solicitud){
-        this.modalSolicitudEditar = solicitud;
-      },
-      clickModalSolicitudAprobar(solicitud){
-        this.modalSolicitudAprobar = solicitud;
-      },
+
       pdf(){ //Funcion que Constuye el PDF de la solicitud
             
             //const fecha = new Date();

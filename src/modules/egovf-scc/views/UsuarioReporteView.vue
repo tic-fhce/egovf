@@ -85,14 +85,16 @@
                     <CRow class="oculto">
                         <CCol :lg="12" class="table-responsive">
                             <table class="table table-striped table-hover" id="printDatos">
-                                <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
-                                <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
-                                    <td><CBadge color="light">ID-B : {{perfil.id}}</CBadge></td>
-                                    <td><CBadge color="light">User ID : {{perfil.user_id}}</CBadge></td>
-                                    <td><CBadge color="light">Nombre : {{perfil.nombre}}</CBadge></td>
-                                    <td><CBadge color="light">Lugar : {{perfil.detalle}}</CBadge></td>
-                                    <td><CBadge color="light">Sigla : {{perfil.lugar}}</CBadge></td>
-                                </tr>
+                                <tbody>
+                                    <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
+                                    <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
+                                        <td><CBadge color="light" class="datos">ID-B : {{perfil.id}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">User ID : {{perfil.user_id}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">Nombre : {{perfil.nombre}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">Lugar : {{perfil.detalle}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">Sigla : {{perfil.lugar}}</CBadge></td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </CCol>
                     </CRow>
@@ -102,12 +104,14 @@
                     <CRow class="oculto">
                         <CCol :lg="12" class="table-responsive">
                             <table class="table table-striped table-hover" id="printHorario">
-                                <tr><td colspan="4" class="text-center"><h4>Horarios del Usuario</h4></td></tr>
-                                <tr v-for="horario in reporte.listaHorario" :key="horario.horario_id">
-                                    <td><CBadge color="light">ID Horario : {{horario.horario_id}}</CBadge></td>
-                                    <td><CBadge color="light">Valido del : {{horario.fecha}}</CBadge></td>
-                                    <td><CBadge color="light">Hasta {{horario.valido}}</CBadge></td>
-                                </tr>
+                                <tbody>
+                                    <tr><td colspan="4" class="text-center"><h4>Horarios del Usuario</h4></td></tr>
+                                    <tr v-for="horario in reporte.listaHorario" :key="horario.horario_id">
+                                        <td><CBadge color="light" class="datos">ID Horario : {{horario.horario_id}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">Valido del : {{horario.fecha}}</CBadge></td>
+                                        <td><CBadge color="light" class="datos">Hasta {{horario.valido}}</CBadge></td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </CCol>
                     </CRow>
@@ -509,5 +513,8 @@ export default {
 }
 .oculto{
     display: none;
+}
+.datos{
+    color: black;
 }
 </style>  

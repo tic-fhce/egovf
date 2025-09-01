@@ -29,18 +29,14 @@ export default class MenuService {
     };
     return axios.post(menuUrl + "menu/addMenuUsuario", menuUsuarioDtoRequest);
   }
-  /////////////////////////////////////////////////////////
-
-
-
-  updateMenuUsuario(id, cif, idmenu, estado) {
-    const menu = {
-      id: id,
-      _01cif: cif,
-      _02idmenu: idmenu,
-      _03estado: estado,
+  updateMenuUsuario(menu){
+    const menuUsuarioDtoResponse = {
+      "id":menu.id,
+      "cif": menu.cif,
+      "idmenu": menu.idMenu,
+      "estado": menu.estado
     };
-    return axios.put(menuUrl + "updateMenuUsuario", menu);
+    return axios.put(menuUrl + "menu/updateMenuUsuario", menuUsuarioDtoResponse);
   }
   
 }
