@@ -26,7 +26,7 @@
 
         <CInputGroup class="mb-3">
             <CInputGroupText  as="label">Del</CInputGroupText>
-            <CFormInput type="date" v-model="evento.fechaInicio" required="true"/>
+            <CFormInput type="date" v-model="evento.fechaInicio" required="true" disabled/>
             <CInputGroupText  as="label">Al</CInputGroupText>
             <CFormInput type="date" v-model="evento.fechaFin" required="true"/>
         </CInputGroup>
@@ -34,6 +34,7 @@
         <CInputGroup class="mb-3">
             <CInputGroupText  as="label">A partir de horas</CInputGroupText>
             <CFormSelect  v-model="evento.horaInicio" required="true">
+                <option value="">Seleccionar Hora </option>
                 <option v-for="hora in generarRango(8, evento.tope)" :value="hora" :key="hora">
                     {{ hora }}:00
                 </option>
@@ -159,7 +160,8 @@ export default {
                 idAmbiente:0,
                 imagen:'',
                 cif:0,
-                tope:0
+                tope:0,
+                unidad:''
             },
             archivo:null,
             fileValid: false,
@@ -265,6 +267,7 @@ export default {
                 }
                 
                 this.evento.imagen = uploadResponse.data.nombre;
+                this.evento.unidad = this.usuario.sigla;
                 
                 this.$swal.fire({
                     title: 'Deseas Agregar El evento ' + this.evento.nombre+' ??',
@@ -352,7 +355,11 @@ export default {
             }
 
             this.evento.fechaInicio=selectInfo.startStr;
-            this.evento.fechaFin=selectInfo.startStr;
+
+            let endDate = new Date(selectInfo.endStr);
+            endDate.setDate(endDate.getDate() - 1);
+
+            this.evento.fechaFin=endDate.toISOString().split('T')[0];
 
             this.evento.cif=this.usuario.cif;
             this.evento.idAmbiente=this.idAmbiente;

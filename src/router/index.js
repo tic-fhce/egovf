@@ -264,6 +264,12 @@ const routes = [
         props:true
       },
       {
+        path: "/listaEventos",
+        name: "ListaEventosView",
+        component: () => import("@/modules/egovf-sra/views/ListaEventosView.vue"),
+        props:true
+      },
+      {
         path: "/usuarioSolicitudes/:estado/:idEvento/:titulo",
         name: "ListaSolicitudesUsuarioView",
         component: () => import("@/modules/egovf-sra/views/ListaSolicitudesUsuarioView.vue"),

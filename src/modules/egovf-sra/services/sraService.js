@@ -50,6 +50,14 @@ export default class SraService {
             }
         });
     }
+    getEventoUnidad(unidad,fecha){
+        return axios.get(sraUrl + "evento/getEventoUnidad",{
+            params:{
+                unidad:unidad,
+                fecha:fecha
+            }
+        });
+    }
     getListaEventos(){
         return axios.get(sraUrl + "evento/getListaEventos");
     }
@@ -66,6 +74,7 @@ export default class SraService {
             "idAmbiente":evento.idAmbiente,
             "imagen":evento.imagen,
             "cif":evento.cif,
+            "unidad":evento.unidad
         };
         return axios.post(sraUrl + "evento/addEvento", eventoDtoRequest);
     }

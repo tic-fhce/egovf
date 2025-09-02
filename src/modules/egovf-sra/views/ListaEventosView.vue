@@ -1,99 +1,101 @@
 <template>
   <ol class="breadcrumb custom-breadcrumb">
-    <li class="breadcrumb-item">
-      <router-link to="/menusolicitudes" class="breadcrumb-link">Solicitudes</router-link>
-    </li>
     <li class="breadcrumb-item active" aria-current="page">
       {{ titulo }} >
     </li>
   </ol>
   <CRow>
-    <CCol :xs="12">
+    <CCol :lg="12">
+      <br />
       <CCard>
-        <CCardHeader class="headercolor d-flex justify-content-between align-items-center">
-          <CCol :lg="6">
-            <div class="align-items-center">
-              <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-              <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
-            </div>
-          </CCol>
-          <CCol :lg="6" class="text-end">
-          </CCol>
+        <CCardHeader class="headercolor text-center">
+          {{titulo}} 
         </CCardHeader>
         <CCardBody>
-          <div class="table-responsive">
-            <table id="solicitudTabla" class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>HR</th>
-                  <th>Cite</th>
-                  <th>Evento</th>
-                  <th>Operaciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="solicitud in listaSolicitudes" :key="solicitud.idSolicitud">
-                  <td>{{ solicitud.idSolicitud }}</td>
-                  <td>{{ solicitud.hojaRuta }}</td>
-                  <td>
-                    {{ solicitud.cite }}
-                    <div class="small text-medium-emphasis">
-                      {{ solicitud.fecha }}
-                    </div>
-                    <CProgress>
-                      <CProgressBar :key="solicitud.idSolicitud" :color="solicitud.color" :value="solicitud.total">{{
-                        solicitud.total }} %</CProgressBar>
-                    </CProgress>
-                  </td>
-                  <td>
-                    {{ solicitud.evento.nombre }}
-                    <div class="small text-medium-emphasis">
-                      {{ solicitud.ambiente }}<br>
-                      {{ formatearFecha(solicitud.evento.fechaInicio) }} | {{ solicitud.evento.horaInicio }}:00
-                    </div>
-                  </td>
-                  <td>
-                    <CButtonGroup role="group">
-                      <CTooltip content="Generar Solicitud de Evento" placement="bottom">
+          <CRow>
+            <CCol :lg="4">
+              <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Gestion</CInputGroupText>
+                <CFormSelect v-model="gestion" :model-value="String(gestion)"
+                  @update:model-value="gestion = Number($event)" required="true">
+                  <option v-for="y in listaGestion" :key="y" :value="y">{{ y }}</option>
+                </CFormSelect>
+              </CInputGroup>
+            </CCol>
+
+            <CCol :lg="4">
+              <CInputGroup class="mb-3">
+                <CInputGroupText as="label">Mes</CInputGroupText>
+                <CFormSelect v-model="mes" :model-value="String(mes)" required="true">
+                  <option v-for="mes in listaMes" :key="mes.m" :value="mes.m">{{ mes.mes }}</option>
+                </CFormSelect>
+              </CInputGroup>
+            </CCol>
+
+            <CCol :lg="4" class="text-center">
+              <CButton color="success" class="font" size="sm" @click="getEventoUnidad()">
+                <CIcon icon="cil-calendar"></CIcon> Cargar Eventos
+              </CButton>
+            </CCol>
+          </CRow>
+        </CCardBody>
+        <CCardFooter class="table-responsive">
+          <table id="eventoTabla" class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Evento</th>
+                <th>Ambiente</th>
+                <th>Detalle</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="evento in listaEventos" :key="evento.id">
+                <th scope="row">{{ evento.id }} </th>
+                <td>{{ evento.nombre }} </td>
+                <td>
+                  <div>{{ evento.ambiente }}</div>
+                  <div class="small text-medium-emphasis">
+                    Dias : <span>{{ evento.fechaInicio }}</span> | {{ evento.fechaFin }}
+                  </div>
+                  <div class="small text-medium-emphasis">
+                    Horas : <span>{{ evento.horaInicio }}:00 </span> | {{ evento.horaFin }}:00
+                  </div>
+
+                  <CAlert :color="evento.color">{{ evento.estado }}</CAlert>
+                </td>
+                <td>
+                  {{ evento.detalle }}
+                </td>
+                <td>
+                  <CButtonGroup role="group">
+
+                      <CTooltip content="Ver Detalle del Evento" placement="bottom">
                         <template #toggler="{ id, on }">
-                          <CButton v-if="estado == 405" :aria-describedby="id" v-on="on" class="font" color="success"
-                            size="sm" @click="solicitudes(solicitud.evento.id)">
-                            <CIcon icon="cil-pencil" />
-                          </CButton>
-                        </template>
-                      </CTooltip>
-                      <CTooltip content="Ver Detalle de la Solicitud" placement="bottom">
-                        <template #toggler="{ id, on }">
-                          <CButton v-if="estado != 405" :aria-describedby="id" v-on="on" class="font" color="success"
-                            size="sm" @click="getSolicitud(solicitud.idSolicitud)">
-                            <CIcon icon="cil-featured-playlist" />
-                          </CButton>
-                        </template>
-                      </CTooltip>
-                      <CTooltip content="Ver Evento" placement="bottom">
-                        <template #toggler="{ id, on }">
-                          <CButton :aria-describedby="id" v-on="on" class="font" color="info" size="sm"
-                            @click="getEventoDetalle(solicitud.evento.id)">
+                          <CButton :aria-describedby="id" v-on="on" class="font" color="success"
+                            size="sm" @click="getEventoDetalle(evento.id)">
                             <CIcon icon="cil-calendar" />
                           </CButton>
                         </template>
                       </CTooltip>
                       <CTooltip content="Editar la Solicitud" placement="bottom">
                         <template #toggler="{ id, on }">
-                          <CButton v-if="estado == 0" :aria-describedby="id" v-on="on" class="font" color="warning"
-                            size="sm" @click="getSolicitudEditar(solicitud.idSolicitud)">
+                          <CButton v-if="evento.estado == 'En Espera'" :aria-describedby="id" v-on="on" class="font" color="warning"
+                            size="sm" @click="getSolicitudEditar(evento.id)">
                             <CIcon icon="cil-pencil" />
                           </CButton>
                         </template>
                       </CTooltip>
                     </CButtonGroup>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CCardBody>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr></tr>
+            </tfoot>
+          </table>
+        </CCardFooter>
       </CCard>
     </CCol>
   </CRow>
@@ -202,95 +204,6 @@
   </CModal>
   <!-- End Modal  Editar Solicitud-->
 
-  <!-- Modal Aprobar Solicitud-->
-  <CModal :visible="modalSolicitudAprobar" @close="clickModalSolicitudAprobar(false)">
-    <CForm @submit.prevent="updateSolicitudAprobar()">
-      <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudAprobar(false)">
-        <CModalTitle>
-          <h6>
-            <CIcon icon="cil-clipboard" size="xl" /> Aprobar Solicitud
-          </h6>
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CAlert color="success" class="text-end">Ref. {{ solicitudEditar.evento.nombre }}</CAlert>
-
-        <CInputGroup class="mb-3">
-          <CInputGroupText as="label">Hoja de Ruta</CInputGroupText>
-          <CFormInput v-model="solicitudEditar.hojaRuta" required="true" />
-        </CInputGroup>
-
-        <CInputGroup class="mb-3">
-          <br>
-          <div>
-            {{ solicitudEditar.detalle }} ......
-          </div>
-        </CInputGroup>
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton @click="clickModalSolicitudAprobar(false)" color="danger" class="font" size="sm">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
-        </CButton>
-        <CButton type="submit" class="font" size="sm" color="success">
-          <CIcon icon="cil-check-alt" class="me-2" />Aprobar Solicitud
-        </CButton>
-      </CModalFooter>
-    </CForm>
-  </CModal>
-  <!-- End Modal  Editar Solicitud-->
-
-
-  <!-- Modal  Detalle Solicitud-->
-  <CModal size="lg" :visible="modalSolicitudDetalle" @close="clickModalSolicitudDetalle(false)">
-    <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudDetalle(false)">
-      <CModalTitle>
-        <h6>
-          <CIcon icon="cil-clipboard" size="xl" /> Detalle Solicitud
-        </h6>
-      </CModalTitle>
-    </CModalHeader>
-
-    <CModalBody>
-      <div class="text-end">
-        <label>{{ solicitudDetalle.cite }}</label><br>
-        <label>La Paz, {{ solicitudDetalle.fecha }}</label>
-      </div>
-
-      <div>
-        <label>M. SC. ORLANDO VÍCTOR HUANCA RODRÍGUEZ</label><br>
-        <label><strong>DECANO</strong></label><br>
-        <label><strong>FACULTAD DE HUMANIDADES Y CIENCIAS DE LA EDUCACIÓN</strong></label><br><br>
-        <label>Presente:</label><br>
-      </div>
-
-      <div class="oculto">
-        <QrcodeVue :value="sms" :size="size" level="H" ref="qr" />
-      </div>
-
-      <div class="text-end">
-        <label><u><strong>REF.: {{ solicitudDetalle.evento.nombre }}</strong></u></label>
-      </div>
-      <br>
-      <div>
-        {{ solicitudDetalle.detalle }} {{ solicitudDetalle.servicio }}.
-      </div>
-      <br>
-      <div>
-        {{ solicitudDetalle.responsable.detalle }}
-      </div>
-
-    </CModalBody>
-    <CModalFooter>
-      <CButton @click="clickModalSolicitudDetalle(false)" color="danger" class="font" size="sm">
-        <CIcon icon="cil-x" class="me-2" />Cancelar
-      </CButton>
-      <CButton @click="pdf()" class="font" size="sm" color="success">
-        <CIcon icon="cil-cloud-download" class="me-2" />Descargar Solicitud
-      </CButton>
-    </CModalFooter>
-  </CModal>
-  <!-- End Modal Detalle Solicitud-->
 
   <!-- Modal  Detalles de Evento-->
   <CModal size="lg" :visible="modalEventoDetalle" @close="clickModalEventoDetalle(false)">
@@ -323,30 +236,25 @@ import SraService from '@/modules/egovf-sra/services/sraService';
 import EgovfService from '@/modules/egovf/services/egovfService';
 
 //Importamos Herramientas 
-import QrcodeVue from 'qrcode.vue';
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
 import $ from 'jquery';
-import jsPDF from 'jspdf';
 
 DataTable.use(DataTablesLib);
 
 export default {
-  name: 'ListaSolicitudesView',
-  props: {
-    estado: { type: [Number, String], required: true },
-    idEvento: { type: [Number, String], required: true },
-    titulo: { type: String, required: true },
-  },
+  name: 'ListaEventosView',
   components: {
-    ComponenteEvento,
-    QrcodeVue
+    ComponenteEvento
   },
   data() {
     return {
+      titulo:'Eventos de la Unidad',
       sraService: null,
       egovfService: null,
-      listaSolicitudes: [],
+      listaEventos: [],
+      gestion:0,
+      mes:0,
       listaResponsable: [],
       modalSolicitud: false,
       modalSolicitudDetalle: false,
@@ -364,6 +272,21 @@ export default {
         sigla: '',
         foto: ''
       },
+      listaGestion: [],
+      listaMes: [
+        { m: "01", mes: "Enero" },
+        { m: "02", mes: "Febrero" },
+        { m: "03", mes: "Marzo" },
+        { m: "04", mes: "Abril" },
+        { m: "05", mes: "Mayo" },
+        { m: "06", mes: "Junio" },
+        { m: "07", mes: "Julio" },
+        { m: "08", mes: "Agosto" },
+        { m: "09", mes: "Septiembre" },
+        { m: "10", mes: "Octubre" },
+        { m: "11", mes: "Noviembre" },
+        { m: "12", mes: "Diciembre" },
+      ],
       solicitud: {
         idServicio: null,
         detalle: '',
@@ -446,10 +369,8 @@ export default {
   mounted() {
     //this.idEvento = this.$route.params.idEvento; //resivimos el cif del ciudadano
     this.getDatos(); // Llamamos los datos del Usuario
-    this.getSolicitudes();
-    if (this.idEvento > 0) {
-      this.getEvento(this.idEvento);
-    }
+    this.getGestion();
+    
 
   },
   computed: {
@@ -460,7 +381,7 @@ export default {
   methods: {
     tabla() {
       this.$nextTick(() => {
-        $('#solicitudTabla').DataTable();
+        $('#eventoTabla').DataTable();
       });
     },
     getDatos() {// Funcion que guarda los datos del Usuario en la View
@@ -474,22 +395,6 @@ export default {
         this.usuario.sigla = this.$cookies.get('sigla');
         this.usuario.foto = this.$cookies.get("foto");
       }
-    },
-    async getSolicitudes() { // Funcion que crea una lista de Solicitudes Aprobadas 
-      this.egovfService.headersUsuario(this.usuario.token);
-      if (this.estado == 405) { // preguntamos si es estado 405 evento sin solicitud
-        //cargamos las listas de Eventos que no tienen Solicitudes
-        await this.sraService.getSolicitudesEventos().then(response => {
-          this.listaSolicitudes = response.data;
-        });
-      }
-      else {//cargamos las solicitudes 
-        await this.sraService.getSolicitudesUnidad(this.estado,this.usuario.sigla).then(response => {
-          this.listaSolicitudes = response.data;
-        });
-      }
-
-      this.progreso();
     },
     progreso() {
       this.listaSolicitudes.forEach(solicitud => {
@@ -507,15 +412,15 @@ export default {
       });
     },
 
-    async getEvento(idEvento) { // Funcion que crea una lista de Ciudadanos 
-      await this.sraService.getEvento(idEvento).then(response => {
-        this.evento = response.data;
-
-        this.solicitud.detalle = "A tiempo de saludarle y desearle éxitos en sus funciones, me dirijo a su autoridad con el fin de solicitar la reserva del " + this.evento.ambiente + ", con el fin de realizar el evento " + this.evento.nombre + ", mismo que será llevado a cabo el dia " + this.formatearFecha(this.evento.fechaInicio) + " de " + this.evento.horaInicio + ":00  a " + this.evento.horaFin + ":00 horas, para lo cual requerimos:"
-        this.solicitud.old = this.solicitud.detalle;
-        this.solicitud.idEvento = idEvento;
-        this.clickModalSolicitud(true);
+    async getEventoUnidad() { // Funcion que crea una lista de Ciudadanos
+      const fech = this.gestion+"-"+this.mes; 
+      await this.sraService.getEventoUnidad(this.usuario.sigla,fech).then(response => {
+        this.listaEventos = response.data;
       });
+      if (this.listaEventos.length == 0) {
+        this.$swal.fire("No se encontraron Eventos", "", "info");
+      }
+      this.tabla();
 
     },
     checkServicio(requerimiento, id) {
@@ -685,22 +590,22 @@ export default {
 
     },
     getEventoDetalle(id) {
-      this.listaSolicitudes.forEach(solicitud => {
-        if (solicitud.evento.id == id) {
-          this.eventoDetalle.id = solicitud.evento.id;
-          this.eventoDetalle.nombre = solicitud.evento.nombre;
-          this.eventoDetalle.detalle = solicitud.evento.detalle;
-          this.eventoDetalle.fechaInicio = solicitud.evento.fechaInicio;
-          this.eventoDetalle.fechaFin = solicitud.evento.fechaFin;
-          this.eventoDetalle.horaInicio = solicitud.evento.horaInicio + ':00';
-          this.eventoDetalle.horaFin = solicitud.evento.horaFin + ':00';
-          this.eventoDetalle.estado = solicitud.evento.estado;
-          this.eventoDetalle.ambiente = solicitud.evento.ambiente;
-          this.eventoDetalle.imagen = solicitud.evento.imagen;
-          this.eventoDetalle.url = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/' + solicitud.evento.imagen;
-          this.eventoDetalle.fecha = solicitud.evento.fecha;
-          this.eventoDetalle.fechaE = solicitud.evento.fechaE;
-          this.eventoDetalle.color = solicitud.evento.color;
+      this.listaEventos.forEach(evento => {
+        if (evento.id == id) {
+          this.eventoDetalle.id = evento.id;
+          this.eventoDetalle.nombre = evento.nombre;
+          this.eventoDetalle.detalle = evento.detalle;
+          this.eventoDetalle.fechaInicio = evento.fechaInicio;
+          this.eventoDetalle.fechaFin = evento.fechaFin;
+          this.eventoDetalle.horaInicio = evento.horaInicio + ':00';
+          this.eventoDetalle.horaFin = evento.horaFin + ':00';
+          this.eventoDetalle.estado = evento.estado;
+          this.eventoDetalle.ambiente = evento.ambiente;
+          this.eventoDetalle.imagen = evento.imagen;
+          this.eventoDetalle.url = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/' + evento.imagen;
+          this.eventoDetalle.fecha = evento.fecha;
+          this.eventoDetalle.fechaE = evento.fechaE;
+          this.eventoDetalle.color = evento.color;
           return true;
         }
       });
@@ -744,7 +649,7 @@ export default {
     },
     listaEvento() {
       this.$router.push({
-        name: 'ListaSolicitudesUsuarioView',
+        name: 'ListaSolicitudesView',
         params: {
           idEvento: 0
         }
@@ -831,74 +736,21 @@ export default {
     clickModalSolicitudAprobar(solicitud) {
       this.modalSolicitudAprobar = solicitud;
     },
-    pdf() { //Funcion que Constuye el PDF de la solicitud
-
-      const fecha = new Date();
-
-      const doc = new jsPDF('p', 'mm', 'letter');
-
-      const contentHtml = this.$refs.qr.$el;
-      const qr = contentHtml.toDataURL("image/jpeg", 0.8);
-
-      //const doc = new jsPDF('p','mm','legal');
-      doc.setFont('times');
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'bold');
-      doc.text(this.solicitudDetalle.cite, (200), 45, { align: "right" });
-      //doc.setFontSize(8);
-      doc.setFont(undefined, 'normal');
-      doc.text(this.solicitudDetalle.fecha, (200), 50, { align: "right" });
-      doc.setFontSize(6);
-      doc.text("Fecha de Impresión : " + fecha, 200, 53, { align: "right" });
-
-      doc.setFontSize(10);
-      doc.text("Sr.:", 20, 70, { align: "left" });
-
-      doc.text("M. SC. ORLANDO VÍCTOR HUANCA RODRÍGUEZ", 20, 80, { align: "left" });
-      doc.setFont(undefined, 'bold');
-      doc.text("DECANO", 20, 85, { align: "left" });
-      doc.text("FACULTAD DE HUMANIDADES Y CIENCIAS DE LA EDUCACIÓN", 20, 90, { align: "left" });
-
-      doc.addImage(qr, 'JPEG', 170, 70, 30, 30);
-
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'normal');
-      doc.text("Presente:", 20, 100, { align: "left" });
-
-      doc.setFont(undefined, 'bold');
-      doc.text("REF.: " + this.solicitudDetalle.evento.nombre, 200, 110, { align: "right" });
-
-      doc.setFont(undefined, 'normal');
-
-      const lineHeight = 5; // Espacio entre líneas (interlineado)
-      const maxWidth = 180;
-      // Dividir el texto en líneas
-      const lineas = doc.splitTextToSize(this.solicitudDetalle.detalle + "\n\n" + this.solicitudDetalle.servicio + "\n\n" + this.solicitudDetalle.responsable.detalle + "\n\nCon este grato motivo saludo a usted con las consideraciones más distinguidas y esperando una respuesta.", maxWidth);
-
-      // Escribir cada línea con interlineado
-      let y = 120; // Posición inicial Y
-      lineas.forEach((linea) => {
-        doc.text(linea, 20, y, { align: "justify", maxWidth: 180 });
-        y += lineHeight; // Aumenta la posición Y para la siguiente línea
-      });
-
-      doc.text(this.solicitudDetalle.responsable.nombre, (215 / 4), y + 25, { align: "center" });
-      doc.text("C.I. : " + this.solicitudDetalle.responsable.ci, (215 / 4), y + 30, { align: "center" });
-      doc.text("Celular : " + this.solicitudDetalle.responsable.celular, (215 / 4), y + 35, { align: "center" });
-
-      doc.text("Vo. Bo.", (162), y + 25, { align: "center" });
-
-
-      doc.setFont(undefined, 'bold');
-      doc.setFontSize(8);
-      doc.text("Universidad del Bicentenario de Bolivia", (215 / 2), y + 50, { align: "center" });
-      doc.text("(1825-2025)", (215 / 2), y + 55, { align: "center" });
-
-      const name = this.solicitudDetalle.cite.replace(/\//g, "");
-      doc.save(name + '.pdf');
-    },
     solicitudes(idEvento) {
       this.getEvento(idEvento);
+    },
+    getGestion() {
+      // funcion que crea una lista de gestiones desde el 2021
+      // revisado
+      var lgestion = [];
+      const fecha = new Date();
+      this.obsgestion = fecha.getFullYear();
+      for (var i = 2021; i <= this.obsgestion; i++) {
+        lgestion.push(i);
+      }
+      this.listaGestion = lgestion;
+      //this.reporteMes.gestion = this.obsgestion;
+      //this.reporteMes.mes = fecha.getMonth();
     },
   }
 }
