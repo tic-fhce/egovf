@@ -78,6 +78,24 @@ export default class SraService {
         };
         return axios.post(sraUrl + "evento/addEvento", eventoDtoRequest);
     }
+    updateEvento(evento) {
+        const eventoDtoResponse = {
+            "id":evento.id,
+            "nombre":evento.nombre,
+            "detalle":evento.detalle,
+            "fechaInicio":evento.fechaInicio,
+            "fechaFin":evento.fechaFin,
+            "horaInicio":evento.horaInicio,
+            "horaFin":evento.horaFin,
+            "estado":0,
+            "idAmbiente":evento.idAmbiente,
+            "imagen":evento.imagen,
+            "cif":evento.cif,
+            "unidad":evento.unidad,
+            "fecha":evento.fecha
+        };
+        return axios.put(sraUrl + "evento/updateEvento", eventoDtoResponse);
+    }
 
     getListaEventoAmbiente(idAmbiente) {
         const ahora = new Date();
@@ -98,6 +116,15 @@ export default class SraService {
             params:{
                 gestion:gestion,
                 mes:mes
+            }
+        });
+    }
+    getListaUsuario(gestion,mes,sigla) {
+        return axios.get(sraUrl + "solicitud/getListaUsuario",{
+            params:{
+                gestion:gestion,
+                mes:mes,
+                sigla:sigla
             }
         });
     }
@@ -122,6 +149,13 @@ export default class SraService {
 
     getSolicitudesEventos() {
         return axios.get(sraUrl + "solicitud/getSolicitudesEventos");
+    }
+    getSolicitudesEventosUnidad(sigla) {
+        return axios.get(sraUrl + "solicitud/getSolicitudesEventosUnidad",{
+            params:{
+                unidad:sigla
+            }
+        });
     }
 
     addSolicitud(solicitud) {

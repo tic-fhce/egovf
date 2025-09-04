@@ -35,7 +35,9 @@
               <tbody>
                 <tr v-for="solicitud in listaSolicitudes" :key="solicitud.idSolicitud">
                   <td>{{ solicitud.idSolicitud }}</td>
-                  <td>{{ solicitud.hojaRuta }}</td>
+                  <td>
+                    <CAlert :color="solicitud.evento.color">{{ solicitud.hojaRuta }}</CAlert>
+                  </td>
                   <td>
                     {{ solicitud.cite }}
                     <div class="small text-medium-emphasis">
@@ -269,7 +271,7 @@
       </div>
 
       <div class="text-end">
-        <label><u><strong>REF.: {{ solicitudDetalle.evento.nombre }}</strong></u></label>
+        <label><u><strong>REF.: Evento "{{ solicitudDetalle.evento.nombre }}"</strong></u></label>
       </div>
       <br>
       <div>
@@ -479,7 +481,7 @@ export default {
       this.egovfService.headersUsuario(this.usuario.token);
       if (this.estado == 405) { // preguntamos si es estado 405 evento sin solicitud
         //cargamos las listas de Eventos que no tienen Solicitudes
-        await this.sraService.getSolicitudesEventos().then(response => {
+        await this.sraService.getSolicitudesEventosUnidad(this.usuario.sigla).then(response => {
           this.listaSolicitudes = response.data;
         });
       }
@@ -511,7 +513,7 @@ export default {
       await this.sraService.getEvento(idEvento).then(response => {
         this.evento = response.data;
 
-        this.solicitud.detalle = "A tiempo de saludarle y desearle éxitos en sus funciones, me dirijo a su autoridad con el fin de solicitar la reserva del " + this.evento.ambiente + ", con el fin de realizar el evento " + this.evento.nombre + ", mismo que será llevado a cabo el dia " + this.formatearFecha(this.evento.fechaInicio) + " de " + this.evento.horaInicio + ":00  a " + this.evento.horaFin + ":00 horas, para lo cual requerimos:"
+        this.solicitud.detalle = "A tiempo de saludarle y desearle éxitos en sus funciones, me dirijo a su autoridad con el fin de solicitar la reserva del " + this.evento.ambiente + ", con el fin de realizar el evento " + this.evento.nombre + " ("+ this.usuario.unidad.toUpperCase() +")"+", mismo que será llevado a cabo el día " + this.formatearFecha(this.evento.fechaInicio) + " de " + this.evento.horaInicio + ":00  a " + this.evento.horaFin + ":00 horas, para lo cual requerimos:"
         this.solicitud.old = this.solicitud.detalle;
         this.solicitud.idEvento = idEvento;
         this.clickModalSolicitud(true);
@@ -866,7 +868,7 @@ export default {
       doc.text("Presente:", 20, 100, { align: "left" });
 
       doc.setFont(undefined, 'bold');
-      doc.text("REF.: " + this.solicitudDetalle.evento.nombre, 200, 110, { align: "right" });
+      doc.text("REF.: Evento  "+`"${this.solicitudDetalle.evento.nombre}"`, 200, 110, { align: "right" });
 
       doc.setFont(undefined, 'normal');
 

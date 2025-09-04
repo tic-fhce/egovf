@@ -9,12 +9,12 @@
 
     <CRow>
 
-        <CCol :lg="2">
+        <CCol :lg="3">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">L.S.A.</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-check" />
+                    <CIcon customClassName="nav-icon" icon="cil-check" class="menuicon"/>
                 </CCardBody>
                 <CCardFooter class="text-center">
                     <CTooltip
@@ -31,12 +31,12 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="2">
+        <CCol :lg="3">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">L.S.E.E.</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-clipboard" />
+                    <CIcon customClassName="nav-icon" icon="cil-clipboard" class="menuicon"/>
                 </CCardBody>
                 <CCardFooter class="text-center">
                     <CTooltip
@@ -53,12 +53,12 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="2">
+        <CCol :lg="3">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">L.S.R.</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-trash" />
+                    <CIcon customClassName="nav-icon" icon="cil-trash" class="menuicon" />
                 </CCardBody>
                 <CCardFooter class="text-center">
                     <CTooltip content="Solicitudes Rechazadas" placement="bottom">
@@ -73,12 +73,12 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="2">
+        <CCol :lg="3">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">L.T.S.</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-code" />
+                    <CIcon customClassName="nav-icon" icon="cil-code" class="menuicon"/>
 
                 </CCardBody>
                 <CCardFooter class="text-center">
@@ -94,12 +94,12 @@
             </CCard>
         </CCol>
 
-        <CCol :lg="2">
+        <CCol :lg="3">
             <br />
             <CCard>
                 <CCardHeader class="headercolor text-center">G.S.A.</CCardHeader>
                 <CCardBody class="text-center">
-                    <CIcon customClassName="nav-icon" icon="cil-check" />
+                    <CIcon customClassName="nav-icon" icon="cil-check"  class="menuicon"/>
 
                 </CCardBody>
                 <CCardFooter class="text-center">
@@ -117,7 +117,7 @@
         </CCol>
     </CRow>
 
-    <!-- Modal  Ambiente del Evento-->
+    <!-- Modal  Solicitud -->
     <CModal :visible="modalSolicitud" @close="clickModalSolicitud(false)">
         <CModalHeader class="headercolor" dismiss @close="clickModalSolicitud(false)">
             <CModalTitle>
@@ -156,7 +156,7 @@
             </CButton>
         </CModalFooter>
     </CModal>
-    <!-- END Modal  Ambiente del Evento -->
+    <!-- END Modal  Solicitud  -->
 </template>
 
 <script>
@@ -227,9 +227,13 @@ export default {
             });
         },
         getLista() {
+            var vista = 'SolicitudesUsuarioView';
+            if (this.usuario.sigla == 'UTIC' || this.usuario.sigla == 'ADM') {
+                vista = 'SolicitudesView';
+            }
             this.clickModalSolicitud(false);
             this.$router.push({
-                name: 'SolicitudesView',
+                name: vista,
                 params: {
                     gestion: this.gestion,
                     mes: this.mes

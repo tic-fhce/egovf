@@ -224,7 +224,7 @@ export default {
         this.$router.push({
           name: 'FechasView',
           params:{
-            ambiente: idAmbiente
+            idAmbiente: idAmbiente
           }
         });
       },

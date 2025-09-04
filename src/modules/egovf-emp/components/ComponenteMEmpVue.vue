@@ -18,6 +18,13 @@
               <CDropdownItem>
                 <CButton @click="clickModalContrato(true)" size="sm"><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Contrato</CButton>
                 </CDropdownItem>
+              
+                <CDropdownDivider />
+              <CDropdownItem>
+                <CButton @click="getModuloMenu()" size="sm"><CIcon icon="cil-medical-cross" class="me-2" />Empleado</CButton>
+                </CDropdownItem>
+
+
             </CDropdownMenu>
           </CDropdown>
         </CCardHeader>
@@ -796,7 +803,17 @@ export default {
         const progreso = (diasPasados / diasTotales) * 100;
         this.total = parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
       }
-    }
+    },
+    getModuloMenu() {
+      this.$router.push({
+        name: 'MenuView',
+        params: {
+          cifCiudadano: this.cif,
+          idModulo: 2,
+          titulo: "Modulo Empleado"
+        },
+      });
+    },
   },
 };
 </script>

@@ -9,7 +9,7 @@
       <br />
       <CCard>
         <CCardHeader class="headercolor text-center">
-          {{titulo}} 
+          {{ titulo }}
         </CCardHeader>
         <CCardBody>
           <CRow>
@@ -71,23 +71,23 @@
                 <td>
                   <CButtonGroup role="group">
 
-                      <CTooltip content="Ver Detalle del Evento" placement="bottom">
-                        <template #toggler="{ id, on }">
-                          <CButton :aria-describedby="id" v-on="on" class="font" color="success"
-                            size="sm" @click="getEventoDetalle(evento.id)">
-                            <CIcon icon="cil-calendar" />
-                          </CButton>
-                        </template>
-                      </CTooltip>
-                      <CTooltip content="Editar la Solicitud" placement="bottom">
-                        <template #toggler="{ id, on }">
-                          <CButton v-if="evento.estado == 'En Espera'" :aria-describedby="id" v-on="on" class="font" color="warning"
-                            size="sm" @click="getSolicitudEditar(evento.id)">
-                            <CIcon icon="cil-pencil" />
-                          </CButton>
-                        </template>
-                      </CTooltip>
-                    </CButtonGroup>
+                    <CTooltip content="Ver Detalle del Evento" placement="bottom">
+                      <template #toggler="{ id, on }">
+                        <CButton :aria-describedby="id" v-on="on" class="font" color="success" size="sm"
+                          @click="getEventoDetalle(evento.id)">
+                          <CIcon icon="cil-calendar" />
+                        </CButton>
+                      </template>
+                    </CTooltip>
+                    <CTooltip content="Editar la Solicitud" placement="bottom">
+                      <template #toggler="{ id, on }">
+                        <CButton v-if="evento.estado == 'En Espera'" :aria-describedby="id" v-on="on" class="font"
+                          color="warning" size="sm" @click="getEvento(evento.id)">
+                          <CIcon icon="cil-pencil" />
+                        </CButton>
+                      </template>
+                    </CTooltip>
+                  </CButtonGroup>
                 </td>
               </tr>
             </tbody>
@@ -100,100 +100,53 @@
     </CCol>
   </CRow>
 
-  <!-- Modal  Solicitud-->
-  <CModal size="lg" :visible="modalSolicitud" @close="clickModalSolicitud(false)">
-    <CForm @submit.prevent="addSolicitud()">
-      <CModalHeader class="headercolor" dismiss @close="clickModalSolicitud(false)">
+  <!-- Modal  Evento-->
+  <CModal size="lg" :visible="modalEvento" @close="clickModalEvento(false)">
+    <CForm @submit.prevent="updateEvento()">
+      <CModalHeader class="headercolor" dismiss @close="clickModalEvento(false)">
         <CModalTitle>
           <h6>
-            <CIcon icon="cil-clipboard" size="xl" /> Crear Solicitud
+            <CIcon icon="cil-calendar" size="xl" /> Editar Evento
           </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <CAlert color="success" class="text-end">Ref. {{ evento.nombre }}</CAlert>
-
         <CInputGroup class="mb-3">
-          <CInputGroupText as="label">Detalle</CInputGroupText>
-          <CFormTextarea v-model="solicitud.detalle" required="true" rows="6"> </CFormTextarea>
+          <CInputGroupText as="label">Nombre del Evento</CInputGroupText>
+          <CFormInput type="text" v-model="eventoEditar.nombre" placeholder="Nombre del Evento" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CTooltip v-for="servicio in evento.servicios" :key="servicio.id" :content="servicio.detalle"
-            placement="bottom">
-            <template #toggler="{ on }">
-              <CFormCheck inline type="radio" name="servicio" :label="servicio.nombre" :value="String(servicio.id)"
-                v-on="on" required="true" @click="checkServicio(servicio.detalle, servicio.id)" />
-            </template>
-          </CTooltip>
+          <CInputGroupText as="label">Detalle del Evento</CInputGroupText>
+          <CFormTextarea v-model="eventoEditar.detalle" required="true" rows="3"> </CFormTextarea>
         </CInputGroup>
-        <hr>
-        <div id="app">
-          <h4>Responsable</h4>
-          <v-select v-model="solicitud.responsable" :options="listaResponsable" label="nombre" :filterable="true"
-            placeholder="Buscar responsable...">
-            <template #option="{ nombre, ci }">
-              <strong>{{ nombre }} </strong>
-              <small class="text-muted"> - {{ ci }}</small>
-            </template>
-          </v-select>
-        </div>
+
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Del</CInputGroupText>
+          <CFormInput type="date" v-model="eventoEditar.fechaInicio" required="true" disabled />
+          <CInputGroupText as="label">Al</CInputGroupText>
+          <CFormInput type="date" v-model="eventoEditar.fechaFin" required="true" />
+        </CInputGroup>
+
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">A partir de horas</CInputGroupText>
+          <CFormSelect v-model="eventoEditar.horaInicio" required="true">
+            <option value="">Seleccionar Hora </option>
+            <option v-for="hora in generarRango(8, eventoEditar.tope)" :value="hora" :key="hora">
+              {{ hora }}:00
+            </option>
+          </CFormSelect>
+          <CInputGroupText as="label">hasta las</CInputGroupText>
+          <CFormSelect v-model="eventoEditar.horaFin" required="true">
+            <option v-for="horaf in generarRango(9, eventoEditar.tope + 3)" :value="horaf" :key="horaf">
+              {{ horaf }}:00
+            </option>
+          </CFormSelect>
+        </CInputGroup>
 
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalSolicitud(false)" color="danger" class="font" size="sm">
-          <CIcon icon="cil-x" class="me-2" />Cancelar
-        </CButton>
-        <CButton v-if="checkSeleccion" type="submit" class="font" size="sm" color="success">
-          <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
-        </CButton>
-      </CModalFooter>
-    </CForm>
-  </CModal>
-  <!-- End Modal  Solicitud-->
-
-  <!-- Modal Editar Solicitud-->
-  <CModal size="lg" :visible="modalSolicitudEditar" @close="clickModalSolicitudEditar(false)">
-    <CForm @submit.prevent="updateSolicitud()">
-      <CModalHeader class="headercolor" dismiss @close="clickModalSolicitudEditar(false)">
-        <CModalTitle>
-          <h6>
-            <CIcon icon="cil-clipboard" size="xl" /> Editar Solicitud
-          </h6>
-        </CModalTitle>
-      </CModalHeader>
-      <CModalBody>
-        <CAlert color="success" class="text-end">Ref. {{ solicitudEditar.evento.nombre }}</CAlert>
-
-        <CInputGroup class="mb-3">
-          <CInputGroupText as="label">Detalle</CInputGroupText>
-          <CFormTextarea v-model="solicitudEditar.detalle" required="true" rows="6"> </CFormTextarea>
-        </CInputGroup>
-
-        <CInputGroup class="mb-3">
-          <CTooltip v-for="servicio in solicitudEditar.evento.servicios" :key="servicio.id" :content="servicio.detalle"
-            placement="bottom">
-            <template #toggler="{ on }">
-              <CFormCheck inline type="radio" name="servicio" :label="servicio.nombre" :value="String(servicio.id)"
-                v-on="on" required="true" @click="checkServicioEditar(servicio.detalle, servicio.id)" />
-            </template>
-          </CTooltip>
-        </CInputGroup>
-        <hr>
-        <div id="app">
-          <h4>Responsable</h4>
-          <v-select v-model="solicitudEditar.responsable" :options="listaResponsable" label="nombre" :filterable="true"
-            placeholder="Buscar responsable...">
-            <template #option="{ nombre, ci }">
-              <strong>{{ nombre }} </strong>
-              <small class="text-muted"> - {{ ci }}</small>
-            </template>
-          </v-select>
-        </div>
-
-      </CModalBody>
-      <CModalFooter>
-        <CButton @click="clickModalSolicitudEditar(false)" color="danger" class="font" size="sm">
+        <CButton @click="clickModalEvento(false)" color="danger" class="font" size="sm">
           <CIcon icon="cil-x" class="me-2" />Cancelar
         </CButton>
         <CButton type="submit" class="font" size="sm" color="success">
@@ -202,7 +155,7 @@
       </CModalFooter>
     </CForm>
   </CModal>
-  <!-- End Modal  Editar Solicitud-->
+  <!-- End Modal  Evento-->
 
 
   <!-- Modal  Detalles de Evento-->
@@ -235,13 +188,6 @@ import ComponenteEvento from '@/components/Evento/ComponenteEvento.vue';
 import SraService from '@/modules/egovf-sra/services/sraService';
 import EgovfService from '@/modules/egovf/services/egovfService';
 
-//Importamos Herramientas 
-import DataTable from 'datatables.net-vue3';
-import DataTablesLib from 'datatables.net';
-import $ from 'jquery';
-
-DataTable.use(DataTablesLib);
-
 export default {
   name: 'ListaEventosView',
   components: {
@@ -249,19 +195,14 @@ export default {
   },
   data() {
     return {
-      titulo:'Eventos de la Unidad',
+      titulo: 'Eventos de la Unidad',
       sraService: null,
       egovfService: null,
       listaEventos: [],
-      gestion:0,
-      mes:0,
-      listaResponsable: [],
-      modalSolicitud: false,
-      modalSolicitudDetalle: false,
-      modalSolicitudEditar: false,
-      modalSolicitudAprobar: false,
+      gestion: 0,
+      mes: 0,
       modalEventoDetalle: false,
-      sms: '',
+      modalEvento: false,
       usuario: {
         token: '',
         cif: '',
@@ -287,58 +228,7 @@ export default {
         { m: "11", mes: "Noviembre" },
         { m: "12", mes: "Diciembre" },
       ],
-      solicitud: {
-        idServicio: null,
-        detalle: '',
-        old: '',
-        responsable: null,
-        idEvento: 0
-      },
-      solicitudEditar: {
-        id: 0,
-        cite: '',
-        fecha: '',
-        idEvento: 0,
-        idServicio: 0,
-        hojaRuta: 0,
-        responsable: null,
-        detalle: '',
-        old: '',
-        gestion: 0,
-        evento: null
-      },
-      evento: {
-        id: '',
-        nombre: '',
-        detalle: '',
-        fechaInicio: '',
-        fechaFin: '',
-        horaInicio: '',
-        horaFin: '',
-        estado: 0,
-        ambiente: '',
-        imagen: '',
-        url: '',
-        fecha: '',
-        fechaE: '',
-        color: '',
-        servicios: []
-      },
       showButton: false,
-      solicitudDetalle: {
-        idSolicitud: 0,
-        cite: '',
-        fecha: '',
-        detalle: '',
-        servicio: '',
-        evento: null,
-        responsable: {
-          detalle: '',
-          nombre: '',
-          celular: '',
-          ci: ''
-        }
-      },
       eventoDetalle: {
         id: '',
         nombre: '',
@@ -355,6 +245,23 @@ export default {
         fechaE: '',
         color: ''
       },
+      eventoEditar: {
+        id: 0,
+        nombre: '',
+        detalle: '',
+        fechaInicio: '',
+        fechaFin: '',
+        horaInicio: '',
+        horaFin: '',
+        estado: 0,
+        idAmbiente: 0,
+        imagen: '',
+        cif: 0,
+        unidad: '',
+        fecha:'',
+        fechaE:'',
+        tope:17
+      }
     }
   },
   beforeCreate() {
@@ -370,7 +277,7 @@ export default {
     //this.idEvento = this.$route.params.idEvento; //resivimos el cif del ciudadano
     this.getDatos(); // Llamamos los datos del Usuario
     this.getGestion();
-    
+
 
   },
   computed: {
@@ -379,11 +286,6 @@ export default {
     },
   },
   methods: {
-    tabla() {
-      this.$nextTick(() => {
-        $('#eventoTabla').DataTable();
-      });
-    },
     getDatos() {// Funcion que guarda los datos del Usuario en la View
       if (this.$cookies.get('cif') != null) {
         this.usuario.token = this.$cookies.get('token');
@@ -396,15 +298,6 @@ export default {
         this.usuario.foto = this.$cookies.get("foto");
       }
     },
-    progreso() {
-      this.listaSolicitudes.forEach(solicitud => {
-        solicitud.color = this.esFechaPasada(solicitud.evento.fechaInicio);
-        solicitud.total = this.calcularDiasRestantes(this.cambioFecha(), solicitud.evento.fechaInicio);
-
-      });
-      this.tabla();
-      this.getListaResponsable();
-    },
 
     async getListaResponsable() { // Funcion que crea una lista de Ciudadanos 
       await this.egovfService.getListaResponsable().then(response => {
@@ -412,63 +305,30 @@ export default {
       });
     },
 
-    async getEventoUnidad() { // Funcion que crea una lista de Ciudadanos
-      const fech = this.gestion+"-"+this.mes; 
-      await this.sraService.getEventoUnidad(this.usuario.sigla,fech).then(response => {
+    async getEventoUnidad() { // Funcion que crea una lista de Eventos Deacuerdo al Usuario
+      const fech = this.gestion + "-" + this.mes;
+      console.log(fech);
+      await this.sraService.getEventoUnidad(this.usuario.sigla, fech).then(response => {
         this.listaEventos = response.data;
       });
       if (this.listaEventos.length == 0) {
         this.$swal.fire("No se encontraron Eventos", "", "info");
       }
-      this.tabla();
 
     },
-    checkServicio(requerimiento, id) {
-      this.solicitud.detalle = this.solicitud.old + "\n\n" + requerimiento;
-      this.solicitud.idServicio = id;
-    },
 
-    checkServicioEditar(requerimiento, id) {
-      this.solicitudEditar.detalle = this.solicitudEditar.old + "\n\n" + requerimiento;
-      this.solicitudEditar.idServicio = id;
-    },
-    addSolicitud() { // funcion para el registro de un ciudadano
+    updateEvento() { // funcion para el registro de un ciudadano
       this.$swal.fire({
-        title: 'Desea Registrar la Solicitud para el evento ' + this.evento.nombre + "??",
-        icon: 'info',
-        showDenyButton: true,
-        confirmButtonText: 'Registrar',
-        denyButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.sraService.addSolicitud(this.solicitud).then(response => {
-            if (response.status == 201) {
-              this.$swal.fire('Solicitud Registrada Correctamente', '', 'success').then((result) => {
-                if (result)
-                  this.listaEvento();
-              });
-            }
-            else {
-              this.$swal.fire('Los Datos no fueron Guardados Error' + response.status, '', 'error');
-            }
-          });
-        } else if (result.isDenied) {
-          this.$swal.fire('Datos Cancelados', '', 'info');
-        }
-      });
-    },
-    updateSolicitud() { // funcion para el registro de un ciudadano
-      this.$swal.fire({
-        title: 'Desea Actualizar la Solicitud del evento ' + this.evento.nombre + "??",
+        title: 'Desea Actualizar la el Evento ' + this.eventoEditar.nombre + "??",
         icon: 'info',
         showDenyButton: true,
         confirmButtonText: 'Actualizar',
         denyButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.sraService.updateSolicitud(this.solicitudEditar).then(response => {
+          this.sraService.updateEvento(this.eventoEditar).then(response => {
             if (response.status == 200) {
-              this.$swal.fire('Solicitud Actualizada Correctamente', '', 'success').then((result) => {
+              this.$swal.fire('Evento Actualizado Correctamente', '', 'success').then((result) => {
                 if (result)
                   location.reload();
               });
@@ -481,113 +341,6 @@ export default {
           this.$swal.fire('Datos Cancelados', '', 'info');
         }
       });
-    },
-    updateSolicitudAprobar() { // funcion para Aprobar la solicitud
-      this.$swal.fire({
-        title: 'Desea Aprobar la Solicitud del evento ' + this.evento.nombre + "??",
-        icon: 'info',
-        showDenyButton: true,
-        confirmButtonText: 'Aprobar',
-        denyButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.sraService.updateSolicitud(this.solicitudEditar).then(response => {
-            if (response.status == 200) {
-              this.$swal.fire('Solicitud Aprobada Correctamente', '', 'success').then((result) => {
-                if (result)
-                  location.reload();
-              });
-            }
-            else {
-              this.$swal.fire('Los Datos no fueron Guardados Error' + response.status, '', 'error');
-            }
-          });
-        } else if (result.isDenied) {
-          this.$swal.fire('Datos Cancelados', '', 'info');
-        }
-      });
-    },
-    updateSolicitudCancelar(id) {
-      this.solicitudEditar.id = id;
-      this.solicitudEditar.cite = "";
-      this.solicitudEditar.fecha = "";
-      this.solicitudEditar.idEvento = 0;
-      this.solicitudEditar.evento = null;
-      this.solicitudEditar.idServicio = "";
-      this.solicitudEditar.hojaRuta = "cancelado";
-      this.solicitudEditar.responsable = 0;
-      this.solicitudEditar.detalle = "";
-      this.solicitudEditar.old = "";
-      this.solicitudEditar.gestion = 0;
-
-      this.$swal.fire({
-        title: 'Desea Cancelar la Solicitud del Evento ' + this.evento.nombre + "??",
-        icon: 'error',
-        showDenyButton: true,
-        confirmButtonText: 'Aprobar',
-        denyButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.sraService.updateSolicitud(this.solicitudEditar).then(response => {
-            if (response.status == 200) {
-              this.$swal.fire('Solicitud Cancelada Correctamente', 'La Solicitud y el Evento fueron cancelados Corectamente', 'success').then((result) => {
-                if (result)
-                  location.reload();
-              });
-            }
-            else {
-              this.$swal.fire('Los Datos no fueron Guardados Error' + response.status, '', 'error');
-            }
-          });
-        } else if (result.isDenied) {
-          this.$swal.fire('Datos Cancelados', '', 'info');
-        }
-      });
-
-    },
-    servicio(idAmbiente) {
-      this.$router.push({
-        name: 'ListaServiciosView',
-        params: {
-          ambiente: idAmbiente
-        }
-      });
-    },
-
-    fechas(idAmbiente) {
-      this.$router.push({
-        name: 'FechasView',
-        params: {
-          ambiente: idAmbiente
-        }
-      });
-    },
-    getSolicitud(id) {
-      this.listaSolicitudes.forEach(solicitud => {
-        if (solicitud.idSolicitud == id) {
-          this.solicitudDetalle.idSolicitud = solicitud.idSolicitud;
-          this.solicitudDetalle.evento = solicitud.evento;
-          this.solicitudDetalle.cite = solicitud.cite;
-          this.solicitudDetalle.fecha = this.cambio(solicitud.fecha);
-          this.solicitudDetalle.detalle = solicitud.detalle;
-          this.solicitudDetalle.servicio = solicitud.servicio;
-          this.listaResponsable.forEach(responsable => {
-            if (responsable.cif == solicitud.cifResponsable) {
-              this.solicitudDetalle.responsable.detalle = "Para tal motivo el responsable del evento es " + responsable.nombre + ", con cedula de identidad " + responsable.ci + " y celular :" + responsable.celular;
-              this.solicitudDetalle.responsable.nombre = responsable.nombre;
-              this.solicitudDetalle.responsable.celular = responsable.celular;
-              this.solicitudDetalle.responsable.ci = responsable.ci;
-              return true;
-            }
-          });
-
-          return true;
-        }
-
-      });
-      this.sms = "http://192.168.31.34:8080/evento/" + this.solicitudDetalle.evento.id;
-      this.clickModalSolicitudDetalle(true);
-
     },
     getEventoDetalle(id) {
       this.listaEventos.forEach(evento => {
@@ -611,133 +364,33 @@ export default {
       });
       this.clickModalEventoDetalle(true);
     },
-    getSolicitudEditar(id) {
-      this.selectSolicitud(id);
-      this.clickModalSolicitudEditar(true);
-    },
-    getSolicitudAprobar(id) {
-      this.selectSolicitud(id);
-      this.solicitudEditar.hojaRuta = "";
-      this.clickModalSolicitudAprobar(true);
-
-    },
-
-    selectSolicitud(id) {
-      this.listaSolicitudes.forEach(solicitud => {
-        if (solicitud.idSolicitud == id) {
-          this.solicitudEditar.id = solicitud.idSolicitud;
-          this.solicitudEditar.cite = solicitud.cite;
-          this.solicitudEditar.fecha = solicitud.fecha;
-          this.solicitudEditar.idEvento = solicitud.evento.id;
-          this.solicitudEditar.evento = solicitud.evento;
-
-          this.solicitudEditar.idServicio = solicitud.idServicio;
-          this.solicitudEditar.hojaRuta = solicitud.hojaRuta;
-          this.listaResponsable.forEach(responsable => {
-            if (responsable.cif == solicitud.cifResponsable) {
-              this.solicitudEditar.responsable = responsable;
-              return true;
-            }
-          });
-
-          this.solicitudEditar.detalle = solicitud.detalle + "\n\n" + solicitud.servicio;
-          this.solicitudEditar.old = solicitud.detalle;
-          this.solicitudEditar.gestion = solicitud.gestion;
+    getEvento(id) {
+      this.listaEventos.forEach(evento => {
+        if (evento.id == id) {
+          this.eventoEditar.id = evento.id;
+          this.eventoEditar.nombre = evento.nombre;
+          this.eventoEditar.detalle = evento.detalle;
+          this.eventoEditar.fechaInicio = evento.fechaInicio;
+          this.eventoEditar.fechaFin = evento.fechaFin;
+          this.eventoEditar.horaInicio = evento.horaInicio;
+          this.eventoEditar.horaFin = evento.horaFin;
+          this.eventoEditar.estado = evento.estado;
+          this.eventoEditar.imagen = evento.imagen;
+          this.eventoEditar.fecha = evento.fecha;
+          this.eventoEditar.fechaE = evento.fechaE;
+          this.eventoEditar.idAmbiente = evento.idAmbiente;
+          this.eventoEditar.cif = this.usuario.cif;
+          this.eventoEditar.unidad = this.usuario.sigla;
           return true;
         }
       });
-    },
-    listaEvento() {
-      this.$router.push({
-        name: 'ListaSolicitudesView',
-        params: {
-          idEvento: 0
-        }
-      });
-    },
-    esFechaPasada(fechaSalida) {
-      if (!fechaSalida) return 'warning';
-
-      const fechaTermino = new Date(fechaSalida);
-      const hoy = new Date();
-
-      // Normalizar fechas (ignorar horas)
-      fechaTermino.setHours(0, 0, 0, 0);
-      hoy.setHours(0, 0, 0, 0);
-
-      return fechaTermino < hoy ? 'danger' : 'success';
-    },
-    calcularDiasRestantes(fi, fs) {
-      const fechaInicio = new Date(fi);
-      const fechaSalida = new Date(fs);
-      const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-      const fechaActual = new Date();
-      if (!fechaSalida) return 0;
-
-      if (fechaActual >= fechaSalida) return 100;
-
-      const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-      const progreso = (diasPasados / diasTotales) * 100;
-      return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-    },
-    cambio(fechaOriginal) {
-      fechaOriginal = fechaOriginal.split(" ")[0];
-      const fechaStr = fechaOriginal.replace(/\//g, "-");
-      const [dia, mes, año] = fechaStr.split("-");
-      const fechaFormateada = `${año}-${mes}-${dia}`;
-      return (this.formatearFecha(fechaFormateada));
-    },
-    cambioFecha() {
-      const primerDia = new Date();
-      const año = primerDia.getFullYear();
-      const mes = String(primerDia.getMonth() + 1).padStart(2, '0');
-      const primerDiaFormateado = `${año}-${mes}-01`;
-      return (primerDiaFormateado);
-    },
-    formatearFecha(fechaStr) {
-
-      // Dividir la fecha en día, mes y año
-      const [anio, mes, dia] = fechaStr.split('-').map(Number);
-
-      // Crear objeto Date (los meses en JS son 0-indexados, por eso mes - 1)
-      const fecha = new Date(anio, mes - 1, dia);
-
-      // Verificar si la fecha es válida
-      if (isNaN(fecha.getTime())) {
-        throw new Error('Fecha inválida');
-      }
-
-      // Opciones para formatear la fecha
-      const opciones = {
-        weekday: 'long',   // "lunes"
-        day: 'numeric',    // "20"
-        month: 'long',     // "enero"
-        year: 'numeric'    // "2025"
-      };
-
-      // Formatear según la configuración regional (español)
-      return fecha.toLocaleDateString('es-ES', opciones);
-    },
-    clickModalSolicitud(solicitud) {//funcion para Visibilisar el modal de registro
-      if (!solicitud) {
-        this.listaEvento();
-      }
-      this.modalSolicitud = solicitud;
-    },
-    clickModalSolicitudDetalle(solicitud) {//funcion para Visibilisar el modal de detalle
-      this.modalSolicitudDetalle = solicitud;
+      this.clickModalEvento(true);
     },
     clickModalEventoDetalle(evento) {
       this.modalEventoDetalle = evento;
     },
-    clickModalSolicitudEditar(solicitud) {
-      this.modalSolicitudEditar = solicitud;
-    },
-    clickModalSolicitudAprobar(solicitud) {
-      this.modalSolicitudAprobar = solicitud;
-    },
-    solicitudes(idEvento) {
-      this.getEvento(idEvento);
+    clickModalEvento(evento) {
+      this.modalEvento = evento;
     },
     getGestion() {
       // funcion que crea una lista de gestiones desde el 2021
@@ -751,6 +404,9 @@ export default {
       this.listaGestion = lgestion;
       //this.reporteMes.gestion = this.obsgestion;
       //this.reporteMes.mes = fecha.getMonth();
+    },
+    generarRango(inicio, fin) {
+      return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i);
     },
   }
 }

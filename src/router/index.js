@@ -264,6 +264,12 @@ const routes = [
         props:true
       },
       {
+        path: "/listaSolicitudesUsuario/:gestion/:mes",
+        name: "SolicitudesUsuarioView",
+        component: () => import("@/modules/egovf-sra/views/SolicitudesUsuarioView.vue"),
+        props:true
+      },
+      {
         path: "/listaEventos",
         name: "ListaEventosView",
         component: () => import("@/modules/egovf-sra/views/ListaEventosView.vue"),
@@ -279,6 +285,11 @@ const routes = [
         path: "/eventos",
         name: "EventosView",
         component: () => import("@/modules/egovf-sra/views/EventosView.vue"),
+      },
+      {
+        path: "/eventosUsuario",
+        name: "EventosUsuarioView",
+        component: () => import("@/modules/egovf-sra/views/EventosUsuarioView.vue"),
       },
       
     ],
