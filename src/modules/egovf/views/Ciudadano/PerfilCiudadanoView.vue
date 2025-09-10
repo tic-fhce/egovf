@@ -1,14 +1,4 @@
 <template>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item">
-            <router-link to="/listadeciudadanos" class="breadcrumb-link">Lista de Ciudadanos</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{titulo}} : {{ cifCiudadano }} >
-        </li>
-        </ol>
-    </nav>
     <!-- Componente de Datos de la Persona -->
     <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf" />
         

@@ -1,12 +1,5 @@
 <template>
-  <ol class="breadcrumb custom-breadcrumb">
-    <li class="breadcrumb-item">
-      <router-link to="/menusolicitudes" class="breadcrumb-link">Solicitudes</router-link>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">
-      {{ titulo }} >
-    </li>
-  </ol>
+
   <CRow>
     <CCol :xs="12">
       <CCard>
@@ -541,8 +534,10 @@ export default {
           this.sraService.addSolicitud(this.solicitud).then(response => {
             if (response.status == 201) {
               this.$swal.fire('Solicitud Registrada Correctamente', '', 'success').then((result) => {
-                if (result)
+                if (result){
+                  location.reload();
                   this.listaEvento();
+                }
               });
             }
             else {

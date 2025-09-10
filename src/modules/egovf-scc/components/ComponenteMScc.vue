@@ -1272,16 +1272,14 @@ export default {
       this.clickModalMes(false);
       this.clickModalDias(false);
       this.reporteMes.cif = this.egovf.cif;
-      if (this.reporteMes.di < 10) {
-        this.reporteMes.di = "0" + this.reporteMes.di;
-      }
-      if (this.reporteMes.df < 10) {
-        this.reporteMes.df = "0" + this.reporteMes.df;
-      }
       this.$router.push({
         name: "ReporteView",
         params: {
-          uri:this.reporteMes.cif +"j" +this.reporteMes.gestion +"m" +this.reporteMes.mes +"m" + this.reporteMes.di +"k" +this.reporteMes.df,
+          cifCiudadano:this.reporteMes.cif,
+          gestion:this.reporteMes.gestion,
+          m:this.reporteMes.mes,
+          di:this.reporteMes.di,
+          df:this.reporteMes.df
         },
       });
     },

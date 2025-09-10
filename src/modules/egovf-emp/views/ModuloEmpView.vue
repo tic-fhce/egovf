@@ -23,11 +23,13 @@ export default {
         ComponenteDatosPersonalesVue,
         ComponenteMEmpVue
     },
+    props: {
+        cifCiudadano: { type: [Number, String], required: true }
+    },
     data(){
         return {
             titulo:'Modulos del Empleado',
             egovfService:null,
-            cifCiudadano:'',
             usuario:{
                 token:'',
                 cif:'',
@@ -69,7 +71,6 @@ export default {
         this.egovfService = new EgovfService();
     },
     mounted(){
-        this.cifCiudadano = this.$route.params.cifCiudadano;
         this.getDatos();
         this.getEgovf();
     },

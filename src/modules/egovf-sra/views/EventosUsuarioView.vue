@@ -56,7 +56,6 @@ export default {
     data(){
         return {
           sraService:null,
-          idAmbiente:0,
           listaEventos:[],
           listaAmbiente:[],
           modalEventoDetalle:false,
@@ -115,10 +114,49 @@ export default {
         }
       },
       async getListaEventos(){ // Funcion que crea una lista de Eventos 
-        await this.sraService.getListaEventos().then(response => {
-            this.listaEventos = response.data;
+        let loadingAlert = null;
+        try{
+          loadingAlert = this.$swal.fire({
+          title: 'Cargando Eventos',
+          html: 'Procesando datos, por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            this.$swal.showLoading();
+          }
         });
-        //this.progreso();
+        this.$nprogress.start();
+
+        const response = await this.sraService.getListaEventos(); 
+        this.listaEventos = response.data;
+
+        this.$swal.close();
+
+        // Mostrar éxito
+        this.$swal.fire({
+          icon: 'success',
+          title: '¡Completado!',
+          text: `Se procesaron ${this.listaEventos .length} Eventos`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+        }catch(error){
+          if (loadingAlert) {
+          this.$swal.close();
+        }
+
+        // Mostrar error
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Error en la carga',
+          text: error.message || 'Ocurrió un error al procesar los datos',
+          confirmButtonText: 'Reintentar'
+        });
+
+        }finally{
+          this.$nprogress.done();
+        }
+       
       },
       getEventoDetalle(id){
         this.listaEventos.forEach(evento =>{

@@ -1,14 +1,4 @@
 <template>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item">
-            <router-link to="/menuObs" class="breadcrumb-link">Menu de Observaciones</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{titulo}} >
-        </li>
-    </ol>
-  </nav>
   <CRow>
 
     <CCol :xs="12">
@@ -275,7 +265,7 @@ export default {
   components: {},
   data() {
     return {
-      titulo: "Observaciones eliminadas por el Empleado",
+      titulo: "Observaciones Eliminadas",
       modalObs: false,
       modalDetalleObs: false,
       modalObsEditar: false,
@@ -373,8 +363,7 @@ export default {
   },
   mounted() {
     this.getDatos();
-    this.getGestion();
-    this.getListaTipoEmpleado();
+    this.getsolicitudEliminada();
   },
   methods: {
     selectFile() {
@@ -403,35 +392,56 @@ export default {
         this.usuario.foto = this.$cookies.get("foto");
       }
     },
-    getGestion() {
-      // funcion que crea una lista de gestiones desde el 2021
-      var lgestion = [];
-      const fecha = new Date();
-      var rgestion = fecha.getFullYear();
-      for (var i = 2021; i <= rgestion; i++) {
-        lgestion.push(i);
-      }
-      this.listaGestion = lgestion;
-      this.getListaObsEliminado();
-    },
-    async getListaObsEliminado() {
-      await this.sccService.getListaObsEliminado().then((response) => {
+    async getsolicitudEliminada() {
+      // funcion que crea una lista de Solicitudes Eliminadas
+      let loadingAlert = null;
+
+      try{
+        loadingAlert = this.$swal.fire({
+          title: 'Cargando Solicitudes de Empleados',
+          html: 'Procesando datos, por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            this.$swal.showLoading();
+          }
+        });
+        this.$nprogress.start();
+
+        const response = await this.sccService.getListaObsEliminado()
         this.listaObs = response.data;
-      });
-      this.getListaCiudadanoEmpleado();
-    },
-    async getListaTipoEmpleado() {
-      // Funcion para listar El tipo de Empleado
-      await this.empleadoService.getListaTipoEmpleado().then((response) => {
-        this.listaTipoEmpleado = response.data;
-      });
-    },
-    async getListaCiudadanoEmpleado() {
-      // Funcion que regresa una lista de Ciudadanos que son Empleados del ModuloEgovf
-      await this.egovfService.getListaEmpleado().then((response) => {
-        this.listaCiudadanoEmpleado = response.data;
-      });
-      this.getListaObsCiudadano();
+
+        const responseEmpleado = await this.egovfService.getListaEmpleado();
+        this.listaCiudadanoEmpleado = responseEmpleado.data;
+
+        this.getListaObsCiudadano();
+
+        this.$swal.close();
+
+        // Mostrar éxito
+        this.$swal.fire({
+          icon: 'success',
+          title: '¡Completado!',
+          text: `Se procesaron ${this.listaObsCiudadanos.length} Solicitudes`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      }catch(error){
+        if (loadingAlert) {
+          this.$swal.close();
+        }
+
+        // Mostrar error
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Error en la carga',
+          text: error.message || 'Ocurrió un error al procesar los datos',
+          confirmButtonText: 'Reintentar'
+        });
+
+      }finally{
+        this.$nprogress.done();
+      }
     },
     getListaObsCiudadano() {
       //Funcion que une las listas listaEmpelado y listaCiudadanoEmpleado
@@ -648,14 +658,6 @@ export default {
     },
     clickModalImgEditar(cio) {
       this.modalImgEditar = cio;
-    },
-    moduloScc(cif) {
-      this.$router.push({
-        name: "ModuloSccView",
-        params: {
-          cifCiudadano: cif,
-        },
-      });
     },
     getUTipo(){
         if(this.uobs.tipo == 'Entrada M.')

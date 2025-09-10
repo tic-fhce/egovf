@@ -24,13 +24,19 @@ export default {
     ComponenteDatosPersonalesVue,
     ComponenteReporteVue,
   },
+  props: {
+    cifCiudadano: { type: [Number, String], required: true },
+    gestion: { type: [Number, String], required: true },
+    m: { type: [Number, String], required: true },
+    di: { type: [Number, String], required: true },
+    df: { type: [Number, String], required: true },
+  },
   data() {
     return {
       titulo: "Reporte de Asistencia",
       sccService: null,
       egovfService: null,
       uri: "",
-      cifCiudadano: "",
       usuario: {
         token: "",
         cif: "",
@@ -85,14 +91,13 @@ export default {
   },
 
   mounted() {
-    this.uri = this.$route.params.uri;
-    this.cifCiudadano = this.uri.substring(0, 11);
-    this.reporte.cif = this.uri.substring(0, 11);
-    this.reporte.gestion = this.uri.substring(12, 16);
-    this.reporte.mes = this.uri.substring(17, 19);
-    this.reporte.di = this.uri.substring(20, 22);
-    this.reporte.df = this.uri.slice(23);
-    this.reporte.uri = this.uri;
+    //this.uri = this.$route.params.uri;
+    this.reporte.cif = this.cifCiudadano;
+    this.reporte.gestion = this.gestion;
+    this.reporte.mes = this.m;
+    this.reporte.di = this.di;
+    this.reporte.df = this.df;
+    this.reporte.uri = '';
     this.getDatos();
     this.getEgovf();
 
@@ -117,6 +122,7 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
+        this.usuario.foto = this.$cookies.get("foto");
       }
     },
     async getEgovf() {
@@ -134,17 +140,18 @@ export default {
       this.reporte.persona.celular = this.egovf.celular;
       this.reporte.persona.correo = this.egovf.correo;
       this.reporte.persona.foto = this.egovf.foto;
+      this.reporte.uri ='';
     },
     async getReporteBiometrico() {
-      await this.sccService.getPerfil(this.reporte.cif).then((response) => {
-          this.reporte.listaPerfil = response.data;
+      await this.sccService.getPerfil(this.cifCiudadano).then((response) => {
+        this.reporte.listaPerfil = response.data;
       });
       this.getListaHorario();
     },
     async getListaHorario() {
-      await this.sccService.getListaHorario(this.cifCiudadano, this.reporte.gestion).then((response) => {
-          this.reporte.listaHorario = response.data;
-        });
+      await this.sccService.getListaHorario(this.cifCiudadano, this.gestion).then((response) => {
+        this.reporte.listaHorario = response.data;
+      });
     },
   },
 };

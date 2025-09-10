@@ -1,11 +1,4 @@
 <template>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb custom-breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">
-            {{titulo}} >
-            </li>
-        </ol>
-    </nav>
 
     <CRow>
 
@@ -18,7 +11,7 @@
                     <h6>{{tipo.detalle}}</h6>
                 </CCardBody>
                 <CCardFooter class="text-center">
-                    <CButton color="success" class="font" @click="getEmpleado(tipo.id)">Ingresar</CButton>
+                    <CButton color="success" class="font" @click="getEmpleado(tipo.id,tipo.detalle)">Ingresar</CButton>
                 </CCardFooter>
             </CCard>
         </CCol> 
@@ -80,11 +73,12 @@ export default {
                 this.listaTipo = response.data;
             });
         },
-        getEmpleado(id){
+        getEmpleado(id,detalle){
             this.$router.push({
                 name: 'ListaEmpleadoView',
                 params: {
-                    id: id,
+                    idEmpleado: id,
+                    titulo:detalle
                 }
             });
 

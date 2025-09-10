@@ -2,53 +2,37 @@
     <div class="oculto">
         {{ reporte.cif }}
     </div>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb custom-breadcrumb">
-            <li class="breadcrumb-item">
-                <router-link to="/menumoduloscc" class="breadcrumb-link">Modulo M-SCC</router-link>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">
-                {{titulo}} >
-            </li>
-        </ol>
-    </nav>
     <CRow>
         <CCol :sm="6" :lg="4">
-            <CWidgetStatsD
-                class="mb-4"
-                style="--cui-card-cap-bg: #3b5998"
-                :values="[
-                { title: 'Min. Retraso', value: this.totalretraso  },
+            <CWidgetStatsD class="mb-4" style="--cui-card-cap-bg: #3b5998" :values="[
+                { title: 'Min. Retraso', value: this.totalretraso },
                 { title: 'Min. Salida Ant.', value: this.totalanticipado },
-                ]"
-            >
-            <template #icon><CIcon icon="cil-history" height="52" class="my-4 text-white"/></template>
+            ]">
+                <template #icon>
+                    <CIcon icon="cil-history" height="52" class="my-4 text-white" />
+                </template>
             </CWidgetStatsD>
         </CCol>
 
         <CCol :sm="6" :lg="4">
-            <CWidgetStatsD
-                class="mb-4"
-                color="warning"
-                :values="[
-                { title: 'Dias De Trabajo', value: this.totaldias  },
-                { title: 'Dias Trabajados', value: this.totaldias-this.totalsin },
-                ]"
-            >
-            <template #icon><CIcon icon="cil-link-broken" height="52" class="my-4 text-white"/></template>
+            <CWidgetStatsD class="mb-4" color="warning" :values="[
+                { title: 'Dias De Trabajo', value: this.totaldias },
+                { title: 'Dias Trabajados', value: this.totaldias - this.totalsin },
+            ]">
+                <template #icon>
+                    <CIcon icon="cil-link-broken" height="52" class="my-4 text-white" />
+                </template>
             </CWidgetStatsD>
         </CCol>
 
         <CCol :sm="6" :lg="4">
-            <CWidgetStatsD
-                class="mb-4"
-                color="danger"
-                :values="[
-                { title: 'DSD', value: this.totalsin  },
+            <CWidgetStatsD class="mb-4" color="danger" :values="[
+                { title: 'DSD', value: this.totalsin },
                 { title: 'Continuos', value: this.totalcontinuo },
-                ]"
-            >
-            <template #icon><CIcon icon="cil-calendar" height="52" class="my-4 text-white"/></template>
+            ]">
+                <template #icon>
+                    <CIcon icon="cil-calendar" height="52" class="my-4 text-white" />
+                </template>
             </CWidgetStatsD>
         </CCol>
     </CRow>
@@ -61,19 +45,26 @@
                         <CCol :lg="6">
                             <div class="align-items-center">
                                 <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                                <label class="mb-0 fs-6 text-white">{{this.titulo}}  mes de {{mes}} de {{reporte.gestion}}</label>
+                                <label class="mb-0 fs-6 text-white">{{ this.titulo }} mes de {{ mes }} de
+                                    {{ reporte.gestion }}</label>
                             </div>
                         </CCol>
                         <CCol :lg="6" class="text-end">
                             <CDropdown variant="btn-group">
-                                <CDropdownToggle  color="dark" class="font border-0 shadow-sm" size="sm"><CIcon icon="cil-menu" class="me-2 text-success"/>Opciones</CDropdownToggle>
+                                <CDropdownToggle color="dark" class="font border-0 shadow-sm" size="sm">
+                                    <CIcon icon="cil-menu" class="me-2 text-success" />Opciones
+                                </CDropdownToggle>
                                 <CDropdownMenu>
                                     <CDropdownItem>
-                                        <CButton @click="mensage()" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2"/>Descargar PDF</CButton>
+                                        <CButton @click="mensage()" size="sm">
+                                            <CIcon icon="cil-cloud-download" size="lg" class="me-2" />Descargar PDF
+                                        </CButton>
                                     </CDropdownItem>
-                                    <CDropdownDivider/>
+                                    <CDropdownDivider />
                                     <CDropdownItem>
-                                        <CButton @click="mensage()" size="sm"><CIcon icon="cil-cloud-download" size="lg" class="me-2"/>Descargar FM-T</CButton>
+                                        <CButton @click="mensage()" size="sm">
+                                            <CIcon icon="cil-cloud-download" size="lg" class="me-2" />Descargar FM-T
+                                        </CButton>
                                     </CDropdownItem>
                                 </CDropdownMenu>
                             </CDropdown>
@@ -86,13 +77,27 @@
                         <CCol :lg="12" class="table-responsive">
                             <table class="table table-striped table-hover" id="printDatos">
                                 <tbody>
-                                    <tr><td colspan="5" class="text-center"><h4>Datos de Usuario Registrado en Biometricos</h4></td></tr>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h4>Datos de Usuario Registrado en Biometricos</h4>
+                                        </td>
+                                    </tr>
                                     <tr v-for="perfil in reporte.listaPerfil" :key="perfil.id">
-                                        <td><CBadge color="light" class="datos">ID-B : {{perfil.id}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">User ID : {{perfil.user_id}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">Nombre : {{perfil.nombre}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">Lugar : {{perfil.detalle}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">Sigla : {{perfil.lugar}}</CBadge></td>
+                                        <td>
+                                            <CBadge color="light" class="datos">ID-B : {{ perfil.id }}</CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">User ID : {{ perfil.user_id }}</CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">Nombre : {{ perfil.nombre }}</CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">Lugar : {{ perfil.detalle }}</CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">Sigla : {{ perfil.lugar }}</CBadge>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -105,11 +110,22 @@
                         <CCol :lg="12" class="table-responsive">
                             <table class="table table-striped table-hover" id="printHorario">
                                 <tbody>
-                                    <tr><td colspan="4" class="text-center"><h4>Horarios del Usuario</h4></td></tr>
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <h4>Horarios del Usuario</h4>
+                                        </td>
+                                    </tr>
                                     <tr v-for="horario in reporte.listaHorario" :key="horario.horario_id">
-                                        <td><CBadge color="light" class="datos">ID Horario : {{horario.horario_id}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">Valido del : {{horario.fecha}}</CBadge></td>
-                                        <td><CBadge color="light" class="datos">Hasta {{horario.valido}}</CBadge></td>
+                                        <td>
+                                            <CBadge color="light" class="datos">ID Horario : {{ horario.horario_id }}
+                                            </CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">Valido del : {{ horario.fecha }}</CBadge>
+                                        </td>
+                                        <td>
+                                            <CBadge color="light" class="datos">Hasta {{ horario.valido }}</CBadge>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -123,56 +139,89 @@
                             <table class="table table-striped table-hover" id="printMarcado">
                                 <thead>
                                     <tr>
-                                        <th>#</th><th>Dia</th><th>Lugar</th><th>Turno</th><th>Hora M.</th><th>Min. R.</th><th>Obs.</th>
+                                        <th>#</th>
+                                        <th>Dia</th>
+                                        <th>Lugar</th>
+                                        <th>Turno</th>
+                                        <th>Hora M.</th>
+                                        <th>Min. R.</th>
+                                        <th>Obs.</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="value in listaReporte" :key="value.id">
-                                        <td>{{value.id}}</td>
-                                        <td>{{value.dia}} {{value.day}}<br><CBadge color="dark">{{value.fecha}}</CBadge><br></td>
-                                        <td>
-                                            <CBadge color="success">{{value.lugar[0]}}</CBadge><br><CBadge color="success">{{value.lugar[1]}}</CBadge><br><CBadge color="success">{{value.lugar[2]}}</CBadge><br><CBadge color="success">{{value.lugar[3]}}</CBadge>
+                                        <td>{{ value.id }}</td>
+                                        <td>{{ value.dia }} {{ value.day }}<br>
+                                            <CBadge color="dark">{{ value.fecha }}</CBadge><br>
                                         </td>
                                         <td>
-                                            <CBadge color="success">{{value.turno[0]}}</CBadge><br>{{value.turno[1]}}<br>{{value.turno[2]}}<br>{{value.turno[3]}}
+                                            <CBadge color="success">{{ value.lugar[0] }}</CBadge><br>
+                                            <CBadge color="success">{{ value.lugar[1] }}</CBadge><br>
+                                            <CBadge color="success">{{ value.lugar[2] }}</CBadge><br>
+                                            <CBadge color="success">{{ value.lugar[3] }}</CBadge>
                                         </td>
                                         <td>
-                                            <span v-if="value.hora[0]=='Sin Marcar'" class="badge bg-danger">{{value.hora[0]}}</span>
-                                            <span v-else>{{value.hora[0]}}</span><br>
-                                            <span v-if="value.hora[1]=='Sin Marcar'" class="badge bg-danger">{{value.hora[1]}}</span>
-                                            <span v-else>{{value.hora[1]}}</span><br>
-                                            <span v-if="value.hora[2]=='Sin Marcar'" class="badge bg-danger">{{value.hora[2]}}</span>
-                                            <span v-else>{{value.hora[2]}}</span><br>
-                                            <span v-if="value.hora[3]=='Sin Marcar'" class="badge bg-danger">{{value.hora[3]}}</span>
-                                            <span v-else>{{value.hora[3]}}</span>
+                                            <CBadge color="success">{{ value.turno[0] }}</CBadge>
+                                            <br>{{ value.turno[1] }}<br>{{ value.turno[2] }}<br>{{ value.turno[3] }}
+                                        </td>
+                                        <td>
+                                            <span v-if="value.hora[0] == 'Sin Marcar'"
+                                                class="badge bg-danger">{{ value.hora[0] }}</span>
+                                            <span v-else>{{ value.hora[0] }}</span><br>
+                                            <span v-if="value.hora[1] == 'Sin Marcar'"
+                                                class="badge bg-danger">{{ value.hora[1] }}</span>
+                                            <span v-else>{{ value.hora[1] }}</span><br>
+                                            <span v-if="value.hora[2] == 'Sin Marcar'"
+                                                class="badge bg-danger">{{ value.hora[2] }}</span>
+                                            <span v-else>{{ value.hora[2] }}</span><br>
+                                            <span v-if="value.hora[3] == 'Sin Marcar'"
+                                                class="badge bg-danger">{{ value.hora[3] }}</span>
+                                            <span v-else>{{ value.hora[3] }}</span>
                                         </td>
 
                                         <td>
-                                            <CBadge :color="value.retraso[0] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                            <CBadge :color="value.retraso[0] > 0 ? 'danger' : 'success'"
+                                                class="retraso-badge">
                                                 {{ value.retraso[0] }}
                                             </CBadge><br>
-                                            <CBadge :color="value.retraso[1] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                            <CBadge :color="value.retraso[1] > 0 ? 'danger' : 'success'"
+                                                class="retraso-badge">
                                                 {{ value.retraso[1] }}
                                             </CBadge><br>
-                                            <CBadge :color="value.retraso[2] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                            <CBadge :color="value.retraso[2] > 0 ? 'danger' : 'success'"
+                                                class="retraso-badge">
                                                 {{ value.retraso[2] }}
                                             </CBadge><br>
-                                            <CBadge :color="value.retraso[3] > 0 ? 'danger' : 'success'" class="retraso-badge">
+                                            <CBadge :color="value.retraso[3] > 0 ? 'danger' : 'success'"
+                                                class="retraso-badge">
                                                 {{ value.retraso[3] }}
                                             </CBadge>
                                         </td>
-                                        
+
                                         <td>
-                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte" :key="listobs.id"><CBadge color="info">{{ listobs.uidobs }} {{ listobs.tipo }} {{ listobs.hora }}</CBadge><br></div>
+                                            <div class="obserbaciones" v-for="listobs in value.obsDtoReporte"
+                                                :key="listobs.id">
+                                                <CBadge color="info">{{ listobs.uidobs }} {{ listobs.tipo }} {{
+                                                    listobs.hora
+                                                    }}</CBadge><br>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="5">Total Minutos de Retraso</th><th><h2>{{totalretraso}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Retraso</th>
+                                        <th>
+                                            <h2>{{ totalretraso }}</h2>
+                                        </th>
+                                        <th>min.</th>
                                     </tr>
                                     <tr>
-                                        <th colspan="5">Total Minutos de Salidas Anticipadas</th><th><h2>{{totalanticipado}}</h2></th><th>min.</th>
+                                        <th colspan="5">Total Minutos de Salidas Anticipadas</th>
+                                        <th>
+                                            <h2>{{ totalanticipado }}</h2>
+                                        </th>
+                                        <th>min.</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -182,7 +231,7 @@
                 </CCardBody>
                 <CCardFooter>
                     <div class="oculto">
-                        <QrcodeVue :value="sms" :size="size" level="H" ref="qr"/>
+                        <QrcodeVue :value="sms" :size="size" level="H" ref="qr" />
                     </div>
                 </CCardFooter>
             </CCard>
@@ -190,105 +239,104 @@
     </CRow>
 </template>
 <script>
-  // Importamos Componentes
-  import QrcodeVue from 'qrcode.vue';
-  
-  //Importamos Herramientas
-  import jsPDF from 'jspdf';
-  import autoTable from 'jspdf-autotable';
-  //import ComponenteReporteVue from "@scc/components/ComponenteReporte.vue";
-  // End
-  
-  // Declaramos los Servicios
-  import EgovfService from "@/modules/egovf/services/egovfService";
-  import SccService from "@/modules/egovf-scc/services/sccService";
-  
-  // End
+// Importamos Componentes
+import QrcodeVue from 'qrcode.vue';
+
+//Importamos Herramientas
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+//import ComponenteReporteVue from "@scc/components/ComponenteReporte.vue";
+// End
+
+// Declaramos los Servicios
+import EgovfService from "@/modules/egovf/services/egovfService";
+import SccService from "@/modules/egovf-scc/services/sccService";
+
+// End
 export default {
     name: "UsuarioReporteView",
     components: {
         QrcodeVue
-      //ComponenteReporteVue,
+        //ComponenteReporteVue,
+    },
+    props: {
+        cif: { type: [Number, String], required: true },
+        gestion: { type: [Number, String], required: true },
+        m: { type: [Number, String], required: true },
+        di: { type: [Number, String], required: true },
+        df: { type: [Number, String], required: true }
     },
     data() {
-      return {
-        titulo: "Reporte de Asistencia",
-        sccService: null,
-        egovfService: null,
-        uri: "",
-        listaReporte:[],
-        cifCiudadano: "",
-        usuario: {
-          token: "",
-          cif: "",
-          correo: "",
-          celular: "",
-          pass: "",
-          unidad: "",
-          sigla: "",
-          foto:""
-        },
-        reporte: {
-          cif: 0,
-          sigla: "",
-          gestion: 0,
-          mes: 0,
-          di: 0,
-          df: 0,
-          listaPerfil: [],
-          listaHorario: [],
-          persona: {
-            id: null,
-            ci: "",
-            nombre: "",
-            paterno: "",
-            materno: "",
-            celular: "",
-            correo: "",
-            foto: "",
-          },
-        },
-        egovf: {
-          idPersona: 0,
-          nombre: "",
-          paterno: "",
-          materno: "",
-          fecha: "",
-          sexo: 0,
-          idUsuario: 0,
-          cif: 0,
-          matricula: 0,
-          ci: "",
-          ci_com: 0,
-          complemento: "",
-          correo: "",
-          celular: "",
-          pass: "",
-          unidad: "",
-          dependiente: "",
-          sigla: "",
-          foto: "",
-        },
-        totalretraso:0,
-        totalanticipado:0,
-        totalsin:0,
-        totaldias:0,
-        totalcontinuo:0,
-        mes:'',
-        sms:'',
-        size:300
-      };
+        return {
+            titulo: "Reporte de Asistencia",
+            sccService: null,
+            egovfService: null,
+            uri: "",
+            listaReporte: [],
+            cifCiudadano: "",
+            usuario: {
+                token: "",
+                cif: "",
+                correo: "",
+                celular: "",
+                pass: "",
+                unidad: "",
+                sigla: "",
+                foto: ""
+            },
+            reporte: {
+                cif: 0,
+                sigla: "",
+                gestion: 0,
+                mes: 0,
+                di: 0,
+                df: 0,
+                listaPerfil: [],
+                listaHorario: [],
+                persona: {
+                    id: null,
+                    ci: "",
+                    nombre: "",
+                    paterno: "",
+                    materno: "",
+                    celular: "",
+                    correo: "",
+                    foto: "",
+                },
+            },
+            egovf: {
+                idPersona: 0,
+                nombre: "",
+                paterno: "",
+                materno: "",
+                fecha: "",
+                sexo: 0,
+                idUsuario: 0,
+                cif: 0,
+                matricula: 0,
+                ci: "",
+                ci_com: 0,
+                complemento: "",
+                correo: "",
+                celular: "",
+                pass: "",
+                unidad: "",
+                dependiente: "",
+                sigla: "",
+                foto: "",
+            },
+            totalretraso: 0,
+            totalanticipado: 0,
+            totalsin: 0,
+            totaldias: 0,
+            totalcontinuo: 0,
+            mes: '',
+            sms: '',
+            size: 300
+        };
     },
-  
+
     mounted() {
-        this.uri = this.$route.params.uri;
-        this.cifCiudadano = this.$cookies.get("cif");
-        this.reporte.cif = this.uri.substring(0, 11);
-        this.reporte.gestion = this.uri.substring(12, 16);
-        this.reporte.mes = this.uri.substring(17, 19);
-        this.reporte.di = this.uri.substring(20, 22);
-        this.reporte.df = this.uri.slice(23);
-        this.reporte.uri = this.uri;
         this.getDatos();
         this.getEgovf();
         this.getMes();
@@ -322,6 +370,7 @@ export default {
             await this.egovfService.getEgovf(this.usuario.cif).then((response) => {
                 this.egovf = response.data;
             });
+
             this.reporte.sigla = this.egovf.sigla;
             this.reporte.persona.id = this.egovf.idPersona;
             this.reporte.persona.ci = this.egovf.ci;
@@ -332,9 +381,14 @@ export default {
             this.reporte.persona.correo = this.egovf.correo;
             this.reporte.persona.foto = this.egovf.foto;
         },
-        async getReporteMes(){// Funcion que construye los reportes del mes
+        async getReporteMes() {// Funcion que construye los reportes del mes
+            this.reporte.cif = this.cif;
+            this.reporte.gestion = this.gestion;
+            this.reporte.di = this.di;
+            this.reporte.df = this.df;
+            this.reporte.uri = '';
             await this.sccService.getReporteMes(this.reporte).then((result) => {
-                this.listaReporte=result.data;
+                this.listaReporte = result.data;
                 this.sumaRetraso(); // Funcion que suma los retrasos
             }).catch((err) => {
                 console.log(err);
@@ -351,7 +405,7 @@ export default {
                 this.reporte.listaHorario = response.data;
             });
         },
-        sumaRetraso(){ //Funcion que suma los retrasos y los minutos de salida adelantada
+        sumaRetraso() { //Funcion que suma los retrasos y los minutos de salida adelantada
             let sum = 0;
             let res = 0;
             let sin = 0;
@@ -359,7 +413,7 @@ export default {
             let continuo = 0;
 
             this.listaReporte.forEach(element => {
-                dias +=1;
+                dias += 1;
                 // Verificar si hay retraso o "Sin Marcar"
                 const tieneRetraso = element.retraso.some(valor => valor > 0);
                 const tieneSinMarcar = element.hora.includes("Sin Marcar");
@@ -368,8 +422,8 @@ export default {
                 if (tieneRetraso || tieneSinMarcar) {
                     sin += 1;
                 }
-                if(tieneContinuo){
-                    continuo+=1;
+                if (tieneContinuo) {
+                    continuo += 1;
                 }
                 // Sumar retrasos según índice par o impar
                 element.retraso.forEach((valor, i) => {
@@ -384,137 +438,142 @@ export default {
             this.totalretraso = sum;
             this.totalanticipado = res;
             this.totalsin = sin;
-            this.totaldias =dias;
+            this.totaldias = dias;
             this.totalcontinuo = continuo;
-            const dir = '/libreReporte'+this.uri;
-            this.sms='Cif:'+this.reporte.cif+' TR: '+this.totalretraso+'min' + ' TA: '+this.totalanticipado+'min '+'https://svfhce.umsa.bo/#'+dir;
+            const dir = '/libreReporte' + this.uri;
+            this.sms = 'Cif:' + this.reporte.cif + ' TR: ' + this.totalretraso + 'min' + ' TA: ' + this.totalanticipado + 'min ' + 'https://svfhce.umsa.bo/#' + dir;
         },
-        getMes(){// Funcion para colocar el Mes en formato Literal
-            if(this.reporte.mes==1){this.mes='Enero';}
-            if(this.reporte.mes==2){this.mes='Febrero';}
-            if(this.reporte.mes==3){this.mes='Marzo';}
-            if(this.reporte.mes==4){this.mes='Abril';}
-            if(this.reporte.mes==5){this.mes='Mayo';}
-            if(this.reporte.mes==6){this.mes='Junio';}
-            if(this.reporte.mes==7){this.mes='Julio';}
-            if(this.reporte.mes==8){this.mes='Agosto';}
-            if(this.reporte.mes==9){this.mes='Septiembre';}
-            if(this.reporte.mes==10){this.mes='Octubre';}
-            if(this.reporte.mes==11){this.mes='Noviembre';}
-            if(this.reporte.mes==12){this.mes='Diciembre';}
+        getMes() {// Funcion para colocar el Mes en formato Literal
+            this.reporte.mes = this.m;
+            if (this.reporte.mes == 1) { this.mes = 'Enero'; }
+            if (this.reporte.mes == 2) { this.mes = 'Febrero'; }
+            if (this.reporte.mes == 3) { this.mes = 'Marzo'; }
+            if (this.reporte.mes == 4) { this.mes = 'Abril'; }
+            if (this.reporte.mes == 5) { this.mes = 'Mayo'; }
+            if (this.reporte.mes == 6) { this.mes = 'Junio'; }
+            if (this.reporte.mes == 7) { this.mes = 'Julio'; }
+            if (this.reporte.mes == 8) { this.mes = 'Agosto'; }
+            if (this.reporte.mes == 9) { this.mes = 'Septiembre'; }
+            if (this.reporte.mes == 10) { this.mes = 'Octubre'; }
+            if (this.reporte.mes == 11) { this.mes = 'Noviembre'; }
+            if (this.reporte.mes == 12) { this.mes = 'Diciembre'; }
         },
-        pdf(){ //Funcion que Constuye el PDF del reporte
+        pdf() { //Funcion que Constuye el PDF del reporte
             var img = new Image();
 
-            const doc = new jsPDF('p','mm','letter');
+            const doc = new jsPDF('p', 'mm', 'letter');
             const contentHtml = this.$refs.qr.$el;
-            const qr = contentHtml.toDataURL("image/jpeg",0.8);
+            const qr = contentHtml.toDataURL("image/jpeg", 0.8);
             //const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
-            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoticjpg.jpg';
-            doc.addImage(img,'JPEG', (215/5), 14,15,10);
-            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logofhce.jpg';
-            doc.addImage(img,'JPEG', (215/7.8), 14,15,10);
+            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoticjpg.jpg';
+            doc.addImage(img, 'JPEG', (215 / 5), 14, 15, 10);
+            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logofhce.jpg';
+            doc.addImage(img, 'JPEG', (215 / 7.8), 14, 15, 10);
 
-            img.src ='https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoumsa.jpg';
-            doc.addImage(img,'JPEG', (215/10), 12,6,12);
-            doc.addImage(qr,'JPEG',160,12,40,40);
+            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoumsa.jpg';
+            doc.addImage(img, 'JPEG', (215 / 10), 12, 6, 12);
+            doc.addImage(qr, 'JPEG', 160, 12, 40, 40);
 
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text("Universidad Mayor de San Andrés",(215/2),18,{align:"center"});
+            doc.text("Universidad Mayor de San Andrés", (215 / 2), 18, { align: "center" });
             doc.setFontSize(10);
             doc.setFont(undefined, 'normal');
-            doc.text("Facultad de Humanidades y Ciencias de la Educación",(215/2),23,{align:"center"});
+            doc.text("Facultad de Humanidades y Ciencias de la Educación", (215 / 2), 23, { align: "center" });
             doc.setFontSize(8);
-            doc.text("Unidad de Tecnologías de la Información y la Comunicación  UMSA-FHCE",(215/2),28,{align:"center"});
+            doc.text("Unidad de Tecnologías de la Información y la Comunicación  UMSA-FHCE", (215 / 2), 28, { align: "center" });
             doc.setFontSize(15);
-            doc.text("Datos de Personales :",20,40);
+            doc.text("Datos de Personales :", 20, 40);
 
             doc.setFontSize(10);
             img.src = this.reporte.persona.foto;
-            doc.addImage(img,'JPEG', 20,47,30,30);
-            doc.text("CIF : "+this.reporte.cif,52,50);
-            doc.text("Nombre : "+this.reporte.persona.nombre,52,55);
-            doc.text("Apellidos : "+this.reporte.persona.paterno+" "+this.reporte.persona.materno,52,60);
-            doc.text("Celular : "+this.reporte.persona.celular,52,65);
-            doc.text("Unidad : "+this.reporte.sigla,52,70);
-            doc.text("ID app : "+this.reporte.persona.id,120,50);
-            doc.text("C.I. : "+this.reporte.persona.ci,120,55);
-            doc.text("Correo : "+this.reporte.persona.correo,120,60);
+            doc.addImage(img, 'JPEG', 20, 47, 30, 30);
+            doc.text("CIF : " + this.reporte.cif, 52, 50);
+            doc.text("Nombre : " + this.reporte.persona.nombre, 52, 55);
+            doc.text("Apellidos : " + this.reporte.persona.paterno + " " + this.reporte.persona.materno, 52, 60);
+            doc.text("Celular : " + this.reporte.persona.celular, 52, 65);
+            doc.text("Unidad : " + this.reporte.sigla, 52, 70);
+            doc.text("ID app : " + this.reporte.persona.id, 120, 50);
+            doc.text("C.I. : " + this.reporte.persona.ci, 120, 55);
+            doc.text("Correo : " + this.reporte.persona.correo, 120, 60);
             doc.setFontSize(15);
-            doc.text("Retraso : "+this.totalretraso+" min.",120,75);
-            doc.text("Salida Anticipada : "+this.totalanticipado+" min.",120,85);
+            doc.text("Retraso : " + this.totalretraso + " min.", 120, 75);
+            doc.text("Salida Anticipada : " + this.totalanticipado + " min.", 120, 85);
             doc.setFontSize(10);
-            var finalY=95;
+            var finalY = 95;
 
-            if(this.reporte.cif != 20903198600){
-                doc.text("Lic. Jaime A. Montecinos Marquez",(215/4),finalY+25,{align:"center"});
-                doc.text("Responsable Unidad TIC.",(215/4),finalY+30,{align:"center"});
-                doc.text("Vo. Bo.",(162),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(162),finalY+30,{align:"center"});
+            if (this.reporte.cif != 20903198600) {
+                doc.text("Lic. Jaime A. Montecinos Marquez", (215 / 4), finalY + 25, { align: "center" });
+                doc.text("Responsable Unidad TIC.", (215 / 4), finalY + 30, { align: "center" });
+                doc.text("Vo. Bo.", (162), finalY + 25, { align: "center" });
+                doc.text("Inmediato Superior", (162), finalY + 30, { align: "center" });
             }
-            else{
-                doc.text("Vo. Bo.",(215/2),finalY+25,{align:"center"});
-                doc.text("Inmediato Superior",(215/2),finalY+30,{align:"center"});
+            else {
+                doc.text("Vo. Bo.", (215 / 2), finalY + 25, { align: "center" });
+                doc.text("Inmediato Superior", (215 / 2), finalY + 30, { align: "center" });
             }
-            finalY = finalY+45;
+            finalY = finalY + 45;
             autoTable(doc, {
-                theme:'striped',
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printDatos',
+                theme: 'striped',
+                startY: finalY,
+                margin: { left: 20 },
+                styles: { fontSize: 8 },
+                html: '#printDatos',
                 showFoot: 'lastPage'
             });
             finalY = doc.lastAutoTable.finalY;
-            finalY = finalY+10;
+            finalY = finalY + 10;
             autoTable(doc, {
-                startY:finalY,
-                margin: {left:20 },
-                styles:{fontSize:8},
-                html:'#printHorario',
+                startY: finalY,
+                margin: { left: 20 },
+                styles: { fontSize: 8 },
+                html: '#printHorario',
                 showFoot: 'lastPage'
             });
             finalY = doc.lastAutoTable.finalY;
             doc.setFontSize(15);
-            doc.text("Reporte de Asistencia " + this.mes +" "+this.reporte.gestion,(215/2),finalY+10,{align:"center"});
+            doc.text("Reporte de Asistencia " + this.mes + " " + this.reporte.gestion, (215 / 2), finalY + 10, { align: "center" });
             autoTable(doc, {
-                startY:finalY+15,
-                margin: {left:15 },
-                styles:{fontSize:7.5},
-                html:'#printMarcado',
+                startY: finalY + 15,
+                margin: { left: 15 },
+                styles: { fontSize: 7.5 },
+                html: '#printMarcado',
                 showFoot: 'lastPage'
             });
-            doc.save(this.reporte.cif+'reporte.pdf');
+            doc.save(this.reporte.cif + 'reporte.pdf');
         },
-        mensage(){
+        mensage() {
             this.$swal.fire({
                 title: 'No estas Autorizado para realizar la Impresion de tu Reporte',
-                icon:'error',
+                icon: 'error',
             });
         }
     },
 }
 </script>
 <style scoped>
-.report{
-    font-size:8px;
+.report {
+    font-size: 8px;
 }
-.material-icons{
-    
+
+.material-icons {
+
     color: white;
     font-size: 1em;
     border-top: 0ch;
     border-bottom: 0ch;
 }
-.obserbaciones{
+
+.obserbaciones {
     font-size: 0.8em;
 }
-.oculto{
+
+.oculto {
     display: none;
 }
-.datos{
+
+.datos {
     color: black;
 }
-</style>  
+</style>

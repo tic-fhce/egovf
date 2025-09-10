@@ -1,11 +1,4 @@
 <template>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb custom-breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">
-        {{ titulo }} >
-      </li>
-    </ol>
-  </nav>
   <CRow>
     <CCol :xs="12">
         <CCard>
@@ -61,6 +54,11 @@
                                         <CButton :aria-describedby="id" v-on="on" class="font" color="dark" size="sm" @click="fechas(ambiente.id)"><CIcon icon="cil-calendar"/></CButton>
                                       </template>
                                     </CTooltip>
+                                    <CTooltip content="Editar Datos del Ambiente" placement="bottom">
+                                      <template #toggler="{ id, on }">
+                                        <CButton :aria-describedby="id" v-on="on" class="font" color="warning" size="sm" @click="getAmbiente(ambiente.id)"><CIcon icon="cil-pencil"/></CButton>
+                                      </template>
+                                    </CTooltip>
                                     
                                   </CButtonGroup>
                                 </td>
@@ -74,7 +72,7 @@
   </CRow>
 
 
-<!-- Modal  Ciudadano-->
+<!-- Modal  Ambiente-->
 <CModal :visible="modalAmbiente" @close="clickModalAmbiente(false)">
   <CForm @submit.prevent="addAmbiente()">
     <CModalHeader class="headercolor" dismiss @close="clickModalAmbiente(false)">
@@ -105,7 +103,40 @@
     </CModalFooter>
   </CForm>
 </CModal>
-<!-- End Modal  Ciudadano-->
+<!-- End Modal  Ambiente-->
+
+<!-- Modal  Editar Ambiente-->
+<CModal :visible="modalAmbienteEditar" @close="clickModalAmbienteEditar(false)">
+  <CForm @submit.prevent="updateAmbiente()">
+    <CModalHeader class="headercolor" dismiss @close="clickModalAmbienteEditar(false)">
+        <CModalTitle>
+          <h6> <CIcon icon="cil-bank" size="xl"/> Editar Ambiente</h6>
+        </CModalTitle>
+    </CModalHeader>
+    <CModalBody>
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Nombre </CInputGroupText>
+        <CFormInput type="text" v-model="editarAmbiente.nombre" placeholder="Nombre del Ambiente" required="true"/>
+      </CInputGroup>
+
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Direccion </CInputGroupText>
+        <CFormInput type="text" v-model="editarAmbiente.direccion" placeholder="Drireccion del Ambiente" required="true"/>
+      </CInputGroup>
+
+      <CInputGroup class="mb-3">
+        <CInputGroupText  as="label">Capacidad </CInputGroupText>
+        <CFormInput type="text" v-model="editarAmbiente.capacidad" placeholder="Capacidad del Ambiente" required="true"/>
+      </CInputGroup>
+
+    </CModalBody>
+    <CModalFooter>
+      <CButton @click="clickModalAmbienteEditar(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2"/>Cancelar</CButton>
+      <CButton type="submit" class="font" size="sm" color="success" ><CIcon icon="cil-cloud-upload" class="me-2"/>Actualizar</CButton>
+    </CModalFooter>
+  </CForm>
+</CModal>
+<!-- End Modal  Ambiente-->
 
 </template>
 
@@ -133,6 +164,7 @@ export default {
           sraService:null,
           listaAmbientes:[],
           modalAmbiente:false,
+          modalAmbienteEditar:false,
           usuario:{
             token:'',
             cif:'',
@@ -147,7 +179,14 @@ export default {
             nombre:'',
             direccion:'',
             capacidad:''
+          },
+          editarAmbiente:{
+            id:0,
+            nombre:'',
+            direccion:'',
+            capacidad:''
           }
+
         }
     },
     beforeCreate(){        
@@ -211,11 +250,35 @@ export default {
             }
           });
       },
+      updateAmbiente(){ // funcion para el registro de un ciudadano
+        this.$swal.fire({
+          title: 'Desea Actualizar el Ambiente',
+          icon:'info',
+          showDenyButton: true,
+          confirmButtonText: 'Actualizar',
+          denyButtonText: 'Cancelar'}).then((result) => {
+            if (result.isConfirmed) {
+              this.sraService.updateAmbiente(this.editarAmbiente).then(response =>{
+                if(response.status==200){
+                  this.$swal.fire('Datos Guardados Corectamente', '', 'success').then((result) => {
+                    if(result)
+                      location.reload();
+                  });
+                }  
+                else{
+                  this.$swal.fire('Los Datos no fueron Guardados Error'+ response.status, '', 'error');
+                }
+              });
+            } else if (result.isDenied) {
+              this.$swal.fire('Datos Cancelados', '', 'info');
+            }
+          });
+      },
       servicio(idAmbiente){
         this.$router.push({
           name: 'ListaServiciosView',
           params:{
-            ambiente: idAmbiente
+            idAmbiente: idAmbiente
           }
         });
       },
@@ -232,34 +295,23 @@ export default {
       clickModalAmbiente(ambiente){//funcion para Visibilisar el modal
         this.modalAmbiente = ambiente;
       },
-      esFechaPasada(fechaSalida) {
-        if (!fechaSalida) return 'warning';
+      getAmbiente(idAmbiente){
+        this.listaAmbientes.forEach(ambiente=>{
+          if(ambiente.id == idAmbiente){
+            this.editarAmbiente.id = ambiente.id;
+            this.editarAmbiente.nombre = ambiente.nombre;
+            this.editarAmbiente.direccion = ambiente.direccion;
+            this.editarAmbiente.capacidad = ambiente.capacidad;
+            return true;
+          }
+        });
+        this.clickModalAmbienteEditar(true);
         
-        const fechaTermino = new Date(fechaSalida);
-        const hoy = new Date();
-        
-        // Normalizar fechas (ignorar horas)
-        fechaTermino.setHours(0, 0, 0, 0);
-        hoy.setHours(0, 0, 0, 0);
-        
-        return fechaTermino < hoy ? 'danger' : 'success';
       },
-      calcularDiasRestantes(fi,fs) {
-        const fechaInicio = new Date(fi);
-        const fechaSalida = new Date(fs);
-        const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-        const fechaActual = new Date();
-        if (!fechaSalida) this.total = 0;
-        
-        if (fechaActual >= fechaSalida) {
-          this.total =100;
-        }
-        else{
-          const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-          const progreso = (diasPasados / diasTotales) * 100;
-          this.total = parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-        }
+      clickModalAmbienteEditar(ambiente){
+          this.modalAmbienteEditar = ambiente;
       }
+
     }
 }
 </script>

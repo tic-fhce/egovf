@@ -1,9 +1,5 @@
 <template>
-  <ol class="breadcrumb custom-breadcrumb">
-    <li class="breadcrumb-item active" aria-current="page">
-      {{ titulo }} >
-    </li>
-  </ol>
+
   <CRow>
     <CCol :lg="12">
       <br />
@@ -79,11 +75,19 @@
                         </CButton>
                       </template>
                     </CTooltip>
-                    <CTooltip content="Editar la Solicitud" placement="bottom">
+                    <CTooltip content="Editar Evento" placement="bottom">
                       <template #toggler="{ id, on }">
                         <CButton v-if="evento.estado == 'En Espera'" :aria-describedby="id" v-on="on" class="font"
                           color="warning" size="sm" @click="getEvento(evento.id)">
                           <CIcon icon="cil-pencil" />
+                        </CButton>
+                      </template>
+                    </CTooltip>
+                    <CTooltip content="Cambiar Afiche del Evento" placement="bottom">
+                      <template #toggler="{ id, on }">
+                        <CButton v-if="evento.estado == 'En Espera'" :aria-describedby="id" v-on="on" class="font"
+                          color="warning" size="sm" @click="getEvento(evento.id)">
+                          <CIcon icon="cil-pen-alt" />
                         </CButton>
                       </template>
                     </CTooltip>
@@ -307,7 +311,6 @@ export default {
 
     async getEventoUnidad() { // Funcion que crea una lista de Eventos Deacuerdo al Usuario
       const fech = this.gestion + "-" + this.mes;
-      console.log(fech);
       await this.sraService.getEventoUnidad(this.usuario.sigla, fech).then(response => {
         this.listaEventos = response.data;
       });

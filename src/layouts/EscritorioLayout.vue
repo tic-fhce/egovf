@@ -19,6 +19,7 @@
 //import MenuService from '@/services/usuario/menuService'
 //import MenuService from '@/modules/egovf/services/menuService'
 import ModuloService from '@/modules/egovf/services/moduloService'
+//import SessionTimeoutMixin from '@/mixins/sessionTimeout'
 
 // Importamos Herramientas
 import { CContainer } from '@coreui/vue'
@@ -28,6 +29,7 @@ import ComponenteSidebar from '@/components/Escritorio/ComponenteSidebar.vue'
 
 export default {
   name: 'EscritorioLayout',
+  //mixins: [SessionTimeoutMixin],
   components: {
     ComponenteFooter,
     ComponenteHeader,

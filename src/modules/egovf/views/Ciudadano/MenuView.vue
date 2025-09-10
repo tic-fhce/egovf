@@ -1,11 +1,4 @@
 <template>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb custom-breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">
-                {{ titulo }} >
-            </li>
-        </ol>
-    </nav>
     <!-- Componente de Datos de la Persona -->
     <ComponenteDatosPersonalesVue :cifCiudadano="cifCiudadano" :egovfp="egovf" />
 
@@ -25,24 +18,23 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Titulo</th>
+                                    <th>Menu</th>
+                                    <th>Tipo</th>
+                                    <th>Detalle</th>
                                     <th>Ruta</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="menu in moduloMenu.menuObj" :key="menu.idMenu">
+                                    <td>{{ menu.idMenu }}</td>
+                                    <td><strong>{{ menu.titulo }}</strong></td>
+                                    <td>{{ menu.icono }}</td>
+                                    <td>{{ menu.descripcion }}</td>
+                                    <td>{{ menu.ruta }}</td>
                                     <td>
-                                        {{ menu.idMenu }}
-                                    </td>
-                                    <td>{{ menu.titulo }}<br>
-                                        <label class="small text-medium-emphasis">{{ menu.descripcion }}</label>
-                                    </td>
-                                    <td>
-                                        {{ menu.ruta }} 
-                                    </td>
-                                    <td>
-                                        <CFormSwitch  :checked="check(menu.estado)" @change="updateMenuUsuario(menu.idMenuUsuario,menu.idMenu,menu.estado)" />
+                                        <CFormSwitch :checked="check(menu.estado)"
+                                            @change="updateMenuUsuario(menu.idMenuUsuario, menu.idMenu, menu.estado)" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -76,7 +68,7 @@ export default {
     props: {
         cifCiudadano: { type: [Number, String], required: true },
         idModulo: { type: [Number, String], required: true },
-        titulo:{type:String, required:true}
+        titulo: { type: String, required: true }
     },
     components: {
         ComponenteDatosPersonalesVue
@@ -84,14 +76,14 @@ export default {
     data() {
         return {
             egovfService: null,
-            moduloService:null,
-            menuService:null,
-            moduloMenu:{
-                id:0,
-                titulo:'',
-                icono:'',
-                importancia:0,
-                menuObj:[]
+            moduloService: null,
+            menuService: null,
+            moduloMenu: {
+                id: 0,
+                titulo: '',
+                icono: '',
+                importancia: 0,
+                menuObj: []
             },
             listaEmpleado: [],
             modalMenu: false,
@@ -126,16 +118,16 @@ export default {
                 sigla: '',
                 foto: ''
             },
-            datos:{
-                cif:0,
-                nombre:'',
-                apellido:''
+            datos: {
+                cif: 0,
+                nombre: '',
+                apellido: ''
             },
-            menuUsuario:{
-                id:0,
-                cif:0,
-                idMenu:0,
-                estado:0
+            menuUsuario: {
+                id: 0,
+                cif: 0,
+                idMenu: 0,
+                estado: 0
             }
         }
     },
@@ -147,7 +139,7 @@ export default {
     created() {
         this.egovfService = new EgovfService();
         this.moduloService = new ModuloService();
-        this.menuService = new MenuService(); 
+        this.menuService = new MenuService();
     },
     mounted() {
         this.getDatos(); // Llamamos los datos del Usuario
@@ -188,15 +180,15 @@ export default {
                 this.moduloMenu = response.data;
             });
         },
-        async updateMenuUsuario(idMenuUsuario,idMenu,estado){
-            this.menuUsuario.id=idMenuUsuario;
+        async updateMenuUsuario(idMenuUsuario, idMenu, estado) {
+            this.menuUsuario.id = idMenuUsuario;
             this.menuUsuario.cif = this.cifCiudadano;
-            this.menuUsuario.idMenu=idMenu;
-            if(estado==1){
+            this.menuUsuario.idMenu = idMenu;
+            if (estado == 1) {
                 this.menuUsuario.estado = 0;
             }
             else this.menuUsuario.estado = 1;
-                
+
             await this.$swal.fire({
                 title: "Desea Activar el Menu para el Ciudadano ?",
                 showDenyButton: true,
@@ -205,28 +197,28 @@ export default {
                 denyButtonText: "Cancelar",
             }).then((result) => {
                 if (result.isConfirmed) {
-                this.menuService.updateMenuUsuario(this.menuUsuario).then((response) => {
-                    if (response.status == 200) {
-                    this.$swal.fire("El Menu fue Activado Correctamente", "", "success").then((res) => {
-                        if (res) location.reload();
+                    this.menuService.updateMenuUsuario(this.menuUsuario).then((response) => {
+                        if (response.status == 200) {
+                            this.$swal.fire("El Menu fue Activado Correctamente", "", "success").then((res) => {
+                                if (res) location.reload();
+                            });
+                        } else {
+                            this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+                        }
                     });
-                    } else {
-                    this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
-                    }
-                });
                 } else if (result.isDenied) {
-                this.$swal.fire("Datos Cancelados", "", "info");
+                    this.$swal.fire("Datos Cancelados", "", "info");
                 }
             });
         },
-        check(estado){
-            if(estado==1){
+        check(estado) {
+            if (estado == 1) {
                 return true;
             }
             else return false;
         }
     },
-    
+
 
 }
 

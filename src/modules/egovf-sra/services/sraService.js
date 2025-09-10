@@ -15,6 +15,15 @@ export default class SraService {
         };
         return axios.post(sraUrl + "ambiente/addAmbiente", ambienteDtoRequest);
     }
+    updateAmbiente(ambiente) {
+        const ambienteDtoResponse = {
+            "id":ambiente.id,
+            "nombre": ambiente.nombre,
+            "direccion": ambiente.direccion,
+            "capacidad": ambiente.capacidad
+        };
+        return axios.put(sraUrl + "ambiente/updateAmbiente", ambienteDtoResponse);
+    }
     //SERVICES SERVICIO
     getListaServicio(idAmbiente) {
         return axios.get(sraUrl + "servicio/getListaServicio",{
@@ -30,6 +39,15 @@ export default class SraService {
             "idAmbiente": servicio.idAmbiente
         };
         return axios.post(sraUrl + "servicio/addServicio", servicioDtoRequest);
+    }
+    updateServicio(servicio) {
+        const servicioDtoResponse = {
+            "id":servicio.id,
+            "nombre": servicio.nombre,
+            "detalle": servicio.detalle,
+            "idAmbiente": servicio.idAmbiente
+        };
+        return axios.put(sraUrl + "servicio/updateServicio", servicioDtoResponse);
     }
     //SERVICES INVENTARIO
     addInventario(inventario) {

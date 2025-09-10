@@ -1,14 +1,4 @@
 <template>
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item">
-            <router-link to="/menuObs" class="breadcrumb-link">Menu de Observaciones</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{titulo}} >
-        </li>
-    </ol>
-  </nav>
   <CRow>
     <CCol :xs="12">
       <CCard>
@@ -34,23 +24,26 @@
               <tbody>
                 <tr v-for="lsobs in listaObsCiudadanos" :key="lsobs.id">
                   <th scope="row">{{ lsobs.id }}</th>
-                  <td><CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/'+ lsobs.foto"  width="70" height="70"/></td>
+                  <td>
+                    <CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/' + lsobs.foto" width="70"
+                      height="70" />
+                  </td>
                   <td>
                     <div>{{ lsobs.cif }}</div>
                     <div class="small text-medium-emphasis">
-                        <span>{{ lsobs.nombre }}</span>
+                      <span>{{ lsobs.nombre }}</span>
                     </div>
                   </td>
                   <td>{{ lsobs.uidobs }}
                     <div class="small text-medium-emphasis">
-                        <span>{{ lsobs.tipo }}<br> {{ lsobs.horas }}</span>
+                      <span>{{ lsobs.tipo }}<br> {{ lsobs.horas }}</span>
                     </div>
                   </td>
 
                   <td>
                     <div>{{ lsobs.detalle }}</div>
                     <div class="small text-medium-emphasis">
-                        <span>{{ lsobs.fechas }}</span>
+                      <span>{{ lsobs.fechas }}</span>
                     </div>
                   </td>
                   <td>
@@ -75,21 +68,24 @@
     </CCol>
   </CRow>
 
-
   <!-- Modal  Detalles de OBS-->
   <CModal size="lg" :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
       <CModalTitle>
-        <h6><CIcon icon="cil-featured-playlist"/> Detalles de la Observacion</h6>
+        <h6>
+          <CIcon icon="cil-featured-playlist" /> Detalles de la Observacion
+        </h6>
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <ComponenteObs :obsDetalle="obsDetalle"/>
+      <ComponenteObs :obsDetalle="obsDetalle" />
     </CModalBody>
     <CModalFooter>
       <CButtonGroup role="group">
-        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm" ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm" >
+        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
+        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm">
           <CIcon icon="cil-cloud-download" class="me-2" />Descargar
         </CButton>
         <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" size="sm">
@@ -108,62 +104,69 @@
     <CForm @submit.prevent="updateObsEmpleado()">
       <CModalHeader class="headercolor text-center" dismiss @close="clickModalObsEditar(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-featured-playlist"/> Actualizar la Observacion de Asistencia</h6>
+          <h6>
+            <CIcon icon="cil-featured-playlist" /> Actualizar la Observacion de Asistencia
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CRow>
           <CCol :lg="6">
             <CInputGroup class="mb-3">
-              <CInputGroupText  as="label">CIF </CInputGroupText>
+              <CInputGroupText as="label">CIF </CInputGroupText>
               <CFormInput type="text" v-model="uobs.cif" required="true" placeholder="CIF" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
-              <CInputGroupText  as="label">UID - OBS </CInputGroupText>
-              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="text" v-model="uobs.uidobs" required="true" placeholder="Cite u Hoja de Ruta"/>
+              <CInputGroupText as="label">UID - OBS </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="text" v-model="uobs.uidobs"
+                required="true" placeholder="Cite u Hoja de Ruta" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
-              <CInputGroupText  as="label">Fecha de Inicio </CInputGroupText>
-              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date" v-model="uobs.fechainicio" required="true"/>
+              <CInputGroupText as="label">Fecha de Inicio </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date"
+                v-model="uobs.fechainicio" required="true" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
-              <CInputGroupText  as="label">Fecha Fin </CInputGroupText>
-              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date" v-model="uobs.fechafin" required="true"/>
+              <CInputGroupText as="label">Fecha Fin </CInputGroupText>
+              <CFormInput :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" type="date" v-model="uobs.fechafin"
+                required="true" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
-              <CInputGroupText  as="label">Detalle</CInputGroupText>
-              <CFormTextarea :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  v-model="uobs.detalle" required="true"> </CFormTextarea>
+              <CInputGroupText as="label">Detalle</CInputGroupText>
+              <CFormTextarea :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" v-model="uobs.detalle"
+                required="true"> </CFormTextarea>
             </CInputGroup>
 
             <CInputGroup class="mb-3">
               <CInputGroupText as="label">Tipo</CInputGroupText>
-              <CFormSelect :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1"  v-model="uobs.tipo" required="true" @change="getUTipo()"> 
-                  <option value="Entrada M.">Entrada Mañana</option>
-                  <option value="Salida M.">Salida Mañana</option>
-                  <option value="Entrada T.">Entrada Tarde</option>
-                  <option value="Salida T.">Salida Tarde</option>
-                  <option value="continuo">Continuo</option>
-                  <option value="continuoingreso">Continuo e Ingreso</option>
-                  <option value="horas">Horas de Servicio</option>
-                  <option value="extraordinario">Horario Extraordinario</option>
-                  <option value="comision">Comisión</option>
-                  <option value="permiso">Permiso</option>
-                  <option value="asueto">Asueto</option>
+              <CFormSelect :disabled="uobs.idtipo == 1" :readonly="uobs.idtipo == 1" v-model="uobs.tipo" required="true"
+                @change="getUTipo()">
+                <option value="Entrada M.">Entrada Mañana</option>
+                <option value="Salida M.">Salida Mañana</option>
+                <option value="Entrada T.">Entrada Tarde</option>
+                <option value="Salida T.">Salida Tarde</option>
+                <option value="continuo">Continuo</option>
+                <option value="continuoingreso">Continuo e Ingreso</option>
+                <option value="horas">Horas de Servicio</option>
+                <option value="extraordinario">Horario Extraordinario</option>
+                <option value="comision">Comisión</option>
+                <option value="permiso">Permiso</option>
+                <option value="asueto">Asueto</option>
               </CFormSelect>
             </CInputGroup>
 
             <CInputGroup class="mb-3">
               <CInputGroupText as="label">Hora Ingreso</CInputGroupText>
-              <CFormInput type="text"  v-model="uobs.horaEntrada" required="true"/>
+              <CFormInput type="text" v-model="uobs.horaEntrada" required="true" />
             </CInputGroup>
 
             <CInputGroup class="mb-3">
               <CInputGroupText as="label">Hora Salida</CInputGroupText>
-              <CFormInput type="text"  v-model="uobs.horaSalida" required="true"/>
+              <CFormInput type="text" v-model="uobs.horaSalida" required="true" />
             </CInputGroup>
 
           </CCol>
@@ -219,15 +222,13 @@ export default {
       uploadService: null,
       sccService: null,
       empleadoService: null,
-      listaGestion: [],
       listaObs: [],
-      listaTipoEmpleado: [],
       listaCiudadanoEmpleado: [],
       listaObsCiudadanos: [],
-      tipo:0,
-      gestion:0,
-      color:'',
-      estado:'',
+      tipo: 0,
+      gestion: 0,
+      color: '',
+      estado: '',
       listaMes: [
         { m: "01", mes: "Enero" },
         { m: "02", mes: "Febrero" },
@@ -251,7 +252,7 @@ export default {
         pass: "",
         unidad: "",
         sigla: "",
-        foto:"",
+        foto: "",
       },
       obsall: {
         cif: null,
@@ -266,62 +267,62 @@ export default {
       },
       obsDetalle: {
         id: 0,
-        idObs:0,
-        cif:0,
-        sexo:0,
-        uidobs:"",
-        fechainicio:"",
-        fechafin:"",
-        gestion:0,
-        mes:0,
-        di:0,
-        df:0,
-        detalle:"",
-        imagen:"",
-        tipo:"",
-        horaEntrada:"",
-        hentrada:"",
-        mentrada:"",
-        horaSalida:"",
-        hsalida:"",
-        msalida:"",
-        url:"",
-        estado:0,
-        idtipo:"PRIVADO",
+        idObs: 0,
+        cif: 0,
+        sexo: 0,
+        uidobs: "",
+        fechainicio: "",
+        fechafin: "",
+        gestion: 0,
+        mes: 0,
+        di: 0,
+        df: 0,
+        detalle: "",
+        imagen: "",
+        tipo: "",
+        horaEntrada: "",
+        hentrada: "",
+        mentrada: "",
+        horaSalida: "",
+        hsalida: "",
+        msalida: "",
+        url: "",
+        estado: 0,
+        idtipo: "PRIVADO",
         datos: {
           cif: 0,
           nombre: "",
           apellido: "",
         },
-        forma:{
-          color:'',
-          estado:''
+        forma: {
+          color: '',
+          estado: ''
         }
       },
       uobs: {
         id: 0,
-        idObs:0,
-        cif:0,
-        sexo:0,
-        uidobs:"",
-        fechainicio:"",
-        fechafin:"",
-        gestion:0,
-        mes:0,
-        di:0,
-        df:0,
-        detalle:"",
-        imagen:"",
-        tipo:"",
-        horaEntrada:"",
-        hentrada:"",
-        mentrada:"",
-        horaSalida:"",
-        hsalida:"",
-        msalida:"",
-        url:"",
-        estado:0,
-        idtipo:0
+        idObs: 0,
+        cif: 0,
+        sexo: 0,
+        uidobs: "",
+        fechainicio: "",
+        fechafin: "",
+        gestion: 0,
+        mes: 0,
+        di: 0,
+        df: 0,
+        detalle: "",
+        imagen: "",
+        tipo: "",
+        horaEntrada: "",
+        hentrada: "",
+        mentrada: "",
+        horaSalida: "",
+        hsalida: "",
+        msalida: "",
+        url: "",
+        estado: 0,
+        idtipo: 0
       }
     };
   },
@@ -338,9 +339,7 @@ export default {
   },
   mounted() {
     this.getDatos();
-    this.getGestion();
-    this.getListaTipoEmpleado();
-
+    this.getSolicitudes();
   },
   methods: {
     selectFile() {
@@ -369,35 +368,59 @@ export default {
         this.usuario.foto = this.$cookies.get("foto");
       }
     },
-    getGestion() {
-      // funcion que crea una lista de gestiones desde el 2021
-      var lgestion = [];
-      const fecha = new Date();
-      var rgestion = fecha.getFullYear();
-      for (var i = 2021; i <= rgestion; i++) {
-        lgestion.push(i);
-      }
-      this.listaGestion = lgestion;
-      this.getListaObsEmpleado(rgestion);
-    },
-    async getListaObsEmpleado(rgestion) {
-      await this.sccService.getListaObsEmpleado(rgestion).then((response) => {
+    async getSolicitudes() {
+
+      // funcion que crea una lista de solicitudes 
+      let loadingAlert = null;
+      try {
+        loadingAlert = this.$swal.fire({
+          title: 'Cargando Solicitudes de Empleados',
+          html: 'Procesando datos, por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            this.$swal.showLoading();
+          }
+        });
+        this.$nprogress.start();
+
+        const fecha = new Date();
+        var rgestion = fecha.getFullYear();
+
+        const response = await this.sccService.getListaObsEmpleado(rgestion);
         this.listaObs = response.data;
-      });
-      this.getListaCiudadanoEmpleado();
-    },
-    async getListaTipoEmpleado() {
-      // Funcion para listar El tipo de Empleado
-      await this.empleadoService.getListaTipoEmpleado().then((response) => {
-        this.listaTipoEmpleado = response.data;
-      });
-    },
-    async getListaCiudadanoEmpleado() {
-      // Funcion que regresa una lista de Ciudadanos que son Empleados del ModuloEgovf
-      await this.egovfService.getListaEmpleado().then((response) => {
-        this.listaCiudadanoEmpleado = response.data;
-      });
-      this.getListaObsCiudadano();
+
+        const responseEmpleado = await this.egovfService.getListaEmpleado();
+        this.listaCiudadanoEmpleado = responseEmpleado.data;
+
+        this.getListaObsCiudadano();
+
+        this.$swal.close();
+
+        // Mostrar éxito
+        this.$swal.fire({
+          icon: 'success',
+          title: '¡Completado!',
+          text: `Se procesaron ${this.listaObsCiudadanos.length} Solicitudes`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        if (loadingAlert) {
+          this.$swal.close();
+        }
+
+        // Mostrar error
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Error en la carga',
+          text: error.message || 'Ocurrió un error al procesar los datos',
+          confirmButtonText: 'Reintentar'
+        });
+
+      } finally {
+        this.$nprogress.done();
+      }
     },
     getListaObsCiudadano() {
       //Funcion que une las listas listaEmpelado y listaCiudadanoEmpleado
@@ -406,15 +429,15 @@ export default {
         this.listaObs.forEach((obs) => {
           var obsCiudadano = {
             id: 0,
-            idObs:0,
+            idObs: 0,
             cif: 0,
             nombre: "",
             uidobs: "",
             tipo: "",
             detalle: "",
-            fechas:"",
-            horas:"",
-            foto:""
+            fechas: "",
+            horas: "",
+            foto: ""
 
           };
           if (empleado.cif == obs.cif) {
@@ -426,8 +449,8 @@ export default {
             obsCiudadano.uidobs = obs.uidobs;
             obsCiudadano.tipo = obs.tipo;
             obsCiudadano.detalle = obs.detalle;
-            obsCiudadano.fechas = obs.fechainicio+" | "+obs.fechafin;
-            obsCiudadano.horas = obs.horaEntrada+" | "+obs.horaSalida;
+            obsCiudadano.fechas = obs.fechainicio + " | " + obs.fechafin;
+            obsCiudadano.horas = obs.horaEntrada + " | " + obs.horaSalida;
             obsCiudadano.foto = empleado.foto;
             this.listaObsCiudadanos.push(obsCiudadano);
             return false;
@@ -441,55 +464,55 @@ export default {
       // Funcion que Muestra el detalle de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.obsDetalle.id=obs.id;
-          this.obsDetalle.idObs=obs.idObs;
-          this.obsDetalle.cif=obs.cif;
-          this.obsDetalle.sexo=obs.sexo;
-          this.obsDetalle.uidobs=obs.uidobs;
-          this.obsDetalle.fechainicio=obs.fechainicio;
-          this.obsDetalle.fechafin=obs.fechafin;
-          this.obsDetalle.gestion=obs.gestion;
-          this.obsDetalle.mes=obs.mes;
-          this.obsDetalle.di=obs.di;
-          this.obsDetalle.df=obs.df;
-          this.obsDetalle.detalle=obs.detalle;
-          this.obsDetalle.imagen=obs.imagen;
-          this.obsDetalle.tipo=obs.tipo;
-          this.obsDetalle.horaEntrada=obs.horaEntrada;
-          this.obsDetalle.hentrada=obs.hentrada;
-          this.obsDetalle.mentrada=obs.mentrada;
-          this.obsDetalle.horaSalida=obs.horaSalida;
-          this.obsDetalle.hsalida=obs.hsalida;
-          this.obsDetalle.msalida=obs.msalida;
-          this.obsDetalle.url=obs.url;
-          this.obsDetalle.estado=obs.estado;
-          
-          if(obs.idtipo == 1){
-            this.obsDetalle.idtipo="GENERAL";
+          this.obsDetalle.id = obs.id;
+          this.obsDetalle.idObs = obs.idObs;
+          this.obsDetalle.cif = obs.cif;
+          this.obsDetalle.sexo = obs.sexo;
+          this.obsDetalle.uidobs = obs.uidobs;
+          this.obsDetalle.fechainicio = obs.fechainicio;
+          this.obsDetalle.fechafin = obs.fechafin;
+          this.obsDetalle.gestion = obs.gestion;
+          this.obsDetalle.mes = obs.mes;
+          this.obsDetalle.di = obs.di;
+          this.obsDetalle.df = obs.df;
+          this.obsDetalle.detalle = obs.detalle;
+          this.obsDetalle.imagen = obs.imagen;
+          this.obsDetalle.tipo = obs.tipo;
+          this.obsDetalle.horaEntrada = obs.horaEntrada;
+          this.obsDetalle.hentrada = obs.hentrada;
+          this.obsDetalle.mentrada = obs.mentrada;
+          this.obsDetalle.horaSalida = obs.horaSalida;
+          this.obsDetalle.hsalida = obs.hsalida;
+          this.obsDetalle.msalida = obs.msalida;
+          this.obsDetalle.url = obs.url;
+          this.obsDetalle.estado = obs.estado;
+
+          if (obs.idtipo == 1) {
+            this.obsDetalle.idtipo = "GENERAL";
           }
-          else{
-            this.obsDetalle.idtipo="PRIVADO";
+          else {
+            this.obsDetalle.idtipo = "PRIVADO";
           }
 
-          if(this.obsDetalle.estado==1){
-              this.obsDetalle.forma.color='success';
-              this.obsDetalle.forma.estado='Aprobado';
+          if (this.obsDetalle.estado == 1) {
+            this.obsDetalle.forma.color = 'success';
+            this.obsDetalle.forma.estado = 'Aprobado';
           }
-          if(this.obsDetalle.estado==0){
-              this.obsDetalle.forma.color='warning';
-              this.obsDetalle.forma.estado='En Espera';
+          if (this.obsDetalle.estado == 0) {
+            this.obsDetalle.forma.color = 'warning';
+            this.obsDetalle.forma.estado = 'En Espera';
           }
-          if(this.obsDetalle.estado==2){
-              this.obsDetalle.forma.color='danger';
-              this.obsDetalle.forma.estado='Rechazado';
+          if (this.obsDetalle.estado == 2) {
+            this.obsDetalle.forma.color = 'danger';
+            this.obsDetalle.forma.estado = 'Rechazado';
           }
           return true;
         }
       });
-      this.listaObsCiudadanos.forEach((ciudadano)=>{
-        if(ciudadano.cif == this.obsDetalle.cif){
-          this.obsDetalle.datos.cif=ciudadano.cif;
-          this.obsDetalle.datos.nombre=ciudadano.nombre;
+      this.listaObsCiudadanos.forEach((ciudadano) => {
+        if (ciudadano.cif == this.obsDetalle.cif) {
+          this.obsDetalle.datos.cif = ciudadano.cif;
+          this.obsDetalle.datos.nombre = ciudadano.nombre;
           return true;
         }
       });
@@ -499,14 +522,14 @@ export default {
       var uObs = {
         id: 0,
         cif: 0,
-        idObs:0,
+        idObs: 0,
         horaEntrada: "",
         horaSalida: "",
         hentrada: 0,
         hsalida: 0,
         mentrada: 0,
-        msalida:0,
-        estado:0
+        msalida: 0,
+        estado: 0
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
@@ -524,78 +547,78 @@ export default {
         }
       });
       await this.$swal.fire({
-          title:"Desea Aprobar la Observacion  ? ",
-          showDenyButton: true,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-          denyButtonText: "Cancelar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.sccService.updateObsBio(uObs).then((response) => {
-              if (response.status == 200) {
-                this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
-                    if (res) location.reload();
-                  });
-              } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
-              }
-            });
-          } else if (result.isDenied) {
-            this.$swal.fire("Datos Cancelados", "", "info");
-          }
-        });
+        title: "Desea Aprobar la Observacion  ? ",
+        showDenyButton: true,
+        icon: "info",
+        confirmButtonText: "Aceptar",
+        denyButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.sccService.updateObsBio(uObs).then((response) => {
+            if (response.status == 200) {
+              this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
+                if (res) location.reload();
+              });
+            } else {
+              this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+            }
+          });
+        } else if (result.isDenied) {
+          this.$swal.fire("Datos Cancelados", "", "info");
+        }
+      });
     },
     async updateObsEmpleado() {
       //Funcion actualizar una Observacion del Usuario
       this.$swal.fire({
-          title: "Deseas Actualizar la Observacion de Asistencia ?",
-          showDenyButton: true,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-          denyButtonText: "Cancelar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.sccService.updateObsEmpleado(this.uobs).then((response) => {
-              if (response.status == 200) {
-                this.$swal.fire("La Observacion fue Actualizada Corectamente","","success").then((res) => {
-                    if (res) location.reload();
-                  });
-              } else {
-                this.$swal.fire("La Observacion no pudo ser Registrada","" + response.status,"error");
-              }
-            });
-          } else if (result.isDenied) {
-            this.$swal.fire("Datos Cancelados", "", "info");
-          }
-        });
+        title: "Deseas Actualizar la Observacion de Asistencia ?",
+        showDenyButton: true,
+        icon: "info",
+        confirmButtonText: "Aceptar",
+        denyButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.sccService.updateObsEmpleado(this.uobs).then((response) => {
+            if (response.status == 200) {
+              this.$swal.fire("La Observacion fue Actualizada Corectamente", "", "success").then((res) => {
+                if (res) location.reload();
+              });
+            } else {
+              this.$swal.fire("La Observacion no pudo ser Registrada", "" + response.status, "error");
+            }
+          });
+        } else if (result.isDenied) {
+          this.$swal.fire("Datos Cancelados", "", "info");
+        }
+      });
     },
     setObs(id) {
       // Funcion que carga los datos de las Observaciones del Usuario
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
-          this.uobs.id=obs.id;
-          this.uobs.idObs=obs.idObs;
-          this.uobs.cif=obs.cif;
-          this.uobs.sexo=obs.sexo;
-          this.uobs.uidobs=obs.uidobs;
-          this.uobs.fechainicio=obs.fechainicio;
-          this.uobs.fechafin=obs.fechafin;
-          this.uobs.gestion=obs.gestion;
-          this.uobs.mes=obs.mes;
-          this.uobs.di=obs.di;
-          this.uobs.df=obs.df;
-          this.uobs.detalle=obs.detalle;
-          this.uobs.imagen=obs.imagen;
-          this.uobs.tipo=obs.tipo;
-          this.uobs.horaEntrada=obs.horaEntrada;
-          this.uobs.hentrada=obs.hentrada;
-          this.uobs.mentrada=obs.mentrada;
-          this.uobs.horaSalida=obs.horaSalida;
-          this.uobs.hsalida=obs.hsalida;
-          this.uobs.msalida=obs.msalida;
-          this.uobs.url=obs.url;
-          this.uobs.estado=obs.estado;
-          this.uobs.idtipo=obs.idtipo;
+          this.uobs.id = obs.id;
+          this.uobs.idObs = obs.idObs;
+          this.uobs.cif = obs.cif;
+          this.uobs.sexo = obs.sexo;
+          this.uobs.uidobs = obs.uidobs;
+          this.uobs.fechainicio = obs.fechainicio;
+          this.uobs.fechafin = obs.fechafin;
+          this.uobs.gestion = obs.gestion;
+          this.uobs.mes = obs.mes;
+          this.uobs.di = obs.di;
+          this.uobs.df = obs.df;
+          this.uobs.detalle = obs.detalle;
+          this.uobs.imagen = obs.imagen;
+          this.uobs.tipo = obs.tipo;
+          this.uobs.horaEntrada = obs.horaEntrada;
+          this.uobs.hentrada = obs.hentrada;
+          this.uobs.mentrada = obs.mentrada;
+          this.uobs.horaSalida = obs.horaSalida;
+          this.uobs.hsalida = obs.hsalida;
+          this.uobs.msalida = obs.msalida;
+          this.uobs.url = obs.url;
+          this.uobs.estado = obs.estado;
+          this.uobs.idtipo = obs.idtipo;
         }
       });
       this.clickModalObsEditar(true);
@@ -609,41 +632,33 @@ export default {
     clickModalImgEditar(cio) {
       this.modalImgEditar = cio;
     },
-    moduloScc(cif) {
-      this.$router.push({
-        name: "ModuloSccView",
-        params: {
-          cifCiudadano: cif,
-        },
-      });
-    },
-    getUTipo(){
-        if(this.uobs.tipo == 'Entrada M.')
-            this.uobs.horaEntrada = '08:30';
-        if(this.uobs.tipo == 'Salida M.')
-            this.uobs.horaSalida = '12:30';
-        if(this.uobs.tipo == 'Entrada T.')
-            this.uobs.horaEntrada = '14:30';
-        if(this.uobs.tipo == 'Salida T.')
-            this.uobs.horaSalida = '18:30';
-        if(this.uobs.tipo == 'continuo'){
-            this.uobs.horaEntrada = '08:30';
-            this.uobs.horaSalida = '16:30';
-        }
-        if(this.uobs.tipo == 'continuoingreso'){
-            this.uobs.horaEntrada = '08:30';
-            this.uobs.horaSalida = '16:30';
-        }
-        if(this.uobs.tipo == 'asueto')
-            this.uobs.horaEntrada = '08:30';
+    getUTipo() {
+      if (this.uobs.tipo == 'Entrada M.')
+        this.uobs.horaEntrada = '08:30';
+      if (this.uobs.tipo == 'Salida M.')
+        this.uobs.horaSalida = '12:30';
+      if (this.uobs.tipo == 'Entrada T.')
+        this.uobs.horaEntrada = '14:30';
+      if (this.uobs.tipo == 'Salida T.')
+        this.uobs.horaSalida = '18:30';
+      if (this.uobs.tipo == 'continuo') {
+        this.uobs.horaEntrada = '08:30';
+        this.uobs.horaSalida = '16:30';
+      }
+      if (this.uobs.tipo == 'continuoingreso') {
+        this.uobs.horaEntrada = '08:30';
+        this.uobs.horaSalida = '16:30';
+      }
+      if (this.uobs.tipo == 'asueto')
+        this.uobs.horaEntrada = '08:30';
     },
     mostrarUHoraIngreso() {
-        const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
-        return tiposPermitidos.includes(this.uobs.tipo);
+      const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.", "horas", "extraordinario", "comision", "permiso"];
+      return tiposPermitidos.includes(this.uobs.tipo);
     },
     mostrarUHoraSalida() {
-        const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
-        return tiposPermitidos.includes(this.uobs.tipo);
+      const tiposPermitidos = ["continuoingreso", "continuo", "Salida M.", "Salida T."];
+      return tiposPermitidos.includes(this.uobs.tipo);
     },
     async downloadImg(Url, nombre) {
       // Funcion que permite Descargar imagen o documento

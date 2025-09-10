@@ -76,7 +76,7 @@ import listPlugin from '@fullcalendar/list'
 import interactionPlugin from '@fullcalendar/interaction'
 
 export default {
-  name: 'ActividadesView',
+  name: 'AgendaView',
   components: {
     ComponenteEvento,
     FooterComponent,
@@ -158,25 +158,64 @@ export default {
   methods: {
 
     async getListaEventos() { // Funcion que crea una lista de Eventos 
-      await this.sraService.getListaEventos().then(response => {
+      let loadingAlert = null;
+      try {
+        // Mostrar SweetAlert de carga
+        loadingAlert = this.$swal.fire({
+          title: 'Cargando Eventos',
+          html: 'Procesando datos, por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            this.$swal.showLoading();
+          }
+        });
+        this.$nprogress.start();
+        const response = await this.sraService.getListaEventos();
         this.listaEventos = response.data;
-      });
-      this.listaEventos.forEach(evento => {
-        if (evento.estado == "Aprobado") {
-          evento.estado = "Evento Confirmado";
+
+        this.listaEventos.forEach(evento => {
+          if (evento.estado == "Aprobado") {
+            evento.estado = "Evento Confirmado";
+          }
+          else {
+            evento.estado = "Evento Por Confirmar";
+          }
+        });
+        this.calendarOptions.events = this.listaEventos.map(evento => ({
+          id: evento.id,
+          title: evento.nombre,
+          start: evento.fechaInicio,
+          end: evento.fechaFin,
+          color: evento.colorCalendar
+        }));
+
+        this.$swal.close();
+
+        // Mostrar éxito
+        this.$swal.fire({
+          icon: 'success',
+          title: '¡Completado!',
+          text: `Se procesaron ${this.listaEventos.length} Eventos`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        if (loadingAlert) {
+          this.$swal.close();
         }
-        else {
-          evento.estado = "Evento Por Confirmar";
-        }
-      });
-      this.calendarOptions.events = this.listaEventos.map(evento => ({
-        id: evento.id,
-        title: evento.nombre,
-        start: evento.fechaInicio,
-        end: evento.fechaFin,
-        color: evento.colorCalendar
-      }));
-      //this.progreso();
+
+        // Mostrar error
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Error en la carga',
+          text: error.message || 'Ocurrió un error al procesar los datos',
+          confirmButtonText: 'Reintentar'
+        });
+      } finally {
+        this.$nprogress.done();
+      }
+
     },
     getEventoDetalle(id) {
       this.listaEventos.forEach(evento => {

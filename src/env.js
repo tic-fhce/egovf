@@ -1,3 +1,4 @@
+export const API_IP = process.env.VUE_IP;
 export const API_URL_EGOVF = process.env.VUE_APP_URL_EGOVF;
 export const API_URL_EGOVF_USER = process.env.VUE_APP_URL_EGOVF_USER;
 export const API_URL_EGOVF_SCC = process.env.VUE_APP_URL_EGOVF_SCC;

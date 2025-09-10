@@ -13,8 +13,8 @@
       </select>
     </label>
     <label for="credential" v-if="method">
-      <input :name="valuesForm[method].name" :placeholder="valuesForm[method].placeholder" :type="valuesForm[method].inputType" required
-        :class="{ 'ext-active': method == 3 }" />
+      <input :name="valuesForm[method].name" :placeholder="valuesForm[method].placeholder"
+        :type="valuesForm[method].inputType" required :class="{ 'ext-active': method == 3 }" />
       <select class="ext" name="complemento" id="complemento" v-if="method == 3">
         <option value="lp">lp</option>
         <option value="sc">sc</option>
@@ -47,14 +47,12 @@ import { nextTick, ref, watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useCookies } from '../../utils/cookiesManager';
 import Swal from 'sweetalert2'
-//import ModalDialog from '../ForgotPassword/ModalDialog.vue';
+import { useStore } from 'vuex' // 🔥 Importar useStore
 
 const userService = new UsuarioService()
-
 const form = ref(null)
-
 const router = useRouter()
-
+const store = useStore() // 🔥 Obtener store con Composition API
 const { setUserCookies } = useCookies()
 
 const textForm = {
@@ -78,18 +76,25 @@ const method = ref(4) // principal method to be called is method 4 email
 const login = async (e) => {
   e.preventDefault()
   const data = Object.fromEntries(new FormData(e.target).entries())
-  try {            
+  try {
     const res = await userService.getToken(data)
-        
+
     if (res.data.cif == "0") {
       throw {
         title: 'Credenciales Incorrectas',
         text: 'Los datos Ingresados son Incorrectos, verifique e intente Nuevamente, o comuníquese con el administrador.'
       }
-    } 
+    }
 
     userService.headersUsuario(res.data.token);
     setUserCookies(res.data)
+
+    // 🔥 CORRECCIÓN: Usar store de Composition API (sin "this")
+    store.dispatch('auth/loginSuccess', {
+      userData: res.data,
+      token: res.data.token
+    })
+
     router.push('/egovf')
   } catch (error) {
     Swal.fire({
@@ -97,8 +102,8 @@ const login = async (e) => {
       title: error?.title ?? 'Servidor no encontrado',
       text: error?.text ?? 'El servidor no está respondiendo, comuniquese con el administrador.',
       // footer: '<a href="https://svfhce.umsa.bo">Porque pasa esto?</a>'
-    }).then((r)=>{
-      if(r) location.reload(); 
+    }).then((r) => {
+      if (r) location.reload();
     });
   }
 }

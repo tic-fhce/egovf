@@ -25,12 +25,14 @@ export default {
     ComponenteDatosPersonalesVue,
     ComponenteMSccVue
   },
+  props:{
+    cifCiudadano:{type:[Number,String], required: true}
+  },
   data() {
     return {
       titulo: "Modulos MSCC",
       egovfService: null,
       empleadoService: null,
-      cifCiudadano: "",
       usuario: {
         token: "",
         cif: "",
@@ -82,7 +84,6 @@ export default {
     this.empleadoService = new EmpleadoService();
   },
   mounted() {
-    this.cifCiudadano = this.$route.params.cifCiudadano;
     this.getDatos();
     this.getEgovf();
     this.getEmpleado();
@@ -98,8 +99,8 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
+        this.usuario.foto = this.$cookies.get("foto");
 
-        this.titulo = this.usuario.correo + "> " + this.titulo;
       }
     },
     async getEgovf() {

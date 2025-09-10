@@ -16,16 +16,24 @@ import VueCookies from 'vue-cookies';
 import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
-import VueSelect  from "vue-select";
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
-const app = createApp(Fhce) 
+import VueSelect from "vue-select"
+
+import '@/utils/axios'
+
+const app = createApp(Fhce)
 app.use(store)
 app.use(router)
 app.use(CoreuiVue)
-app.use(VueAxios,axios)
-app.use(VueCookies,{expires:'1d'})
+app.use(VueAxios, axios)
+app.use(VueCookies, { expires: '1d' })
 app.use(VueSweetalert2)
 app.use(jsPDF)
+
+
+app.config.globalProperties.$nprogress = NProgress
 
 app.provide('icons', icons)
 app.component('CIcon', CIcon)

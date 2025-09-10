@@ -12,16 +12,16 @@
               <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones</CDropdownToggle>
             <CDropdownMenu>
               <CDropdownItem>
-                <CButton @click="clickModalModulo(true)" size="sm"><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Modulo</CButton>
+                <CButton @click="clickModalModulo(true)" size="sm"><CIcon icon="cil-plus"  class="me-2" /> Agregar Modulo</CButton>
                 </CDropdownItem>
               <CDropdownDivider />
               <CDropdownItem>
-                <CButton @click="clickModalContrato(true)" size="sm"><CIcon icon="cil-medical-cross" class="me-2" /> Agregar Contrato</CButton>
+                <CButton @click="clickModalContrato(true)" size="sm"><CIcon icon="cil-plus" class="me-2" /> Agregar Contrato</CButton>
                 </CDropdownItem>
               
                 <CDropdownDivider />
               <CDropdownItem>
-                <CButton @click="getModuloMenu()" size="sm"><CIcon icon="cil-medical-cross" class="me-2" />Empleado</CButton>
+                <CButton @click="getModuloMenu()" size="sm"><CIcon icon="cil-menu" class="me-2" />Empleado</CButton>
                 </CDropdownItem>
 
 
