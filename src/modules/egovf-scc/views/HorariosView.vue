@@ -189,8 +189,10 @@ export default {
     mounted(){
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-        this.getGestion();
         this.getHorario();
+        const gestion = this.$egovf.getGestion();
+        this.gestion = gestion.gestion;
+        this.listaGestion = gestion.lgestion;
 
     },
     created(){
@@ -209,6 +211,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get('foto');
             }
         },
         async getHorario(){ // Funcion que llama el horario del usuario            
@@ -223,15 +226,6 @@ export default {
             await this.sccService.getListaHorario(this.usuario.cif,this.gestion).then(response=>{
                 this.listaHorarios = response.data;
             });
-        },
-        getGestion(){ // funcion que crea una lista de gestiones desde el 2021
-            var lgestion=[];
-            const fecha = new Date();
-            this.gestion = fecha.getFullYear();
-            for(var i=2021; i<= this.gestion; i++){
-                lgestion.push(i);
-            }
-            this.listaGestion = lgestion;
         },
     }
 }

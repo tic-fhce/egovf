@@ -33,32 +33,25 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Foto</th>
                   <th>CIF</th>
                   <th>Datos</th>
                   <th>Contacto</th>
-                  <th>Unidad</th>
                   <th>Operaciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="ciudadano in listaCiudadanos" :key="ciudadano.idPersona">
-                  <th scope="row">{{ ciudadano.idPersona }}</th>
+                <tr v-for="persona in listaPersonas" :key="persona.idPersona">
+                  <th scope="row">{{ persona.id }}</th>
+                  <td>{{ persona.cif }}</td>
                   <td>
-                    <CImage :src="'https://fhcevirtual.umsa.bo/egovf-img/imagenes/200/' + ciudadano.foto" width="70"
-                      height="70" />
-                  </td>
-                  <td>{{ ciudadano.cif }}</td>
-                  <td>
-                    {{ ciudadano.nombre }} {{ ciudadano.paterno }} {{ ciudadano.materno }}<br>
-                    {{ ciudadano.ci }}<br>
-                    <label class="fontabla">{{ ciudadano.correo }}</label>
+                    {{ persona.nombre }} {{ persona.paterno }} {{ persona.materno }}<br>
+                    {{ persona.ci }}<br>
+                    <label class="fontabla">{{ persona.correo }}</label>
                   </td>
                   <td>
-                    {{ ciudadano.celular }}</td>
-                  <td>{{ ciudadano.sigla }}</td>
+                    {{ persona.celular }}</td>
                   <td>
-                    <CButton class="font" color="success" @click="perfil(ciudadano.cif)" size="sm">
+                    <CButton class="font" color="success" @click="perfil(persona.id)" size="sm">
                       <CIcon icon="cil-user" class="me-2" />Perfil
                     </CButton>
                   </td>
@@ -188,7 +181,6 @@
 
 //Importamos Servicios
 import PersonaService from '@/modules/egovf/services/personaService';
-import EgovfService from '@/modules/egovf/services/egovfService';
 
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
@@ -198,19 +190,17 @@ import $ from 'jquery';
 DataTable.use(DataTablesLib);
 
 export default {
-  name: 'ListaView',
+  name: 'ListaPersonaView',
   components: {
 
   },
   data() {
     return {
-      titulo: 'Lista de Ciudadanos',
+      titulo: '',
       modalCiudadano: false,
       personaService: null,
-      egovfService: null,
-      listaCiudadanos: [],
+      listaPersonas: [],
       registro: [],
-      listaUnidad: [],
       botones: false,
       usuario: {...this.$models.usuarioModel},
       persona: {
@@ -242,10 +232,10 @@ export default {
     }
   },
   created() {
-    this.egovfService = new EgovfService();
     this.personaService = new PersonaService();
   },
   mounted() {
+    this.titulo = 'Lista de Personas'
     this.getDatos(); // Llamamos los datos del Usuario
     this.getListarCiudadano(); // Funcion que debuelve una lista de ciudadanos 
   },
@@ -266,7 +256,6 @@ export default {
         this.usuario.sigla = this.$cookies.get('sigla');
         this.usuario.foto = this.$cookies.get("foto");
 
-        this.egovfService.headersUsuario(this.usuario.token);
         this.personaService.headersUsuario(this.usuario.token);
       }
     },
@@ -275,8 +264,8 @@ export default {
       try {
         // Mostrar SweetAlert de carga
         loadingAlert = this.$swal.fire({
-          title: 'Cargando Ciudadanos',
-          html: 'Procesando Ciudadanos<br>mas de 13000 ciudadanos registrados, por favor espere...',
+          title: 'Cargando Personas sin Ciudadania',
+          html: 'Procesando Personas<br>mas de 13000 presonas registradas sin ciudadania, por favor espere...',
           allowOutsideClick: false,
           didOpen: () => {
             this.$swal.showLoading();
@@ -284,8 +273,8 @@ export default {
         });
         this.$nprogress.start();
 
-        const response = await this.egovfService.getListaCiudadano();
-        this.listaCiudadanos = response.data;
+        const response = await this.personaService.getListaPersonaCifCero();
+        this.listaPersonas = response.data;
         await new Promise(resolve => setTimeout(resolve, 100));
 
         this.tabla();
@@ -296,7 +285,7 @@ export default {
         this.$swal.fire({
           icon: 'success',
           title: '¡Completado!',
-          text: `Se procesaron ${this.listaCiudadanos.length} Ciudadanos`,
+          text: `Se procesaron ${this.listaPersonas.length} Ciudadanos`,
           timer: 2000,
           showConfirmButton: false
         });

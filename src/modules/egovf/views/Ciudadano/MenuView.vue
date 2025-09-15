@@ -87,42 +87,9 @@ export default {
             },
             listaEmpleado: [],
             modalMenu: false,
-            usuario: {
-                token: '',
-                cif: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                sigla: '',
-                foto: ''
-            },
-            egovf: {
-                idPersona: 0,
-                nombre: '',
-                paterno: '',
-                materno: '',
-                fecha: '',
-                sexo: 0,
-                idUsuario: 0,
-                cif: 0,
-                matricula: 0,
-                ci: '',
-                ci_com: 0,
-                complemento: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                dependiente: '',
-                sigla: '',
-                foto: ''
-            },
-            datos: {
-                cif: 0,
-                nombre: '',
-                apellido: ''
-            },
+            usuario: {...this.$models.usuarioModel},
+            egovf: {...this.$models.egovfModel},
+            datos: {...this.$models.datosModel},
             menuUsuario: {
                 id: 0,
                 cif: 0,
@@ -133,7 +100,7 @@ export default {
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     created() {

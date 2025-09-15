@@ -28,15 +28,17 @@ export default class PersonaService {
     return axios.post(personaUrl + "persona/addPersona", aux);
   }
 
+  getListaPersonaCifCero() {
+    return axios.get(personaUrl + "persona/getListaPersonaCifCero");
+  }
+
   ////////////////
 
 
   getListaCiudadanos() {
     return axios.get(personaUrl + "listaPersona");
   }
-  getListaPersonas() {
-    return axios.get(personaUrl + "listaPersonas");
-  }
+  
   
   getPersona(cif) {
     return axios.get(personaUrl + "getPerfil", {

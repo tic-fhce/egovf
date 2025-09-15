@@ -123,7 +123,7 @@ h2 {
   font-size: 1rem;
   text-align: center;
   text-transform: none;
-  color: var(--color-third);
+  color: var(--color-third-light);
   line-height: 1;
   margin-bottom: 0;
 }
@@ -209,6 +209,7 @@ button[type="submit"] {
 
   &:hover {
     background-color: var(--color-third-light);
+    color: var(--color-third)
   }
 }
 

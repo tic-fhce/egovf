@@ -77,7 +77,6 @@ export default {
   components: {},
   data() {
     return {
-        titulo:'Menu de Observaciones',
         listaGestion:[],
         modalObs:false,
         gestion:0,
@@ -95,7 +94,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get("cif") == null) {
-      this.$router.push("/");
+      window.location.href = '/';
     }
   },
   created() {
@@ -103,7 +102,9 @@ export default {
   },
   mounted() {
     this.getDatos();
-    this.getGestion();
+    const gestion = this.$egovf.getGestion();
+    this.obsgestion = gestion.gestion;
+    this.listaGestion = gestion.lgestion;
   },
   methods: {
 
@@ -122,15 +123,6 @@ export default {
     },
     clickModalObs(obs){
         this.modalObs = obs;
-    },
-    getGestion(){ // funcion que crea una lista de gestiones desde el 2021
-        var lgestion=[];
-        const fecha = new Date();
-        this.obsgestion = fecha.getFullYear();
-        for(var i=2021; i<= this.obsgestion; i++){
-            lgestion.push(i);
-        }
-        this.listaGestion = lgestion;
     },
     obsLista() {
         this.clickModalObs(false);

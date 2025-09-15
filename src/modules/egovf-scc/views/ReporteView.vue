@@ -37,56 +37,11 @@ export default {
       sccService: null,
       egovfService: null,
       uri: "",
-      usuario: {
-        token: "",
-        cif: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        sigla: "",
-      },
-      reporte: {
-        cif: 0,
-        sigla: "",
-        gestion: 0,
-        mes: 0,
-        di: 0,
-        df: 0,
-        listaPerfil: [],
-        listaHorario: [],
-        persona: {
-          id: null,
-          ci: "",
-          nombre: "",
-          paterno: "",
-          materno: "",
-          celular: "",
-          correo: "",
-          foto: "",
-        },
-      },
-      egovf: {
-        idPersona: 0,
-        nombre: "",
-        paterno: "",
-        materno: "",
-        fecha: "",
-        sexo: 0,
-        idUsuario: 0,
-        cif: 0,
-        matricula: 0,
-        ci: "",
-        ci_com: 0,
-        complemento: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        dependiente: "",
-        sigla: "",
-        foto: "",
-      },
+      usuario: {...this.$models.usuarioModel},
+
+      reporte: {...this.$models.reporteModel },
+      
+      egovf: {...this.$models.egovfModel},
     };
   },
 
@@ -105,7 +60,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get("cif") == null) {
-      this.$router.push("/");
+      window.location.href = '/';
     }
   },
   created() {

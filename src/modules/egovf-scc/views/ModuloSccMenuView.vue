@@ -196,7 +196,7 @@ export default {
             modalMes: false,
             modalDias: false,
             listaGestion: [],
-            listaMes: [{ m: "01", mes: "Enero" }, { m: "02", mes: "Febrero" }, { m: "03", mes: "Marzo" }, { m: "04", mes: "Abril" }, { m: "05", mes: "Mayo" }, { m: "06", mes: "Junio" }, { m: "07", mes: "Julio" }, { m: "08", mes: "Agosto" }, { m: "09", mes: "Septiembre" }, { m: "10", mes: "Octubre" }, { m: "11", mes: "Noviembre" }, { m: "12", mes: "Diciembre" }],
+            listaMes: [],
             usuario: {
                 token: '',
                 cif: '',
@@ -232,16 +232,19 @@ export default {
         this.sccService = new SccService();
         this.uploadService = new UploadService();
         this.getAbiso();
-        this.getGestion();
     },
     mounted() {
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-
+        const gestion = this.$egovf.getGestion();
+        this.obsgestion = gestion.gestion;
+        this.reporteMes.gestion = gestion.gestion;
+        this.listaGestion = gestion.lgestion;
+        this.listaMes = this.$egovf.listaMes();
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     methods: {
@@ -257,16 +260,6 @@ export default {
                 this.usuario.sigla = this.$cookies.get('sigla');
                 this.usuario.foto = this.$cookies.get('foto');
             }
-        },
-        getGestion() { // funcion que crea una lista de gestiones desde el 2021
-            var lgestion = [];
-            const fecha = new Date();
-            this.obsgestion = fecha.getFullYear();
-            for (var i = 2021; i <= this.obsgestion; i++) {
-                lgestion.push(i);
-            }
-            this.reporteMes.gestion = this.obsgestion;
-            this.listaGestion = lgestion;
         },
         async getAbiso() {
             const steps = [];
@@ -308,7 +301,7 @@ export default {
             this.$router.push(direccion);
         },
         clickModalMes(rmes) {
-            if (this.usuario.foto == 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
+            if (this.usuario.foto == 'user.png')
                 this.getFotoPerfil();
             else {
                 this.modalMes = rmes;
@@ -316,7 +309,7 @@ export default {
 
         },
         clickModalDias(dias) {
-            if (this.usuario.foto == 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/user.png')
+            if (this.usuario.foto == 'user.png')
                 this.getFotoPerfil();
             else {
                 this.modalDias = dias;
@@ -341,19 +334,6 @@ export default {
         getReporteMes() {//Funcion que muestra los Reportes de Usuario
             this.clickModalMes(false);
             this.clickModalDias(false);
-            /*this.reporteMes.cif = this.usuario.cif;
-            if (this.reporteMes.di < 10) {
-                this.reporteMes.di = '0' + this.reporteMes.di;
-            }
-            if (this.reporteMes.df < 10) {
-                this.reporteMes.df = '0' + this.reporteMes.df;
-            }
-            this.$router.push({
-                name: "UsuarioReporteView",
-                params: {
-                    uri: this.reporteMes.cif + 'j' + this.reporteMes.gestion + 'm' + this.reporteMes.mes + 'm' + this.reporteMes.di + 'k' + this.reporteMes.df
-                }
-            });*/
             this.$router.push({
                 name: 'UsuarioReporteView',
                 params:{

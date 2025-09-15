@@ -97,15 +97,7 @@ export default {
       listaModuloCifEmpleado: [],
       id_modulo: 0,
       getPB: true,
-      usuario: {
-        token: "",
-        cif: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        sigla: "",
-      },
+      usuario: {...this.$models.usuarioModel},
       modulo: {
         cif: 0,
         idmodulo: 0,
@@ -115,7 +107,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get("cif") == null) {
-      this.$router.push("/");
+      window.location.href = '/';
     }
   },
   created() {

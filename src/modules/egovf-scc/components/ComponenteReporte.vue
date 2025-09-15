@@ -256,45 +256,17 @@ export default {
             });
         },
         sumaRetraso() { //Funcion que suma los retrasos y los minutos de salida adelantada
-            let sum = 0;
-            let res = 0;
-            let sin = 0;
-            this.listaReporte.forEach(element => {
-                // Verificar si hay retraso o "Sin Marcar"
-                const tieneRetraso = element.retraso.some(valor => valor > 0);
-                const tieneSinMarcar = element.hora.includes("Sin Marcar");
-
-                if (tieneRetraso || tieneSinMarcar) {
-                    sin += 1;
-                }
-                // Sumar retrasos según índice par o impar
-                element.retraso.forEach((valor, i) => {
-                    if (i % 2 === 0) {
-                        sum += parseInt(valor, 10);
-                    } else {
-                        res += parseInt(valor, 10);
-                    }
-                });
-            });
-            this.totalretraso = sum;
-            this.totalanticipado = res;
-            this.totalsin = sin;
+            const resuldato = this.$functions.sumaRetraso(this.listaReporte);
+            this.totalretraso = resuldato.sum;
+            this.totalanticipado = resuldato.res;
+            this.totalsin = resuldato.sin;
+            
             const dir = '/libreReporte' + this.uri;
             this.sms = 'Cif:' + this.reporte.cif + ' TR: ' + this.totalretraso + 'min' + ' TA: ' + this.totalanticipado + 'min ' + 'https://svfhce.umsa.bo' + dir;
+            
         },
         getMes() {// Funcion para colocar el Mes en formato Literal
-            if (this.reporte.mes == 1) { this.mes = 'Enero'; }
-            if (this.reporte.mes == 2) { this.mes = 'Febrero'; }
-            if (this.reporte.mes == 3) { this.mes = 'Marzo'; }
-            if (this.reporte.mes == 4) { this.mes = 'Abril'; }
-            if (this.reporte.mes == 5) { this.mes = 'Mayo'; }
-            if (this.reporte.mes == 6) { this.mes = 'Junio'; }
-            if (this.reporte.mes == 7) { this.mes = 'Julio'; }
-            if (this.reporte.mes == 8) { this.mes = 'Agosto'; }
-            if (this.reporte.mes == 9) { this.mes = 'Septiembre'; }
-            if (this.reporte.mes == 10) { this.mes = 'Octubre'; }
-            if (this.reporte.mes == 11) { this.mes = 'Noviembre'; }
-            if (this.reporte.mes == 12) { this.mes = 'Diciembre'; }
+            this.mes = this.$functions.getMes(this.reporte.mes);
         },
         pdf() { //Funcion que Constuye el PDF del reporte
             var img = new Image();
@@ -305,7 +277,7 @@ export default {
 
             //const doc = new jsPDF('p','mm','legal');
             doc.setFontSize(10);
-            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logoticjpg.jpg';
+            img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logotic.jpg';
             doc.addImage(img, 'JPEG', (215 / 5), 14, 15, 10);
 
             img.src = 'https://fhcevirtual.umsa.bo/egovf-img/imagenes/logofhce.jpg';

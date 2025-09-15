@@ -31,46 +31,14 @@ export default {
         return {
             titulo:'Perfil del Ciudadano',
             egovfService:null,
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                sigla:''
-            },
-            egovf:{
-                idPersona:0,
-                nombre:'',
-                paterno:'',
-                materno:'',
-                fecha:'',
-                sexo:0,
-                idUsuario:0,
-                cif:0,
-                matricula:0,
-                ci:'',
-                ci_com:0,
-                complemento:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                dependiente:'',
-                sigla:'',
-                foto:''
-            },
-            datos:{
-                cif:0,
-                nombre:'',
-                apellido:''
-            },
+            usuario:{...this.$models.usuarioModel},
+            egovf:{...this.$models.egovfModel},
+            datos:{...this.$models.datosModel},
         }
     },
     beforeCreate(){        
         if(this.$cookies.get('cif')==null){
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     created(){

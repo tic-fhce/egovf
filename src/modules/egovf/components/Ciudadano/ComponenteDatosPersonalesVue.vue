@@ -293,36 +293,8 @@ export default {
             what: "https://api.whatsapp.com/send?phone=591",
             getPB: true,
             archivo: '',
-            usuario: {
-                token: '',
-                cif: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                sigla: ''
-            },
-            egovf: {
-                idPersona: 0,
-                nombre: '',
-                paterno: '',
-                materno: '',
-                fecha: '',
-                sexo: 0,
-                idUsuario: 0,
-                cif: 0,
-                matricula: 0,
-                ci: '',
-                ci_com: 0,
-                complemento: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                dependiente: '',
-                sigla: '',
-                foto:''
-            },
+            usuario: {...this.$models.usuarioModel},
+            egovf: {...this.$models.egovfModel},
             pass: {
                 id: null,
                 cif: '',
@@ -336,11 +308,7 @@ export default {
                 dependencia: '',
                 sigla: ''
             },
-            datos:{
-                cif:0,
-                nombre:'',
-                apellido:''
-            }
+            datos:{...this.$models.datosModel}
         };
     },
     mounted() {
@@ -461,7 +429,7 @@ export default {
             
             this.archivo = fileInput.files[0];
             
-            if (!this.validateFile(this.archivo)) {
+            if (!this.$functions.validateFile(this.archivo)) {
                 this.resetFileInput();
                 return;
             }
@@ -553,12 +521,7 @@ export default {
                 document.getElementById('filedoc')
             );
         },
-    
-        validateFile(file) {
-            const VALID_TYPES = ['image/jpeg', 'image/png'];
-            return file && VALID_TYPES.includes(file.type);
-        },
-    
+
         resetFileInput() {
             this.archivo=null;
             this.fileValid = false;

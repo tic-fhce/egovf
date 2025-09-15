@@ -77,6 +77,14 @@
                                                     </CButton>
                                                 </template>
                                             </CTooltip>
+                                            <CTooltip content="Ver Modulos del perfil de Ciudadano" placement="bottom">
+                                                <template #toggler="{ id, on }">
+                                                    <CButton :aria-describedby="id" v-on="on" color="dark" class="font"
+                                                        @click="moduloEmp(ciudadano.cif)" size="sm">
+                                                        <CIcon icon="cil-user" />
+                                                    </CButton>
+                                                </template>
+                                            </CTooltip>
                                             <CTooltip content="Eliminar Empleado" placement="bottom">
                                                 <template #toggler="{ id, on }">
                                                     <CButton :aria-describedby="id" v-on="on"
@@ -86,7 +94,6 @@
                                                     </CButton>
                                                 </template>
                                             </CTooltip>
-
                                         </CButtonGroup>
                                     </td>
                                 </tr>
@@ -141,18 +148,11 @@
 
                 <CInputGroup class="mb-3">
                     <CInputGroupText as="label">Tipo</CInputGroupText>
-                    <CFormSelect v-model="obsall.tipo" required="true" @change="getTipo()">
-                        <option value="Entrada M.">Entrada Mañana</option>
-                        <option value="Salida M.">Salida Mañana</option>
-                        <option value="Entrada T.">Entrada Tarde</option>
-                        <option value="Salida T.">Salida Tarde</option>
-                        <option value="continuo">Continuo</option>
-                        <option value="continuoingreso">Continuo e Ingreso</option>
-                        <option value="horas">Horas de Servicio</option>
-                        <option value="extraordinario">Horario Extraordinario</option>
-                        <option value="comision">Comisión</option>
-                        <option value="permiso">Permiso</option>
-                        <option value="asueto">Asueto</option>
+                    <CFormSelect v-model="obsall.tipo" required="true" @change="getTipo($event.target.value)">
+                        <option v-for="opt in tipoOpciones" :key="opt.value" :value="opt.value"
+                            :disabled="opt.disabled">
+                            {{ opt.label }}
+                        </option>
                     </CFormSelect>
                 </CInputGroup>
 
@@ -274,40 +274,21 @@ export default {
             listaCiudadanos: [],
             listaCiudadanoEmpleado: [],
             listaGestion: [],
-            listaMes: [{ m: "01", mes: "Enero" }, { m: "02", mes: "Febrero" }, { m: "03", mes: "Marzo" }, { m: "04", mes: "Abril" }, { m: "05", mes: "Mayo" }, { m: "06", mes: "Junio" }, { m: "07", mes: "Julio" }, { m: "08", mes: "Agosto" }, { m: "09", mes: "Septiembre" }, { m: "10", mes: "Octubre" }, { m: "11", mes: "Noviembre" }, { m: "12", mes: "Diciembre" }],
+            listaMes: [],
+            tipoOpciones: [],
             archivo: '',
             tipoEmpleadoObj: '',
             fileValid: false,
             uploading: false,
             uploadProgress: 0,
-            usuario: {
-                token: '',
-                cif: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                sigla: ''
-            },
+            usuario: { ...this.$models.usuarioModel },
             tipoEmpleado: {
                 id: 0,
                 detalle: '',
                 corto: '',
                 foto: ''
             },
-            obsall: {
-                cif: null,
-                sexo: '',
-                uidobs: '',
-                fechainicio: '',
-                fechafin: '',
-                detalle: '',
-                tipo: 'Seleccionar Tipo',
-                horaEntrada: '08:30',
-                horaSalida: '18:30',
-                imagen: '',
-                url: ''
-            },
+            obsall: { ...this.$models.obsModel },
             record: {
                 gestion: 2023,
                 mes: 0,
@@ -317,7 +298,7 @@ export default {
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     created() {
@@ -330,7 +311,11 @@ export default {
         this.getDatos();
         this.getTipoEmpleado();
         this.getListaEmpleado();
-        this.getGestion();
+        const gestion = this.$functions.getGestion();
+        this.listaGestion = gestion.lgestion;
+        this.record.gestion = gestion.gestion;
+        this.tipoOpciones = this.$functions.tipoOpciones();
+        this.listaMes = this.$functions.listaMes();
     },
     methods: {
         selectFile(event) {// Funcion que permite cambiar los datos del archivo
@@ -343,7 +328,7 @@ export default {
 
             this.archivo = fileInput.files[0];
 
-            if (!this.validateFile(this.archivo)) {
+            if (!this.$functions.validateFile(this.archivo)) {
                 this.resetFileInput();
                 return;
             }
@@ -382,44 +367,35 @@ export default {
         },
         getListaCiudadano() {//Funcion que una las listas listaEmpelado y listaCiudadanoEmpleado
             this.listaCiudadanos = [];
+
+            // Crear un mapa para acceso rápido por CIF
+            const ciudadanoMap = new Map(
+                this.listaCiudadanoEmpleado.map(c => [c.cif, c])
+            );
+
+            // Recorrer empleados y buscar coincidencias en ciudadanos
             this.listaEmpleado.forEach(empleado => {
-                this.listaCiudadanoEmpleado.forEach(ciudadano => {
-                    var ce = {
-                        idPersona: 0,
-                        cif: 0,
-                        nombre: '',
-                        paterno: '',
-                        materno: '',
-                        ci: '',
-                        correo: '',
-                        celular: '',
-                        sigla: '',
-                        unidad: '',
-                        foto: '',
-                        modulo: '',
-                        total: 0,
-                        color: ''
-                    };
-                    if (empleado.cif == ciudadano.cif) {
-                        ce.idPersona = ciudadano.idPersona;
-                        ce.cif = empleado.cif;
-                        ce.nombre = ciudadano.nombre;
-                        ce.paterno = ciudadano.paterno;
-                        ce.materno = ciudadano.materno;
-                        ce.ci = ciudadano.ci;
-                        ce.correo = ciudadano.correo;
-                        ce.celular = ciudadano.celular;
-                        ce.sigla = ciudadano.sigla;
-                        ce.unidad = ciudadano.unidad;
-                        ce.foto = ciudadano.foto;
-                        ce.modulo = empleado.empleado;
-                        ce.color = this.esFechaPasada(empleado.salida);
-                        ce.total = this.calcularDiasRestantes(empleado.fecha, empleado.salida);
-                        this.listaCiudadanos.push(ce);
-                        return false;
-                    }
-                    return true;
-                })
+                const ciudadano = ciudadanoMap.get(empleado.cif);
+                if (!ciudadano) return;
+
+                const ce = {
+                    idPersona: ciudadano.idPersona,
+                    cif: empleado.cif,
+                    nombre: ciudadano.nombre,
+                    paterno: ciudadano.paterno,
+                    materno: ciudadano.materno,
+                    ci: ciudadano.ci,
+                    correo: ciudadano.correo,
+                    celular: ciudadano.celular,
+                    sigla: ciudadano.sigla,
+                    unidad: ciudadano.unidad,
+                    foto: ciudadano.foto,
+                    modulo: empleado.empleado,
+                    color: this.$functions.esFechaPasada(empleado.salida),
+                    total: this.$functions.calcularDiasRestantes(empleado.fecha, empleado.salida)
+                };
+
+                this.listaCiudadanos.push(ce);
             });
             this.tablaEmpleado();
         },
@@ -476,16 +452,6 @@ export default {
                 this.uploadProgress = 0;
             }
         },
-        getGestion() { // funcion que crea una lista de gestiones desde el 2021
-            var lgestion = [];
-            const fecha = new Date();
-            var rgestion = fecha.getFullYear();
-            this.record.gestion = rgestion;
-            for (var i = 2021; i <= rgestion; i++) {
-                lgestion.push(i);
-            }
-            this.listaGestion = lgestion;
-        },
         async getTipoEmpleado() {
             // Funcion El tipo de Empleado {adminsitrativo, docente, etc.}
             await this.empleadoService.getTipoEmpleado(this.idEmpleado).then((response) => {
@@ -513,28 +479,15 @@ export default {
                 name: "RecordView",
                 params: {
                     gestion: this.record.gestion,
-                    m:this.record.mes,
-                    tipo:this.record.tipo
+                    m: this.record.mes,
+                    tipo: this.record.tipo
                 }
             });
         },
-        getTipo() {
-            if (this.obsall.tipo == 'Entrada M.')
-                this.obsall.horaEntrada = '08:30';
-            if (this.obsall.tipo == 'Salida M.')
-                this.obsall.horaSalida = '12:30';
-            if (this.obsall.tipo == 'Entrada T.')
-                this.obsall.horaEntrada = '14:30';
-            if (this.obsall.tipo == 'Salida T.')
-                this.obsall.horaSalida = '18:30';
-            if (this.obsall.tipo == 'continuo')
-                this.obsall.horaSalida = '16:30';
-            if (this.obsall.tipo == 'continuoingreso') {
-                this.obsall.horaEntrada = '08:30';
-                this.obsall.horaSalida = '16:30';
-            }
-            if (this.obsall.tipo == 'asueto')
-                this.obsall.horaEntrada = '08:30';
+        getTipo(tipoSeleccionado) {
+            const hora = this.$functions.getObsHora(tipoSeleccionado);
+            this.obsall.horaEntrada = hora.horaEntrada;
+            this.obsall.horaSalida = hora.horaSalida;
         },
         mostrarHoraIngreso() {
             const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.", "horas", "extraordinario", "comision", "permiso"];
@@ -545,31 +498,23 @@ export default {
             return tiposPermitidos.includes(this.obsall.tipo);
         },
         esFechaPasada(fechaSalida) {
-            if (!fechaSalida) return 'warning';
-
-            const fechaTermino = new Date(fechaSalida);
-            const hoy = new Date();
-
-            // Normalizar fechas (ignorar horas)
-            fechaTermino.setHours(0, 0, 0, 0);
-            hoy.setHours(0, 0, 0, 0);
-
-            return fechaTermino < hoy ? 'danger' : 'success';
+            return this.$functions.esFechaPasada(fechaSalida);
         },
-        calcularDiasRestantes(fi, fs) {
-            const fechaInicio = new Date(fi);
-            const fechaSalida = new Date(fs);
-            const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-            const fechaActual = new Date();
-            if (!fechaSalida) return 0;
 
-            if (fechaActual >= fechaSalida) return 100;
-
-            const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-            const progreso = (diasPasados / diasTotales) * 100;
-            return parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
+        resetFileInput() {
+            this.archivo = null;
+            this.fileValid = false;
+            const input = this.getSafeFileInput();
+            if (input) input.value = '';
         },
-        //funciones para validar el archivo a subir
+        moduloEmp(cif) {
+            this.$router.push({
+                name: 'ModuloEmpView',
+                params: {
+                    cifCiudadano: cif
+                },
+            });
+        },
         getSafeFileInput(event) {
             // Todas las formas posibles de obtener el input
             return (
@@ -585,18 +530,6 @@ export default {
                 // Último recurso
                 document.getElementById('filedoc')
             );
-        },
-
-        validateFile(file) {
-            const VALID_TYPES = ['image/jpeg', 'image/png'];
-            return file && VALID_TYPES.includes(file.type);
-        },
-
-        resetFileInput() {
-            this.archivo = null;
-            this.fileValid = false;
-            const input = this.getSafeFileInput();
-            if (input) input.value = '';
         },
     }
 }

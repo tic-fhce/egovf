@@ -76,6 +76,12 @@ const routes = [
         meta: { title: 'Lista de Ciudadanos',requiresAuth: true  }
       },
       {
+        path: "/listadepersonas",
+        name: "ListaPersonaView",
+        component: () => import("@/modules/egovf/views/Ciudadano/ListaPersonaView.vue"),
+        meta: { title: 'Lista de Personas sin Ciudadania',requiresAuth: true  }
+      },
+      {
         path: "/perfilCiudadano/:cifCiudadano",
         name: "PerfilCiudadanoView",
         component: () => import("@/modules/egovf/views/Ciudadano/PerfilCiudadanoView.vue"),
@@ -134,7 +140,7 @@ const routes = [
         name: "ModuloSccView",
         component: () => import("@/modules/egovf-scc/views/ModuloSccView.vue"),
         props:true,
-        meta: { title: 'Modulo Contenedor de Control',requiresAuth: true  }
+        meta: { title: 'Modulo Seguimiento Contenedor de Control',requiresAuth: true  }
       },
 
       // END MODULO EMPLEADO

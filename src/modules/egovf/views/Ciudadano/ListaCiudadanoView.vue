@@ -138,16 +138,7 @@ export default {
       listaEmpleado: [],
       modalCiudadano: false,
       total: 0,
-      usuario: {
-        token: '',
-        cif: '',
-        correo: '',
-        celular: '',
-        pass: '',
-        unidad: '',
-        sigla: '',
-        foto: ''
-      },
+      usuario: {...this.$models.usuarioModel},
       ciudadano: {
         cif: 0,
         nombre: '',
@@ -172,7 +163,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get('cif') == null) {
-      this.$router.push('/');
+      window.location.href = '/';
     }
   },
   created() {
@@ -208,7 +199,7 @@ export default {
         // Mostrar SweetAlert de carga
         loadingAlert = this.$swal.fire({
           title: 'Cargando Ciudadanos',
-          html: 'Procesando datos, por favor espere...',
+          html: 'Procesando Ciudadanos<br>mas de 13000 ciudadanos registrados, por favor espere...',
           allowOutsideClick: false,
           didOpen: () => {
             this.$swal.showLoading();
@@ -220,10 +211,15 @@ export default {
           a.paterno.localeCompare(b.paterno)
         );
         this.listaCiudadanos = ciudadanosOrdenados;
-        this.getEmpleados();
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+        this.tabla();
+        
 
         this.$swal.close();
 
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.getEmpleados();
         // Mostrar éxito
         this.$swal.fire({
           icon: 'success',
@@ -253,7 +249,6 @@ export default {
     async getEmpleados() {// Funcion que regresa una lista de Empleados del ModuloEMP 
       await this.empleadoService.getEmpleados().then((response) => {
         this.listaEmpleado = response.data;
-        this.tabla();
       });
     },
     perfil(cifAux) {
@@ -305,32 +300,10 @@ export default {
       });
     },
     esFechaPasada(fechaSalida) {
-      if (!fechaSalida) return 'warning';
-
-      const fechaTermino = new Date(fechaSalida);
-      const hoy = new Date();
-
-      // Normalizar fechas (ignorar horas)
-      fechaTermino.setHours(0, 0, 0, 0);
-      hoy.setHours(0, 0, 0, 0);
-
-      return fechaTermino < hoy ? 'danger' : 'success';
+      return this.$functions.esFechaPasada(fechaSalida);
     },
     calcularDiasRestantes(fi, fs) {
-      const fechaInicio = new Date(fi);
-      const fechaSalida = new Date(fs);
-      const diasTotales = Math.floor((fechaSalida - fechaInicio) / (1000 * 60 * 60 * 24));
-      const fechaActual = new Date();
-      if (!fechaSalida) this.total = 0;
-
-      if (fechaActual >= fechaSalida) {
-        this.total = 100;
-      }
-      else {
-        const diasPasados = Math.floor((fechaActual - fechaInicio) / (1000 * 60 * 60 * 24));
-        const progreso = (diasPasados / diasTotales) * 100;
-        this.total = parseInt(progreso < 0 ? 0 : progreso.toFixed(2));
-      }
+      this.total = this.$functions.calcularDiasRestantes(fi,fs);
     }
   }
 }

@@ -229,20 +229,6 @@ export default {
       gestion: 0,
       color: '',
       estado: '',
-      listaMes: [
-        { m: "01", mes: "Enero" },
-        { m: "02", mes: "Febrero" },
-        { m: "03", mes: "Marzo" },
-        { m: "04", mes: "Abril" },
-        { m: "05", mes: "Mayo" },
-        { m: "06", mes: "Junio" },
-        { m: "07", mes: "Julio" },
-        { m: "08", mes: "Agosto" },
-        { m: "09", mes: "Septiembre" },
-        { m: "10", mes: "Octubre" },
-        { m: "11", mes: "Noviembre" },
-        { m: "12", mes: "Diciembre" },
-      ],
       archivo: "",
       usuario: {
         token: "",
@@ -328,7 +314,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get("cif") == null) {
-      this.$router.push("/");
+      window.location.href = '/';
     }
   },
   created() {

@@ -14,7 +14,7 @@ muestra una lista de las obserbaciones deacuerdo a la gestion y el mes seleccion
                         <CCol :lg="6">
                             <div class="align-items-center">
                                 <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                                <label class="mb-0 fs-5 text-white">{{ titulo }}</label>
+                                <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
                             </div>
                         </CCol>
                         <CCol :lg="6" class="text-end">
@@ -299,7 +299,7 @@ export default {
             listaGestion:[],
             uploading: false,
             uploadProgress: 0,
-            listaMes:[{m:"01",mes:"Enero"},{m:"02",mes:"Febrero"},{m:"03",mes:"Marzo"},{m:"04",mes:"Abril"},{m:"05",mes:"Mayo"},{m:"06",mes:"Junio"},{m:"07",mes:"Julio"},{m:"08",mes:"Agosto"},{m:"09",mes:"Septiembre"},{m:"10",mes:"Octubre"},{m:"11",mes:"Noviembre"},{m:"12",mes:"Diciembre"}],
+            listaMes:[],
             usuario:{
                 token:'',
                 cif:'',
@@ -401,7 +401,10 @@ export default {
     mounted(){
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-        this.getGestion();
+        const gestion = this.$egovf.getGestion();
+        this.obsgestion = gestion.gestion;
+        this.listaGestion = gestion.lgestion;    
+        this.listaMes = this.$egovf.listaMes();
         this.getEgovf();
     },
     created(){
@@ -421,7 +424,7 @@ export default {
             
             this.archivo = fileInput.files[0];
             
-            if (!this.validateFile(this.archivo)) {
+            if (!this.this.$egovf.validateFile(this.archivo)) {
                 this.resetFileInput();
                 return;
             }
@@ -439,15 +442,6 @@ export default {
                 this.usuario.sigla = this.$cookies.get('sigla');
                 this.usuario.foto = this.$cookies.get('foto');
             }
-        },
-        getGestion(){ // funcion que crea una lista de gestiones desde el 2021
-            var lgestion=[];
-            const fecha = new Date();
-            this.obsgestion = fecha.getFullYear();
-            for(var i=2021; i<= this.obsgestion; i++){
-                lgestion.push(i);
-            }
-            this.listaGestion = lgestion;
         },
         async getObsUsuario(){ // Funcion que llama una lista de Observaciones del usuario 
             await this.sccService.getObsUsuario(this.usuario.cif,this.obsgestion,this.obsmes).then(response=>{
@@ -782,11 +776,6 @@ export default {
                 // Último recurso
                 document.getElementById('filedoc')
             );
-        },
-    
-        validateFile(file) {
-            const VALID_TYPES = ['image/jpeg', 'image/png'];
-            return file && VALID_TYPES.includes(file.type);
         },
     
         resetFileInput() {

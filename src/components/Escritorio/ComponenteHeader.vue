@@ -7,7 +7,7 @@
 
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          {{ titulo }}
+          {{ tituloActual }}
         </CNavItem>
       </CHeaderNav>
 
@@ -61,15 +61,17 @@ export default {
   },
   data() {
     return {
-      titulo: ''
     }
   },
-  updated() {
-    this.titulo = this.$cookies.get('titulo');
+
+  computed: {
+    tituloActual() {
+      return this.$route.meta.title;
+    }
   },
   beforeCreate() {
     if (this.$cookies.get('cif') == null) {
-      this.$router.push('/home');
+      window.location.href = '/';
     }
   },
   methods: {

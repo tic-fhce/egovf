@@ -54,7 +54,6 @@ export default {
     name:'BiometricosView',
     data(){
         return {
-            titulo:'Biometricos Aprobados',
             listaPerfil:[],
             sccService:null,
             usuario:{
@@ -64,7 +63,8 @@ export default {
                 celular:'',
                 pass:'',
                 unidad:'',
-                sigla:''
+                sigla:'',
+                foto:''
             }
 
         }
@@ -90,6 +90,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get('foto');
             }
         },
         async getPerfilBiometrico(){ // funcion que debuelve una lista del Usuario registrado en los biometricos 

@@ -13,39 +13,50 @@
             <CCol :lg="6" class="text-end">
               <CDropdown variant="btn-group">
                 <!--Menus-->
-                  <CButtonGroup role="group">
-                    <!--Menu Opciones-->
-                    <CDropdown variant="btn-group">
-                      <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">
-                        <CIcon icon="cil-menu" color="dark" class="me-2 text-success"/>Opciones</CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>
-                          <CButton @click="clickModalBiometrico(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Biometrico</CButton>
-                        </CDropdownItem>
-                        <CDropdownDivider />
-                        <CDropdownItem>
-                          <CButton @click="clickModalHorario(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Horario</CButton>
-                        </CDropdownItem>
-                        <CDropdownDivider />
-                        <CDropdownItem>
-                          <CButton @click="clickModalObs(true)" size="sm"><CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Observaciones</CButton>
-                        </CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                    <!--Menu reportes-->
-                    <CDropdown variant="btn-group">
-                      <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">Reportes</CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem>
-                          <CButton @click="clickModalMes(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual</CButton>
-                        </CDropdownItem>
-                        <CDropdownDivider />
-                        <CDropdownItem>
-                          <CButton @click="clickModalDias(true)" size="sm"><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Segmentado</CButton>
-                        </CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  </CButtonGroup>
+                <CButtonGroup role="group">
+                  <!--Menu Opciones-->
+                  <CDropdown variant="btn-group">
+                    <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">
+                      <CIcon icon="cil-menu" color="dark" class="me-2 text-success" />Opciones
+                    </CDropdownToggle>
+                    <CDropdownMenu>
+                      <CDropdownItem>
+                        <CButton @click="clickModalBiometrico(true)" size="sm">
+                          <CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Biometrico
+                        </CButton>
+                      </CDropdownItem>
+                      <CDropdownDivider />
+                      <CDropdownItem>
+                        <CButton @click="clickModalHorario(true)" size="sm">
+                          <CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Horario
+                        </CButton>
+                      </CDropdownItem>
+                      <CDropdownDivider />
+                      <CDropdownItem>
+                        <CButton @click="clickModalObs(true)" size="sm">
+                          <CIcon icon="cil-plus" size="lg" class="me-2" />Agregar Observaciones
+                        </CButton>
+                      </CDropdownItem>
+                    </CDropdownMenu>
+                  </CDropdown>
+                  <!--Menu reportes-->
+                  <CDropdown variant="btn-group">
+                    <CDropdownToggle color="dark" class="font border-0  shadow-sm" size="sm">Reportes</CDropdownToggle>
+                    <CDropdownMenu>
+                      <CDropdownItem>
+                        <CButton @click="clickModalMes(true)" size="sm">
+                          <CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual
+                        </CButton>
+                      </CDropdownItem>
+                      <CDropdownDivider />
+                      <CDropdownItem>
+                        <CButton @click="clickModalDias(true)" size="sm">
+                          <CIcon icon="cil-description" size="lg" class="me-2" />Reporte Segmentado
+                        </CButton>
+                      </CDropdownItem>
+                    </CDropdownMenu>
+                  </CDropdown>
+                </CButtonGroup>
               </CDropdown>
             </CCol>
           </CRow>
@@ -58,11 +69,12 @@
             <CNavItem>
               <CNavLink :active="tabScc == 1" @click="clicktabScc(1)">
                 <CButton size="sm">
-                  <CIcon icon="cil-monitor"></CIcon><label class="d-none d-md-flex me-auto">Datos del Biometricos</label>
+                  <CIcon icon="cil-monitor"></CIcon><label class="d-none d-md-flex me-auto">Datos del
+                    Biometricos</label>
                 </CButton>
               </CNavLink>
             </CNavItem>
-            
+
             <CNavItem>
               <CNavLink :active="tabScc == 2" @click="clicktabScc(2)">
                 <CButton size="sm">
@@ -70,11 +82,12 @@
                 </CButton>
               </CNavLink>
             </CNavItem>
-            
+
             <CNavItem>
               <CNavLink :active="tabScc == 3" @click="clicktabScc(3)">
                 <CButton size="sm">
-                  <CIcon icon="cil-featured-playlist"></CIcon><label class="d-none d-md-flex me-auto">Observaciones</label>
+                  <CIcon icon="cil-featured-playlist"></CIcon><label
+                    class="d-none d-md-flex me-auto">Observaciones</label>
                 </CButton>
               </CNavLink>
             </CNavItem>
@@ -88,49 +101,54 @@
                 <CCol :lg="4" v-for="perfil in listaPerfil" :key="perfil.id">
                   <br>
                   <CCard>
-                      <CCardHeader class="headercolor"> <CIcon icon="cil-monitor"></CIcon> - UID : {{perfil.user_id}} </CCardHeader>
-                      <CCardBody class="datos">
-                          <CRow class="mb-2">
-                              <CCol><strong>ID-Biometrico:</strong></CCol>
-                              <CCol>{{ perfil.id }}</CCol>
-                          </CRow>
-                          <CRow class="mb-2">
-                              <CCol><strong>UID:</strong></CCol>
-                              <CCol>{{ perfil.user_id }}</CCol>
-                          </CRow>
-                          <CRow class="mb-2">
-                              <CCol><strong>Estado:</strong></CCol>
-                              <CCol>
-                                  <CBadge :color="perfil.estado == 0 ? 'warning' : 'success'">
-                                      {{ perfil.estado == 0 ? 'Inactivo' : 'Activo' }}
-                                  </CBadge>
-                              </CCol>
-                          </CRow>
+                    <CCardHeader class="headercolor">
+                      <CIcon icon="cil-monitor"></CIcon> - UID : {{ perfil.user_id }}
+                    </CCardHeader>
+                    <CCardBody class="datos">
+                      <CRow class="mb-2">
+                        <CCol><strong>ID-Biometrico:</strong></CCol>
+                        <CCol>{{ perfil.id }}</CCol>
+                      </CRow>
+                      <CRow class="mb-2">
+                        <CCol><strong>UID:</strong></CCol>
+                        <CCol>{{ perfil.user_id }}</CCol>
+                      </CRow>
+                      <CRow class="mb-2">
+                        <CCol><strong>Estado:</strong></CCol>
+                        <CCol>
+                          <CBadge :color="perfil.estado == 0 ? 'warning' : 'success'">
+                            {{ perfil.estado == 0 ? 'Inactivo' : 'Activo' }}
+                          </CBadge>
+                        </CCol>
+                      </CRow>
 
-                          <CRow class="mb-2">
-                              <CCol><strong>Sigla:</strong></CCol>
-                              <CCol>{{ perfil.lugar }}</CCol>
-                          </CRow>
-                          <CRow class="mb-2">
-                              <CCol><strong>Horario:</strong></CCol>
-                              <CCol>
-                                  <CBadge :color="perfil.horario_id == 0 ? 'danger' : 'success'">
-                                      {{ perfil.horario_id == 0 ? 'Sin Horario' : 'Horario Registrado' }}
-                                  </CBadge>
-                              </CCol>
-                          </CRow>
-                          <CRow class="mb-2">
-                              <CCol><strong>Tipo:</strong></CCol>
-                              <CCol>{{ empleado.empleado }}</CCol>
-                          </CRow>
-                          <CRow><br><hr></CRow>
-                          <CRow class="mb-2 text-center">
-                              <CCol>{{ perfil.nombre }}<br>nombre registrado</CCol>
-                          </CRow> 
-                      </CCardBody>
-                      <CCardFooter>
-                          <CCol class="text-center"><strong>{{perfil.detalle}}</strong></CCol> <!-- Aquí puedes agregar más detalles si lo deseas -->
-                      </CCardFooter>
+                      <CRow class="mb-2">
+                        <CCol><strong>Sigla:</strong></CCol>
+                        <CCol>{{ perfil.lugar }}</CCol>
+                      </CRow>
+                      <CRow class="mb-2">
+                        <CCol><strong>Horario:</strong></CCol>
+                        <CCol>
+                          <CBadge :color="perfil.horario_id == 0 ? 'danger' : 'success'">
+                            {{ perfil.horario_id == 0 ? 'Sin Horario' : 'Horario Registrado' }}
+                          </CBadge>
+                        </CCol>
+                      </CRow>
+                      <CRow class="mb-2">
+                        <CCol><strong>Tipo:</strong></CCol>
+                        <CCol>{{ empleado.empleado }}</CCol>
+                      </CRow>
+                      <CRow><br>
+                        <hr>
+                      </CRow>
+                      <CRow class="mb-2 text-center">
+                        <CCol>{{ perfil.nombre }}<br>nombre registrado</CCol>
+                      </CRow>
+                    </CCardBody>
+                    <CCardFooter>
+                      <CCol class="text-center"><strong>{{ perfil.detalle }}</strong></CCol>
+                      <!-- Aquí puedes agregar más detalles si lo deseas -->
+                    </CCardFooter>
                   </CCard>
                 </CCol>
               </CRow>
@@ -144,14 +162,21 @@
                   <br />
                   <CCard>
                     <CCardHeader class="headercolor text-center">
-                      {{this.tituloh}}
+                      {{ this.tituloh }}
                     </CCardHeader>
                   </CCard>
                   <CCardBody class="table-responsive">
                     <table class="table">
                       <thead>
                         <tr>
-                          <th>Horario</th><th>Lunes</th><th>Martes</th><th>Miercoles</th><th>Jueves</th><th>Viernes</th><th>Sabado</th><th>Domingo</th>
+                          <th>Horario</th>
+                          <th>Lunes</th>
+                          <th>Martes</th>
+                          <th>Miercoles</th>
+                          <th>Jueves</th>
+                          <th>Viernes</th>
+                          <th>Sabado</th>
+                          <th>Domingo</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -219,7 +244,9 @@
                           <br />
                         </CCol>
                         <CCol :lg="6" class="text-center">
-                          <CButton color="success" class="font" size="sm" @click="getListaHorario()"><CIcon icon="cil-calendar"></CIcon> Cargar Horarios</CButton>
+                          <CButton color="success" class="font" size="sm" @click="getListaHorario()">
+                            <CIcon icon="cil-calendar"></CIcon> Cargar Horarios
+                          </CButton>
                         </CCol>
                       </CRow>
                     </CCardBody>
@@ -313,25 +340,28 @@
                     <CCardBody>
                       <CRow>
                         <CCol :lg="4">
-                            <CInputGroup class="mb-3">
-                                <CInputGroupText  as="label">Gestion</CInputGroupText>
-                                <CFormSelect  v-model="obsgestion" :model-value="String(obsgestion)"  @update:model-value="obsgestion = Number($event)" required="true">
-                                    <option v-for="y  in listaGestion" :key="y" :value="y">{{y}}</option>
-                                </CFormSelect>
-                            </CInputGroup>
+                          <CInputGroup class="mb-3">
+                            <CInputGroupText as="label">Gestion</CInputGroupText>
+                            <CFormSelect v-model="obsgestion" :model-value="String(obsgestion)"
+                              @update:model-value="obsgestion = Number($event)" required="true">
+                              <option v-for="y in listaGestion" :key="y" :value="y">{{ y }}</option>
+                            </CFormSelect>
+                          </CInputGroup>
                         </CCol>
 
                         <CCol :lg="4">
-                            <CInputGroup class="mb-3">
-                                <CInputGroupText  as="label">Mes</CInputGroupText>
-                                <CFormSelect  v-model="obsmes" :model-value="String(obsmes)"  required="true">
-                                    <option v-for="mes  in listaMes" :key="mes.m" :value="mes.m">{{mes.mes}}</option>
-                                </CFormSelect>
-                            </CInputGroup>
+                          <CInputGroup class="mb-3">
+                            <CInputGroupText as="label">Mes</CInputGroupText>
+                            <CFormSelect v-model="obsmes" :model-value="String(obsmes)" required="true">
+                              <option v-for="mes in listaMes" :key="mes.m" :value="mes.m">{{ mes.mes }}</option>
+                            </CFormSelect>
+                          </CInputGroup>
                         </CCol>
 
                         <CCol :lg="4" class="text-center">
-                            <CButton color="success" class="font" size="sm" @click="getObsUsuario()"><CIcon icon="cil-featured-playlist"></CIcon> Cargar Observaciones</CButton>
+                          <CButton color="success" class="font" size="sm" @click="getObsUsuario()">
+                            <CIcon icon="cil-featured-playlist"></CIcon> Cargar Observaciones
+                          </CButton>
                         </CCol>
                       </CRow>
                     </CCardBody>
@@ -339,7 +369,12 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>ID</th><th>UidObs</th><th>Tipo</th><th>Detalle</th><th>Estado</th><th>Opciones</th>
+                            <th>ID</th>
+                            <th>UidObs</th>
+                            <th>Tipo</th>
+                            <th>Detalle</th>
+                            <th>Estado</th>
+                            <th>Opciones</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -347,7 +382,7 @@
                             <th scope="row">{{ lsobs.id }}</th>
                             <td>{{ lsobs.uidobs }}</td>
                             <td>
-                              <div>{{ lsobs.tipo }}</div> 
+                              <div>{{ lsobs.tipo }}</div>
                               <div class="small text-medium-emphasis">
                                 <span>{{ lsobs.horaEntrada }}</span> | {{ lsobs.horaSalida }}
                               </div>
@@ -359,15 +394,22 @@
                               </div>
                             </td>
                             <td>
-                              <CButton color="danger" class="font" size="sm" v-if="lsobs.estado === 2" @click="updateObsBio(lsobs.id, 0)" ><CIcon icon="cil-warning" size="lg"/>
+                              <CButton color="danger" class="font" size="sm" v-if="lsobs.estado === 2"
+                                @click="updateObsBio(lsobs.id, 0)">
+                                <CIcon icon="cil-warning" size="lg" />
                               </CButton>
-                              <CButton color="success" class="font" size="sm" v-if="lsobs.estado === 1" @click="updateObsBio(lsobs.id, 0)" ><CIcon icon="cil-check" size="lg"/>
+                              <CButton color="success" class="font" size="sm" v-if="lsobs.estado === 1"
+                                @click="updateObsBio(lsobs.id, 0)">
+                                <CIcon icon="cil-check" size="lg" />
                               </CButton>
-                              <CButton color="warning" class="font" size="sm" v-if="lsobs.estado === 0" @click="updateObsBio(lsobs.id, 1)"><CIcon icon="cil-cloud-upload" size="lg"/>
+                              <CButton color="warning" class="font" size="sm" v-if="lsobs.estado === 0"
+                                @click="updateObsBio(lsobs.id, 1)">
+                                <CIcon icon="cil-cloud-upload" size="lg" />
                               </CButton>
                             </td>
                             <td>
-                              <CButton color="dark" class="font" size="sm" @click="getObsDetalle(lsobs.id)"><CIcon icon="cil-featured-playlist"></CIcon>
+                              <CButton color="dark" class="font" size="sm" @click="getObsDetalle(lsobs.id)">
+                                <CIcon icon="cil-featured-playlist"></CIcon>
                               </CButton>
                             </td>
                           </tr>
@@ -392,16 +434,20 @@
   <CModal size="lg" :visible="modalDetalleObs" @close="clickModalDetalleObs(false)">
     <CModalHeader class="headercolor" dismiss @close="clickModalDetalleObs(false)">
       <CModalTitle>
-        <h6><CIcon icon="cil-featured-playlist"/> Detalles de la Observacion</h6>
+        <h6>
+          <CIcon icon="cil-featured-playlist" /> Detalles de la Observacion
+        </h6>
       </CModalTitle>
     </CModalHeader>
     <CModalBody>
-      <ComponenteObs :obsDetalle="obsDetalle"/>
+      <ComponenteObs :obsDetalle="obsDetalle" />
     </CModalBody>
     <CModalFooter>
       <CButtonGroup role="group">
-        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm" ><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm" >
+        <CButton @click="clickModalDetalleObs(false)" color="danger" class="font" size="sm">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
+        <CButton @click="downloadImg(obsDetalle.url, obsDetalle.imagen)" color="warning" class="font" size="sm">
           <CIcon icon="cil-cloud-download" class="me-2" />Descargar
         </CButton>
         <CButton @click="updateObsBio(obsDetalle.id, 1)" color="success" class="font" size="sm">
@@ -420,7 +466,9 @@
     <CForm @submit.prevent="updateBiometricoCif()">
       <CModalHeader class="headercolor" dismiss @close="clickModalBiometrico(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-monitor"/> Agregar Biometrico</h6>
+          <h6>
+            <CIcon icon="cil-monitor" /> Agregar Biometrico
+          </h6>
         </CModalTitle>
       </CModalHeader>
 
@@ -433,9 +481,10 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label" for="inputGroupSelect01">Datos del Biometrico</CInputGroupText>
-          <CFormSelect v-model="id_bio" :model-value="String(id_bio)"  @update:model-value="id_bio = Number($event)" required="true">
+          <CFormSelect v-model="id_bio" :model-value="String(id_bio)" @update:model-value="id_bio = Number($event)"
+            required="true">
             <option v-for="lista in listaBiometrico" :value="lista.id" :key="lista.id">
-                {{ lista.nombre }} - {{ lista.lugar }}
+              {{ lista.nombre }} - {{ lista.lugar }}
             </option>
           </CFormSelect>
         </CInputGroup>
@@ -457,7 +506,9 @@
     <CForm @submit.prevent="addHorario()">
       <CModalHeader class="headercolor" dismiss @close="clickModalHorario(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-calendar"/> Agregar Nuevo Horario</h6>
+          <h6>
+            <CIcon icon="cil-calendar" /> Agregar Nuevo Horario
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -536,8 +587,10 @@
         </div>
       </CModalBody>
       <CModalFooter>
-        <CButton @click="clickModalHorario(false)" color="danger" class="font" size="sm"><CIcon icon="cil-x" class="me-2" />Cancelar</CButton>
-        <CButton type="submit" class="font" color="success" size="sm" >
+        <CButton @click="clickModalHorario(false)" color="danger" class="font" size="sm">
+          <CIcon icon="cil-x" class="me-2" />Cancelar
+        </CButton>
+        <CButton type="submit" class="font" color="success" size="sm">
           <CIcon icon="cil-check-alt" class="me-2" />Agregar Horario
         </CButton>
       </CModalFooter>
@@ -550,7 +603,9 @@
     <CForm @submit.prevent="addObs()" enctype="multipart/form-data">
       <CModalHeader class="headercolor" dismiss @close="clickModalObs(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-featured-playlist"/> Agregar Observaciones de Asistencia</h6>
+          <h6>
+            <CIcon icon="cil-featured-playlist" /> Agregar Observaciones de Asistencia
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -559,63 +614,56 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">UID - OBS</CInputGroupText>
-          <CFormInput type="text" v-model="obs.uidobs" required="true"/>
+          <CFormInput type="text" v-model="obs.uidobs" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Fecha de Inicio</CInputGroupText>
-          <CFormInput type="date"  v-model="obs.fechainicio" required="true"/>
+          <CInputGroupText as="label">Fecha de Inicio</CInputGroupText>
+          <CFormInput type="date" v-model="obs.fechainicio" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Fecha Fin</CInputGroupText>
-          <CFormInput type="date"  v-model="obs.fechafin" required="true"/>
+          <CInputGroupText as="label">Fecha Fin</CInputGroupText>
+          <CFormInput type="date" v-model="obs.fechafin" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Detalle</CInputGroupText>
-          <CFormTextarea  v-model="obs.detalle" required="true"> </CFormTextarea>
+          <CInputGroupText as="label">Detalle</CInputGroupText>
+          <CFormTextarea v-model="obs.detalle" required="true"> </CFormTextarea>
         </CInputGroup>
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Tipo</CInputGroupText>
-          <CFormSelect  v-model="obs.tipo" required="true" @change="getTipo()"> 
-              <option value="Entrada M.">Entrada Mañana</option>
-              <option value="Salida M.">Salida Mañana</option>
-              <option value="Entrada T.">Entrada Tarde</option>
-              <option value="Salida T.">Salida Tarde</option>
-              <option value="continuo">Continuo</option>
-              <option value="continuoingreso">Continuo e Ingreso</option>
-              <option value="horas">Horas de Servicio</option>
-              <option value="extraordinario">Horario Extraordinario</option>
-              <option value="comision">Comisión</option>
-              <option value="permiso">Permiso</option>
-              <option value="asueto">Asueto</option>
+          <CFormSelect v-model="obs.tipo" required="true" @change="getTipo($event.target.value)">
+            <option v-for="opt in tipoOpciones" :key="opt.value" :value="opt.value" :disabled="opt.disabled">
+              {{ opt.label }}
+            </option>
           </CFormSelect>
         </CInputGroup>
 
         <CInputGroup class="mb-3" v-if="mostrarHoraIngreso()">
           <CInputGroupText as="label">Hora Ingreso</CInputGroupText>
-          <CFormInput type="text"  v-model="obs.horaEntrada" required="true"/>
+          <CFormInput type="text" v-model="obs.horaEntrada" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3" v-if="mostrarHoraSalida()">
           <CInputGroupText as="label">Hora Salida</CInputGroupText>
-          <CFormInput type="text"  v-model="obs.horaSalida" required="true"/>
+          <CFormInput type="text" v-model="obs.horaSalida" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-            <CInputGroupText as="label">Documento</CInputGroupText>
-                <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg"  @change="selectFile" :valid="fileValid" required="true"/>
-                <CInputGroupText v-if="fileValid">
-                    <CIcon icon="cil-check" class="text-success"/>
-                </CInputGroupText>
+          <CInputGroupText as="label">Documento</CInputGroupText>
+          <CFormInput type="file" ref="fileInput" id="filedoc" accept="image/png,image/jpeg" @change="selectFile"
+            :valid="fileValid" required="true" />
+          <CInputGroupText v-if="fileValid">
+            <CIcon icon="cil-check" class="text-success" />
+          </CInputGroupText>
         </CInputGroup>
-        
+
         <CProgress v-if="uploading" :height="50" class="mb-3">
-            <CProgressBar  :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated >
-                Espere un Momento ........... {{ uploadProgress }} %
-            </CProgressBar>
+          <CProgressBar :value="uploadProgress" :color="uploadProgress === 100 ? 'success' : 'warning'" animated>
+            Espere un Momento ........... {{ uploadProgress }} %
+          </CProgressBar>
         </CProgress>
 
       </CModalBody>
@@ -633,13 +681,15 @@
   </CModal>
   <!-- END Modal  Obserbasiones-->
 
-  
+
   <!-- Modal Reporte Mensual-->
   <CModal :visible="modalMes" @close="clickModalMes(false)">
     <CForm @submit.prevent="getReporteMes()">
       <CModalHeader class="headercolor" dismiss @close="clickModalMes(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-description" size="lg" class="me-2" /> Reporte Mensual</h6>
+          <h6>
+            <CIcon icon="cil-description" size="lg" class="me-2" /> Reporte Mensual
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -647,8 +697,9 @@
         <hr />
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Gestion </CInputGroupText>
-          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)" required="true">
+          <CInputGroupText as="label">Gestion </CInputGroupText>
+          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)"
+            @update:model-value="reporteMes.gestion = Number($event)" required="true">
             <option v-for="y in listaGestion" :key="y" :value="y">
               {{ y }}
             </option>
@@ -657,8 +708,8 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Mes </CInputGroupText>
-          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)"  required="true">
-            <option v-for="mes in listaMes" :value="mes.m" :key="mes.m" >
+          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)" required="true">
+            <option v-for="mes in listaMes" :value="mes.m" :key="mes.m">
               {{ mes.mes }}
             </option>
           </CFormSelect>
@@ -682,7 +733,9 @@
     <CForm @submit.prevent="getReporteMes()">
       <CModalHeader class="headercolor" dismiss @close="clickModalDias(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual Segmentado</h6>
+          <h6>
+            <CIcon icon="cil-description" size="lg" class="me-2" />Reporte Mensual Segmentado
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -690,7 +743,8 @@
         <hr />
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Gestion </CInputGroupText>
-          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)" @update:model-value="reporteMes.gestion = Number($event)" required="true">
+          <CFormSelect v-model="reporteMes.gestion" :model-value="String(reporteMes.gestion)"
+            @update:model-value="reporteMes.gestion = Number($event)" required="true">
             <option v-for="y in listaGestion" :key="y" :value="y">
               {{ y }}
             </option>
@@ -699,25 +753,27 @@
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Mes </CInputGroupText>
-          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)"  required="true">
+          <CFormSelect v-model="reporteMes.mes" :model-value="String(reporteMes.mes)" required="true">
             <option v-for="mes in listaMes" :key="mes.m" :value="mes.m">
               {{ mes.mes }}
             </option>
           </CFormSelect>
         </CInputGroup>
-        
+
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Inicio </CInputGroupText>
-          <CFormSelect v-model="reporteMes.di" :model-value="String(reporteMes.di)" @update:model-value="reporteMes.di = Number($event)" required="true">
+          <CFormSelect v-model="reporteMes.di" :model-value="String(reporteMes.di)"
+            @update:model-value="reporteMes.di = Number($event)" required="true">
             <option value=""></option>
             <option v-for="i = 1 in 31" :key="i" :value="i">{{ i }}</option>
           </CFormSelect><br>
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Fin </CInputGroupText>
-          <CFormSelect v-model="reporteMes.df" :model-value="String(reporteMes.df)" @update:model-value="reporteMes.df = Number($event)" required="true">
+          <CInputGroupText as="label">Fin </CInputGroupText>
+          <CFormSelect v-model="reporteMes.df" :model-value="String(reporteMes.df)"
+            @update:model-value="reporteMes.df = Number($event)" required="true">
             <option v-for="j = 1 in 31" :key="j" :value="j">{{ j }}</option>
           </CFormSelect>
         </CInputGroup>
@@ -754,7 +810,7 @@ export default {
   },
   data() {
     return {
-      titulo:'Modulo SCC',
+      titulo: '',
       tabScc: 1,
       modalDetalleObs: false,
       modalBiometrico: false,
@@ -772,195 +828,29 @@ export default {
       reporteFinal: [],
       listaObs: [],
       listaGestion: [],
-      listaMes: [
-        { m: "01", mes: "Enero" },
-        { m: "02", mes: "Febrero" },
-        { m: "03", mes: "Marzo" },
-        { m: "04", mes: "Abril" },
-        { m: "05", mes: "Mayo" },
-        { m: "06", mes: "Junio" },
-        { m: "07", mes: "Julio" },
-        { m: "08", mes: "Agosto" },
-        { m: "09", mes: "Septiembre" },
-        { m: "10", mes: "Octubre" },
-        { m: "11", mes: "Noviembre" },
-        { m: "12", mes: "Diciembre" },
-      ],
+      listaMes: [],
       listaHorarios: [],
+      tipoOpciones: [],
       id_bio: 0,
       id_horario: 0,
       getPB: true,
       obsgestion: 0,
       obsmes: 1,
       archivo: "",
-      tituloh:"No tiene Un horario Actual Designado ",
-      reporteMes: {
-        id_horario: "",
-        cif: "",
-        gestion: 2023,
-        mes: 1,
-        di: 0,
-        df: 0,
-        listaPerfil: [],
-        persona: {
-          id: null,
-          _01cif: "",
-          _02ci: "",
-          _03complemento: "",
-          _04nombre: "",
-          _05paterno: "",
-          _06materno: "",
-          _07fecha: "",
-          _08sexo: "",
-          _09cel: "",
-          _10correo: "",
-        },
-      },
-      biometrico: {
-        id: null,
-        user_id: 0,
-        nombre: "",
-        cif: 0,
-        estado: 0,
-        horario: 0,
-        lugar: "",
-        id_tipo: 0,
-        detalle: "",
-        sexo: 0,
-      },
-      egovf: {
-        idPersona: 0,
-        nombre: "",
-        paterno: "",
-        materno: "",
-        fecha: "",
-        sexo: 0,
-        idUsuario: 0,
-        cif: 0,
-        matricula: 0,
-        ci: "",
-        ci_com: 0,
-        complemento: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        dependiente: "",
-        sigla: "",
-        foto: "",
-      },
-      horario: {
-        cif: 0,
-        fecha:"",
-        salida:"",
-        tipo:0,
-        lem: "08:30",
-        lsm: "12:30",
-        let: "14:30",
-        lst: "18:30",
-        mem: "08:30",
-        msm: "12:30",
-        met: "14:30",
-        mst: "18:30",
-        miem: "08:30",
-        mism: "12:30",
-        miet: "14:30",
-        mist: "18:30",
-        jem: "08:30",
-        jsm: "12:30",
-        jet: "14:30",
-        jst: "18:30",
-        vem: "08:30",
-        vsm: "12:30",
-        vet: "14:30",
-        vst: "18:30",
-        sem: "08:30",
-        ssm: "12:30",
-        set: "14:30",
-        sst: "18:30",
-        dem: "08:30",
-        dsm: "12:30",
-        det: "14:30",
-        dst: "18:30"
-      },
-      horarioPerfil: {
-        id: 0,
-        cif: this.mscc.cif,
-        lem: "08:30",
-        lsm: "12:30",
-        let: "14:30",
-        lst: "18:30",
-        mem: "08:30",
-        msm: "12:30",
-        met: "14:30",
-        mst: "18:30",
-        miem: "08:30",
-        mism: "12:30",
-        miet: "14:30",
-        mist: "18:30",
-        jem: "08:30",
-        jsm: "12:30",
-        jet: "14:30",
-        jst: "18:30",
-        vem: "08:30",
-        vsm: "12:30",
-        vet: "14:30",
-        vst: "18:30",
-        sem: "08:30",
-        ssm: "12:30",
-        set: "14:30",
-        sst: "18:30",
-        dem: "08:30",
-        dsm: "12:30",
-        det: "14:30",
-        dst: "18:30",
-      },
-      obs: {
-        cif: null,
-        uidobs: "",
-        fechainicio: "",
-        fechafin: "",
-        detalle: "",
-        imagen: "",
-        tipo: "Seleccionar Tipo",
-        horaEntrada: "08:30",
-        horaSalida:"16:30",
-        url: ""
-      },
-      obsDetalle: {
-        id: 0,
-        idObs:0,
-        cif:0,
-        sexo:0,
-        uidobs:"",
-        fechainicio:"",
-        fechafin:"",
-        gestion:0,
-        mes:0,
-        di:0,
-        df:0,
-        detalle:"",
-        imagen:"",
-        tipo:"",
-        horaEntrada:"",
-        hentrada:"",
-        mentrada:"",
-        horaSalida:"",
-        hsalida:"",
-        msalida:"",
-        url:"",
-        estado:0,
-        idtipo:"PRIVADO",
-        datos: {
-            cif: 0,
-            nombre: "",
-            apellido: "",
-        },
-        forma:{
-            color:'',
-            estado:''
-        }
-      },
+      tituloh: "No tiene Un horario Actual Designado ",
+      reporteMes: { ...this.$models.reporteMesModel },
+
+      biometrico: { ...this.$models.biometricoModel },
+
+      egovf: { ...this.$models.egovfModel },
+
+      horario: { ...this.$models.horarioModel },
+
+      horarioPerfil: { ...this.$models.horarioPerfilModel(this.mscc.cif) },
+
+      obs: { ...this.$models.obsModel },
+
+      obsDetalle: { ...this.$models.obsDetalleModel },
     };
   },
   created() {
@@ -969,12 +859,20 @@ export default {
   },
   mounted() {
     this.getListarCifCero(); // funcion que trae La lista de usuarios Registrados en los Biometricos
+    this.listaMes = this.$functions.listaMes();
+    const gestion = this.$functions.getGestion();
+    this.obsgestion = gestion.gestion;
+    this.reporteMes.gestion = gestion.gestion;
+    this.reporteMes.mes = gestion.mes;
+    this.listaGestion = gestion.lgestion;
+    this.tipoOpciones = this.$functions.tipoOpciones();
+    this.titulo = this.$route.meta.title;
   },
   updated() {
     this.egovf = this.mscc; // pasamos el props a objeto egovf
     if (this.egovf.cif > 0 && this.getPB) {
       this.getPerfilBiometrico(); // funcion que debuelbe una lista del Usuario registrado en los biometricos
-      this.getGestion(); // funcion que crea una lista de gestiones desde el 2021
+      //this.getGestion(); // funcion que crea una lista de gestiones desde el 2021
       this.getPB = false; // cambiamos el valor para evitar la actualizacion constante
     }
     this.obsDetalle.datos.cif = this.egovf.cif;
@@ -982,20 +880,20 @@ export default {
     this.obsDetalle.datos.apellido = this.egovf.paterno + " " + this.egovf.materno;
   },
   methods: {
-    selectFile(event){// Funcion que permite cambiar los datos del archivo
-        const fileInput = this.getSafeFileInput(event);
-        if (!fileInput?.files?.length) {
-            this.resetFileInput();
-            return;
-        }
-        
-        this.archivo = fileInput.files[0];
-        
-        if (!this.validateFile(this.archivo)) {
-            this.resetFileInput();
-            return;
-        }
-        this.fileValid = true;
+    selectFile(event) {// Funcion que permite cambiar los datos del archivo
+      const fileInput = this.getSafeFileInput(event);
+      if (!fileInput?.files?.length) {
+        this.resetFileInput();
+        return;
+      }
+
+      this.archivo = fileInput.files[0];
+
+      if (!this.$egovf.validateFile(this.archivo)) {
+        this.resetFileInput();
+        return;
+      }
+      this.fileValid = true;
     },
     async getListarCifCero() {
       // funcion que trae una lista de usuarios Registrados en los Biometricos
@@ -1018,41 +916,28 @@ export default {
     async getHorario() {
       // Funcion que llama el horario del usuario
       // revisado
-      if(this.id_horario>0){
-        await this.sccService.getHorario(2025, this.egovf.cif).then((response) => {
+      if (this.id_horario > 0) {
+        await this.sccService.getHorario(this.reporteMes.gestion, this.egovf.cif).then((response) => {
           this.tituloh = "Horario Actual";
           this.horarioPerfil = response.data;
         });
-        
+
       }
     },
     async getListaHorario() {
       // Funcion que llama una lista de Horarios del usuario deacuerdo a la gestion
       await this.sccService.getListaHorario(this.egovf.cif, this.obsgestion).then((response) => {
-          this.listaHorarios = response.data;
-        });
+        this.listaHorarios = response.data;
+      });
     },
     async getObsUsuario() {
       // Funcion que llama una lista de Observaciones del usuario
       await this.sccService.getObsUsuario(this.egovf.cif, this.obsgestion, this.obsmes).then((response) => {
-          this.listaObs = response.data;
-        });
+        this.listaObs = response.data;
+      });
       if (this.listaObs.length == 0) {
         this.$swal.fire("No se encontro ninguna Observacion", "", "info");
       }
-    },
-    getGestion() {
-      // funcion que crea una lista de gestiones desde el 2021
-      // revisado
-      var lgestion = [];
-      const fecha = new Date();
-      this.obsgestion = fecha.getFullYear();
-      for (var i = 2021; i <= this.obsgestion; i++) {
-        lgestion.push(i);
-      }
-      this.listaGestion = lgestion;
-      this.reporteMes.gestion = this.obsgestion;
-      this.reporteMes.mes = fecha.getMonth();
     },
     datosChange() {
       //Funcion que cambia los parametros del Biometrico para su registro
@@ -1066,7 +951,7 @@ export default {
           this.biometrico.sexo = this.egovf.sexo;
           return (true);
         }
-        
+
       });
     },
     addHorario() {
@@ -1087,11 +972,11 @@ export default {
           if (result.isConfirmed) {
             this.sccService.addHorario(this.horario).then((response) => {
               if (response.status == 201) {
-                this.$swal.fire("Los Horarios fueron Agregados al Empleado Corectamente","","success").then((res) => {
-                    if (res) location.reload();
-                  });
+                this.$swal.fire("Los Horarios fueron Agregados al Empleado Corectamente", "", "success").then((res) => {
+                  if (res) location.reload();
+                });
               } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
+                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
               }
             });
           } else if (result.isDenied) {
@@ -1103,68 +988,68 @@ export default {
       //Funcion para registrar una Observacion del Usuario
       this.uploading = true;
       this.uploadProgress = 0;
-      try{
-          const formData = new FormData();
-          formData.append('archivo',this.archivo);
-          const config = {
-              onUploadProgress: progressEvent => {
-                  this.uploadProgress = Math.round(
-                      (progressEvent.loaded * 100) / progressEvent.total
-                  );
-              }
-          };
-          const uploadResponse = await this.uploadService.addImagen(formData, config);
-          if (uploadResponse.status !== 200) {
-              throw new Error('Error al subir archivo');
+      try {
+        const formData = new FormData();
+        formData.append('archivo', this.archivo);
+        const config = {
+          onUploadProgress: progressEvent => {
+            this.uploadProgress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
           }
-          
-          this.obs.url = this.uploadService.getUrl()+ uploadResponse.data.nombre;
-          this.obs.imagen = uploadResponse.data.nombre;
-          this.obs.cif = this.egovf.cif;
+        };
+        const uploadResponse = await this.uploadService.addImagen(formData, config);
+        if (uploadResponse.status !== 200) {
+          throw new Error('Error al subir archivo');
+        }
 
-          this.$swal.fire({
-              title: "Desea agregar las Observaciones de Asistencia al Empleado?" +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
-              showDenyButton: true,
-              icon:'info',
-              confirmButtonText: 'Aceptar',
-              denyButtonText: 'Cancelar',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  this.sccService.addObs(this.obs).then(response =>{
-                      if(response.status == 201){
-                          this.$swal.fire("Las Observaciones fueron Agregados Corectamente a " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,"","success").then((res)=>{
-                              if(res)
-                                location.reload();
-                          });
-                      }
-                      else{
-                          this.$swal.fire('La Observacion no pudo ser Registrada', ''+ response.status, 'error');
-                      }
-                  });
-                      
-              } else if (result.isDenied) {
-                  this.$swal.fire('Datos Cancelados', '', 'info');
+        this.obs.url = this.uploadService.getUrl() + uploadResponse.data.nombre;
+        this.obs.imagen = uploadResponse.data.nombre;
+        this.obs.cif = this.egovf.cif;
+
+        this.$swal.fire({
+          title: "Desea agregar las Observaciones de Asistencia al Empleado?" + this.egovf.nombre + " " + this.egovf.paterno + " " + this.egovf.materno,
+          showDenyButton: true,
+          icon: 'info',
+          confirmButtonText: 'Aceptar',
+          denyButtonText: 'Cancelar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.sccService.addObs(this.obs).then(response => {
+              if (response.status == 201) {
+                this.$swal.fire("Las Observaciones fueron Agregados Corectamente a " + this.egovf.nombre + " " + this.egovf.paterno + " " + this.egovf.materno, "", "success").then((res) => {
+                  if (res)
+                    location.reload();
+                });
               }
-          });
-      }catch(err){
-          this.$swal.fire('El archivo no pudo ser Guardado  '+ err,'', 'error');
-      }finally {
-          this.uploading = false;
-          this.uploadProgress = 0;
+              else {
+                this.$swal.fire('La Observacion no pudo ser Registrada', '' + response.status, 'error');
+              }
+            });
+
+          } else if (result.isDenied) {
+            this.$swal.fire('Datos Cancelados', '', 'info');
+          }
+        });
+      } catch (err) {
+        this.$swal.fire('El archivo no pudo ser Guardado  ' + err, '', 'error');
+      } finally {
+        this.uploading = false;
+        this.uploadProgress = 0;
       }
     },
     async updateObsBio(id, estado) {
       var uObs = {
         id: 0,
         cif: 0,
-        idObs:0,
+        idObs: 0,
         horaEntrada: "",
         horaSalida: "",
         hentrada: 0,
         hsalida: 0,
         mentrada: 0,
-        msalida:0,
-        estado:0
+        msalida: 0,
+        estado: 0
       };
       this.listaObs.forEach((obs) => {
         if (obs.id == id) {
@@ -1182,33 +1067,33 @@ export default {
         }
       });
       await this.$swal.fire({
-          title:"Desea Actualizar la Observacion de ? " +this.egovf.nombre +" " +this.egovf.paterno + " " +this.egovf.materno,
-          showDenyButton: true,
-          icon: "info",
-          confirmButtonText: "Aceptar",
-          denyButtonText: "Cancelar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.sccService.updateObsBio(uObs).then((response) => {
-              if (response.status == 200) {
-                this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
-                    if (res) location.reload();
-                  });
-              } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
-              }
-            });
-          } else if (result.isDenied) {
-            this.$swal.fire("Datos Cancelados", "", "info");
-          }
-        });
+        title: "Desea Actualizar la Observacion de ? " + this.egovf.nombre + " " + this.egovf.paterno + " " + this.egovf.materno,
+        showDenyButton: true,
+        icon: "info",
+        confirmButtonText: "Aceptar",
+        denyButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.sccService.updateObsBio(uObs).then((response) => {
+            if (response.status == 200) {
+              this.$swal.fire("Observacion Actualizada Corectamente", "", "success").then((res) => {
+                if (res) location.reload();
+              });
+            } else {
+              this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+            }
+          });
+        } else if (result.isDenied) {
+          this.$swal.fire("Datos Cancelados", "", "info");
+        }
+      });
     },
     async updateBiometrico() {
       // Funcion para registrar al usuario con un biometrico
       // verificado
       await this.$swal
         .fire({
-          title:"Desea Agregar el Biometrico  al Ciudadano ? " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
+          title: "Desea Agregar el Biometrico  al Ciudadano ? " + this.egovf.nombre + " " + this.egovf.paterno + " " + this.egovf.materno,
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
@@ -1217,14 +1102,14 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateBiometrico(this.biometrico).then((response) => {
-                if (response.status == 200) {
-                  this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente","","success").then((res) => {
-                      if (res) location.reload();
-                    });
-                } else {
-                  this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
-                }
-              });
+              if (response.status == 200) {
+                this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente", "", "success").then((res) => {
+                  if (res) location.reload();
+                });
+              } else {
+                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+              }
+            });
           } else if (result.isDenied) {
             this.$swal.fire("Datos Cancelados", "", "info");
           }
@@ -1245,7 +1130,7 @@ export default {
 
       await this.$swal
         .fire({
-          title:"Desea Agregar el Biometrico  al Ciudadano ? " +this.egovf.nombre +" " +this.egovf.paterno +" " +this.egovf.materno,
+          title: "Desea Agregar el Biometrico  al Ciudadano ? " + this.egovf.nombre + " " + this.egovf.paterno + " " + this.egovf.materno,
           showDenyButton: true,
           icon: "info",
           confirmButtonText: "Aceptar",
@@ -1254,14 +1139,14 @@ export default {
         .then((result) => {
           if (result.isConfirmed) {
             this.sccService.updateBiometricoCif(this.biometrico).then((response) => {
-                if (response.status == 200) {
-                  this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente","","success").then((res) => {
-                      if (res) location.reload();
-                    });
-                } else {
-                  this.$swal.fire("Los Datos no fueron Guardados Error" + response.status,"","error");
-                }
-              });
+              if (response.status == 200) {
+                this.$swal.fire("Los datos del Biometrico fueron Agregados al Ciudadano Corectamente", "", "success").then((res) => {
+                  if (res) location.reload();
+                });
+              } else {
+                this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+              }
+            });
           } else if (result.isDenied) {
             this.$swal.fire("Datos Cancelados", "", "info");
           }
@@ -1275,11 +1160,11 @@ export default {
       this.$router.push({
         name: "ReporteView",
         params: {
-          cifCiudadano:this.reporteMes.cif,
-          gestion:this.reporteMes.gestion,
-          m:this.reporteMes.mes,
-          di:this.reporteMes.di,
-          df:this.reporteMes.df
+          cifCiudadano: this.reporteMes.cif,
+          gestion: this.reporteMes.gestion,
+          m: this.reporteMes.mes,
+          di: this.reporteMes.di,
+          df: this.reporteMes.df
         },
       });
     },
@@ -1373,7 +1258,7 @@ export default {
       this.listaObs.forEach((obs) => {
         if (obs.id === id) {
           this.obsDetalle.id = obs.id;
-          this.obsDetalle.cif=obs.cif;
+          this.obsDetalle.cif = obs.cif;
           this.obsDetalle.idObs = obs.idObs;
           this.obsDetalle.uidobs = obs.uidobs;
           this.obsDetalle.fechainicio = obs.fechainicio;
@@ -1386,23 +1271,23 @@ export default {
           this.obsDetalle.url = obs.url;
           this.obsDetalle.estado = obs.estado;
 
-          if(obs.idtipo == 1){
-            this.obsDetalle.idtipo="GENERAL";
+          if (obs.idtipo == 1) {
+            this.obsDetalle.idtipo = "GENERAL";
           }
-          else{
-            this.obsDetalle.idtipo="PRIVADO";
+          else {
+            this.obsDetalle.idtipo = "PRIVADO";
           }
-          if(this.obsDetalle.estado==1){
-              this.obsDetalle.forma.color='success';
-              this.obsDetalle.forma.estado='Aprobado';
+          if (this.obsDetalle.estado == 1) {
+            this.obsDetalle.forma.color = 'success';
+            this.obsDetalle.forma.estado = 'Aprobado';
           }
-          if(this.obsDetalle.estado==0){
-              this.obsDetalle.forma.color='warning';
-              this.obsDetalle.forma.estado='En Espera';
+          if (this.obsDetalle.estado == 0) {
+            this.obsDetalle.forma.color = 'warning';
+            this.obsDetalle.forma.estado = 'En Espera';
           }
-          if(this.obsDetalle.estado==2){
-              this.obsDetalle.forma.color='danger';
-              this.obsDetalle.forma.estado='Rechazado';
+          if (this.obsDetalle.estado == 2) {
+            this.obsDetalle.forma.color = 'danger';
+            this.obsDetalle.forma.estado = 'Rechazado';
           }
           return true;
         }
@@ -1440,71 +1325,53 @@ export default {
     clickModalDias(dias) {
       this.modalDias = dias;
     },
-    getTipo(){
-        if(this.obs.tipo == 'Entrada M.')
-            this.obs.horaEntrada = '08:30';
-        if(this.obs.tipo == 'Salida M.')
-            this.obs.horaSalida = '12:30';
-        if(this.obs.tipo == 'Entrada T.')
-            this.obs.horaEntrada = '14:30';
-        if(this.obs.tipo == 'Salida T.')
-            this.obs.horaSalida = '18:30';
-        if(this.obs.tipo == 'continuo')
-            this.obs.horaSalida = '16:30';
-        if(this.obs.tipo == 'continuoingreso'){
-            this.obs.horaEntrada = '08:30';
-            this.obs.horaSalida = '16:30';
-        }
-        if(this.obs.tipo == 'asueto')
-            this.obs.horaEntrada = '08:30';
+    getTipo(tipoSeleccionado) {
+      const hora = this.$egovf.getObsHora(tipoSeleccionado);
+      this.obs.horaEntrada = hora.horaEntrada;
+      this.obs.horaSalida = hora.horaSalida;
     },
     mostrarHoraIngreso() {
-        const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.","horas","extraordinario","comision","permiso"];
-        return tiposPermitidos.includes(this.obs.tipo);
+      const tiposPermitidos = ["continuoingreso", "Entrada M.", "Entrada T.", "horas", "extraordinario", "comision", "permiso"];
+      return tiposPermitidos.includes(this.obs.tipo);
     },
     mostrarHoraSalida() {
-        const tiposPermitidos = ["continuoingreso","continuo", "Salida M.", "Salida T."];
-        return tiposPermitidos.includes(this.obs.tipo);
+      const tiposPermitidos = ["continuoingreso", "continuo", "Salida M.", "Salida T."];
+      return tiposPermitidos.includes(this.obs.tipo);
     },
     //funciones para validar el archivo a subir
     getSafeFileInput(event) {
-    // Todas las formas posibles de obtener el input
-        return (
-            // CoreUI v4+ (recomendado)
-            this.$refs.fileInput?.$refs?.input ||
-            
-            // Event target
-            event?.target ||
-            
-            // CoreUI v3
-            this.$refs.fileInput?.$el?.querySelector?.('input[type="file"]') ||
-            
-            // Último recurso
-            document.getElementById('filedoc')
-        );
-    },
+      // Todas las formas posibles de obtener el input
+      return (
+        // CoreUI v4+ (recomendado)
+        this.$refs.fileInput?.$refs?.input ||
 
-    validateFile(file) {
-        const VALID_TYPES = ['image/jpeg', 'image/png'];
-        return file && VALID_TYPES.includes(file.type);
+        // Event target
+        event?.target ||
+
+        // CoreUI v3
+        this.$refs.fileInput?.$el?.querySelector?.('input[type="file"]') ||
+
+        // Último recurso
+        document.getElementById('filedoc')
+      );
     },
 
     resetFileInput() {
-        this.archivo=null;
-        this.fileValid = false;
-        const input = this.getSafeFileInput();
-        if (input) input.value = '';
+      this.archivo = null;
+      this.fileValid = false;
+      const input = this.getSafeFileInput();
+      if (input) input.value = '';
     },
   },
 };
 </script>
 <style scoped>
-
 CBadge {
   padding: 6px 10px;
   font-size: 0.9rem;
 }
-.datos{
-    font-size: 12px;
+
+.datos {
+  font-size: 12px;
 }
 </style>

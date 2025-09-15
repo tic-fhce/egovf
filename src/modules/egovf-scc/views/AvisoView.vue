@@ -7,7 +7,7 @@
             <CCol :lg="6">
               <div class="align-items-center">
                 <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
-                <label class="mb-0 fs-6 text-white">{{titulo}}</label>
+                <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
               </div>
             </CCol>
             <CCol :lg="6" class="text-end">
@@ -32,10 +32,10 @@
                 <tr v-for="aviso in listaAvisos" :key="aviso.id">
                   <th scope="row">{{ aviso.id }}</th>
                   <td>{{ aviso.titulo }}
-                    <CProgress thin color="success" :value="100"/>
+                    <CProgress thin color="success" :value="100" />
                     <div class="clearfix">
                       <div class="float-start">
-                        <strong>{{aviso.icon}}</strong>
+                        <strong>{{ aviso.icon }}</strong>
                       </div>
                       <div class="float-end">
                         <CBadge v-if="aviso.estado == 1" color="success">Activo</CBadge>
@@ -46,7 +46,7 @@
                   <td>{{ aviso.detalle }}</td>
                   <td>
                     <CButton class="font" color="success" @click="avisoSelect(aviso.id)" size="sm">
-                      <CIcon icon="cil-pencil"/>
+                      <CIcon icon="cil-pencil" />
                     </CButton>
                   </td>
                 </tr>
@@ -63,23 +63,25 @@
     <CForm @submit.prevent="addAviso()">
       <CModalHeader class="headercolor" dismiss @close="clickModalAviso(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Agregar Nuevo Aviso</h6>
+          <h6>
+            <CIcon icon="cil-medical-cross" class="me-2" /> Agregar Nuevo Aviso
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
 
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Titulo</CInputGroupText>
-          <CFormInput type="text" v-model="aviso.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
+          <CFormInput type="text" v-model="aviso.titulo" placeholder="Titulo del Aviso a colocar" required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Detalle</CInputGroupText>
-          <CFormTextarea  cols="30" rows="5" v-model="aviso.detalle" required="true"> </CFormTextarea>
+          <CInputGroupText as="label">Detalle</CInputGroupText>
+          <CFormTextarea cols="30" rows="5" v-model="aviso.detalle" required="true"> </CFormTextarea>
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText as="label" >Icono</CInputGroupText>
+          <CInputGroupText as="label">Icono</CInputGroupText>
           <CFormSelect v-model="aviso.icon" :model-value="String(aviso.icon)" required="true">
             <option value="info">Informacion</option>
             <option value="error">Error</option>
@@ -107,22 +109,25 @@
     <CForm @submit.prevent="updateAviso()">
       <CModalHeader class="headercolor" dismiss @close="clickModalAvisoUpdate(false)">
         <CModalTitle>
-          <h6><CIcon icon="cil-medical-cross"  class="me-2" /> Actualizar Aviso</h6>
+          <h6>
+            <CIcon icon="cil-medical-cross" class="me-2" /> Actualizar Aviso
+          </h6>
         </CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CInputGroup class="mb-3">
           <CInputGroupText as="label">Titulo</CInputGroupText>
-          <CFormInput type="text" v-model="avisoUpdate.titulo" placeholder="Titulo del Aviso a colocar" required="true"/>
+          <CFormInput type="text" v-model="avisoUpdate.titulo" placeholder="Titulo del Aviso a colocar"
+            required="true" />
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText  as="label">Detalle</CInputGroupText>
-          <CFormTextarea  cols="30" rows="5" v-model="avisoUpdate.detalle" required="true"> </CFormTextarea>
+          <CInputGroupText as="label">Detalle</CInputGroupText>
+          <CFormTextarea cols="30" rows="5" v-model="avisoUpdate.detalle" required="true"> </CFormTextarea>
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText as="label" >Icono</CInputGroupText>
+          <CInputGroupText as="label">Icono</CInputGroupText>
           <CFormSelect v-model="avisoUpdate.icon" :model-value="String(avisoUpdate.icon)" required="true">
             <option value="info">Informacion</option>
             <option value="error">Error</option>
@@ -133,10 +138,11 @@
         </CInputGroup>
 
         <CInputGroup class="mb-3">
-          <CInputGroupText as="label" >Estado</CInputGroupText>
-          <CFormSelect v-model="avisoUpdate.estado" :model-value="String(avisoUpdate.estado)" @update:model-value="avisoUpdate.estado = Number($event)" required="true">
+          <CInputGroupText as="label">Estado</CInputGroupText>
+          <CFormSelect v-model="avisoUpdate.estado" :model-value="String(avisoUpdate.estado)"
+            @update:model-value="avisoUpdate.estado = Number($event)" required="true">
             <option value="1">Activo</option>
-              <option value="0">Inactivo</option>
+            <option value="0">Inactivo</option>
           </CFormSelect>
         </CInputGroup>
 
@@ -183,6 +189,7 @@ export default {
         pass: "",
         unidad: "",
         sigla: "",
+        foto: ""
       },
       aviso: {
         titulo: "",
@@ -201,7 +208,7 @@ export default {
   },
   beforeCreate() {
     if (this.$cookies.get("cif") == null) {
-      this.$router.push("/");
+      window.location.href = '/';
     }
   },
   created() {
@@ -240,46 +247,46 @@ export default {
     addAviso() {
       // funcion para el registro de un Aviso
       this.$swal.fire({
-          title: "Desea Registrar El Aviso",
-          icon: "info",
-          showDenyButton: true,
-          confirmButtonText: "Registrar",
-          denyButtonText: "Cancelar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.sccService.addAviso(this.aviso).then((response) => {
-              if (response.status == 201) {
-                this.$swal.fire("Aviso Registrado Corectamente", "", "success").then((result) => {
-                    if (result) location.reload();
-                  });
-              } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
-              }
-            });
-          }
-        });
+        title: "Desea Registrar El Aviso",
+        icon: "info",
+        showDenyButton: true,
+        confirmButtonText: "Registrar",
+        denyButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.sccService.addAviso(this.aviso).then((response) => {
+            if (response.status == 201) {
+              this.$swal.fire("Aviso Registrado Corectamente", "", "success").then((result) => {
+                if (result) location.reload();
+              });
+            } else {
+              this.$swal.fire("Los Datos no fueron Guardados Error", "" + response.status, "error");
+            }
+          });
+        }
+      });
     },
     updateAviso() {
       // funcion para actualizar un Aviso
       this.$swal.fire({
-          title: "Desea Actualizar El Aviso",
-          icon: "info",
-          showDenyButton: true,
-          confirmButtonText: "Actualizar",
-          denyButtonText: "Cancelar",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.sccService.updateAviso(this.avisoUpdate).then((response) => {
-              if (response.status == 200) {
-                this.$swal.fire("Aviso Actualizado Corectamente", "", "success").then((result) => {
-                    if (result) location.reload();
-                  });
-              } else {
-                this.$swal.fire("Los Datos no fueron Guardados Error","" + response.status,"error");
-              }
-            });
-          }
-        });
+        title: "Desea Actualizar El Aviso",
+        icon: "info",
+        showDenyButton: true,
+        confirmButtonText: "Actualizar",
+        denyButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.sccService.updateAviso(this.avisoUpdate).then((response) => {
+            if (response.status == 200) {
+              this.$swal.fire("Aviso Actualizado Corectamente", "", "success").then((result) => {
+                if (result) location.reload();
+              });
+            } else {
+              this.$swal.fire("Los Datos no fueron Guardados Error", "" + response.status, "error");
+            }
+          });
+        }
+      });
     },
     avisoSelect(id) {
       this.listaAvisos.forEach((aviso) => {

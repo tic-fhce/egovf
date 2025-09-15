@@ -22,6 +22,8 @@ import 'nprogress/nprogress.css';
 import VueSelect from "vue-select"
 
 import '@/utils/axios'
+import functions from '@/utils/functions'
+import models from '@/utils/models'
 
 const app = createApp(Fhce)
 app.use(store)
@@ -32,7 +34,8 @@ app.use(VueCookies, { expires: '1d' })
 app.use(VueSweetalert2)
 app.use(jsPDF)
 
-
+app.config.globalProperties.$functions = functions
+app.config.globalProperties.$models = models
 app.config.globalProperties.$nprogress = NProgress
 
 app.provide('icons', icons)

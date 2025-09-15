@@ -45,16 +45,7 @@ export default {
                     icono: "cil-bullhorn"
                 }
             ],
-            usuario: {
-                token: '',
-                cif: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                sigla: '',
-                foto: ''
-            }
+            usuario: {...this.$models.usuarioModel}
         }
     },
     created() {
@@ -64,7 +55,7 @@ export default {
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     methods: {

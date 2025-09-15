@@ -176,7 +176,7 @@ export default {
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     created() {
