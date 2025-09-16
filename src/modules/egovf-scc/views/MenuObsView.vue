@@ -80,16 +80,7 @@ export default {
         listaGestion:[],
         modalObs:false,
         gestion:0,
-        usuario: {
-            token: "",
-            cif: "",
-            correo: "",
-            celular: "",
-            pass: "",
-            unidad: "",
-            sigla: "",
-            foto:""
-        },
+        usuario: {...this.$models.usuarioModel},
     };
   },
   beforeCreate() {
@@ -102,7 +93,7 @@ export default {
   },
   mounted() {
     this.getDatos();
-    const gestion = this.$egovf.getGestion();
+    const gestion = this.$functions.getGestion();
     this.obsgestion = gestion.gestion;
     this.listaGestion = gestion.lgestion;
   },

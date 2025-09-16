@@ -236,11 +236,11 @@ export default {
     mounted() {
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-        const gestion = this.$egovf.getGestion();
+        const gestion = this.$functions.getGestion();
         this.obsgestion = gestion.gestion;
         this.reporteMes.gestion = gestion.gestion;
         this.listaGestion = gestion.lgestion;
-        this.listaMes = this.$egovf.listaMes();
+        this.listaMes = this.$functions.listaMes();
     },
     beforeCreate() {
         if (this.$cookies.get('cif') == null) {

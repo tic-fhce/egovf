@@ -162,15 +162,7 @@ export default {
             listaHorarios:[],
             listaGestion:[],
             mensage:"No tiene Un horario Actual Designado",
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                sigla:''
-            },
+            usuario:{...this.$models.usuarioModel},
             gestion:0,
             horarioPerfil:{
                 id:0,
@@ -190,7 +182,7 @@ export default {
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
         this.getHorario();
-        const gestion = this.$egovf.getGestion();
+        const gestion = this.$functions.getGestion();
         this.gestion = gestion.gestion;
         this.listaGestion = gestion.lgestion;
 
