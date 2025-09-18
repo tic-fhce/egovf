@@ -189,7 +189,7 @@
 //Importamos Servicios
 import PersonaService from '@/modules/egovf/services/personaService';
 import EgovfService from '@/modules/egovf/services/egovfService';
-
+import { getListaCiudadanosCached } from '@/modules/egovf/services/ciudadanoCache';
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
@@ -212,7 +212,7 @@ export default {
       registro: [],
       listaUnidad: [],
       botones: false,
-      usuario: {...this.$models.usuarioModel},
+      usuario: { ...this.$models.usuarioModel },
       persona: {
         cif: 0,
         ci: '',
@@ -273,52 +273,48 @@ export default {
     async getListarCiudadano() { // Funcion que crea una lista de Ciudadanos 
       let loadingAlert = null;
       try {
-        // Mostrar SweetAlert de carga
         loadingAlert = this.$swal.fire({
           title: 'Cargando Ciudadanos',
           html: 'Procesando Ciudadanos<br>mas de 13000 ciudadanos registrados, por favor espere...',
           allowOutsideClick: false,
-          didOpen: () => {
-            this.$swal.showLoading();
-          }
+          didOpen: () => this.$swal.showLoading()
         });
+
         this.$nprogress.start();
 
-        const response = await this.egovfService.getListaCiudadano();
-        this.listaCiudadanos = response.data;
-        await new Promise(resolve => setTimeout(resolve, 100));
+        const data = await getListaCiudadanosCached({
+          forceReload: false,               // true para forzar recarga desde servidor
+          maxAgeMinutes: 10,                // cache válida 60 minutos
+          fetcher: () => this.egovfService.getListaCiudadano()
+        });
+
+        this.listaCiudadanos = data;
 
         this.tabla();
-        this.$swal.close();
-        await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Mostrar éxito
+        this.$swal.close();
+
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         this.$swal.fire({
           icon: 'success',
           title: '¡Completado!',
-          text: `Se procesaron ${this.listaCiudadanos.length} Ciudadanos`,
+          text: `Se procesaron ${this.listaCiudadanos.length} ciudadanos`,
           timer: 2000,
           showConfirmButton: false
         });
 
-
-
+        console.timeEnd('CargaCiudadanos');
       } catch (error) {
-        if (loadingAlert) {
-          this.$swal.close();
-        }
-
-        // Mostrar error
+        if (loadingAlert) this.$swal.close();
         this.$swal.fire({
           icon: 'error',
           title: 'Error en la carga',
           text: error.message || 'Ocurrió un error al procesar los datos',
           confirmButtonText: 'Reintentar'
         });
-
       } finally {
         this.$nprogress.done();
-
       }
 
     },

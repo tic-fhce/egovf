@@ -181,7 +181,7 @@
 
 //Importamos Servicios
 import PersonaService from '@/modules/egovf/services/personaService';
-
+import { getListaPersonasCached } from '@/modules/egovf/services/personaCache';
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
@@ -273,13 +273,18 @@ export default {
         });
         this.$nprogress.start();
 
-        const response = await this.personaService.getListaPersonaCifCero();
-        this.listaPersonas = response.data;
-        await new Promise(resolve => setTimeout(resolve, 100));
+        const data = await getListaPersonasCached({
+          forceReload: false,               // true para forzar recarga desde servidor
+          maxAgeMinutes: 10,                // cache válida 60 minutos
+          fetcher: () => this.personaService.getListaPersonaCifCero()
+        });
+
+        this.listaPersonas = data;
+        //await new Promise(resolve => setTimeout(resolve, 100));
 
         this.tabla();
         this.$swal.close();
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve,100));
 
         // Mostrar éxito
         this.$swal.fire({

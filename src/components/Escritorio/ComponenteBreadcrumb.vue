@@ -1,12 +1,15 @@
 <template>
   <CBreadcrumb class="d-md-down-none me-auto mb-0">
-    <CBreadcrumbItem  
-      v-for="(item, index) in breadcrumbs" 
-      :key="index" 
-      :href="index === breadcrumbs.length - 1 ? null : item.fullPath"
-      :active="index === breadcrumbs.length - 1"
-    >
-      {{ item.name }}
+    <CBreadcrumbItem v-for="(item, index) in breadcrumbs" 
+    :key="index"
+       
+      :active="index === breadcrumbs.length - 1">
+      <router-link v-if="!item.active" :to="item.fullPath">
+        {{ item.name }}
+      </router-link>
+      <span v-else>
+        {{ item.name }}
+      </span>
     </CBreadcrumbItem>
   </CBreadcrumb>
 </template>
@@ -54,14 +57,14 @@ export default {
       if (Object.keys(routesMap.value).length === 0) {
         buildRoutesMap()
       }
-      
+
       breadcrumbs.value = buildBreadcrumbs(route.name, routesMap.value, route.params)
     }
 
     function buildBreadcrumbs(routeName, routesMap, currentParams) {
       const breadcrumbs = []
       let currentRoute = routesMap[routeName]
-      
+
       if (!currentRoute) {
         console.warn(`Ruta no encontrada en el mapa: ${routeName}`)
         return []
@@ -71,25 +74,25 @@ export default {
       while (currentRoute) {
         // Reemplazar parámetros en la ruta
         let fullPath = replaceParamsInPath(currentRoute.path, currentParams)
-        
+
         breadcrumbs.unshift({
           name: getRouteTitle(currentRoute, currentParams),
           path: currentRoute.path, // Path original con placeholders
           fullPath: fullPath, // Path con parámetros reemplazados
           active: false,
         })
-        
+
         // Si no tiene parent, terminamos
         if (!currentRoute.meta?.parent) break
-        
+
         const parentRouteName = currentRoute.meta.parent
-        
+
         // Verificar si la ruta padre existe
         if (!routesMap[parentRouteName]) {
           console.warn(`Ruta padre no encontrada: ${parentRouteName}`)
           break
         }
-        
+
         currentRoute = routesMap[parentRouteName]
       }
 
@@ -112,7 +115,7 @@ export default {
 
     function getRouteTitle(route, params) {
       let title = route.meta?.title || route.name
-      
+
       // Reemplazar parámetros en el título dinámico
       if (title && typeof title === 'string') {
         Object.keys(params).forEach(key => {
@@ -121,7 +124,7 @@ export default {
           }
         })
       }
-      
+
       return title
     }
 
@@ -131,6 +134,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

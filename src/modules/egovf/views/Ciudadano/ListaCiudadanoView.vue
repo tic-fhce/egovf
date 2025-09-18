@@ -116,6 +116,7 @@
 //Importamos Servicios
 import EgovfService from '@/modules/egovf/services/egovfService';
 import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
+import { getListaCiudadanosCached } from '@/modules/egovf/services/ciudadanoCache';
 
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
@@ -139,18 +140,7 @@ export default {
       modalCiudadano: false,
       total: 0,
       usuario: {...this.$models.usuarioModel},
-      ciudadano: {
-        cif: 0,
-        nombre: '',
-        apellido: '',
-        correo: '',
-        celular: '',
-        unidad: '',
-        sigla: '',
-        dependiente: '',
-        foto: '',
-        sexo: 0
-      },
+      ciudadano: {...this.$models.ciudadanoModel},
       empleado: {
         empleado: '',
         fecha: '',
@@ -205,17 +195,23 @@ export default {
             this.$swal.showLoading();
           }
         });
+
         this.$nprogress.start();
-        const response = await this.egovfService.getListaCiudadanoPublico();
-        const ciudadanosOrdenados = response.data.sort((a, b) =>
+
+        const data = await getListaCiudadanosCached({
+          forceReload: false,               // true para forzar recarga desde servidor
+          maxAgeMinutes: 10,                // cache válida 60 minutos
+          fetcher: () => this.egovfService.getListaCiudadanoPublico()
+        });
+        
+        const ciudadanosOrdenados = data.sort((a, b) =>
           a.paterno.localeCompare(b.paterno)
         );
+
         this.listaCiudadanos = ciudadanosOrdenados;
 
-        await new Promise(resolve => setTimeout(resolve, 100));
         this.tabla();
         
-
         this.$swal.close();
 
         await new Promise(resolve => setTimeout(resolve, 500));

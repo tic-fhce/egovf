@@ -878,6 +878,7 @@ export default {
     this.obsDetalle.datos.cif = this.egovf.cif;
     this.obsDetalle.datos.nombre = this.egovf.nombre;
     this.obsDetalle.datos.apellido = this.egovf.paterno + " " + this.egovf.materno;
+    this.obsDetalle.datos.foto = this.egovf.foto;
   },
   methods: {
     selectFile(event) {// Funcion que permite cambiar los datos del archivo

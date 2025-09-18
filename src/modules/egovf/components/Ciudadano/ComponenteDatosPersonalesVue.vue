@@ -50,7 +50,7 @@
                                     <CInputGroup size="sm" class="mb-3">
                                         <CInputGroupText as="label">Celular</CInputGroupText>
                                         <CFormInput type="text" :value="egovf.celular" disabled/>
-                                        <CButton type="button" color="success" class="font" size="sm" @click="openWhatsApp(egovf.celular)" >Whatsapp</CButton>
+                                        <CButton type="button" color="success" class="font" size="sm" @click="openWhatsApp(what)" >Whatsapp</CButton>
                                     </CInputGroup>
 
                                     <CInputGroup size="sm" class="mb-3">
@@ -302,12 +302,7 @@ export default {
                 pass2: '',
                 pass3: ''
             },
-            unidad: {
-                id: 0,
-                unidad: '',
-                dependencia: '',
-                sigla: ''
-            },
+            unidad: {...this.$models.unidadModel},
             datos:{...this.$models.datosModel}
         };
     },
@@ -342,7 +337,7 @@ export default {
             this.usuario.unidad = this.$cookies.get('unidad');
             this.usuario.sigla = this.$cookies.get('sigla');
             this.usuario.foto = this.$cookies.get("foto");
-            this.what + this.egovf.celular;
+            this.what = this.what + this.egovf.celular;
         },
         updatePersona() {
             this.$swal.fire({
@@ -499,7 +494,7 @@ export default {
         openWhatsApp(phone) {
             const cleanedPhone = phone.replace(/[^\d]/g, '');
             if (cleanedPhone.length >= 8) {
-                window.open(`https://wa.me/${cleanedPhone}`, '_blank');
+                window.open(phone, '_blank');
             } else {
                 this.$toast.error('Número de teléfono inválido');
             }

@@ -12,7 +12,21 @@ const usuarioModel = {
 const datosModel = {
     cif: 0,
     nombre: '',
-    apellido: ''
+    apellido: '',
+    foto: ''
+}
+
+const ciudadanoModel = {
+    cif: 0,
+    nombre: '',
+    apellido: '',
+    correo: '',
+    celular: '',
+    unidad: '',
+    sigla: '',
+    dependiente: '',
+    foto: '',
+    sexo: 0
 }
 
 
@@ -45,6 +59,7 @@ const obsDetalleModel = {
         cif: 0,
         nombre: "",
         apellido: "",
+        foto: ""
     },
     forma: {
         color: '',
@@ -213,10 +228,17 @@ const reporteModel = {
         foto: ""
     }
 }
+const unidadModel = {
+    id: 0,
+    unidad: "",
+    dependencia: "",
+    sigla: ""
+}
 
 export default {
     usuarioModel,
     egovfModel,
+    ciudadanoModel,
     obsDetalleModel,
     horarioPerfilModel,
     horarioModel,
@@ -225,5 +247,6 @@ export default {
     reporteMesModel,
     empleadoModel,
     reporteModel,
-    datosModel 
+    datosModel,
+    unidadModel
 }
