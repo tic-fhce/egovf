@@ -8,7 +8,7 @@
             <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
           </div>
           <CButton @click="clickModalModulo(true)" color="dark" class="font" size="sm">
-            <CIcon icon="cil-cloud-upload" class="me-2" />Agregar
+            <CIcon icon="cil-cloud-upload" class="me-2" />Agregar Modulos
           </CButton>
         </CCardHeader>
         <CCardBody>

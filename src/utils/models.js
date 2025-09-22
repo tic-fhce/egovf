@@ -8,6 +8,19 @@ const usuarioModel = {
     sigla: '',
     foto: ''
 }
+const personaModel = {
+    id:0,
+    cif: 0,
+    ci: '',
+    complemento: 'Seleccionar Region Expedida',
+    nombre: '',
+    paterno: '',
+    materno: '',
+    fecha: '',
+    sexo: 'Seleccionar Sexo',
+    cel: '',
+    correo: ''
+}
 
 const datosModel = {
     cif: 0,
@@ -157,7 +170,8 @@ const egovfModel = {
     unidad: "",
     dependiente: "",
     sigla: "",
-    foto: ""
+    foto: "",
+    empleado: 0
 }
 
 const obsModel = {
@@ -237,6 +251,7 @@ const unidadModel = {
 
 export default {
     usuarioModel,
+    personaModel,
     egovfModel,
     ciudadanoModel,
     obsDetalleModel,

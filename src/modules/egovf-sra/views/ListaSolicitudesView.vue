@@ -1,12 +1,4 @@
 <template>
-  <ol class="breadcrumb custom-breadcrumb">
-    <li class="breadcrumb-item">
-      <router-link to="/menusolicitudes" class="breadcrumb-link">Solicitudes</router-link>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">
-      {{ titulo }} >
-    </li>
-  </ol>
   <CRow>
     <CCol :xs="12">
       <CCard>
@@ -697,7 +689,7 @@ export default {
         }
 
       });
-      this.sms = "http://192.168.31.34:8080/evento/" + this.solicitudDetalle.evento.id;
+      this.sms = "https://svfhce.umsa.bo/evento/" + this.solicitudDetalle.evento.id;
       this.clickModalSolicitudDetalle(true);
 
     },

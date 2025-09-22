@@ -705,7 +705,7 @@ export default {
     },
     async updateEstado(estado) {
       if (estado == 0) {
-        this.empleado.salida = this.$egovf.fechaActual();
+        this.empleado.salida = this.$functions.fechaActual();
       }
       this.moduloService.headersUsuario(this.usuario.token);
       await this.$swal.fire({

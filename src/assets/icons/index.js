@@ -124,6 +124,7 @@ import {
   cilLowVision,
   cilBullhorn,
   cilPenAlt,
+  cilReload,
 } from '@coreui/icons'
 
 export const iconsSet = Object.assign(
@@ -225,6 +226,7 @@ export const iconsSet = Object.assign(
     cilLowVision,
     cilBullhorn,
     cilPenAlt,
+    cilReload,
   },
   {
     cifUs,

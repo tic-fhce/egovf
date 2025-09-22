@@ -116,7 +116,6 @@
 //Importamos Servicios
 import EgovfService from '@/modules/egovf/services/egovfService';
 import EmpleadoService from '@/modules/egovf-emp/services/empleadoService';
-import { getListaCiudadanosCached } from '@/modules/egovf/services/ciudadanoCache';
 
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
@@ -198,13 +197,9 @@ export default {
 
         this.$nprogress.start();
 
-        const data = await getListaCiudadanosCached({
-          forceReload: false,               // true para forzar recarga desde servidor
-          maxAgeMinutes: 10,                // cache válida 60 minutos
-          fetcher: () => this.egovfService.getListaCiudadanoPublico()
-        });
+        const response = await this.egovfService.getListaCiudadanoPublico();
         
-        const ciudadanosOrdenados = data.sort((a, b) =>
+        const ciudadanosOrdenados = response.data.sort((a, b) =>
           a.paterno.localeCompare(b.paterno)
         );
 

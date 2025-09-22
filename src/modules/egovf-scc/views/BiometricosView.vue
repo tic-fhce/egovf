@@ -56,17 +56,7 @@ export default {
         return {
             listaPerfil:[],
             sccService:null,
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                sigla:'',
-                foto:''
-            }
-
+            usuario:{...this.$models.usuarioModel}
         }
     },
     mounted(){

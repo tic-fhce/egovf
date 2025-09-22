@@ -515,7 +515,14 @@
         <ComponenteNombres :datos="obsDetalle.datos" />
         <hr />
         <CInputGroup class="mb-3">
-          <h6>{{ empleado.empleado }}</h6>
+          <h6>{{ empleado.empleado }} > <strong>Inicio del Contrato {{empleado.fecha}} </strong></h6>
+        </CInputGroup>
+        <CInputGroup class="mb-3">
+          <CInputGroupText as="label">Fecha valida del Horario.</CInputGroupText>
+          <CInputGroupText as="label">Del </CInputGroupText>
+          <CFormInput type="date" v-model="horario.fecha" required="true" />
+          <CInputGroupText as="label">Al</CInputGroupText>
+          <CFormInput type="date" v-model="horario.salida" required="true" disabled />
         </CInputGroup>
 
         <div class="mb-3 row table-responsive">
@@ -958,10 +965,6 @@ export default {
     addHorario() {
       //Funcion para registrar un Horario al Usuario
       //revisado
-      this.horario.cif = this.egovf.cif;
-      this.horario.fecha = this.empleado.fecha;
-      this.horario.salida = this.empleado.salida;
-      this.horario.tipo = this.empleado.tipoempleado_id;
       this.$swal
         .fire({
           title: "Desea Agregar el Horario de trabajo del Empleado ?",
@@ -1315,6 +1318,10 @@ export default {
       this.modalBiometrico = Bio;
     },
     clickModalHorario(hor) {
+      this.horario.cif = this.egovf.cif;
+      //this.horario.fecha = this.empleado.fecha;
+      this.horario.salida = this.empleado.salida;
+      this.horario.tipo = this.empleado.tipoempleado_id;
       this.modalHorario = hor;
     },
     clickModalObs(cio) {

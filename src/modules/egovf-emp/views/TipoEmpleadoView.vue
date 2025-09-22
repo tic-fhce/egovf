@@ -32,16 +32,7 @@ export default {
     data() {
         return {
             empleadoService: null,
-            usuario: {
-                token: '',
-                cif: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                sigla: '',
-                foto: ''
-            },
+            usuario: {...this.$models.usuarioModel},
             listaTipo: []
         }
     },

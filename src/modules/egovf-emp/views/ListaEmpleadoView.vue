@@ -132,12 +132,9 @@
                 </CInputGroup>
 
                 <CInputGroup class="mb-3">
-                    <CInputGroupText as="label">Fecha de Inicio </CInputGroupText>
+                    <CInputGroupText as="label">Al </CInputGroupText>
                     <CFormInput type="date" v-model="obsall.fechainicio" required="true" />
-                </CInputGroup>
-
-                <CInputGroup class="mb-3">
-                    <CInputGroupText as="label">Fecha Fin </CInputGroupText>
+                    <CInputGroupText as="label">Al </CInputGroupText>
                     <CFormInput type="date" v-model="obsall.fechafin" required="true" />
                 </CInputGroup>
 
@@ -354,16 +351,52 @@ export default {
             }
         },
         async getListaEmpleado() {// Funcion que regresa una lista de Empleados del ModuloEMP 
-            await this.empleadoService.getListaEmpleado(this.idEmpleado).then((response) => {
+            let loadingAlert = null;
+            try {
+                // Mostrar SweetAlert de carga
+                loadingAlert = this.$swal.fire({
+                    title: 'Cargando Empleados',
+                    html: 'Procesando datos, por favor espere...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        this.$swal.showLoading();
+                    }
+                });
+                this.$nprogress.start();
+
+                const response = await this.empleadoService.getListaEmpleado(this.idEmpleado);
                 this.listaEmpleado = response.data;
-                this.getListaCiudadanoEmpleado();
-            });
-        },
-        async getListaCiudadanoEmpleado() { // Funcion que regresa una lista de Ciudadanos que son Empleados del ModuloEgovf
-            await this.egovfService.getListaEmpleado().then(response => {
-                this.listaCiudadanoEmpleado = response.data;
+
+                const responseEmpleado = await this.egovfService.getListaEmpleado();
+                this.listaCiudadanoEmpleado = responseEmpleado.data;
+
                 this.getListaCiudadano();
-            });
+                
+                this.$swal.close();
+                // Mostrar éxito
+                this.$swal.fire({
+                    icon: 'success',
+                    title: '¡Completado!',
+                    text: `Se procesaron ${this.listaCiudadanos.length} Empleados`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } catch (error) {
+                if (loadingAlert) {
+                    this.$swal.close();
+                }
+
+                // Mostrar error
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Error en la carga',
+                    text: error.message || 'Ocurrió un error al procesar los datos',
+                    confirmButtonText: 'Reintentar'
+                });
+
+            } finally {
+                this.$nprogress.done();
+            }
         },
         getListaCiudadano() {//Funcion que una las listas listaEmpelado y listaCiudadanoEmpleado
             this.listaCiudadanos = [];
@@ -422,7 +455,7 @@ export default {
                 this.obsall.cif = this.idEmpleado;
 
                 this.$swal.fire({
-                    title: 'Desea agregar la Observacione de Asistencia a los Empleados?',
+                    title: 'Desea agregar la Observaciones de Asistencia a los Empleados?',
                     showDenyButton: true,
                     icon: 'info',
                     confirmButtonText: 'Aceptar',

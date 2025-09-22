@@ -38,10 +38,11 @@ const routes = [
         meta: { requiresAuth: false }
       },
       {
-        path: "/libreReporte:uriu",
+        path: "/libreReporte/:cifCiudadano/:gestion/:m/:di/:df",
         name: "ReporteLibreView",
         component: () => import("@/views/Usuario/ReporteLibreView.vue"),
-        meta: { requiresAuth: false }
+        props:true,
+        meta: { title: 'Reporte de Asistencia',requiresAuth: false }
       },
       {
         path: "/perfilpublico:cif",

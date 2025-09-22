@@ -151,14 +151,12 @@
 <script>
 //Importamos Servicios
 import SccService from '@/modules/egovf-scc/services/sccService';
-import EgovfService from '@/modules/egovf/services/egovfService';
 export default {
     name:'HorariosView',
     data(){
         return {
             titulo:'Horarios',
             sccService:null,
-            egovfService:null,
             listaHorarios:[],
             listaGestion:[],
             mensage:"No tiene Un horario Actual Designado",
@@ -181,16 +179,17 @@ export default {
     mounted(){
         this.cifCiudadano = this.$cookies.get('cif');
         this.getDatos();
-        this.getHorario();
+        
         const gestion = this.$functions.getGestion();
         this.gestion = gestion.gestion;
         this.listaGestion = gestion.lgestion;
+
+        this.getHorario();
 
     },
     created(){
         //Creamos los Sercicios
         this.sccService = new SccService();
-        this.egovfService = new EgovfService();
     },
     methods:{
         getDatos(){

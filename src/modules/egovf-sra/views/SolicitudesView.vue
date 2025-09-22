@@ -1,12 +1,4 @@
 <template>
-    <ol class="breadcrumb custom-breadcrumb">
-        <li class="breadcrumb-item">
-            <router-link to="/menusolicitudes" class="breadcrumb-link">Solicitudes</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{titulo}} >
-        </li>
-    </ol>
     <CRow>
         <CCol :xs="12">
             <CCard>

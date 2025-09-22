@@ -29,7 +29,7 @@ export default {
     },
     data(){
         return {
-            titulo:'Perfil del Ciudadano',
+            titulo:'',
             egovfService:null,
             usuario:{...this.$models.usuarioModel},
             egovf:{...this.$models.egovfModel},
@@ -45,6 +45,7 @@ export default {
         this.egovfService = new EgovfService();
     },
     mounted(){
+        this.titulo = this.$route.meta.title;
         this.getDatos(); // Llamamos los datos del Usuario
         this.getEgovf(); //llamamos los datos del ciudadano
 

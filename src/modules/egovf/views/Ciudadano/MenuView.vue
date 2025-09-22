@@ -11,6 +11,9 @@
                         <CIcon icon="cil-list" size="lg" class="me-2 text-light" />
                         <label class="mb-0 fs-6 text-white">{{ titulo }}</label>
                     </div>
+                    <CButton @click="actualizarMenu()" color="dark" class="font" size="sm">
+                        <CIcon icon="cil-reload" class="me-2" />Actualizar Menus
+                    </CButton>
                 </CCardHeader>
                 <CCardBody>
                     <div class="table-responsive">
@@ -87,9 +90,9 @@ export default {
             },
             listaEmpleado: [],
             modalMenu: false,
-            usuario: {...this.$models.usuarioModel},
-            egovf: {...this.$models.egovfModel},
-            datos: {...this.$models.datosModel},
+            usuario: { ...this.$models.usuarioModel },
+            egovf: { ...this.$models.egovfModel },
+            datos: { ...this.$models.datosModel },
             menuUsuario: {
                 id: 0,
                 cif: 0,
@@ -183,7 +186,30 @@ export default {
                 return true;
             }
             else return false;
-        }
+        },
+        async actualizarMenu() { // Funcion que actualiza el menu de los modulos 
+            await this.$swal.fire({
+                title: "Se actualizaran los datos del Modulo",
+                showDenyButton: true,
+                icon: "info",
+                confirmButtonText: "Aceptar",
+                denyButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.moduloService.actualizarModulo(this.cifCiudadano, this.idModulo).then((response) => {
+                        if (response.status == 200) {
+                            this.$swal.fire("El Modulo fue Actualizado Correctamente", "", "success").then((res) => {
+                                if (res) location.reload();
+                            });
+                        } else {
+                            this.$swal.fire("Los Datos no fueron Guardados Error" + response.status, "", "error");
+                        }
+                    });
+                } else if (result.isDenied) {
+                    this.$swal.fire("Datos Cancelados", "", "info");
+                }
+            });
+        },
     },
 
 

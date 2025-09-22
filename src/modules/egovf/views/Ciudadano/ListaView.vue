@@ -189,7 +189,6 @@
 //Importamos Servicios
 import PersonaService from '@/modules/egovf/services/personaService';
 import EgovfService from '@/modules/egovf/services/egovfService';
-import { getListaCiudadanosCached } from '@/modules/egovf/services/ciudadanoCache';
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
@@ -204,7 +203,7 @@ export default {
   },
   data() {
     return {
-      titulo: 'Lista de Ciudadanos',
+      titulo: '',
       modalCiudadano: false,
       personaService: null,
       egovfService: null,
@@ -213,18 +212,7 @@ export default {
       listaUnidad: [],
       botones: false,
       usuario: { ...this.$models.usuarioModel },
-      persona: {
-        cif: 0,
-        ci: '',
-        complemento: 'Seleccionar Region Expedida',
-        nombre: '',
-        paterno: '',
-        materno: '',
-        fecha: '',
-        sexo: 'Seleccionar Sexo',
-        cel: '',
-        correo: ''
-      },
+      persona: {...this.$models.personaModel},
       errorCI: "",
       errorCorreo: "",
       errorCelular: "",
@@ -248,6 +236,7 @@ export default {
   mounted() {
     this.getDatos(); // Llamamos los datos del Usuario
     this.getListarCiudadano(); // Funcion que debuelve una lista de ciudadanos 
+    this.titulo = this.$route.meta.title;
   },
   methods: {
     tabla() {
@@ -282,13 +271,9 @@ export default {
 
         this.$nprogress.start();
 
-        const data = await getListaCiudadanosCached({
-          forceReload: false,               // true para forzar recarga desde servidor
-          maxAgeMinutes: 10,                // cache válida 60 minutos
-          fetcher: () => this.egovfService.getListaCiudadano()
-        });
+        const response = await this.egovfService.getListaCiudadano();
 
-        this.listaCiudadanos = data;
+        this.listaCiudadanos = response.data;
 
         this.tabla();
 
@@ -304,7 +289,6 @@ export default {
           showConfirmButton: false
         });
 
-        console.timeEnd('CargaCiudadanos');
       } catch (error) {
         if (loadingAlert) this.$swal.close();
         this.$swal.fire({

@@ -121,7 +121,8 @@
                                             </CBadge>
                                         </td>
                                         <td>
-                                            <CBadge color="light" class="datos">Valido del : {{ horario.fecha }}</CBadge>
+                                            <CBadge color="light" class="datos">Valido del : {{ horario.fecha }}
+                                            </CBadge>
                                         </td>
                                         <td>
                                             <CBadge color="light" class="datos">Hasta {{ horario.valido }}</CBadge>
@@ -165,17 +166,17 @@
                                             <br>{{ value.turno[1] }}<br>{{ value.turno[2] }}<br>{{ value.turno[3] }}
                                         </td>
                                         <td>
-                                            <span v-if="value.hora[0] == 'Sin Marcar'"
-                                                class="badge bg-danger">{{ value.hora[0] }}</span>
+                                            <span v-if="value.hora[0] == 'Sin Marcar'" class="badge bg-danger">{{
+                                                value.hora[0] }}</span>
                                             <span v-else>{{ value.hora[0] }}</span><br>
-                                            <span v-if="value.hora[1] == 'Sin Marcar'"
-                                                class="badge bg-danger">{{ value.hora[1] }}</span>
+                                            <span v-if="value.hora[1] == 'Sin Marcar'" class="badge bg-danger">{{
+                                                value.hora[1] }}</span>
                                             <span v-else>{{ value.hora[1] }}</span><br>
-                                            <span v-if="value.hora[2] == 'Sin Marcar'"
-                                                class="badge bg-danger">{{ value.hora[2] }}</span>
+                                            <span v-if="value.hora[2] == 'Sin Marcar'" class="badge bg-danger">{{
+                                                value.hora[2] }}</span>
                                             <span v-else>{{ value.hora[2] }}</span><br>
-                                            <span v-if="value.hora[3] == 'Sin Marcar'"
-                                                class="badge bg-danger">{{ value.hora[3] }}</span>
+                                            <span v-if="value.hora[3] == 'Sin Marcar'" class="badge bg-danger">{{
+                                                value.hora[3] }}</span>
                                             <span v-else>{{ value.hora[3] }}</span>
                                         </td>
 
@@ -203,7 +204,7 @@
                                                 :key="listobs.id">
                                                 <CBadge color="info">{{ listobs.uidobs }} {{ listobs.tipo }} {{
                                                     listobs.hora
-                                                    }}</CBadge><br>
+                                                }}</CBadge><br>
                                             </div>
                                         </td>
                                     </tr>
@@ -274,57 +275,9 @@ export default {
             uri: "",
             listaReporte: [],
             cifCiudadano: "",
-            usuario: {
-                token: "",
-                cif: "",
-                correo: "",
-                celular: "",
-                pass: "",
-                unidad: "",
-                sigla: "",
-                foto: ""
-            },
-            reporte: {
-                cif: 0,
-                sigla: "",
-                gestion: 0,
-                mes: 0,
-                di: 0,
-                df: 0,
-                listaPerfil: [],
-                listaHorario: [],
-                persona: {
-                    id: null,
-                    ci: "",
-                    nombre: "",
-                    paterno: "",
-                    materno: "",
-                    celular: "",
-                    correo: "",
-                    foto: "",
-                },
-            },
-            egovf: {
-                idPersona: 0,
-                nombre: "",
-                paterno: "",
-                materno: "",
-                fecha: "",
-                sexo: 0,
-                idUsuario: 0,
-                cif: 0,
-                matricula: 0,
-                ci: "",
-                ci_com: 0,
-                complemento: "",
-                correo: "",
-                celular: "",
-                pass: "",
-                unidad: "",
-                dependiente: "",
-                sigla: "",
-                foto: "",
-            },
+            usuario: { ...this.$models.usuarioModel },
+            reporte: { ...this.$models.reporteModel },
+            egovf: { ...this.$models.egovfModel },
             totalretraso: 0,
             totalanticipado: 0,
             totalsin: 0,
@@ -339,9 +292,6 @@ export default {
     mounted() {
         this.getDatos();
         this.getEgovf();
-        this.getMes();
-        this.getReporteBiometrico();
-        this.getReporteMes();
     },
     beforeCreate() {
         if (this.$cookies.get("cif") == null) {
@@ -363,23 +313,77 @@ export default {
                 this.usuario.unidad = this.$cookies.get("unidad");
                 this.usuario.sigla = this.$cookies.get("sigla");
                 this.usuario.foto = this.$cookies.get("foto");
+                this.egovfService.headersUsuario(this.usuario.token);
             }
         },
         async getEgovf() {
-            this.egovfService.headersUsuario(this.usuario.token);
-            await this.egovfService.getEgovf(this.usuario.cif).then((response) => {
-                this.egovf = response.data;
-            });
+            let loadingAlert = null;
+            try {
 
-            this.reporte.sigla = this.egovf.sigla;
-            this.reporte.persona.id = this.egovf.idPersona;
-            this.reporte.persona.ci = this.egovf.ci;
-            this.reporte.persona.nombre = this.egovf.nombre;
-            this.reporte.persona.paterno = this.egovf.paterno;
-            this.reporte.persona.materno = this.egovf.materno;
-            this.reporte.persona.celular = this.egovf.celular;
-            this.reporte.persona.correo = this.egovf.correo;
-            this.reporte.persona.foto = this.egovf.foto;
+                loadingAlert = this.$swal.fire({
+                    title: 'Sincronizando Biometricos y Bases de Datos',
+                    html: 'Procesando registrados, por favor espere...',
+                    allowOutsideClick: false,
+                    didOpen: () => this.$swal.showLoading()
+                });
+
+                this.$nprogress.start();
+
+
+                const responseEgovf = await this.egovfService.getEgovf(this.usuario.cif);
+                this.egovf = responseEgovf.data;
+
+                this.reporte.sigla = this.egovf.sigla;
+                this.reporte.persona.id = this.egovf.idPersona;
+                this.reporte.persona.ci = this.egovf.ci;
+                this.reporte.persona.nombre = this.egovf.nombre;
+                this.reporte.persona.paterno = this.egovf.paterno;
+                this.reporte.persona.materno = this.egovf.materno;
+                this.reporte.persona.celular = this.egovf.celular;
+                this.reporte.persona.correo = this.egovf.correo;
+                this.reporte.persona.foto = this.egovf.foto;
+
+                this.getMes();
+
+                const responseBiometrico = await this.sccService.getPerfil(this.usuario.cif);
+                this.reporte.listaPerfil = responseBiometrico.data;
+
+
+                const responseHorario = await this.sccService.getListaHorario(this.usuario.cif, this.reporte.gestion);
+                this.reporte.listaHorario = responseHorario.data;
+
+                this.reporte.cif = this.cif;
+                this.reporte.gestion = this.gestion;
+                this.reporte.di = this.di;
+                this.reporte.df = this.df;
+                this.reporte.uri = '';
+
+                const responseRepoerte = await this.sccService.getReporteMes(this.reporte);
+                this.listaReporte = responseRepoerte.data;
+                this.sumaRetraso(); // Funcion que suma los retrasos
+
+                this.$swal.close();
+
+                this.$swal.fire({
+                    icon: 'success',
+                    title: '¡Completado!',
+                    text: `Se procesaron ${this.listaReporte.length} registros`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } catch (error) {
+                if (loadingAlert) this.$swal.close();
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Error en la carga',
+                    text: error.message || 'Ocurrió un error al procesar los datos',
+                    confirmButtonText: 'Reintentar'
+                });
+            } finally {
+                this.$nprogress.done();
+            }
+
+
         },
         async getReporteMes() {// Funcion que construye los reportes del mes
             this.reporte.cif = this.cif;
@@ -394,17 +398,7 @@ export default {
                 console.log(err);
             });
         },
-        async getReporteBiometrico() {
-            await this.sccService.getPerfil(this.usuario.cif).then((response) => {
-                this.reporte.listaPerfil = response.data;
-            });
-            this.getListaHorario();
-        },
-        async getListaHorario() {
-            await this.sccService.getListaHorario(this.usuario.cif, this.reporte.gestion).then((response) => {
-                this.reporte.listaHorario = response.data;
-            });
-        },
+
         sumaRetraso() { //Funcion que suma los retrasos y los minutos de salida adelantada
             let sum = 0;
             let res = 0;

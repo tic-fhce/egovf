@@ -45,15 +45,22 @@
                   <td>{{ persona.cif }}</td>
                   <td>
                     {{ persona.nombre }} {{ persona.paterno }} {{ persona.materno }}<br>
-                    {{ persona.ci }}<br>
+                    {{ persona.ci }} {{ persona.complemento }}<br>
                     <label class="fontabla">{{ persona.correo }}</label>
                   </td>
                   <td>
-                    {{ persona.celular }}</td>
+                    {{ persona.cel }}</td>
                   <td>
-                    <CButton class="font" color="success" @click="perfil(persona.id)" size="sm">
-                      <CIcon icon="cil-user" class="me-2" />Perfil
-                    </CButton>
+                    <CButtonGroup role="group">
+                      <CTooltip content="Crear Ciudadania" placement="bottom">
+                        <template #toggler="{ id, on }">
+                          <CButton :aria-describedby="id" v-on="on" color="success" class="font"
+                            @click="crear(persona.id)" size="sm">
+                            <CIcon icon="cil-clipboard" class="me-2" /> Crear
+                          </CButton>
+                        </template>
+                      </CTooltip>
+                    </CButtonGroup>
                   </td>
                 </tr>
               </tbody>
@@ -181,7 +188,6 @@
 
 //Importamos Servicios
 import PersonaService from '@/modules/egovf/services/personaService';
-import { getListaPersonasCached } from '@/modules/egovf/services/personaCache';
 //Importamos Herramientas 
 import DataTable from 'datatables.net-vue3';
 import DataTablesLib from 'datatables.net';
@@ -202,19 +208,8 @@ export default {
       listaPersonas: [],
       registro: [],
       botones: false,
-      usuario: {...this.$models.usuarioModel},
-      persona: {
-        cif: 0,
-        ci: '',
-        complemento: 'Seleccionar Region Expedida',
-        nombre: '',
-        paterno: '',
-        materno: '',
-        fecha: '',
-        sexo: 'Seleccionar Sexo',
-        cel: '',
-        correo: ''
-      },
+      usuario: { ...this.$models.usuarioModel },
+      persona: { ...this.$models.personaModel },
       errorCI: "",
       errorCorreo: "",
       errorCelular: "",
@@ -235,7 +230,7 @@ export default {
     this.personaService = new PersonaService();
   },
   mounted() {
-    this.titulo = 'Lista de Personas'
+    this.titulo = this.$route.meta.title;
     this.getDatos(); // Llamamos los datos del Usuario
     this.getListarCiudadano(); // Funcion que debuelve una lista de ciudadanos 
   },
@@ -273,35 +268,31 @@ export default {
         });
         this.$nprogress.start();
 
-        const data = await getListaPersonasCached({
-          forceReload: false,               // true para forzar recarga desde servidor
-          maxAgeMinutes: 10,                // cache válida 60 minutos
-          fetcher: () => this.personaService.getListaPersonaCifCero()
-        });
+         const response = await this.personaService.getListaPersonaCifCero();
 
-        this.listaPersonas = data;
+        this.listaPersonas = response.data;
+
         //await new Promise(resolve => setTimeout(resolve, 100));
 
         this.tabla();
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         this.$swal.close();
-        await new Promise(resolve => setTimeout(resolve,100));
+
 
         // Mostrar éxito
         this.$swal.fire({
           icon: 'success',
           title: '¡Completado!',
-          text: `Se procesaron ${this.listaPersonas.length} Ciudadanos`,
+          text: `Se procesaron ${this.listaPersonas.length} Personas Sin Ciudadania`,
           timer: 2000,
           showConfirmButton: false
         });
-
-
-
       } catch (error) {
         if (loadingAlert) {
           this.$swal.close();
         }
-
         // Mostrar error
         this.$swal.fire({
           icon: 'error',
@@ -312,17 +303,16 @@ export default {
 
       } finally {
         this.$nprogress.done();
-
       }
-
     },
-    perfil(cifAux) {
-      this.$router.push({
-        name: 'PerfilCiudadanoView',
-        params: {
-          cifCiudadano: cifAux
+    crear(id) {
+      this.listaPersonas.forEach(persona => {
+        if (persona.id == id) {
+          this.persona = persona;
+          return true;
         }
       });
+      this.clickModalCiudadano(true);
     },
     registrarCiudadano() { // funcion para el registro de un ciudadano
       this.personaFalse();
@@ -393,6 +383,8 @@ export default {
       this.errorpersona.cel = false;
       this.errorpersona.correo = false;
     },
+
+
     clickModalCiudadano(ciudadano) {//funcion para Visibilisar el modal
       this.modalCiudadano = ciudadano;
     },

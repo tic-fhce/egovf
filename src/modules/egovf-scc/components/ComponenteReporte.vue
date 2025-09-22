@@ -261,7 +261,7 @@ export default {
             this.totalanticipado = resuldato.res;
             this.totalsin = resuldato.sin;
             
-            const dir = '/libreReporte' + this.uri;
+            const dir = '/libreReporte/' + this.reporte.cif+"/"+this.reporte.gestion+"/"+this.reporte.mes+"/"+this.reporte.di+"/"+this.reporte.df;
             this.sms = 'Cif:' + this.reporte.cif + ' TR: ' + this.totalretraso + 'min' + ' TA: ' + this.totalanticipado + 'min ' + 'https://svfhce.umsa.bo' + dir;
             
         },
@@ -323,8 +323,8 @@ export default {
             var finalY = 95;
 
             if (this.reporte.cif != 20903198600) {
-                doc.text("Lic. Jaime A. Montecinos Marquez", (215 / 4), finalY + 25, { align: "center" });
-                doc.text("Responsable Unidad TIC.", (215 / 4), finalY + 30, { align: "center" });
+                doc.text("Ana Maria Madueño Medina", (215 / 4), finalY + 25, { align: "center" });
+                doc.text("Administradora – FHCE", (215 / 4), finalY + 30, { align: "center" });
 
                 doc.text("Vo. Bo.", (162), finalY + 25, { align: "center" });
                 doc.text("Inmediato Superior", (162), finalY + 30, { align: "center" });

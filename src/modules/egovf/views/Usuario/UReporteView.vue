@@ -26,15 +26,7 @@ export default {
       egovfService: null,
       uri: "",
       cifCiudadano: "",
-      usuario: {
-        token: "",
-        cif: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        sigla: "",
-      },
+      usuario: {...this.$models.usuarioModel},
       reporte: {
         cif: 0,
         sigla: "",
@@ -55,27 +47,7 @@ export default {
           foto: "",
         },
       },
-      egovf: {
-        idPersona: 0,
-        nombre: "",
-        paterno: "",
-        materno: "",
-        fecha: "",
-        sexo: 0,
-        idUsuario: 0,
-        cif: 0,
-        matricula: 0,
-        ci: "",
-        ci_com: 0,
-        complemento: "",
-        correo: "",
-        celular: "",
-        pass: "",
-        unidad: "",
-        dependiente: "",
-        sigla: "",
-        foto: "",
-      },
+      egovf: {...this.$models.egovfModel},
     };
   },
 
@@ -111,7 +83,7 @@ export default {
         this.usuario.pass = this.$cookies.get("pass");
         this.usuario.unidad = this.$cookies.get("unidad");
         this.usuario.sigla = this.$cookies.get("sigla");
-
+        this.usuario.foto = this.$cookies.get('foto');
         this.titulo = this.usuario.correo + "> " + this.titulo;
       }
     },

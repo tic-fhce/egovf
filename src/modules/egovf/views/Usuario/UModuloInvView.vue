@@ -27,50 +27,14 @@ export default {
             egovfService:null,
             empleadoService:null,
             cifCiudadano:'',
-            usuario:{
-                token:'',
-                cif:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                sigla:''
-            },
-            egovf:{
-                idPersona:0,
-                nombre:'',
-                paterno:'',
-                materno:'',
-                fecha:'',
-                sexo:0,
-                idUsuario:0,
-                cif:0,
-                matricula:0,
-                ci:'',
-                ci_com:0,
-                complemento:'',
-                correo:'',
-                celular:'',
-                pass:'',
-                unidad:'',
-                dependiente:'',
-                sigla:''
-            },
-            empleado:{
-                id:0,
-                cif:0,
-                empleado:'',
-                tipoempleado_id:0,
-                fecha:'',
-                estado:0,
-                salida:'',
-                contratos:[]
-            },
+            usuario:{...this.$models.usuarioModel},
+            egovf:{...this.$models.egovfModel},
+            empleado:{...this.$models.empleadoModel},
         }
     },
     beforeCreate(){        
         if(this.$cookies.get('cif')==null){
-            this.$router.push('/');
+            window.location.href = '/';
         }
     },
     created(){
@@ -94,6 +58,7 @@ export default {
                 this.usuario.pass=this.$cookies.get('pass');
                 this.usuario.unidad = this.$cookies.get('unidad');
                 this.usuario.sigla = this.$cookies.get('sigla');
+                this.usuario.foto = this.$cookies.get('foto');
             }
         },
         async getEgovf(){

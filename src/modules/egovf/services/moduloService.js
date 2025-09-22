@@ -47,6 +47,18 @@ export default class ModuloService {
     };
     return axios.post(moduloUrl + "modulo/addModulo", moduloUsuarioDtoRequest);
   }
+  actualizarModulo(cif, id) {
+    const moduloUsuarioDtoResponse = {
+      "id":0,
+      "cif":cif,
+      "id_modulo":id,
+      "estado":0,
+      "quien":0,
+      "fecha":"",
+      "fechamodificacion":""
+    };
+    return axios.put(moduloUrl + "modulo/updateModulo",moduloUsuarioDtoResponse);
+  }
   updateEliminarModuloEmpleado(cif, quien) {
     const moduloUsuarioDtoResponse = {
       "id":0,

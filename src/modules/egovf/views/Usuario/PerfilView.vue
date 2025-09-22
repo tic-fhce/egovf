@@ -307,28 +307,7 @@ export default {
             fileValid: false,
             nuevafoto: '',
             usuario: {...this.$models.usuarioModel},
-            egovf: {
-                idPersona: 0,
-                nombre: '',
-                paterno: '',
-                materno: '',
-                fecha: '',
-                sexo: 0,
-                idUsuario: 0,
-                cif: 0,
-                matricula: 0,
-                ci: '',
-                ci_com: 0,
-                complemento: '',
-                correo: '',
-                celular: '',
-                pass: '',
-                unidad: '',
-                dependiente: '',
-                sigla: '',
-                foto: '',
-                empleado: 0
-            },
+            egovf: {...this.$models.egovfModel},
             pass: {
                 id: null,
                 cif: '',
@@ -449,7 +428,7 @@ export default {
 
             this.archivo = fileInput.files[0];
 
-            if (!this.$egovf.validateFile(this.archivo)) {
+            if (!this.$functions.validateFile(this.archivo)) {
                 this.resetFileInput();
                 return;
             }

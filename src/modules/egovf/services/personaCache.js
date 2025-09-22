@@ -3,11 +3,12 @@ import Dexie from 'dexie';
 const DB_NAME = 'PersonaDB';
 const db = new Dexie(DB_NAME);
 
-// Schema: tabla 'personas' con pk 'id' y un store 'meta' para metadatos (ej. ultimaCarga)
+// Definición del esquema
 db.version(2).stores({
-  personas: 'id,cif,ci,complemento,nombre,paterno,materno,fecha,sexo,cel,correo', 
+  personas: 'id,cif,ci,complemento,nombre,paterno,materno,fecha,sexo,cel,correo',
   meta: 'key'
 });
+
 
 export async function getListaPersonasCached({ maxAgeMinutes = 10, fetcher }) {
   const meta = await db.meta.get('personas');
@@ -18,6 +19,7 @@ export async function getListaPersonasCached({ maxAgeMinutes = 10, fetcher }) {
     if (meta && (now - meta.timestamp) < maxAgeMinutes * 60 * 1000) {
       return data;
     } else {
+
       fetcher().then(async response => {
         await db.transaction('rw', db.personas, db.meta, async () => {
           await db.personas.clear();
@@ -30,7 +32,6 @@ export async function getListaPersonasCached({ maxAgeMinutes = 10, fetcher }) {
   }
 
   // Si no hay cache → API obligatorio
-
   const response = await fetcher();
   await db.transaction('rw', db.personas, db.meta, async () => {
     await db.personas.clear();
@@ -41,7 +42,7 @@ export async function getListaPersonasCached({ maxAgeMinutes = 10, fetcher }) {
 }
 
 /** Borrar cache manualmente */
-export async function clearCiudadanoCache() {
+export async function clearPersonaCache() {
   await db.transaction('rw', db.personas, db.meta, async () => {
     await db.personas.clear();
     await db.meta.delete('ultimaCarga');
@@ -49,7 +50,7 @@ export async function clearCiudadanoCache() {
 }
 
 /** Obtener un ciudadano por id */
-export async function getCiudadanoById(id) {
+export async function getPersonaById(id) {
   return db.personas.get(id);
 }
 
